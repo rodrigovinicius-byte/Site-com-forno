@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manutenção, Processos & Parametrização 5.0 - Grupo TBX</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .nav-card { transition: transform .15s ease, box-shadow .15s ease; }
+        .nav-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -8px rgba(15,23,42,.18); }
+        .fade-in { animation: fadeIn .2s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
+        /* Animação para simular o movimento da esteira */
+        @keyframes conveyorShift {
+            0% { background-position: 0 0; }
+            100% { background-position: 40px 0; }
+        }
+        .moving-conveyor {
+            background-image: linear-gradient(90deg, rgba(226,232,240,0.5) 25%, transparent 25%, transparent 50%, rgba(226,232,240,0.5) 50%, rgba(226,232,240,0.5) 75%, transparent 75%, transparent);
+            background-size: 40px 100%;
+            animation: conveyorShift 2s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen flex flex-col relative overflow-x-hidden text-slate-800">
+
+    <!-- Sistema de Notificações Inteligentes (Toasts) -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none max-w-sm w-full font-sans"></div>
+
+    <!-- Cabeçalho Principal -->
+    <header class="bg-slate-900 text-white shadow-md border-b border-slate-700 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <button id="btnVoltar" onclick="voltar()" class="hidden p-2 rounded-lg hover:bg-slate-800 mr-1 transition-all">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+                <div class="p-2 bg-white rounded-lg flex items-center justify-center">
+                    <div class="h-8 w-24 bg-gradient-to-r from-blue-600 to-cyan-600 rounded flex items-center justify-center font-bold text-xs tracking-wider text-white">GRUPO TBX</div>
+                </div>
+                <div>
+                    <h1 id="headerTitle" class="font-bold text-base">Fiabilidade & Processos 5.0</h1>
+                    <p class="text-[10px] text-slate-400">Portal Integrado de Engenharia, Treinamento e Operação</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="toggleAiAssistant()" class="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-750 hover:to-indigo-750 text-white text-xs font-bold py-2 px-3.5 rounded-lg shadow flex items-center gap-2 transition-all">
+                    <i class="fa-solid fa-gears animate-spin" style="animation-duration: 4s;"></i> Copiloto Técnico
+                </button>
+                <button onclick="toggleConfigModal(true)" class="bg-slate-800 border border-slate-700 text-xs py-2 px-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300">Ligar Planilha</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Área Principal -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6">
+        
+        <div id="apiStatusAlert" class="mb-6 p-4 rounded-xl border flex items-center justify-between text-xs bg-amber-50 border-amber-200 text-amber-800">
+            <span class="flex items-center gap-2">
+                <i class="fa-solid fa-circle-exclamation text-amber-600 text-sm"></i>
+                Sinalização de Rede: Conecte o URL de implantação do Google Apps Script nas configurações para sincronizar checklists.
+            </span>
+        </div>
+
+        <div id="loadingIndicator" class="hidden text-center py-12">
+            <i class="fa-solid fa-circle-notch animate-spin text-3xl text-blue-600"></i>
+            <p class="text-xs text-slate-500 mt-2">Sincronizando base de dados de processos...</p>
+        </div>
+
+        <!-- Ecrã Inicial (Dashboard de Fiabilidade e Conhecimento) -->
+        <div id="view-home" class="fade-in">
+            <!-- KPIs de Processos e Inovação 5.0 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="p-3 bg-blue-600 text-white rounded-xl"><i class="fa-solid fa-screwdriver-wrench text-lg"></i></div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Aderência Preventiva</span>
+                        <span class="block text-sm font-bold text-slate-800">94.2% Preventivas em Dia</span>
+                        <span class="block text-[10px] text-indigo-700 font-medium"><i class="fa-solid fa-chart-line"></i> Meta corporativa: 95%</span>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-purple-50 to-pink-50 border border-purple-100 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="p-3 bg-purple-600 text-white rounded-xl"><i class="fa-solid fa-graduation-cap text-lg"></i></div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Capacitação Humana</span>
+                        <span class="block text-sm font-bold text-slate-800">88.5% Operadores Certificados</span>
+                        <span class="block text-[10px] text-purple-700 font-medium"><i class="fa-solid fa-award"></i> Fichas de treinamento ativas</span>
+                    </div>
+                </div>
+
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 p-4 rounded-2xl flex items-center gap-4 shadow-sm">
+                    <div class="p-3 bg-amber-600 text-white rounded-xl"><i class="fa-solid fa-fire-burner text-lg"></i></div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tratamento Térmico</span>
+                        <span class="block text-sm font-bold text-slate-800">Forno de Recozimento</span>
+                        <span class="block text-[10px] text-amber-700 font-medium"><i class="fa-solid fa-calculator"></i> Calculadora de ciclo ativa</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navegação Principal entre Módulos -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+                <button onclick="abrirModuloChecklist()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clipboard-check text-lg"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1 text-sm">Inspeção & Checklist</h2>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Checklists preventivos estruturados por setor e periodicidade com rastreabilidade total.</p>
+                </button>
+
+                <button onclick="abrirModuloAlmoxarifado()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-boxes-stacked text-lg"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1 text-sm">Almoxarifado Técnico</h2>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Controle inteligente de stock de reposição, peças críticas, localizações e fotos.</p>
+                </button>
+
+                <button onclick="abrirModuloPOPs()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-book-open text-lg"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1 text-sm">Procedimentos (POP)</h2>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Instruções Operacionais e guias passo a passo de funcionamento seguro para cada ativo.</p>
+                </button>
+
+                <button onclick="abrirModuloTreinamento()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-user-graduate text-lg"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1 text-sm">Treino & Funcionamento</h2>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Assinatura de fichas de treino técnico e registo de horas de funcionamento das máquinas.</p>
+                </button>
+
+                <button onclick="abrirModuloForno()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-fire text-lg"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1 text-sm">Curva do Forno</h2>
+                    <p class="text-[11px] text-slate-500 leading-relaxed">Parametrização dinâmica das 5 bancadas de resistências baseada no material e espessura.</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Módulo 1: Checklist de Máquinas -->
+        <div id="view-checklist-setor" class="fade-in hidden">
+            <h2 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-wider">Selecione o Setor Industrial</h2>
+            <div id="setorCards" class="grid grid-cols-1 sm:grid-cols-3 gap-4"></div>
+        </div>
+
+        <div id="view-checklist-periodo" class="fade-in hidden">
+            <h2 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-wider">
+                Setor: <span id="periodoSetorLabel" class="text-slate-700 font-bold"></span> — Periodicidade
+            </h2>
+            <div id="periodoCards" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+        </div>
+
+        <div id="view-checklist-itens" class="fade-in hidden">
+            <h2 class="text-xs font-bold text-slate-400 uppercase mb-4 tracking-wider" id="itensTopLabel"></h2>
+            <div id="checklistContainer" class="space-y-6"></div>
+        </div>
+
+        <!-- Módulo 2: Almoxarifado Técnico -->
+        <div id="view-almoxarifado" class="fade-in hidden">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between">
+                <div class="flex flex-1 gap-3 w-full sm:max-w-xl">
+                    <select id="almoxCategoriaFilter" onchange="renderAlmoxarifadoLista()" class="bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-blue-500 shadow-sm w-44">
+                        <option value="">Todas as Categorias</option>
+                    </select>
+                    <input type="text" id="almoxSearch" oninput="renderAlmoxarifadoLista()" placeholder="Procurar peças no stock técnico..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 shadow-sm">
+                </div>
+                <div class="flex gap-3 w-full sm:w-auto justify-end">
+                    <button onclick="abrirModalCadastroItem()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shadow-sm">
+                        <i class="fa-solid fa-plus"></i> Novo Item Técnico
+                    </button>
+                </div>
+            </div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-50 text-[11px] font-bold uppercase text-slate-400 border-b border-slate-100 tracking-wider">
+                            <tr>
+                                <th class="p-4 w-24">Foto</th>
+                                <th class="p-4">Componente</th>
+                                <th class="p-4">Família</th>
+                                <th class="p-4">Stock</th>
+                                <th class="p-4">Localização</th>
+                                <th class="p-4 text-center w-36">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="almoxarifadoTbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Módulo 3: POPs -->
+        <div id="view-pops" class="fade-in hidden">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                <div class="flex flex-1 gap-3 w-full sm:max-w-xl">
+                    <select id="popMaquinaFilter" onchange="renderPOPs()" class="bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-blue-500 shadow-sm w-48">
+                        <option value="">Todas as Máquinas</option>
+                    </select>
+                    <input type="text" id="popSearch" oninput="renderPOPs()" placeholder="Buscar instruções de operação..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 shadow-sm">
+                </div>
+                <button onclick="abrirModalNovoPOP()" class="bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold py-2.5 px-4 rounded-xl flex items-center gap-2 transition-all shadow-sm">
+                    <i class="fa-solid fa-file-invoice"></i> Cadastrar Novo POP
+                </button>
+            </div>
+            <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+        </div>
+
+        <!-- Módulo 4: Treinamentos & Funcionamento -->
+        <div id="view-treinamento" class="fade-in hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Lado Esquerdo: Treinamento -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-user-graduate text-purple-600"></i> Registro de Treinamento Técnico
+                    </h3>
+                    <div class="space-y-4 mb-6">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Operador / Colaborador</label>
+                            <input type="text" id="treinoOperador" placeholder="Nome Completo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Equipamento</label>
+                                <select id="treinoMaquina" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500"></select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Qualificação</label>
+                                <select id="treinoStatus" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                                    <option value="Em Formação">Em Formação</option>
+                                    <option value="Qualificado">Qualificado (Apto)</option>
+                                    <option value="Multiplicador">Multiplicador (Tutor)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Data da Avaliação</label>
+                                <input type="date" id="treinoData" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Avaliador / Engenheiro</label>
+                                <input type="text" id="treinoAvaliador" placeholder="Assinatura técnica" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+                        <button onclick="salvarTreinamento()" class="w-full py-3 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">Assinar Ficha de Treinamento</button>
+                    </div>
+                    <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Últimas Capacitações Registadas</h4>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50 text-slate-500 border-b">
+                                    <th class="p-2">Operador</th>
+                                    <th class="p-2">Máquina</th>
+                                    <th class="p-2">Status</th>
+                                    <th class="p-2">Avaliador</th>
+                                </tr>
+                            </thead>
+                            <tbody id="treinamentoTbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Lado Direito: Horímetro -->
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-clock text-blue-600"></i> Registro de Funcionamento (Horímetro)
+                        </h3>
+                        <div class="space-y-4 mb-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Máquina</label>
+                                    <select id="funcMaquina" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500"></select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Data</label>
+                                    <input type="date" id="funcData" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Leitura Inicial (Horas)</label>
+                                    <input type="number" id="funcInicio" placeholder="000.00" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Leitura Final (Horas)</label>
+                                    <input type="number" id="funcFim" placeholder="000.00" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Responsável pela Coleta</label>
+                                <input type="text" id="funcResponsavel" placeholder="Nome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                            </div>
+                            <button onclick="salvarFuncionamento()" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">Registar Horas de Trabalho</button>
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Histórico de Horas Recentes</h4>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-50 text-slate-500 border-b">
+                                        <th class="p-2">Máquina</th>
+                                        <th class="p-2">Data</th>
+                                        <th class="p-2">H. Inicial</th>
+                                        <th class="p-2">H. Final</th>
+                                        <th class="p-2">Total Horas</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="funcionamentoTbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Módulo 5: Parametrização do Forno de Recozimento (Com Modo de Estabilização 8h) -->
+        <div id="view-forno" class="fade-in hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Coluna Entrada de Dados (4 colunas) -->
+                <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-orange-600"></i> Parâmetros do Processo
+                        </h3>
+                        <!-- Chave de Ativação do Modo Estabilização (Inovação 5.0) -->
+                        <div class="flex items-center gap-1.5 bg-orange-50 border border-orange-200 px-2 py-1 rounded-lg">
+                            <span class="text-[9px] font-bold text-orange-700 uppercase">Estabilização</span>
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" id="fornoEstabilizacao" onchange="calcularParametrosForno()" class="sr-only peer">
+                                <div class="w-7 h-4 bg-slate-200 rounded-full peer peer-focus:ring-0 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-orange-600"></div>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="containerNormalParams" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Material da Peça</label>
+                            <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                                <option value="aco-304">Aço Inoxidável AISI 304</option>
+                                <option value="aco-201">Aço Inoxidável AISI 201</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                    <span>Tamanho (mm)</span>
+                                </label>
+                                <input type="number" id="fornoPecaComprimento" value="150" min="10" max="2000" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                    <span>Espaçamento (mm)</span>
+                                </label>
+                                <input type="number" id="fornoEspacamento" value="50" min="0" max="1000" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-slate-400 mt-0.5">Espaçamento de ponta a ponta deixado entre as quinas das peças na esteira.</p>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                <span>Espessura da Parede/Chapa</span>
+                                <span class="text-blue-600 font-bold" id="valEspessura">2.5 mm</span>
+                            </label>
+                            <input type="range" id="fornoEspessura" min="0.5" max="20" step="0.5" value="2.5" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            <span class="text-[10px] text-slate-400">Regula o tempo mínimo de encharque térmico exigido na zona de recozimento (4,50m).</span>
+                        </div>
+                    </div>
+
+                    <div id="containerEstabilizacaoParams" class="hidden bg-orange-50/40 border border-orange-100 p-4 rounded-xl space-y-2">
+                        <span class="block text-xs font-bold text-orange-800 uppercase flex items-center gap-1">
+                            <i class="fa-solid fa-clock-rotate-left"></i> Rotina de Estabilização Ativa
+                        </span>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            O forno está configurado para o ciclo de setup térmico dinâmico. Peças de sacrifício serão repassadas continuamente por <strong>8 horas</strong> para estabilizar as curvas das resistências.
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                            <span>Frequência da Esteira</span>
+                            <span class="text-orange-600 font-bold" id="valFrequencia">35.0 Hz</span>
+                        </label>
+                        <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="35" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
+                        <span class="text-[10px] text-slate-400">Frequência do inversor de frequência (Hz) que regula a velocidade do motor redutor da esteira.</span>
+                    </div>
+
+                    <!-- Mensagens de Validação e Engenharia de Processo -->
+                    <div id="fornoAlerta" class="hidden p-3 rounded-lg border text-[11px] font-semibold"></div>
+                </div>
+
+                <!-- Coluna Curva Térmica e Diagrama do Forno (8 colunas) -->
+                <div class="lg:col-span-8 space-y-6">
+                    <!-- Diagrama Físico do Forno -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-area text-blue-600"></i> Diagrama das Zonas Industriais (Comprimento Total: 28,50 m)
+                        </h3>
+                        
+                        <!-- Representação Horizontal do Forno -->
+                        <div class="grid grid-cols-12 border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-[10px] text-white">
+                            <!-- Entrada: 1.50m (5.2%) -->
+                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1">
+                                <span class="block">Entrada</span>
+                                <span class="font-normal opacity-80 text-[9px]">1,50 m</span>
+                            </div>
+                            <!-- Pré-aquecimento: 6.50m (22.8%) -->
+                            <div class="col-span-3 bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1">
+                                <span class="block"><i class="fa-solid fa-fire"></i> Pré-Aq.</span>
+                                <span class="font-normal opacity-80 text-[9px]">6,50 m</span>
+                            </div>
+                            <!-- Recozimento: 4.50m (15.8%) -->
+                            <div class="col-span-2 bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1 relative">
+                                <span class="block animate-pulse"><i class="fa-solid fa-volcano"></i> Recoz.</span>
+                                <span class="font-normal opacity-80 text-[9px]">4,50 m</span>
+                            </div>
+                            <!-- Resfriamento: 14.50m (51%) -->
+                            <div class="col-span-5 bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1">
+                                <span class="block"><i class="fa-solid fa-snowflake"></i> Resfriamento</span>
+                                <span class="font-normal opacity-80 text-[9px]">14,50 m</span>
+                            </div>
+                            <!-- Saída: 1.50m (5.2%) -->
+                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center p-1">
+                                <span class="block">Saída</span>
+                                <span class="font-normal opacity-80 text-[9px]">1,50 m</span>
+                            </div>
+                        </div>
+
+                        <!-- Animação de Fluxo de Peças com Espaçamento Real -->
+                        <div class="border rounded-xl p-3 bg-slate-100">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-wider" id="labelSimulacaoConveyor"><i class="fa-solid fa-left-right"></i> Simulação Visual de Carregamento da Esteira</span>
+                            <div class="h-10 w-full bg-slate-200 rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
+                        </div>
+                    </div>
+
+                    <!-- Métricas de Velocidade e Ciclo -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Velocidade da Esteira</span>
+                            <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoVelocidade">0,45 m/min</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider" id="fornoMetricLabelCiclo">Tempo de Ciclo Total</span>
+                            <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoTempoCiclo">63 min</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center bg-indigo-50/20 border-indigo-100">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Atmosfera de Gás</span>
+                            <span class="block text-sm font-bold text-indigo-700 mt-2" id="fornoAtmosfera">N₂ Purificado</span>
+                        </div>
+                    </div>
+
+                    <!-- Parametrização das 5 Bancadas de Resistência -->
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-base font-bold text-slate-800 mb-4 flex items-center gap-2">
+                            <i class="fa-solid fa-temperature-three-quarters text-orange-600"></i> Parametrização das 5 Bancadas de Resistência
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center">
+                            <!-- Bancada 1 -->
+                            <div class="border rounded-xl p-3 bg-orange-50/30 border-orange-100">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 1</span>
+                                <span class="block text-[10px] text-slate-500 font-semibold mb-1">Pré-Aquecimento</span>
+                                <span class="block text-base font-bold text-orange-600" id="b1Temp">420°C</span>
+                            </div>
+                            <!-- Bancada 2 -->
+                            <div class="border rounded-xl p-3 bg-orange-100/30 border-orange-200">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 2</span>
+                                <span class="block text-[10px] text-slate-500 font-semibold mb-1">Rampa Rápida</span>
+                                <span class="block text-base font-bold text-orange-700" id="b2Temp">595°C</span>
+                            </div>
+                            <!-- Bancada 3 -->
+                            <div class="border rounded-xl p-3 bg-red-50/40 border-red-200">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 3</span>
+                                <span class="block text-[10px] text-slate-500 font-semibold mb-1">Recozimento 1</span>
+                                <span class="block text-base font-bold text-red-600" id="b3Temp">700°C</span>
+                            </div>
+                            <!-- Bancada 4 -->
+                            <div class="border rounded-xl p-3 bg-red-100/30 border-red-200">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 4</span>
+                                <span class="block text-[10px] text-slate-500 font-semibold mb-1">Recozimento 2</span>
+                                <span class="block text-base font-bold text-red-700" id="b4Temp">700°C</span>
+                            </div>
+                            <!-- Bancada 5 -->
+                            <div class="border rounded-xl p-3 bg-blue-50/40 border-blue-100">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 5</span>
+                                <span class="block text-[10px] text-slate-500 font-semibold mb-1">Resfriamento</span>
+                                <span class="block text-base font-bold text-blue-600" id="b5Temp">280°C</span>
+                            </div>
+                        </div>
+
+                        <!-- Fluxo de Gás Estimado -->
+                        <div class="mt-4 p-4 border border-indigo-100 bg-indigo-50/20 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="p-2 bg-indigo-500 text-white rounded-lg"><i class="fa-solid fa-wind text-sm"></i></div>
+                                <div>
+                                    <span class="block text-[10px] font-bold text-slate-400 uppercase">Fluxo Estimado de Injeção de Gás</span>
+                                    <span class="text-xs font-semibold text-slate-700" id="fornoFluxoGas">Vazão Recomendada: 18 m³/h de Nitrogênio</span>
+                                </div>
+                            </div>
+                            <span class="text-[9px] bg-indigo-100 text-indigo-800 px-2 py-0.5 rounded font-bold uppercase">Sob Pressão</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Cadastrar Novo POP -->
+    <div id="popModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl overflow-hidden">
+            <div class="p-6">
+                <h3 class="text-base font-bold text-slate-800 mb-4">Cadastrar Procedimento Operacional Padrão</h3>
+                <div class="space-y-4 mb-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Título do POP</label>
+                            <input type="text" id="popTituloInput" placeholder="Ex: Ajuste de Altura" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Equipamento</label>
+                            <select id="popMaquinaInput" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500"></select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">EPIs Necessários</label>
+                            <input type="text" id="popEpiInput" placeholder="Ex: Óculos, Luvas de Couro" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Ferramentas Requeridas</label>
+                            <input type="text" id="popFerramentasInput" placeholder="Ex: Chave Allen 5mm" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Procedimento Passo a Passo</label>
+                        <textarea id="popDescricaoInput" rows="3" placeholder="Insira o procedimento detalhado e os passos de operação." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none"></textarea>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button onclick="fecharModalNovoPOP()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition-all">Cancelar</button>
+                    <button onclick="confirmarCadastroPOP()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-sm shadow-md transition-all">Salvar POP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Visualização Ampliada de Imagens -->
+    <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4" onclick="fecharModalImagem()">
+        <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
+            <img id="enlargedImg" src="" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800">
+            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1">
+                <i class="fa-solid fa-xmark"></i> Fechar Pré-visualização
+            </button>
+        </div>
+    </div>
+
+    <!-- Painel Lateral: Copiloto de Fiabilidade (Gemini IA) -->
+    <div id="aiPanel" class="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl border-l border-slate-200 z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out font-sans">
+        <div class="p-4 bg-slate-900 text-white flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-screwdriver-wrench text-blue-400 animate-pulse"></i>
+                <span class="font-bold text-sm">Copiloto de Fiabilidade TBX</span>
+            </div>
+            <button onclick="toggleAiAssistant()" class="text-slate-400 hover:text-white transition-colors p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <div class="p-3 bg-blue-50 border-b border-blue-100 text-[11px] text-blue-900 flex gap-2 items-start">
+            <i class="fa-solid fa-circle-info mt-0.5 text-blue-600"></i>
+            <span>Assistente inteligente treinado para manutenção, segurança LOTO, procedimentos POP, calibração de maquinários e metalurgia de recozimento de aços 304/201.</span>
+        </div>
+        <div id="aiChatArea" class="flex-grow overflow-y-auto p-4 space-y-4">
+            <div class="bg-slate-100 rounded-2xl p-3 text-xs text-slate-700 max-w-[85%]">
+                Olá! Sou o vosso engenheiro de processos e fiabilidade virtual. Como posso ajudar a calcular a curva de recozimento ou ajustar a esteira do forno hoje?
+            </div>
+        </div>
+        <div class="p-3 bg-slate-50 border-t border-slate-200 flex gap-2">
+            <input type="text" id="aiInput" onkeydown="handleAiKeydown(event)" placeholder="Consulte o assistente técnico..." class="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-blue-500">
+            <button onclick="sendAiMessage()" class="bg-blue-600 hover:bg-blue-700 text-white rounded-xl px-3 py-2 text-xs font-bold transition-all flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <script>
+        // Configuração inicial do acesso ao modelo de IA Gemini
+        const apiKey = "";
+        
+        let originalDatabase = [];
+        let almoxarifadoData = [];
+        let popData = [];
+        let treinamentoData = [];
+        let funcionamentoData = [];
+        let fotoAnexadaBase64 = "";
+        let currentView = 'home';
+        let selectedSetor = '';
+        let selectedPeriodo = '';
+        let API_URL = localStorage.getItem("checklist_google_api_url") || "";
+
+        window.onload = () => {
+            if (API_URL) {
+                document.getElementById('apiStatusAlert').classList.add('hidden');
+                baixarDadosDaPlanilha();
+            } else {
+                toggleConfigModal(true);
+            }
+            gerarAlmoxarifadoMock();
+            gerarPOPsMock();
+            gerarTreinamentoMock();
+            gerarFuncionamentoMock();
+        };
+
+        // Sistema de Toasts Elegantes
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            
+            let bgClass = "bg-blue-600 text-white shadow-blue-200";
+            let icon = '<i class="fa-solid fa-circle-check"></i>';
+            
+            if (type === 'error') {
+                bgClass = "bg-red-600 text-white shadow-red-200";
+                icon = '<i class="fa-solid fa-circle-xmark"></i>';
+            } else if (type === 'info') {
+                bgClass = "bg-indigo-600 text-white shadow-indigo-200";
+                icon = '<i class="fa-solid fa-microchip animate-pulse"></i>';
+            }
+            
+            toast.className = `p-4 rounded-xl shadow-lg text-xs font-bold flex items-center gap-3 transition-all duration-300 transform translate-y-2 opacity-0 ${bgClass}`;
+            toast.innerHTML = `${icon} <span>${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        // Navegação das Páginas
+        function alternarTela(novaTela) {
+            document.getElementById('view-home').classList.add('hidden');
+            document.getElementById('view-checklist-setor').classList.add('hidden');
+            document.getElementById('view-checklist-periodo').classList.add('hidden');
+            document.getElementById('view-checklist-itens').classList.add('hidden');
+            document.getElementById('view-almoxarifado').classList.add('hidden');
+            document.getElementById('view-pops').classList.add('hidden');
+            document.getElementById('view-treinamento').classList.add('hidden');
+            document.getElementById('view-forno').classList.add('hidden');
+
+            document.getElementById(`view-${novaTela}`).classList.remove('hidden');
+            currentView = novaTela;
+
+            const btnVoltar = document.getElementById('btnVoltar');
+            const headerTitle = document.getElementById('headerTitle');
+
+            if (novaTela === 'home') {
+                btnVoltar.classList.add('hidden');
+                headerTitle.innerText = "Fiabilidade & Processos 5.0";
+            } else {
+                btnVoltar.classList.remove('hidden');
+                if (novaTela === 'almoxarifado') headerTitle.innerText = "Almoxarifado Técnico";
+                else if (novaTela === 'pops') headerTitle.innerText = "Procedimentos de Operação (POP)";
+                else if (novaTela === 'treinamento') headerTitle.innerText = "Fichas de Treinamento";
+                else if (novaTela === 'forno') headerTitle.innerText = "Parametrização do Forno";
+                else headerTitle.innerText = "Checklist de Máquinas";
+            }
+        }
+
+        function voltar() {
+            if (currentView === 'checklist-itens') alternarTela('checklist-periodo');
+            else if (currentView === 'checklist-periodo') alternarTela('checklist-setor');
+            else alternarTela('home');
+        }
+
+        // Controles de Módulos
+        function abrirModuloChecklist() {
+            if (!API_URL) {
+                showToast("Por favor, configure o endereço de ligação à vossa planilha primeiro.", "error");
+                toggleConfigModal(true);
+                return;
+            }
+            alternarTela('checklist-setor');
+        }
+
+        function abrirModuloAlmoxarifado() {
+            alternarTela('almoxarifado');
+            renderAlmoxarifadoLista();
+        }
+
+        function abrirModuloPOPs() {
+            alternarTela('pops');
+            popularFiltroMaquinas('popMaquinaFilter');
+            renderPOPs();
+        }
+
+        function abrirModuloTreinamento() {
+            alternarTela('treinamento');
+            popularFiltroMaquinas('treinoMaquina');
+            popularFiltroMaquinas('funcMaquina');
+            renderTreinamentos();
+            renderFuncionamentos();
+        }
+
+        function abrirModuloForno() {
+            alternarTela('forno');
+            calcularParametrosForno();
+        }
+
+        // LÓGICA DE PARAMETRIZAÇÃO DO FORNO DE RECOZIMENTO (INDÚSTRIA 5.0)
+        function calcularParametrosForno() {
+            const material = document.getElementById('fornoMaterial').value;
+            const espessura = parseFloat(document.getElementById('fornoEspessura').value);
+            const freq = parseFloat(document.getElementById('fornoFrequencia').value);
+            const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value);
+            const espacamento = parseFloat(document.getElementById('fornoEspacamento').value);
+            const isEstabilizacao = document.getElementById('fornoEstabilizacao').checked;
+
+            // Atualização dos Rótulos Sliders
+            document.getElementById('valEspessura').innerText = `${espessura.toFixed(1)} mm`;
+            document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
+
+            // Conversão de Frequência (Hz) para Velocidade (m/min)
+            // Simulação matemática: 50 Hz = 1.0 m/min (Fator de Conversão: 0.02)
+            const velocidadeEsteira = freq * 0.02; // m/min
+
+            // Tempo total de ciclo (Comprimento total do forno = 28.50 m)
+            const tempoTotalCiclo = 28.50 / velocidadeEsteira; // minutos
+
+            // Tempo de encharque térmico efetivo na Zona de Recozimento (Comprimento = 4.50 m)
+            const tempoEncharque = 4.50 / velocidadeEsteira; // minutos
+
+            // Capacidade de Produção Baseada no Tamanho da Peça e Espaçamento
+            const pitchPecaMetros = (compPeca + espacamento) / 1000; // conversão para metros
+            const capacidadePecasHora = pitchPecaMetros > 0 ? Math.round((velocidadeEsteira * 60) / pitchPecaMetros) : 0;
+
+            // Determinação de Temperaturas e Tempos Exigidos baseados na liga metálica
+            let tempIdealRecozimento = 1050; 
+            let tempoRequisitadoPorMm = 1.6; // Minutos exigidos de encharque por milímetro de espessura
+            let gasInerte = "Nitrogênio + Hidrogênio (N₂/H₂)";
+            let fluxoBaseGas = 16;
+
+            if (material === 'aco-201') {
+                tempIdealRecozimento = 1020;
+                tempoRequisitadoPorMm = 1.4;
+                gasInerte = "Nitrogênio Puro (Atmosfera Neutra)";
+                fluxoBaseGas = 12;
+            }
+
+            const tempoEncharqueMinimoExigido = Math.max(2.5, espessura * tempoRequisitadoPorMm); 
+            let vazaoCalculadaGas = Math.round(fluxoBaseGas + (espessura * 0.45) + (capacidadePecasHora * 0.015));
+
+            // Ajuste automático das 5 Bancadas de Resistência
+            let b1 = Math.round(tempIdealRecozimento * 0.60); // Pré-aquecimento
+            let b2 = Math.round(tempIdealRecozimento * 0.85); // Rampa rápida
+            let b3 = tempIdealRecozimento;                    // Recozimento 1
+            let b4 = tempIdealRecozimento;                    // Recozimento 2
+            let b5 = Math.round(tempIdealRecozimento * 0.40); // Resfriamento controlado
+
+            // Ocultar/Exibir containers com base no modo
+            const containerNormal = document.getElementById('containerNormalParams');
+            const containerEstabilizacao = document.getElementById('containerEstabilizacaoParams');
+            const painelAlerta = document.getElementById('fornoAlerta');
+            const labelSimulacao = document.getElementById('labelSimulacaoConveyor');
+            const labelCiclo = document.getElementById('fornoMetricLabelCiclo');
+
+            if (isEstabilizacao) {
+                containerNormal.classList.add('hidden');
+                containerEstabilizacao.classList.remove('hidden');
+                
+                // Sobrescrever variáveis para modo de estabilização térmica do forno
+                tempIdealRecozimento = 980; // Patamar seguro de estabilização dinâmica
+                gasInerte = "Nitrogênio de Purga (N₂)";
+                vazaoCalculadaGas = Math.round(18 + (freq * 0.1)); // Fluxo dinâmico de purga atmosférica
+                
+                b1 = Math.round(tempIdealRecozimento * 0.50);
+                b2 = Math.round(tempIdealRecozimento * 0.75);
+                b3 = tempIdealRecozimento;
+                b4 = tempIdealRecozimento;
+                b5 = Math.round(tempIdealRecozimento * 0.35);
+
+                // Cálculo de voltas de peças de teste durante o turno de 8 horas (480 minutos)
+                const numRepasses = (480 / tempoTotalCiclo).toFixed(1);
+
+                labelSimulacao.innerHTML = `<i class="fa-solid fa-arrows-spin animate-spin text-orange-600"></i> Simulação Visual: Lote de Teste em Estabilização (Repasse Contínuo)`;
+                labelCiclo.innerText = "Tempo de uma Volta";
+
+                painelAlerta.className = "p-3 rounded-lg border bg-orange-100 border-orange-200 text-orange-800 text-[11px] font-bold block";
+                painelAlerta.innerHTML = `<i class="fa-solid fa-hourglass-half mr-1 animate-pulse"></i> MODO ESTABILIZAÇÃO DE SETUP: O lote de peças de sacrifício dará aproximadamente <strong class="text-orange-950">${numRepasses} voltas completas</strong> no forno ao longo do ciclo de 8 horas para estabilizar a inércia das resistências.`;
+
+                // Renderiza peças contínuas (sem espaçamento) para representar as dummy de passagem
+                renderVisualEsteira(300, 10);
+            } else {
+                containerNormal.classList.remove('hidden');
+                containerEstabilizacao.classList.add('hidden');
+                labelSimulacao.innerHTML = `<i class="fa-solid fa-left-right"></i> Simulação Visual de Carregamento da Esteira`;
+                labelCiclo.innerText = "Tempo de Ciclo Total";
+
+                // Validação de Engenharia Física de Processos (Alerta de Subaquecimento)
+                if (tempoEncharque < tempoEncharqueMinimoExigido) {
+                    painelAlerta.className = "p-3 rounded-lg border bg-red-100 border-red-200 text-red-800 text-[11px] font-bold block";
+                    painelAlerta.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1 animate-pulse"></i> ALERTA: Velocidade da esteira excessiva para esta espessura (${espessura}mm). Risco de recozimento incompleto (Falta encharque térmico). Reduza a frequência (Hz).`;
+                } else if (tempoEncharque > tempoEncharqueMinimoExigido * 2.5) {
+                    painelAlerta.className = "p-3 rounded-lg border bg-amber-100 border-amber-200 text-amber-800 text-[11px] font-bold block";
+                    painelAlerta.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> AVISO: Velocidade lenta. Desperdício térmico e risco de oxidação severa. Recomenda-se elevar a frequência (Hz).`;
+                } else {
+                    painelAlerta.className = "p-3 rounded-lg border bg-emerald-100 border-emerald-200 text-emerald-800 text-[11px] font-bold block";
+                    painelAlerta.innerHTML = `<i class="fa-solid fa-circle-check mr-1"></i> Processo em Equilíbrio Térmico: O tempo de permanência na zona de recozimento atende aos requisitos metalúrgicos da liga.`;
+                }
+
+                renderVisualEsteira(compPeca, espacamento);
+            }
+
+            // Atualização de Outputs de Resultados na Tela
+            document.getElementById('fornoVelocidade').innerText = `${velocidadeEsteira.toFixed(2)} m/min`;
+            document.getElementById('fornoTempoCiclo').innerText = `${Math.round(tempoTotalCiclo)} min`;
+            document.getElementById('fornoCapacidade').innerText = isEstabilizacao ? "Repassando Carga" : `${capacidadePecasHora} pçs/h`;
+            document.getElementById('fornoTempoEncharque').innerText = `${tempoEncharque.toFixed(1)} min`;
+
+            document.getElementById('b1Temp').innerText = `${b1}°C`;
+            document.getElementById('b2Temp').innerText = `${b2}°C`;
+            document.getElementById('b3Temp').innerText = `${b3}°C`;
+            document.getElementById('b4Temp').innerText = `${b4}°C`;
+            document.getElementById('b5Temp').innerText = `${b5}°C`;
+            document.getElementById('fornoFluxoGas').innerText = `Vazão Recomendada: ${vazaoCalculadaGas} m³/h de ${gasInerte}`;
+        }
+
+        function renderVisualEsteira(comprimento, espacamento) {
+            const area = document.getElementById('conveyorVisualArea');
+            area.innerHTML = "";
+            
+            // Gerar caixas de peças com o espaçamento proporcional escalonado
+            const larguraVisualPeca = Math.min(100, Math.max(15, comprimento * 0.15));
+            const margemVisualPeca = Math.min(60, Math.max(4, espacamento * 0.15));
+
+            for (let i = 0; i < 15; i++) {
+                const peca = document.createElement('div');
+                peca.className = "h-6 bg-slate-400 rounded border border-slate-500 shadow flex items-center justify-center text-[8px] text-white font-bold shrink-0 transition-all";
+                peca.style.width = `${larguraVisualPeca}px`;
+                peca.style.marginRight = `${margemVisualPeca}px`;
+                peca.innerText = "AÇO";
+                area.appendChild(peca);
+            }
+        }
+
+        // Download dos Dados da Planilha
+        async function baixarDadosDaPlanilha() {
+            toggleLoading(true);
+            try {
+                const res = await fetch(`${API_URL}?action=carregarItens`);
+                if (!res.ok) throw new Error("A ligação falhou");
+                originalDatabase = await res.json();
+                
+                renderSetorCards();
+                showToast("Dossier de Processos carregado com sucesso!");
+            } catch (e) { 
+                showToast("Incapaz de estabelecer comunicação com o Google Sheets.", "error"); 
+            }
+            toggleLoading(false);
+        }
+
+        function renderSetorCards() {
+            const container = document.getElementById('setorCards');
+            const setores = [...new Set(originalDatabase.map(i => i.setor))];
+            
+            container.innerHTML = setores.map(setor => `
+                <button onclick="selecionarSetor('${setor}')" class="nav-card bg-white border border-slate-200 rounded-xl p-5 shadow-sm text-left flex items-center justify-between w-full">
+                    <div>
+                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Setor Industrial</span>
+                        <span class="block font-bold text-slate-800 text-sm mt-0.5">${setor}</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-right-to-bracket text-blue-500"></i>
+                </button>
+            `).join('');
+        }
+
+        function selecionarSetor(setor) {
+            selectedSetor = setor;
+            document.getElementById('periodoSetorLabel').innerText = setor;
+            
+            const periodos = [...new Set(originalDatabase.filter(i => i.setor === setor).map(i => i.periodicidade))];
+            const container = document.getElementById('periodoCards');
+            
+            container.innerHTML = periodos.map(per => `
+                <button onclick="selecionarPeriodo('${per}')" class="nav-card bg-white border border-slate-200 rounded-xl p-5 shadow-sm text-left flex items-center justify-between w-full">
+                    <div>
+                        <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider">Intervalo de Verificação</span>
+                        <span class="block font-bold text-slate-800 text-sm mt-0.5">${per}</span>
+                    </div>
+                    <i class="fa-solid fa-business-time text-slate-400"></i>
+                </button>
+            `).join('');
+            
+            alternarTela('checklist-periodo');
+        }
+
+        function verificarEstadoItem(select) {
+            const row = select.closest('.row-check');
+            const failureWizard = row.querySelector('.failure-wizard');
+            
+            if (select.value === 'Problema') {
+                failureWizard.classList.remove('hidden');
+                failureWizard.classList.add('fade-in');
+                showToast("Alerta: Ativada análise rápida de fiabilidade (5 Porquês).", "info");
+            } else {
+                failureWizard.classList.add('hidden');
+            }
+        }
+
+        function selecionarPeriodo(periodo) {
+            selectedPeriodo = periodo;
+            document.getElementById('itensTopLabel').innerText = `Processo: ${selectedSetor} — Frequência: ${selectedPeriodo}`;
+            
+            const container = document.getElementById("checklistContainer");
+            container.innerHTML = "";
+
+            const filtrados = originalDatabase.filter(x => x.setor === selectedSetor && x.periodicidade === selectedPeriodo);
+            const agrupado = {};
+            filtrados.forEach(d => {
+                if(!agrupado[d.maquina]) agrupado[d.maquina] = [];
+                agrupado[d.maquina].push(d);
+            });
+
+            for (let maq in agrupado) {
+                let html = `
+                    <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                        <div class="bg-slate-800 text-white px-4 py-3 font-bold text-xs sm:text-sm flex items-center justify-between">
+                            <span class="flex items-center gap-2"><i class="fa-solid fa-industry text-blue-400"></i> ${maq}</span>
+                            <span class="text-[10px] bg-emerald-600 px-2 py-0.5 rounded font-semibold text-slate-100"><i class="fa-solid fa-lock"></i> Padrão LOTO Sincronizado</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead class="bg-slate-50 text-[10px] uppercase text-slate-500 border-b">
+                                    <tr>
+                                        <th class="p-3">Instrução de Trabalho / Processo</th>
+                                        <th class="p-3 w-40 sm:w-48">Operador / Manutentor</th>
+                                        <th class="p-3 w-28 sm:w-32">Estado</th>
+                                        <th class="p-3">Anotações / Desvios</th>
+                                        <th class="p-3 w-24 sm:w-28 text-center">Ação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>`;
+                
+                agrupado[maq].forEach(item => {
+                    html += `
+                        <tr class="row-check border-b last:border-0 hover:bg-slate-50/25" data-maquina="${maq}" data-item="${item.item}">
+                            <td class="p-3 text-xs font-medium text-slate-700">
+                                <div class="flex flex-col gap-1">
+                                    <span>${item.item}</span>
+                                    ${item.obs ? `<span class="text-[9px] text-blue-700 font-normal italic bg-blue-50/50 px-1.5 py-0.5 rounded border border-blue-100/50 w-fit">Referência: ${item.obs}</span>` : ''}
+                                    
+                                    <!-- Análise de Causa Raiz (5 Porquês) -->
+                                    <div class="failure-wizard hidden mt-2 p-3 bg-red-50/50 border border-red-200 rounded-lg space-y-2">
+                                        <span class="block text-[10px] font-bold text-red-700 uppercase tracking-wider"><i class="fa-solid fa-clipboard-question"></i> Análise de Causa Raiz (5 Porquês)</span>
+                                        <div class="grid grid-cols-2 gap-2">
+                                            <div>
+                                                <label class="block text-[9px] font-bold text-slate-500 uppercase">1. Causa do Sintoma</label>
+                                                <input type="text" class="fail-why-1 w-full border border-slate-200 rounded p-1 text-[10px] focus:outline-none focus:border-red-500" placeholder="Porquê 1">
+                                            </div>
+                                            <div>
+                                                <label class="block text-[9px] font-bold text-slate-500 uppercase">2. Causa da Falha Física</label>
+                                                <input type="text" class="fail-why-2 w-full border border-slate-200 rounded p-1 text-[10px] focus:outline-none focus:border-red-500" placeholder="Porquê 2">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="p-3">
+                                <input type="text" class="operador-inp w-full border border-slate-200 rounded-lg px-2.5 py-1 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-slate-50/50" placeholder="Assinatura técnica">
+                            </td>
+                            <td class="p-3">
+                                <select onchange="verificarEstadoItem(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2 py-1 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 font-medium">
+                                    <option value="OK">Conforme (OK)</option>
+                                    <option value="Problema">Não-Conformidade</option>
+                                </select>
+                            </td>
+                            <td class="p-3">
+                                <input type="text" class="obs-inp w-full border border-slate-200 rounded-lg px-2.5 py-1 text-xs focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 bg-slate-50/50" placeholder="Observações de processo...">
+                            </td>
+                            <td class="p-3 text-center">
+                                <button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm transition-all flex items-center justify-center gap-1">
+                                    <i class="fa-solid fa-share-from-square"></i> Registar
+                                </button>
+                            </td>
+                        </tr>`;
+                });
+                html += `</tbody></table></div></div>`;
+                container.innerHTML += html;
+            }
+
+            alternarTela('checklist-itens');
+        }
+
+        async function registrarItemIndividual(botao) {
+            const linha = botao.closest(".row-check");
+            const inputOperador = inlineQuerySelector = linha.querySelector(".operador-inp");
+            const selectStatus = linha.querySelector(".status-sel");
+            const inputObs = linha.querySelector(".obs-inp");
+
+            const operadorValue = inputOperador.value.trim();
+
+            if (!operadorValue) {
+                showToast("Erro: Assinatura do Operador/Manutentor é obrigatória.", "error");
+                inputOperador.focus();
+                return;
+            }
+
+            botao.disabled = true;
+            const originalContent = botao.innerHTML;
+            botao.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i>`;
+            botao.className = "btn-registrar w-full bg-slate-400 text-white text-xs font-bold py-1.5 px-3 rounded-lg cursor-not-allowed flex items-center justify-center gap-1";
+
+            let dadosOcorrencia = inputObs.value.trim();
+            if (selectStatus.value === 'Problema') {
+                const porquê1 = linha.querySelector('.fail-why-1').value.trim();
+                const porquê2 = linha.querySelector('.fail-why-2').value.trim();
+                if (porquê1 || porquê2) {
+                    dadosOcorrencia += ` [Causa Raiz: 1: ${porquê1} | 2: ${porquê2}]`;
+                }
+            }
+
+            const payload = [{
+                maquina: linha.getAttribute("data-maquina"),
+                item: linha.getAttribute("data-item"),
+                setor: selectedSetor,
+                periodicidade: selectedPeriodo,
+                status: selectStatus.value,
+                operador: operadorValue,
+                obs: dadosOcorrencia
+            }];
+
+            try {
+                await fetch(API_URL, { 
+                    method: 'POST', 
+                    mode: 'no-cors', 
+                    body: JSON.stringify(payload) 
+                });
+
+                showToast(`Dados gravados: ${payload[0].item}`);
+                botao.innerHTML = `<i class="fa-solid fa-check-double"></i> Pronto`;
+                botao.className = "btn-registrar w-full bg-emerald-600 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow flex items-center justify-center gap-1 animate-pulse";
+
+                inputOperador.value = "";
+                selectStatus.value = "OK";
+                inputObs.value = "";
+                linha.querySelector('.failure-wizard').classList.add('hidden');
+                
+                const fail1 = linha.querySelector('.fail-why-1');
+                const fail2 = linha.querySelector('.fail-why-2');
+                if (fail1) fail1.value = "";
+                if (fail2) fail2.value = "";
+
+                setTimeout(() => {
+                    botao.disabled = false;
+                    botao.innerHTML = originalContent;
+                    botao.className = "btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm transition-all flex items-center justify-center gap-1";
+                }, 2500);
+
+            } catch (err) {
+                showToast("Incapaz de transmitir dados.", "error");
+                botao.disabled = false;
+                botao.innerHTML = originalContent;
+                botao.className = "btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm transition-all flex items-center justify-center gap-1";
+            }
+        }
+
+        // Almoxarifado Mock
+        function gerarAlmoxarifadoMock() {
+            almoxarifadoData = [
+                { id: 1, nome: "Ventosa de Silicone de Alta Temperatura", categoria: "Sistemas de Vácuo", quantidade: 14, minimo: 5, unidade: "un", local: "Prateleira A - Gaveta 2", foto: "" },
+                { id: 2, nome: "Filtro Regulador de Pressão Modular 1/4", categoria: "Sistemas Pneumáticos", quantidade: 3, minimo: 4, unidade: "un", local: "Painel de Manutenção C", foto: "" },
+                { id: 3, nome: "Óleo Sintético Mobil Gear ISO VG 220", categoria: "Fluidos & Lubrificantes", quantidade: 25, minimo: 10, unidade: "L", local: "Armazém Geral - Zona Norte", foto: "" }
+            ];
+        }
+
+        function renderAlmoxarifadoLista() {
+            const tbody = document.getElementById('almoxarifadoTbody');
+            const catFilter = document.getElementById('almoxCategoriaFilter').value;
+            const search = document.getElementById('almoxSearch').value.toLowerCase();
+            
+            const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))];
+            const selectCat = document.getElementById('almoxCategoriaFilter');
+            const currentCatSelected = selectCat.value;
+            selectCat.innerHTML = '<option value="">Todas as Categorias</option>' + 
+                categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+            selectCat.value = currentCatSelected;
+
+            const filtrados = almoxarifadoData.filter(item => {
+                const matchCat = catFilter === "" || item.categoria === catFilter;
+                const matchSearch = item.nome.toLowerCase().includes(search) || item.categoria.toLowerCase().includes(search);
+                return matchCat && matchSearch;
+            });
+
+            tbody.innerHTML = filtrados.map((item, idx) => {
+                const isCritico = item.quantidade <= item.minimo;
+                const badgeEstoque = isCritico 
+                    ? `<span class="bg-red-100 text-red-800 text-[10px] px-2 py-0.5 rounded font-bold"><i class="fa-solid fa-triangle-exclamation animate-bounce"></i> Stock Crítico: ${item.quantidade} / ${item.minimo}</span>`
+                    : `<span class="bg-slate-100 text-slate-700 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>`;
+                
+                const imgTag = item.foto 
+                    ? `<img src="${item.foto}" onclick="visualizarImagem('${item.foto}')" class="h-10 w-10 object-cover rounded-lg border border-slate-200 cursor-pointer hover:opacity-85 shadow-sm">`
+                    : `<div class="h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400"><i class="fa-solid fa-camera"></i></div>`;
+
+                return `
+                    <tr class="border-b last:border-0 hover:bg-slate-50/25">
+                        <td class="p-4">${imgTag}</td>
+                        <td class="p-4 font-semibold text-slate-800 text-xs">${item.nome}</td>
+                        <td class="p-4 text-xs text-slate-500">${item.categoria}</td>
+                        <td class="p-4 text-xs">${badgeEstoque}</td>
+                        <td class="p-4 text-xs text-slate-500">${item.local}</td>
+                        <td class="p-4 text-center">
+                            <div class="flex gap-2 justify-center">
+                                <button onclick="editarItemAlmox(${item.id})" class="text-blue-600 hover:text-blue-800 p-1.5 hover:bg-blue-50 rounded-lg transition-all"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deletarItemAlmox(${item.id})" class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-50 rounded-lg transition-all"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function abrirModalCadastroItem() {
+            document.getElementById('almoxModalTitle').innerText = "Registar Peça no Almoxarifado";
+            document.getElementById('editAlmoxIndex').value = "";
+            document.getElementById('novoItemNome').value = "";
+            document.getElementById('novoItemCategoria').value = "";
+            document.getElementById('novoItemLocal').value = "";
+            document.getElementById('novoItemQuantidade').value = "0";
+            document.getElementById('novoItemMinimo').value = "0";
+            document.getElementById('novoItemUnidade').value = "un";
+            removerFotoAnexada();
+            document.getElementById('cadastroItemModal').classList.remove('hidden');
+        }
+
+        function fecharModalCadastroItem() {
+            document.getElementById('cadastroItemModal').classList.add('hidden');
+        }
+
+        function processarFotoItem(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                fotoAnexadaBase64 = evt.target.result;
+                document.getElementById('fotoPreviewImg').src = fotoAnexadaBase64;
+                document.getElementById('fotoPreviewContainer').classList.remove('hidden');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removerFotoAnexada() {
+            fotoAnexadaBase64 = "";
+            document.getElementById('fotoPreviewImg').src = "";
+            document.getElementById('fotoPreviewContainer').classList.add('hidden');
+            document.getElementById('novoItemImagem').value = "";
+        }
+
+        function confirmarCadastroItem() {
+            const nome = document.getElementById('novoItemNome').value.trim();
+            const categoria = document.getElementById('novoItemCategoria').value.trim();
+            const local = document.getElementById('novoItemLocal').value.trim();
+            const quantidade = parseInt(document.getElementById('novoItemQuantidade').value) || 0;
+            const minimo = parseInt(document.getElementById('novoItemMinimo').value) || 0;
+            const unidade = document.getElementById('novoItemUnidade').value.trim() || "un";
+            const editId = document.getElementById('editAlmoxIndex').value;
+
+            if (!nome || !categoria) {
+                showToast("Erro: Os campos Nome e Família são obrigatórios.", "error");
+                return;
+            }
+
+            if (editId) {
+                const item = almoxarifadoData.find(i => i.id == editId);
+                if (item) {
+                    item.nome = nome;
+                    item.categoria = categoria;
+                    item.local = local;
+                    item.quantidade = quantidade;
+                    item.minimo = minimo;
+                    item.unidade = unidade;
+                    if (fotoAnexadaBase64) item.foto = fotoAnexadaBase64;
+                }
+                showToast("Ficha do componente atualizada!");
+            } else {
+                const novoObj = {
+                    id: Date.now(),
+                    nome,
+                    categoria,
+                    local,
+                    quantidade,
+                    minimo,
+                    unidade,
+                    foto: fotoAnexadaBase64
+                };
+                almoxarifadoData.push(novoObj);
+                showToast("Componente registrado no almoxarifado!");
+            }
+
+            fecharModalCadastroItem();
+            renderAlmoxarifadoLista();
+        }
+
+        function editarItemAlmox(id) {
+            const item = almoxarifadoData.find(i => i.id == id);
+            if (!item) return;
+
+            document.getElementById('almoxModalTitle').innerText = "Editar Detalhes do Componente";
+            document.getElementById('editAlmoxIndex').value = id;
+            document.getElementById('novoItemNome').value = item.nome;
+            document.getElementById('novoItemCategoria').value = item.categoria;
+            document.getElementById('novoItemLocal').value = item.local;
+            document.getElementById('novoItemQuantidade').value = item.quantidade;
+            document.getElementById('novoItemMinimo').value = item.minimo;
+            document.getElementById('novoItemUnidade').value = item.unidade;
+            
+            if (item.foto) {
+                fotoAnexadaBase64 = item.foto;
+                document.getElementById('fotoPreviewImg').src = item.foto;
+                document.getElementById('fotoPreviewContainer').classList.remove('hidden');
+            } else {
+                removerFotoAnexada();
+            }
+
+            document.getElementById('cadastroItemModal').classList.remove('hidden');
+        }
+
+        function deletarItemAlmox(id) {
+            almoxarifadoData = almoxarifadoData.filter(i => i.id !== id);
+            showToast("Item removido com sucesso.");
+            renderAlmoxarifadoLista();
+        }
+
+        // POPs Mock
+        function gerarPOPsMock() {
+            popData = [
+                { id: 1, titulo: "Inicialização Segura da Guilhotina", maquina: "Guilhotina - GUI-001", epis: "Óculos de Proteção, Luvas Antidegaste, Calçado com biqueira de aço", ferramentas: "Painel IHM, Sensores óticos", descricao: "1. Garanta que a área ao redor da mesa esteja limpa.\n2. Execute o reset dos sensores óticos de barreira.\n3. Acione o botão de partida no painel IHM.\n4. Realize um ciclo de vácuo em vazio antes de alimentar material." },
+                { id: 2, titulo: "Bloqueio Energético LOTO - Prensa", maquina: "Robô Prensa - ROB-PR001", epis: "Óculos de Proteção, Luvas Térmicas, Cadeado de Bloqueio", ferramentas: "Cadeado LOTO, Etiqueta de Identificação", descricao: "1. Desligue a chave seccionadora principal no painel traseiro.\n2. Insira o cadeado mecânico na trava vermelha LOTO.\n3. Preencha a etiqueta com seu nome, ramal e data de hoje.\n4. Tente ligar o equipamento no painel operacional para testar a energia zero." }
+            ];
+        }
+
+        function renderPOPs() {
+            const container = document.getElementById('popsContainer');
+            const maqFilter = document.getElementById('popMaquinaFilter').value;
+            const search = document.getElementById('popSearch').value.toLowerCase();
+
+            const filtrados = popData.filter(pop => {
+                const matchMaq = maqFilter === "" || pop.maquina === maqFilter;
+                const matchSearch = pop.titulo.toLowerCase().includes(search) || pop.descricao.toLowerCase().includes(search);
+                return matchMaq && matchSearch;
+            });
+
+            container.innerHTML = filtrados.map(pop => `
+                <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+                    <div class="flex justify-between items-start mb-3">
+                        <div>
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">${pop.maquina}</span>
+                            <h4 class="font-bold text-slate-800 text-sm mt-0.5">${pop.titulo}</h4>
+                        </div>
+                        <span class="text-[9px] bg-amber-50 text-amber-800 border border-amber-200 px-2 py-0.5 rounded font-bold uppercase"><i class="fa-solid fa-shield"></i> Padrão POP</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 bg-slate-50 border rounded-lg p-2.5 mb-4 text-[10px] font-semibold text-slate-600">
+                        <div><i class="fa-solid fa-mask-face text-slate-400 mr-1"></i> EPI: ${pop.epis}</div>
+                        <div><i class="fa-solid fa-wrench text-slate-400 mr-1"></i> Ferramentas: ${pop.ferramentas}</div>
+                    </div>
+                    <div class="text-xs text-slate-600 whitespace-pre-line leading-relaxed border-t pt-3 border-slate-100">
+                        ${pop.descricao}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function abrirModalNovoPOP() {
+            popularFiltroMaquinas('popMaquinaInput');
+            document.getElementById('popTituloInput').value = "";
+            document.getElementById('popEpiInput').value = "";
+            document.getElementById('popFerramentasInput').value = "";
+            document.getElementById('popDescricaoInput').value = "";
+            document.getElementById('popModal').classList.remove('hidden');
+        }
+
+        function fecharModalNovoPOP() {
+            document.getElementById('popModal').classList.add('hidden');
+        }
+
+        function confirmarCadastroPOP() {
+            const titulo = document.getElementById('popTituloInput').value.trim();
+            const maquina = document.getElementById('popMaquinaInput').value;
+            const epis = document.getElementById('popEpiInput').value.trim();
+            const ferramentas = document.getElementById('popFerramentasInput').value.trim();
+            const descricao = document.getElementById('popDescricaoInput').value.trim();
+
+            if (!titulo || !descricao) {
+                showToast("Por favor, preencha o título e as instruções do POP.", "error");
+                return;
+            }
+
+            const novoPop = {
+                id: Date.now(),
+                titulo,
+                maquina,
+                epis: epis || "EPIs Padrão da Fábrica",
+                ferramentas: ferramentas || "Nenhuma ferramenta específica",
+                descricao
+            };
+
+            popData.push(novoPop);
+            showToast("POP cadastrado com sucesso!");
+            fecharModalNovoPOP();
+            renderPOPs();
+        }
+
+        // Treinamentos & Horímetros Mock
+        function gerarTreinamentoMock() {
+            treinamentoData = [
+                { id: 1, operador: "Rodrigo Vinicius", maquina: "Robô Prensa - ROB-PR001", status: "Multiplicador", avaliador: "Eng. Pedro Silva", data: "08/02/2026" },
+                { id: 2, operador: "Carlos Santos", maquina: "Guilhotina - GUI-001", status: "Qualificado", avaliador: "Superv. João Costa", data: "15/05/2026" }
+            ];
+        }
+
+        function renderTreinamentos() {
+            const tbody = document.getElementById('treinamentoTbody');
+            tbody.innerHTML = treinamentoData.map(t => {
+                let badgeClass = "bg-slate-100 text-slate-800";
+                if (t.status === 'Qualificado') badgeClass = "bg-emerald-100 text-emerald-800 font-bold";
+                else if (t.status === 'Multiplicador') badgeClass = "bg-purple-100 text-purple-800 font-bold";
+
+                return `
+                    <tr class="border-b last:border-0 hover:bg-slate-50/50">
+                        <td class="p-2 font-medium text-slate-800">${t.operador}</td>
+                        <td class="p-2 text-slate-500">${t.maquina}</td>
+                        <td class="p-2"><span class="px-2 py-0.5 rounded text-[10px] ${badgeClass}">${t.status}</span></td>
+                        <td class="p-2 text-slate-400">${t.avaliador}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function salvarTreinamento() {
+            const operador = document.getElementById('treinoOperador').value.trim();
+            const maquina = document.getElementById('treinoMaquina').value;
+            const status = document.getElementById('treinoStatus').value;
+            const dataInput = document.getElementById('treinoData').value;
+            const avaliador = document.getElementById('treinoAvaliador').value.trim();
+
+            if (!operador || !avaliador || !dataInput) {
+                showToast("Por favor, preencha todos os campos da ficha de treinamento.", "error");
+                return;
+            }
+
+            const partes = dataInput.split('-');
+            const dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+
+            const novoTreino = {
+                id: Date.now(),
+                operador,
+                maquina,
+                status,
+                avaliador,
+                data: dataFormatada
+            };
+
+            treinamentoData.unshift(novoTreino);
+            showToast("Certificação do operador registrada com sucesso!");
+            
+            document.getElementById('treinoOperador').value = "";
+            document.getElementById('treinoAvaliador').value = "";
+            document.getElementById('treinoData').value = "";
+            
+            renderTreinamentos();
+        }
+
+        function gerarFuncionamentoMock() {
+            funcionamentoData = [
+                { id: 1, maquina: "Guilhotina - GUI-001", data: "05/07/2026", inicio: 1024.5, fim: 1032.0, total: 7.5, responsavel: "Rodrigo V." },
+                { id: 2, maquina: "Robô Prensa - ROB-PR001", data: "04/07/2026", inicio: 5412.0, fim: 5424.2, total: 12.2, responsavel: "Eng. Pedro" }
+            ];
+        }
+
+        function renderFuncionamentos() {
+            const tbody = document.getElementById('funcionamentoTbody');
+            tbody.innerHTML = funcionamentoData.map(f => `
+                <tr class="border-b last:border-0 hover:bg-slate-50/50">
+                    <td class="p-2 font-medium text-slate-800">${f.maquina}</td>
+                    <td class="p-2 text-slate-500">${f.data}</td>
+                    <td class="p-2 text-slate-400">${f.inicio.toFixed(1)}h</td>
+                    <td class="p-2 text-slate-400">${f.fim.toFixed(1)}h</td>
+                    <td class="p-2 text-blue-600 font-bold">${f.total.toFixed(1)}h</td>
+                </tr>
+            `).join('');
+        }
+
+        function salvarFuncionamento() {
+            const maquina = document.getElementById('funcMaquina').value;
+            const dataInput = document.getElementById('funcData').value;
+            const inicio = parseFloat(document.getElementById('funcInicio').value);
+            const fim = parseFloat(document.getElementById('funcFim').value);
+            const responsavel = document.getElementById('funcResponsavel').value.trim();
+
+            if (!dataInput || isNaN(inicio) || isNaN(fim) || !responsavel) {
+                showToast("Por favor, preencha todos os dados da ficha de funcionamento.", "error");
+                return;
+            }
+
+            if (fim < inicio) {
+                showToast("Erro: A leitura final não pode ser menor que a inicial.", "error");
+                return;
+            }
+
+            const partes = dataInput.split('-');
+            const dataFormatada = `${partes[2]}/${partes[1]}/${partes[0]}`;
+            const total = fim - inicio;
+
+            const novoFunc = {
+                id: Date.now(),
+                maquina,
+                data: dataFormatada,
+                inicio,
+                fim,
+                total,
+                responsavel
+            };
+
+            funcionamentoData.unshift(novoFunc);
+            showToast("Funcionamento do horímetro registrado!");
+            
+            document.getElementById('funcInicio').value = "";
+            document.getElementById('funcFim').value = "";
+            document.getElementById('funcResponsavel').value = "";
+            document.getElementById('funcData').value = "";
+
+            renderFuncionamentos();
+        }
+
+        function visualizarImagem(base64) {
+            document.getElementById('enlargedImg').src = base64;
+            document.getElementById('viewImageModal').classList.remove('hidden');
+        }
+
+        function fecharModalImagem() {
+            document.getElementById('viewImageModal').classList.add('hidden');
+        }
+
+        // Modais de Configuração Geral
+        function toggleConfigModal(show) {
+            document.getElementById('configModal').classList.toggle('hidden', !show);
+            if (show) {
+                document.getElementById('apiInputUrl').value = API_URL;
+            }
+        }
+
+        function salvarConfigUrl() {
+            const url = document.getElementById('apiInputUrl').value.trim();
+            if (url) {
+                localStorage.setItem("checklist_google_api_url", url);
+                API_URL = url;
+                document.getElementById('apiStatusAlert').classList.add('hidden');
+                toggleConfigModal(false);
+                baixarDadosDaPlanilha();
+            } else {
+                showToast("Introduza uma URL válida do Google Script.", "error");
+            }
+        }
+
+        function toggleLoading(active) {
+            document.getElementById('loadingIndicator').classList.toggle('hidden', !active);
+        }
+
+        function popularFiltroMaquinas(selectId) {
+            const select = document.getElementById(selectId);
+            const maquinas = [...new Set(originalDatabase.map(i => i.maquina))];
+            if (maquinas.length === 0) {
+                // Maquinas padrão se a API não estiver conectada
+                select.innerHTML = `
+                    <option value="Guilhotina - GUI-001">Guilhotina - GUI-001</option>
+                    <option value="Robô Prensa - ROB-PR001">Robô Prensa - ROB-PR001</option>
+                `;
+                return;
+            }
+            if (selectId === 'popMaquinaFilter') {
+                select.innerHTML = '<option value="">Todas as Máquinas</option>' + 
+                    maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            } else {
+                select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            }
+        }
+
+        // Assistente Inteligente Baseado em Gemini API (Indústria 5.0)
+        let isAiPanelOpen = false;
+
+        function toggleAiAssistant() {
+            const panel = document.getElementById('aiPanel');
+            isAiPanelOpen = !isAiPanelOpen;
+            if (isAiPanelOpen) {
+                panel.classList.remove('translate-x-full');
+            } else {
+                panel.classList.add('translate-x-full');
+            }
+        }
+
+        function handleAiKeydown(e) {
+            if (e.key === 'Enter') sendAiMessage();
+        }
+
+        async function sendAiMessage() {
+            const input = document.getElementById('aiInput');
+            const query = input.value.trim();
+            if (!query) return;
+
+            appendAiChatMessage(query, 'user');
+            input.value = "";
+
+            const loadingId = appendAiChatMessage("A processar diagnóstico de fiabilidade...", 'assistant-loading');
+
+            const databaseSummary = originalDatabase.slice(0, 10).map(i => `${i.maquina}: ${i.item}`).join('\n');
+            const popSummary = popData.map(p => `POP: ${p.titulo} na ${p.maquina}`).join('\n');
+
+            const systemPrompt = `És o Engenheiro Sénior de Fiabilidade, Segurança e Processos Industriais (Indústria 5.0) do Grupo TBX. Tens ampla competência em LOTO (Lockout/Tagout), Lean Manufacturing, TPM, calibração, treinamento técnico, criação de POPs e Fornos Industriais de Recozimento Contínuo (comprimento total de 28,50m, zonas: Entrada 1,5m, Pré-aquecimento 6,5m, Recozimento 4,5m, Resfriamento 14,5m e Saída 1,5m). Sabes parametrizar o forno baseado na frequência da esteira (Hz), aço inoxidável AISI 304 e AISI 201, espessura e passo/espaçamento de quinas das peças. Responde de forma técnica, focando na segurança operacional, fiabilidade mecânica e controle metalúrgico dos processos industriais. Aqui estão os procedimentos cadastrados:\n${popSummary}\nE inventário:\n${databaseSummary}`;
+
+            try {
+                const responseText = await callGeminiAPI(query, systemPrompt);
+                removeAiMessage(loadingId);
+                appendAiChatMessage(responseText, 'assistant');
+            } catch (err) {
+                removeAiMessage(loadingId);
+                appendAiChatMessage("Incapaz de obter ligação ao Gemini de momento. Certifique-se de que a rede operacional está ativa.", 'assistant');
+                showToast("Erro ao processar consulta de engenharia", "error");
+            }
+        }
+
+        async function callGeminiAPI(prompt, systemPrompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemPrompt }] }
+            };
+
+            let delay = 1000;
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (response.ok) {
+                        const result = await response.json();
+                        return result.candidates?.[0]?.content?.parts?.[0]?.text || "Nenhum resultado obtido.";
+                    }
+                } catch (e) {
+                    // Retentativa exponencial silenciosa conforme as diretrizes estipuladas
+                }
+                await new Promise(res => setTimeout(res, delay));
+                delay *= 2;
+            }
+            throw new Error("Falha permanente ao ligar à API do Gemini.");
+        }
+
+        function appendAiChatMessage(text, sender) {
+            const chatArea = document.getElementById('aiChatArea');
+            const messageDiv = document.createElement('div');
+            const id = "msg-" + Date.now();
+            messageDiv.id = id;
+
+            if (sender === 'user') {
+                messageDiv.className = "bg-blue-600 text-white rounded-2xl p-3 text-xs max-w-[85%] ml-auto shadow-sm font-medium";
+                messageDiv.innerText = text;
+            } else if (sender === 'assistant-loading') {
+                messageDiv.className = "bg-slate-100 rounded-2xl p-3 text-xs text-slate-500 max-w-[85%] flex items-center gap-2";
+                messageDiv.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-blue-600"></i> <span>${text}</span>`;
+            } else {
+                messageDiv.className = "bg-slate-100 rounded-2xl p-3 text-xs text-slate-750 max-w-[85%] shadow-sm leading-relaxed";
+                messageDiv.innerHTML = text.replace(/\n/g, '<br>');
+            }
+
+            chatArea.appendChild(messageDiv);
+            chatArea.scrollTop = chatArea.scrollHeight;
+            return id;
+        }
+
+        function removeAiMessage(id) {
+            const el = document.getElementById(id);
+            if (el) el.remove();
+        }
+    </script>
+</body>
+</html>
