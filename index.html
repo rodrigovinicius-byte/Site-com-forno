@@ -141,7 +141,7 @@
             <div id="setorCards" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
         </div>
 
-        <!-- Módulo 1: Checklist de Máquinas - Periodicidade (Estilo image_ee6a01.png e image_fa2c8b.png) -->
+        <!-- Módulo 1: Checklist de Máquinas - Periodicidade (Estilo image_fa3c60.png) -->
         <div id="view-checklist-periodo" class="fade-in hidden">
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4" id="periodoHeaderLabel"></span>
             <div id="periodoCards" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
@@ -163,7 +163,7 @@
                     <input type="text" id="almoxSearch" oninput="renderAlmoxarifadoLista()" placeholder="Selecione ou busque pelo [ID] ou Nome..." class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm">
                 </div>
                 <div class="flex gap-3 w-full lg:w-auto justify-end">
-                    <button onclick="abrirModalMovimentacao()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-semibold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm">
+                    <button onclick="abrirModalMovimentacao()" class="bg-[#047857] hover:bg-emerald-700 text-white text-sm font-semibold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm">
                         <i class="fa-solid fa-arrows-rotate"></i> Registrar Movimentação
                     </button>
                     <button onclick="abrirModalCadastroItem()" class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm">
@@ -384,20 +384,20 @@
 
     <!-- Modal: Cadastrar Novo Item (Estilo image_ee6ea2.png) -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 overflow-y-auto no-print">
-        <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl overflow-hidden my-8">
-            <div class="p-6 space-y-5">
-                <h3 id="almoxModalTitle" class="text-lg font-bold text-slate-800">Cadastrar Novo Item</h3>
+        <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
+            <div class="p-8 space-y-6">
+                <h3 id="almoxModalTitle" class="text-xl font-bold text-slate-900">Cadastrar Novo Item</h3>
                 <input type="hidden" id="editAlmoxIndex">
                 
                 <div class="space-y-4 font-sans text-slate-600">
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label>
                         <div class="flex gap-2 items-center">
-                            <input type="text" id="novoItemNome" placeholder="Ex: Ventosa" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                            <input type="text" id="novoItemNome" placeholder="Ex: Ventosa" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
                             <div class="relative">
                                 <input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="absolute inset-0 opacity-0 cursor-pointer w-10 h-10">
                                 <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all">
-                                    <i class="fa-solid fa-camera"></i>
+                                    <i class="fa-solid fa-camera text-slate-500"></i>
                                 </button>
                             </div>
                         </div>
@@ -416,37 +416,37 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label>
-                        <textarea id="novoItemDescricao" rows="2" placeholder="Detalhes, aplicação, especificações..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none"></textarea>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label>
+                        <textarea id="novoItemDescricao" rows="2" placeholder="Detalhes, aplicação, especificações..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria / Família</label>
-                            <input type="text" id="novoItemCategoria" placeholder="Ex: Pneumatico" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria / Família</label>
+                            <input type="text" id="novoItemCategoria" placeholder="Ex: Pneumatico" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label>
-                            <input type="text" id="novoItemUnidade" placeholder="un, m, L..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label>
+                            <input type="text" id="novoItemUnidade" placeholder="un, m, L..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800">
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label>
-                            <input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label>
+                            <input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
                         </div>
                         <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label>
-                            <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label>
+                            <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800">
                         </div>
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label>
                         <div id="localizacaoInputsContainer" class="space-y-2">
                             <div class="flex gap-2">
-                                <input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500" placeholder="Ex: Prateleira A3">
+                                <input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-850" placeholder="Ex: Prateleira A3">
                                 <button type="button" onclick="removerLinhaLocalizacao(this)" class="px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-red-500 transition-all text-xs">
                                     <i class="fa-solid fa-xmark"></i>
                                 </button>
@@ -468,14 +468,14 @@
 
     <!-- Modal: Registrar Movimentação (Estilo image_ee6e7b.png) -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
-            <div class="p-6 space-y-4">
-                <h3 class="text-base font-bold text-slate-900">Registrar Movimentação</h3>
+        <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
+            <div class="p-8 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900">Registrar Movimentação</h3>
                 
                 <div class="space-y-3">
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label>
-                        <select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium"></select>
+                        <select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"></select>
                     </div>
 
                     <!-- Bloco de Informações Dinâmicas do Item Selecionado -->
@@ -501,25 +501,25 @@
                     <div class="grid grid-cols-2 gap-3">
                         <div>
                             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Registro</label>
-                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800">
                                 <option value="Entrada">Entrada</option>
                                 <option value="Saída">Saída</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Quantidade</label>
-                            <input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                            <input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
                         </div>
                     </div>
 
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Responsável</label>
-                        <input type="text" id="movResponsavel" placeholder="Nome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        <input type="text" id="movResponsavel" placeholder="Nome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
                     </div>
 
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label>
-                        <textarea id="movMotivo" rows="2" placeholder="Ex: reposição, uso em OS 123..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none"></textarea>
+                        <textarea id="movMotivo" rows="2" placeholder="Ex: reposição, uso em OS 123..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
                     </div>
                 </div>
 
@@ -696,8 +696,13 @@
                 if (!res.ok) throw new Error("A conexão falhou");
                 const resJson = await res.json();
                 
-                originalDatabase = resJson.itens || [];
-                checklistStatus = resJson.status || [];
+                if (resJson && resJson.itens) {
+                    originalDatabase = resJson.itens;
+                    checklistStatus = resJson.status || [];
+                } else if (Array.isArray(resJson)) {
+                    originalDatabase = resJson;
+                    checklistStatus = [];
+                }
                 
                 renderSetorCards();
                 showToast("Dossiê de Inspeções carregado!");
@@ -735,7 +740,19 @@
             const setores = [...new Set(originalDatabase.map(i => i.setor))];
             
             container.innerHTML = setores.map(setor => {
-                const pendentes = checklistStatus.filter(s => normalizar(s.setor) === normalizar(setor) && s.vencido).length;
+                const maquinasDoSetor = [...new Set(originalDatabase.filter(i => normalizar(i.setor) === normalizar(setor)).map(i => i.maquina))];
+                let pendentes = 0;
+
+                maquinasDoSetor.forEach(maq => {
+                    const statusEncontrados = checklistStatus.filter(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(setor));
+                    if (statusEncontrados.length === 0) {
+                        pendentes++; // Se nunca foi feito, considera como pendente de inspeção
+                    } else {
+                        const algumVencido = statusEncontrados.some(s => s.vencido);
+                        if (algumVencido) pendentes++;
+                    }
+                });
+
                 const pendentesBadge = pendentes > 0 
                     ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold inline-block mt-3">${pendentes} pendente(s)</span>`
                     : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold inline-block mt-3">Tudo conforme</span>`;
@@ -762,26 +779,49 @@
             if(!container) return;
             
             const periodicidadesMap = [
-                { id: "diaria", label: "Diária/ Intradiária", desc: "Máquinas neste grupo" },
-                { id: "semanal", label: "Semanal", desc: "Máquinas neste grupo" },
-                { id: "quinzenal", label: "Quinzenal", desc: "Máquinas neste grupo" },
-                { id: "mensal", label: "Mensal", desc: "Máquinas neste grupo" }
+                { id: "diaria", label: "Diária/ Intradiária" },
+                { id: "semanal", label: "Semanal" },
+                { id: "quinzenal", label: "Quinzenal" },
+                { id: "mensal", label: "Mensal" }
             ];
 
+            const filterSetor = normalizar(setor);
+
             container.innerHTML = periodicidadesMap.map(p => {
-                let maquinasGrupo = [];
+                // Buscamos as MÁQUINAS REAIS direto da base de itens cadastrada
+                const maquinasNoGrupo = [...new Set(
+                    originalDatabase
+                        .filter(item => {
+                            const matchSetor = normalizar(item.setor) === filterSetor;
+                            let matchPer = false;
+                            if (p.id === "diaria") {
+                                matchPer = normalizar(item.periodicidade) === "diaria" || normalizar(item.periodicidade) === "intradiaria";
+                            } else {
+                                matchPer = normalizar(item.periodicidade) === p.id;
+                            }
+                            return matchSetor && matchPer;
+                        })
+                        .map(item => item.maquina)
+                )];
+
+                const countMaquinas = maquinasNoGrupo.length;
                 let atrasados = 0;
 
-                const filterSetor = normalizar(setor);
-
-                if (p.id === "diaria") {
-                    maquinasGrupo = checklistStatus.filter(s => normalizar(s.setor) === filterSetor && (normalizar(s.periodicidade) === "diaria" || normalizar(s.periodicidade) === "intradiaria"));
-                } else {
-                    maquinasGrupo = checklistStatus.filter(s => normalizar(s.setor) === filterSetor && normalizar(s.periodicidade) === p.id);
-                }
-
-                atrasados = maquinasGrupo.filter(s => s.vencido).length;
-                const countMaquinas = maquinasGrupo.length;
+                // Calculamos o status de atraso máquina por máquina
+                maquinasNoGrupo.forEach(maq => {
+                    const statusAtivo = checklistStatus.find(s => 
+                        normalizar(s.maquina) === normalizar(maq) && 
+                        normalizar(s.setor) === filterSetor &&
+                        (p.id === "diaria" 
+                            ? (normalizar(s.periodicidade) === "diaria" || normalizar(s.periodicidade) === "intradiaria")
+                            : normalizar(s.periodicidade) === p.id
+                        )
+                    );
+                    
+                    if (!statusAtivo || statusAtivo.vencido) {
+                        atrasados++;
+                    }
+                });
 
                 const badge = atrasados > 0
                     ? `<span class="bg-red-100 text-red-700 text-xs px-3 py-1 rounded-full font-bold">${atrasados} de ${countMaquinas} atrasado(s)</span>`
@@ -842,7 +882,7 @@
                     const dataStr = dataObj.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
                     const horaStr = dataObj.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
                     const operadorStr = statusAtivo.operador ? ` por ${statusAtivo.operador}` : '';
-                    badgeUltimo = `<span class="bg-slate-700 text-slate-100 text-xs px-3 py-1 rounded-full font-bold">Último: ${dataStr} ${horaStr}${operadorStr}</span>`;
+                    badgeUltimo = `<span class="bg-slate-750 text-slate-100 text-xs px-3 py-1 rounded-full font-bold">Último: ${dataStr} ${horaStr}${operadorStr}</span>`;
                 }
 
                 let html = `
@@ -958,6 +998,15 @@
                     if (per !== 'diaria' && per !== 'intradiaria') {
                         checklistStatus[statusIndex].vencido = false; 
                     }
+                } else {
+                    checklistStatus.push({
+                        maquina: payload.dados[0].maquina,
+                        setor: selectedSetor,
+                        periodicidade: payload.dados[0].periodicidade,
+                        ultimoRegistro: new Date().toISOString(),
+                        operador: operadorValue,
+                        vencido: false
+                    });
                 }
 
                 setTimeout(() => {
@@ -1120,8 +1169,8 @@
                         <td class="p-4 text-xs text-slate-500 font-medium">${item.local || "-"}</td>
                         <td class="p-4 font-sans text-center">
                             <div class="flex gap-2 justify-center">
-                                <button onclick="abrirModalMovimentacao('${item.id}')" class="text-emerald-600 hover:text-emerald-800 p-2 hover:bg-emerald-50 rounded-lg transition-all" title="Registrar Movimentação"><i class="fa-solid fa-arrows-rotate"></i></button>
-                                <button onclick="editarItemAlmox('${item.id}')" class="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-lg transition-all" title="Editar"><i class="fa-solid fa-pencil"></i></button>
+                                <button onclick="abrirModalMovimentacao('${item.id}')" class="text-emerald-600 hover:text-emerald-800 p-2 hover:bg-emerald-50 rounded-lg transition-all" title="Registrar Movimentação"><i class="fa-solid fa-arrows-rotate text-emerald-600"></i></button>
+                                <button onclick="editarItemAlmox('${item.id}')" class="text-blue-600 hover:text-blue-800 p-2 hover:bg-blue-50 rounded-lg transition-all" title="Editar"><i class="fa-solid fa-pencil text-blue-600"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -1135,7 +1184,7 @@
             const div = document.createElement('div');
             div.className = "flex gap-2";
             div.innerHTML = `
-                <input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500" value="${valor}" placeholder="Ex: Prateleira A3">
+                <input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-850" value="${valor}" placeholder="Ex: Prateleira A3">
                 <button type="button" onclick="removerLinhaLocalizacao(this)" class="px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-400 hover:bg-slate-100 hover:text-red-500 transition-all text-xs">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
