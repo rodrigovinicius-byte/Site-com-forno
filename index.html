@@ -696,18 +696,27 @@
                 if (!res.ok) throw new Error("A conexão falhou");
                 const resJson = await res.json();
                 
+                let loadedItens = [];
+                let loadedStatus = [];
                 if (resJson && resJson.itens) {
-                    originalDatabase = resJson.itens;
-                    checklistStatus = resJson.status || [];
+                    loadedItens = resJson.itens;
+                    loadedStatus = resJson.status || [];
                 } else if (Array.isArray(resJson)) {
-                    originalDatabase = resJson;
-                    checklistStatus = [];
+                    loadedItens = resJson;
+                    loadedStatus = [];
                 }
+                
+                if (!loadedItens || loadedItens.length === 0) {
+                    throw new Error("Base de dados remota retornou vazia.");
+                }
+                
+                originalDatabase = loadedItens;
+                checklistStatus = loadedStatus;
                 
                 renderSetorCards();
                 showToast("Dossiê de Inspeções carregado!");
             } catch (e) { 
-                showToast("Erro de rede. Carregando dados locais de contingência.", "info"); 
+                showToast("Erro ao carregar dados remotos. Ativando contingência local.", "error"); 
                 carregarChecklistMock();
             }
             toggleLoading(false);
@@ -732,6 +741,29 @@
             ];
 
             renderSetorCards();
+        }
+
+        // Função de Limpeza e Normalização Segura de Textos
+        function normalizar(texto) {
+            return String(texto || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        // Correspondência inteligente tolerante a acentuação, plurais e grafias diferentes (ex: Diário vs Diária)
+        function matchPeriodicidade(itemPeriod, pId) {
+            const norm = normalizar(itemPeriod);
+            if (pId === "diaria") {
+                return norm.includes("diar") || norm.includes("intrad") || norm.includes("turno");
+            }
+            if (pId === "semanal") {
+                return norm.includes("seman");
+            }
+            if (pId === "quinzenal") {
+                return norm.includes("quinzen");
+            }
+            if (pId === "mensal") {
+                return norm.includes("mens") || norm.includes("mes");
+            }
+            return norm === pId;
         }
 
         function renderSetorCards() {
@@ -788,17 +820,12 @@
             const filterSetor = normalizar(setor);
 
             container.innerHTML = periodicidadesMap.map(p => {
-                // Buscamos as MÁQUINAS REAIS direto da base de itens cadastrada
+                // Buscamos as MÁQUINAS REAIS direto da base de dados de cadastro (originalDatabase)
                 const maquinasNoGrupo = [...new Set(
                     originalDatabase
                         .filter(item => {
                             const matchSetor = normalizar(item.setor) === filterSetor;
-                            let matchPer = false;
-                            if (p.id === "diaria") {
-                                matchPer = normalizar(item.periodicidade) === "diaria" || normalizar(item.periodicidade) === "intradiaria";
-                            } else {
-                                matchPer = normalizar(item.periodicidade) === p.id;
-                            }
+                            const matchPer = matchPeriodicidade(item.periodicidade, p.id);
                             return matchSetor && matchPer;
                         })
                         .map(item => item.maquina)
@@ -812,10 +839,7 @@
                     const statusAtivo = checklistStatus.find(s => 
                         normalizar(s.maquina) === normalizar(maq) && 
                         normalizar(s.setor) === filterSetor &&
-                        (p.id === "diaria" 
-                            ? (normalizar(s.periodicidade) === "diaria" || normalizar(s.periodicidade) === "intradiaria")
-                            : normalizar(s.periodicidade) === p.id
-                        )
+                        matchPeriodicidade(s.periodicidade, p.id)
                     );
                     
                     if (!statusAtivo || statusAtivo.vencido) {
@@ -851,12 +875,7 @@
 
             const filtrados = originalDatabase.filter(x => {
                 const matchSetor = normalizar(x.setor) === normalizar(selectedSetor);
-                let matchPer = false;
-                if (periodoId === "diaria") {
-                    matchPer = normalizar(x.periodicidade) === "diaria" || normalizar(x.periodicidade) === "intradiaria";
-                } else {
-                    matchPer = normalizar(x.periodicidade) === periodoId;
-                }
+                const matchPer = matchPeriodicidade(x.periodicidade, periodoId);
                 return matchSetor && matchPer;
             });
 
@@ -882,7 +901,7 @@
                     const dataStr = dataObj.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
                     const horaStr = dataObj.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
                     const operadorStr = statusAtivo.operador ? ` por ${statusAtivo.operador}` : '';
-                    badgeUltimo = `<span class="bg-slate-750 text-slate-100 text-xs px-3 py-1 rounded-full font-bold">Último: ${dataStr} ${horaStr}${operadorStr}</span>`;
+                    badgeUltimo = `<span class="bg-slate-755 text-slate-100 text-xs px-3 py-1 rounded-full font-bold">Último: ${dataStr} ${horaStr}${operadorStr}</span>`;
                 }
 
                 let html = `
@@ -1756,11 +1775,6 @@
 
         function toggleLoading(active) {
             document.getElementById('loadingIndicator').classList.toggle('hidden', !active);
-        }
-
-        // Função de Limpeza e Normalização Segura de Textos
-        function normalizar(texto) {
-            return String(texto || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
 
         function visualizarImagem(base64) {
