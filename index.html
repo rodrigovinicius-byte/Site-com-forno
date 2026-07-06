@@ -18,12 +18,12 @@
         
         /* Estilos de Impressão Industrial de Alta Definição (Folha A4) */
         @media print {
-            body { background: white !important; color: black !important; font-size: 12px !important; }
+            body { background: white !important; color: black !important; font-size: 11px !important; }
             .no-print, header, nav, footer, button, .modal, #apiStatusAlert, #toastContainer { display: none !important; }
             #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
             table { page-break-inside: auto; width: 100% !important; border-collapse: collapse !important; }
             tr { page-break-inside: avoid; page-break-after: auto; }
-            th, td { border: 1px solid #1e293b !important; padding: 8px !important; }
+            th, td { border: 1.5px solid #000000 !important; padding: 8px !important; color: black !important; }
         }
     </style>
 </head>
@@ -68,7 +68,7 @@
         <div id="apiStatusAlert" class="mb-6 p-4 rounded-xl border flex items-center justify-between text-xs bg-amber-50 border-amber-200 text-amber-800">
             <span class="flex items-center gap-2">
                 <i class="fa-solid fa-circle-exclamation text-amber-600 text-sm"></i>
-                Sinalização de Rede: Conecte o URL do Google Apps Script nas configurações para sincronização e gravação de dados em tempo real.
+                Sinalização de Rede: Conecte o URL do Google Apps Script nas configurações para sincronizar os dados. Usando dados locais como contingência.
             </span>
         </div>
 
@@ -141,7 +141,7 @@
             <div id="setorCards" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
         </div>
 
-        <!-- Módulo 1: Checklist de Máquinas - Periodicidade (Estilo image_ee6a01.png) -->
+        <!-- Módulo 1: Checklist de Máquinas - Periodicidade (Estilo image_ee6a01.png e image_fa2c8b.png) -->
         <div id="view-checklist-periodo" class="fade-in hidden">
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4" id="periodoHeaderLabel"></span>
             <div id="periodoCards" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
@@ -542,7 +542,7 @@
     </div>
 
     <!-- Painel Lateral: Copiloto de Fiabilidade (Gemini IA) -->
-    <div id="aiPanel" class="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl border-l border-slate-200 z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out font-sans no-print font-sans">
+    <div id="aiPanel" class="fixed right-0 top-0 h-full w-full sm:w-96 bg-white shadow-2xl border-l border-slate-200 z-50 flex flex-col transform translate-x-full transition-transform duration-300 ease-in-out font-sans no-print">
         <div class="p-4 bg-[#0b132b] text-white flex justify-between items-center">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-screwdriver-wrench text-blue-400 animate-pulse"></i>
@@ -587,7 +587,7 @@
                 document.getElementById('apiStatusAlert').classList.add('hidden');
                 baixarDadosDaPlanilha();
             } else {
-                toggleConfigModal(true);
+                carregarChecklistMock();
             }
             gerarAlmoxarifadoMock();
             gerarPOPsMock();
@@ -669,11 +669,6 @@
         }
 
         function abrirModuloChecklist() {
-            if (!API_URL) {
-                showToast("Por favor, configure o endereço de ligação do Google Apps Script.", "error");
-                toggleConfigModal(true);
-                return;
-            }
             alternarTela('checklist-setor');
         }
 
@@ -707,9 +702,31 @@
                 renderSetorCards();
                 showToast("Dossiê de Inspeções carregado!");
             } catch (e) { 
-                showToast("Erro ao estabelecer conexão remota com o Google Sheets.", "error"); 
+                showToast("Erro de rede. Carregando dados locais de contingência.", "info"); 
+                carregarChecklistMock();
             }
             toggleLoading(false);
+        }
+
+        // Dados Mock Robustos para o Checklist
+        function carregarChecklistMock() {
+            originalDatabase = [
+                { item: "Verificar/ completar Oleo Canola/ Soja", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", obs: "Obs: 4 vezes por turno" },
+                { item: "Limpar e lubrificar barramento", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Intradiária", obs: "Obs: a cada setup" },
+                { item: "Limpeza moldes e bicos", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", obs: "" },
+                
+                { item: "Verificar vazamentos de ar mangueiras", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "Ouvir ruídos" },
+                { item: "Aperto de facas e fixadores", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Quinzenal", obs: "" }
+            ];
+
+            checklistStatus = [
+                { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString(), operador: "Rodrigo Santos", vencido: true, diasDesde: 1 },
+                { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Intradiária", ultimoRegistro: new Date().toISOString(), operador: "Claudio Lima", vencido: false, diasDesde: 0 },
+                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: null, operador: null, vencido: true, diasDesde: null },
+                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Quinzenal", ultimoRegistro: null, operador: null, vencido: true, diasDesde: null }
+            ];
+
+            renderSetorCards();
         }
 
         function renderSetorCards() {
@@ -718,8 +735,7 @@
             const setores = [...new Set(originalDatabase.map(i => i.setor))];
             
             container.innerHTML = setores.map(setor => {
-                // Calcular itens atrasados/pendentes no setor
-                const pendentes = checklistStatus.filter(s => s.setor === setor && s.vencido).length;
+                const pendentes = checklistStatus.filter(s => normalizar(s.setor) === normalizar(setor) && s.vencido).length;
                 const pendentesBadge = pendentes > 0 
                     ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold inline-block mt-3">${pendentes} pendente(s)</span>`
                     : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold inline-block mt-3">Tudo conforme</span>`;
@@ -745,7 +761,6 @@
             const container = document.getElementById('periodoCards');
             if(!container) return;
             
-            // Frequências conforme image_ee6a01.png
             const periodicidadesMap = [
                 { id: "diaria", label: "Diária/ Intradiária", desc: "Máquinas neste grupo" },
                 { id: "semanal", label: "Semanal", desc: "Máquinas neste grupo" },
@@ -757,10 +772,12 @@
                 let maquinasGrupo = [];
                 let atrasados = 0;
 
+                const filterSetor = normalizar(setor);
+
                 if (p.id === "diaria") {
-                    maquinasGrupo = checklistStatus.filter(s => s.setor === setor && (normalizar(s.periodicidade) === "diaria" || normalizar(s.periodicidade) === "intradiaria"));
+                    maquinasGrupo = checklistStatus.filter(s => normalizar(s.setor) === filterSetor && (normalizar(s.periodicidade) === "diaria" || normalizar(s.periodicidade) === "intradiaria"));
                 } else {
-                    maquinasGrupo = checklistStatus.filter(s => s.setor === setor && normalizar(s.periodicidade) === p.id);
+                    maquinasGrupo = checklistStatus.filter(s => normalizar(s.setor) === filterSetor && normalizar(s.periodicidade) === p.id);
                 }
 
                 atrasados = maquinasGrupo.filter(s => s.vencido).length;
@@ -793,7 +810,7 @@
             container.innerHTML = "";
 
             const filtrados = originalDatabase.filter(x => {
-                const matchSetor = x.setor === selectedSetor;
+                const matchSetor = normalizar(x.setor) === normalizar(selectedSetor);
                 let matchPer = false;
                 if (periodoId === "diaria") {
                     matchPer = normalizar(x.periodicidade) === "diaria" || normalizar(x.periodicidade) === "intradiaria";
@@ -816,9 +833,8 @@
             });
 
             for (let maq in agrupado) {
-                const statusAtivo = checklistStatus.find(s => s.maquina === maq && s.setor === selectedSetor);
+                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(selectedSetor));
                 
-                // Badge exata conforme imagem ee6a41.png (Nunca feito ou Última Execução com Responsável)
                 let badgeUltimo = `<span class="bg-rose-100 text-rose-700 text-xs px-3 py-1 rounded-full font-bold">Nunca feito</span>`;
                 
                 if (statusAtivo && statusAtivo.ultimoRegistro) {
@@ -829,7 +845,6 @@
                     badgeUltimo = `<span class="bg-slate-700 text-slate-100 text-xs px-3 py-1 rounded-full font-bold">Último: ${dataStr} ${horaStr}${operadorStr}</span>`;
                 }
 
-                // Estrutura idêntica à imagem ee6a41.png
                 let html = `
                     <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                         <div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between">
@@ -855,7 +870,6 @@
                                 <tbody class="divide-y divide-slate-100 bg-white">`;
                 
                 agrupado[maq].forEach((item, index) => {
-                    // Badge estilizada idêntica à observação no print ee6a41.png
                     const badgeObs = item.obs ? `<span class="bg-blue-50 text-blue-600 text-[10px] px-2.5 py-1 rounded-md font-bold inline-block mt-1.5"><i class="fa-solid fa-circle-info mr-1"></i>Obs: ${item.obs}</span>` : '';
 
                     html += `
@@ -921,11 +935,13 @@
             };
 
             try {
-                await fetch(API_URL, { 
-                    method: 'POST', 
-                    mode: 'no-cors', 
-                    body: JSON.stringify(payload) 
-                });
+                if (API_URL) {
+                    await fetch(API_URL, { 
+                        method: 'POST', 
+                        mode: 'no-cors', 
+                        body: JSON.stringify(payload) 
+                    });
+                }
 
                 showToast(`Gravado: ${payload.dados[0].item}`);
                 botao.innerHTML = `<i class="fa-solid fa-check"></i>`;
@@ -933,13 +949,11 @@
 
                 inputObs.value = "";
                 
-                // Atualizar o status local
-                const statusIndex = checklistStatus.findIndex(s => s.maquina === payload.dados[0].maquina && s.setor === selectedSetor);
+                const statusIndex = checklistStatus.findIndex(s => normalizar(s.maquina) === normalizar(payload.dados[0].maquina) && normalizar(s.setor) === normalizar(selectedSetor));
                 if (statusIndex !== -1) {
                     checklistStatus[statusIndex].ultimoRegistro = new Date().toISOString();
                     checklistStatus[statusIndex].operador = operadorValue;
                     
-                    // Para diária e intradiária não marcamos como vencido de imediato
                     const per = normalizar(payload.dados[0].periodicidade);
                     if (per !== 'diaria' && per !== 'intradiaria') {
                         checklistStatus[statusIndex].vencido = false; 
@@ -959,24 +973,23 @@
             }
         }
 
-        // Folha de Impressão Industrial de Padrão Corporativo A4
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             if(!printArea) return;
 
-            const filtrados = originalDatabase.filter(x => x.maquina === maquina);
+            const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
             
             let tableRows = filtrados.map((item, index) => `
-                <tr style="border-bottom: 1px solid #1e293b;">
-                    <td style="padding: 10px; font-size: 11px; text-align: center; border-right: 1px solid #1e293b;">${index + 1}</td>
-                    <td style="padding: 10px; font-size: 11px; font-weight: bold; border-right: 1px solid #1e293b;">
+                <tr style="border-bottom: 1.5px solid #000000;">
+                    <td style="padding: 10px; font-size: 11px; text-align: center; border-right: 1.5px solid #000000; font-weight: bold; color: black !important;">${index + 1}</td>
+                    <td style="padding: 10px; font-size: 11px; font-weight: bold; border-right: 1.5px solid #000000; color: black !important;">
                         ${item.item}
-                        ${item.obs ? `<br><span style="font-size: 9px; color: #475569; font-weight: normal; font-style: italic;">Obs: ${item.obs}</span>` : ''}
+                        ${item.obs ? `<br><span style="font-size: 9px; color: #334155; font-weight: normal; font-style: italic;">Obs: ${item.obs}</span>` : ''}
                     </td>
-                    <td style="padding: 10px; width: 110px; border-right: 1px solid #1e293b; text-align: center; font-size: 10px;">
-                        [ &nbsp; ] OK &nbsp;&nbsp; [ &nbsp; ] NOK
+                    <td style="padding: 10px; width: 120px; border-right: 1.5px solid #000000; text-align: center; font-size: 10px; color: black !important; font-weight: bold;">
+                        [ &nbsp; ] OK &nbsp;&nbsp;&nbsp; [ &nbsp; ] NOK
                     </td>
-                    <td style="padding: 10px; width: 120px; border-right: 1px solid #1e293b;"></td>
+                    <td style="padding: 10px; width: 130px; border-right: 1.5px solid #000000;"></td>
                     <td style="padding: 10px;"></td>
                 </tr>
             `).join('');
@@ -984,33 +997,33 @@
             printArea.innerHTML = `
                 <div style="font-family: Arial, sans-serif; color: #000; padding: 20px;">
                     <!-- Header Corporativo -->
-                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #0f172a; padding-bottom: 15px; margin-bottom: 25px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #000000; padding-bottom: 15px; margin-bottom: 25px;">
                         <div>
                             <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 5px;">
-                                <span style="font-size: 10px; font-weight: 900; color: #94a3b8; letter-spacing: 2px;">GRUPO</span>
-                                <div style="width: 2px; height: 16px; background-color: #e11d48;"></div>
-                                <span style="font-size: 15px; font-weight: 900; color: #0f172a;">TBX</span>
+                                <span style="font-size: 10px; font-weight: 900; color: #000000; letter-spacing: 2px;">GRUPO</span>
+                                <div style="width: 2px; height: 16px; background-color: #000000;"></div>
+                                <span style="font-size: 15px; font-weight: 900; color: #000000;">TBX</span>
                             </div>
-                            <h1 style="font-size: 18px; font-weight: bold; margin: 0; color: #0f172a;">FOLHA DE INSPECÇÃO OPERACIONAL</h1>
-                            <p style="font-size: 10px; color: #475569; margin: 3px 0 0 0;">Controle e Manutenção Preventiva Sistemática</p>
+                            <h1 style="font-size: 18px; font-weight: bold; margin: 0; color: #000000;">FOLHA DE INSPECÇÃO OPERACIONAL</h1>
+                            <p style="font-size: 10px; color: #000000; margin: 3px 0 0 0; font-weight: bold;">Controle e Manutenção Preventiva Sistemática</p>
                         </div>
-                        <div style="text-align: right; font-size: 11px; line-height: 1.4;">
-                            <span style="font-weight: bold; display: block; font-size: 13px; color: #0f172a;">ATIVO: ${maquina}</span>
-                            <span style="display: block;">Setor: ${selectedSetor}</span>
-                            <span style="display: block;">Frequência: ${selectedPeriodo.toUpperCase()}</span>
-                            <span style="font-size: 9px; color: #64748b; display: block; margin-top: 5px;">Data Impressão: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</span>
+                        <div style="text-align: right; font-size: 11px; line-height: 1.4; color: #000000;">
+                            <span style="font-weight: bold; display: block; font-size: 13px; color: #000000;">ATIVO: ${maquina}</span>
+                            <span style="display: block; font-weight: bold;">Setor: ${selectedSetor}</span>
+                            <span style="display: block; font-weight: bold;">Frequência: ${selectedPeriodo.toUpperCase()}</span>
+                            <span style="font-size: 9px; color: #000000; display: block; margin-top: 5px;">Data Impressão: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</span>
                         </div>
                     </div>
 
                     <!-- Corpo da Tabela Grid -->
-                    <table style="width: 100%; border-collapse: collapse; border: 2px solid #0f172a; margin-bottom: 30px;">
+                    <table style="width: 100%; border-collapse: collapse; border: 2px solid #000000; margin-bottom: 30px;">
                         <thead>
-                            <tr style="background-color: #f8fafc; border-bottom: 2px solid #0f172a; text-align: left; font-size: 10px; font-weight: bold;">
-                                <th style="padding: 10px; width: 40px; text-align: center; border-right: 1px solid #1e293b;">Nº</th>
-                                <th style="padding: 10px; border-right: 1px solid #1e293b;">ITEM / INSTRUÇÃO DE TRABALHO</th>
-                                <th style="padding: 10px; width: 110px; text-align: center; border-right: 1px solid #1e293b;">AVALIAÇÃO</th>
-                                <th style="padding: 10px; width: 120px; border-right: 1px solid #1e293b;">ASSINATURA OP.</th>
-                                <th style="padding: 10px;">OBSERVAÇÕES DO TURNO / OCORRÊNCIAS</th>
+                            <tr style="background-color: #f1f5f9; border-bottom: 2px solid #000000; text-align: left; font-size: 10px; font-weight: bold;">
+                                <th style="padding: 10px; width: 40px; text-align: center; border-right: 1.5px solid #000000; color: black !important;">Nº</th>
+                                <th style="padding: 10px; border-right: 1.5px solid #000000; color: black !important;">ITEM / INSTRUÇÃO DE TRABALHO</th>
+                                <th style="padding: 10px; width: 120px; text-align: center; border-right: 1.5px solid #000000; color: black !important;">AVALIAÇÃO</th>
+                                <th style="padding: 10px; width: 130px; border-right: 1.5px solid #000000; color: black !important;">ASSINATURA OP.</th>
+                                <th style="padding: 10px; color: black !important;">OBSERVAÇÕES DO TURNO / OCORRÊNCIAS</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1019,13 +1032,13 @@
                     </table>
 
                     <!-- Rodapé de Assinatura e Liberação Técnica -->
-                    <div style="margin-top: 50px; display: flex; justify-content: space-between; font-size: 11px;">
+                    <div style="margin-top: 50px; display: flex; justify-content: space-between; font-size: 11px; color: black !important; font-weight: bold;">
                         <div style="width: 45%; text-align: center;">
-                            <div style="border-bottom: 1px solid #000; margin-bottom: 6px; height: 40px;"></div>
+                            <div style="border-bottom: 1.5px solid #000000; margin-bottom: 6px; height: 40px;"></div>
                             <span>Assinatura do Inspetor / Operador do Turno</span>
                         </div>
                         <div style="width: 45%; text-align: center;">
-                            <div style="border-bottom: 1px solid #000; margin-bottom: 6px; height: 40px;"></div>
+                            <div style="border-bottom: 1.5px solid #000000; margin-bottom: 6px; height: 40px;"></div>
                             <span>Visto Técnico Engenharia / Supervisão</span>
                         </div>
                     </div>
@@ -1512,14 +1525,10 @@
 
             let tempIdealRecozimento = 1050; 
             let tempoRequisitadoPorMm = 1.6; 
-            let gasInerte = "Nitrogênio + Hidrogênio (N₂/H₂)";
-            let fluxoBaseGas = 16;
 
             if (material === 'aco-201') {
                 tempIdealRecozimento = 1020;
                 tempoRequisitadoPorMm = 1.4;
-                gasInerte = "Nitrogênio Puro";
-                fluxoBaseGas = 12;
             }
 
             const tempoEncharqueMinimoExigido = Math.max(2.5, espessura * tempoRequisitadoPorMm); 
@@ -1700,6 +1709,7 @@
             document.getElementById('loadingIndicator').classList.toggle('hidden', !active);
         }
 
+        // Função de Limpeza e Normalização Segura de Textos
         function normalizar(texto) {
             return String(texto || "").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         }
