@@ -504,6 +504,108 @@
         </div>
     </main>
 
+    <!-- Modal: Configurar Ligação Planilha (NOVO/CORRIGIDO) -->
+    <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <i class="fa-solid fa-link text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Ligação ao Google Sheets</h3>
+                        <p class="text-xs text-slate-500">Insira a URL de implantação da API do Apps Script</p>
+                    </div>
+                </div>
+                <div class="space-y-4 mb-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">URL do Apps Script</label>
+                        <input type="text" id="apiInputUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                    <p class="text-[10px] text-slate-400 leading-relaxed">
+                        Esta URL liga os vossos checklists, registros e almoxarifado técnico diretamente à vossa folha de cálculo no Google Drive de forma segura.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="toggleConfigModal(false)" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button onclick="salvarConfigUrl()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar Ligação</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Cadastro/Edição de Peça Almoxarifado (NOVO/CORRIGIDO) -->
+    <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 overflow-y-auto">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl overflow-hidden my-8">
+            <div class="p-6">
+                <h3 id="almoxModalTitle" class="text-base font-bold text-slate-800 mb-4">Registar Peça no Almoxarifado</h3>
+                <input type="hidden" id="editAlmoxIndex">
+                <div class="space-y-4 mb-5">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Nome do Componente</label>
+                            <input type="text" id="novoItemNome" placeholder="Ex: Válvula Solenoide 24V" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Família / Categoria</label>
+                            <input type="text" id="novoItemCategoria" placeholder="Ex: Sistemas Pneumáticos" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-3 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Stock Atual</label>
+                            <input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Stock Mínimo</label>
+                            <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Unidade</label>
+                            <select id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                                <option value="un">Unidade (un)</option>
+                                <option value="m">Metros (m)</option>
+                                <option value="L">Litros (L)</option>
+                                <option value="kg">Quilos (kg)</option>
+                                <option value="jg">Jogo (jg)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Localização (Física)</label>
+                            <input type="text" id="novoItemLocal" placeholder="Ex: Prateleira B - Gaveta 4" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Foto do Componente</label>
+                            <input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="w-full text-xs text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer">
+                        </div>
+                    </div>
+                    
+                    <!-- Preview da Foto Anexada -->
+                    <div id="fotoPreviewContainer" class="hidden relative border rounded-xl overflow-hidden bg-slate-50 p-2 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <img id="fotoPreviewImg" src="" class="h-12 w-12 object-cover rounded-lg border">
+                            <span class="text-[10px] text-slate-500 font-semibold">Imagem anexada com sucesso</span>
+                        </div>
+                        <button onclick="removerFotoAnexada()" class="p-1.5 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Remover
+                        </button>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5">Descrição Técnica</label>
+                        <textarea id="novoItemDescricao" rows="2" placeholder="Ex: Modelo pneumático com rosca de 1/4 BSP..." class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none"></textarea>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-2">
+                    <button onclick="fecharModalCadastroItem()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button onclick="confirmarCadastroItem()" class="w-full py-3 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar Item</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: Cadastrar Novo POP -->
     <div id="popModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4">
         <div class="bg-white rounded-2xl max-w-xl w-full shadow-xl overflow-hidden">
@@ -608,6 +710,7 @@
         // Sistema de Toasts Elegantes
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
+            if(!container) return;
             const toast = document.createElement('div');
             
             let bgClass = "bg-blue-600 text-white shadow-blue-200";
@@ -685,6 +788,7 @@
         function abrirModuloAlmoxarifado() {
             alternarTela('almoxarifado');
             renderAlmoxarifadoLista();
+            if(API_URL) baixarAlmoxarifadoDaPlanilha();
         }
 
         function abrirModuloPOPs() {
@@ -720,7 +824,6 @@
             document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
 
             // Conversão de Frequência (Hz) para Velocidade (m/min)
-            // Simulação matemática: 50 Hz = 1.0 m/min (Fator de Conversão: 0.02)
             const velocidadeEsteira = freq * 0.02; // m/min
 
             // Tempo total de ciclo (Comprimento total do forno = 28.50 m)
@@ -767,7 +870,6 @@
                 containerNormal.classList.add('hidden');
                 containerEstabilizacao.classList.remove('hidden');
                 
-                // Sobrescrever variáveis para modo de estabilização térmica do forno
                 tempIdealRecozimento = 980; // Patamar seguro de estabilização dinâmica
                 gasInerte = "Nitrogênio de Purga (N₂)";
                 vazaoCalculadaGas = Math.round(18 + (freq * 0.1)); // Fluxo dinâmico de purga atmosférica
@@ -778,7 +880,6 @@
                 b4 = tempIdealRecozimento;
                 b5 = Math.round(tempIdealRecozimento * 0.35);
 
-                // Cálculo de voltas de peças de teste durante o turno de 8 horas (480 minutos)
                 const numRepasses = (480 / tempoTotalCiclo).toFixed(1);
 
                 labelSimulacao.innerHTML = `<i class="fa-solid fa-arrows-spin animate-spin text-orange-600"></i> Simulação Visual: Lote de Teste em Estabilização (Repasse Contínuo)`;
@@ -787,7 +888,6 @@
                 painelAlerta.className = "p-3 rounded-lg border bg-orange-100 border-orange-200 text-orange-800 text-[11px] font-bold block";
                 painelAlerta.innerHTML = `<i class="fa-solid fa-hourglass-half mr-1 animate-pulse"></i> MODO ESTABILIZAÇÃO DE SETUP: O lote de peças de sacrifício dará aproximadamente <strong class="text-orange-950">${numRepasses} voltas completas</strong> no forno ao longo do ciclo de 8 horas para estabilizar a inércia das resistências.`;
 
-                // Renderiza peças contínuas (sem espaçamento) para representar as dummy de passagem
                 renderVisualEsteira(300, 10);
             } else {
                 containerNormal.classList.remove('hidden');
@@ -795,10 +895,9 @@
                 labelSimulacao.innerHTML = `<i class="fa-solid fa-left-right"></i> Simulação Visual de Carregamento da Esteira`;
                 labelCiclo.innerText = "Tempo de Ciclo Total";
 
-                // Validação de Engenharia Física de Processos (Alerta de Subaquecimento)
                 if (tempoEncharque < tempoEncharqueMinimoExigido) {
                     painelAlerta.className = "p-3 rounded-lg border bg-red-100 border-red-200 text-red-800 text-[11px] font-bold block";
-                    painelAlerta.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1 animate-pulse"></i> ALERTA: Velocidade da esteira excessiva para esta espessura (${espessura}mm). Risco de recozimento incompleto (Falta encharque térmico). Reduza a frequência (Hz).`;
+                    painelAlerta.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1 animate-pulse"></i> ALERTA: Velocidade da esteira excessiva para esta espessura (${espessura}mm). Risco de recozimento incompleto. Reduza a frequência (Hz).`;
                 } else if (tempoEncharque > tempoEncharqueMinimoExigido * 2.5) {
                     painelAlerta.className = "p-3 rounded-lg border bg-amber-100 border-amber-200 text-amber-800 text-[11px] font-bold block";
                     painelAlerta.innerHTML = `<i class="fa-solid fa-triangle-exclamation mr-1"></i> AVISO: Velocidade lenta. Desperdício térmico e risco de oxidação severa. Recomenda-se elevar a frequência (Hz).`;
@@ -813,9 +912,6 @@
             // Atualização de Outputs de Resultados na Tela
             document.getElementById('fornoVelocidade').innerText = `${velocidadeEsteira.toFixed(2)} m/min`;
             document.getElementById('fornoTempoCiclo').innerText = `${Math.round(tempoTotalCiclo)} min`;
-            document.getElementById('fornoCapacidade').innerText = isEstabilizacao ? "Repassando Carga" : `${capacidadePecasHora} pçs/h`;
-            document.getElementById('fornoTempoEncharque').innerText = `${tempoEncharque.toFixed(1)} min`;
-
             document.getElementById('b1Temp').innerText = `${b1}°C`;
             document.getElementById('b2Temp').innerText = `${b2}°C`;
             document.getElementById('b3Temp').innerText = `${b3}°C`;
@@ -826,9 +922,9 @@
 
         function renderVisualEsteira(comprimento, espacamento) {
             const area = document.getElementById('conveyorVisualArea');
+            if(!area) return;
             area.innerHTML = "";
             
-            // Gerar caixas de peças com o espaçamento proporcional escalonado
             const larguraVisualPeca = Math.min(100, Math.max(15, comprimento * 0.15));
             const margemVisualPeca = Math.min(60, Math.max(4, espacamento * 0.15));
 
@@ -848,18 +944,50 @@
             try {
                 const res = await fetch(`${API_URL}?action=carregarItens`);
                 if (!res.ok) throw new Error("A ligação falhou");
-                originalDatabase = await res.json();
+                const resJson = await res.json();
+                
+                // Mapeamento correto de estrutura caso retorne { itens: [...] } ou array plano
+                originalDatabase = resJson.itens || resJson;
                 
                 renderSetorCards();
                 showToast("Dossier de Processos carregado com sucesso!");
+                
+                // Sincroniza também o Almoxarifado em background
+                baixarAlmoxarifadoDaPlanilha();
             } catch (e) { 
                 showToast("Incapaz de estabelecer comunicação com o Google Sheets.", "error"); 
             }
             toggleLoading(false);
         }
 
+        async function baixarAlmoxarifadoDaPlanilha() {
+            if (!API_URL) return;
+            try {
+                const res = await fetch(`${API_URL}?action=carregarAlmoxarifado`);
+                if (!res.ok) throw new Error("Ligação falhou");
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    almoxarifadoData = data.map(item => ({
+                        id: item.id,
+                        nome: item.item,
+                        categoria: item.categoria,
+                        quantidade: item.quantidade,
+                        minimo: item.estoqueMinimo,
+                        unidade: item.unidade,
+                        local: item.localizacao,
+                        foto: item.imagem,
+                        descricao: item.descricao
+                    }));
+                    renderAlmoxarifadoLista();
+                }
+            } catch(e) {
+                console.error("Erro ao sincronizar estoque técnico", e);
+            }
+        }
+
         function renderSetorCards() {
             const container = document.getElementById('setorCards');
+            if(!container) return;
             const setores = [...new Set(originalDatabase.map(i => i.setor))];
             
             container.innerHTML = setores.map(setor => `
@@ -879,6 +1007,7 @@
             
             const periodos = [...new Set(originalDatabase.filter(i => i.setor === setor).map(i => i.periodicidade))];
             const container = document.getElementById('periodoCards');
+            if(!container) return;
             
             container.innerHTML = periodos.map(per => `
                 <button onclick="selecionarPeriodo('${per}')" class="nav-card bg-white border border-slate-200 rounded-xl p-5 shadow-sm text-left flex items-center justify-between w-full">
@@ -911,6 +1040,7 @@
             document.getElementById('itensTopLabel').innerText = `Processo: ${selectedSetor} — Frequência: ${selectedPeriodo}`;
             
             const container = document.getElementById("checklistContainer");
+            if(!container) return;
             container.innerHTML = "";
 
             const filtrados = originalDatabase.filter(x => x.setor === selectedSetor && x.periodicidade === selectedPeriodo);
@@ -992,7 +1122,7 @@
 
         async function registrarItemIndividual(botao) {
             const linha = botao.closest(".row-check");
-            const inputOperador = inlineQuerySelector = linha.querySelector(".operador-inp");
+            const inputOperador = linha.querySelector(".operador-inp");
             const selectStatus = linha.querySelector(".status-sel");
             const inputObs = linha.querySelector(".obs-inp");
 
@@ -1018,15 +1148,18 @@
                 }
             }
 
-            const payload = [{
-                maquina: linha.getAttribute("data-maquina"),
-                item: linha.getAttribute("data-item"),
-                setor: selectedSetor,
-                periodicidade: selectedPeriodo,
-                status: selectStatus.value,
-                operador: operadorValue,
-                obs: dadosOcorrencia
-            }];
+            const payload = {
+                tipo: "checklist",
+                dados: [{
+                    maquina: linha.getAttribute("data-maquina"),
+                    item: linha.getAttribute("data-item"),
+                    setor: selectedSetor,
+                    periodicidade: selectedPeriodo,
+                    status: selectStatus.value,
+                    operador: operadorValue,
+                    obs: dadosOcorrencia
+                }]
+            };
 
             try {
                 await fetch(API_URL, { 
@@ -1035,7 +1168,7 @@
                     body: JSON.stringify(payload) 
                 });
 
-                showToast(`Dados gravados: ${payload[0].item}`);
+                showToast(`Dados gravados: ${payload.dados[0].item}`);
                 botao.innerHTML = `<i class="fa-solid fa-check-double"></i> Pronto`;
                 botao.className = "btn-registrar w-full bg-emerald-600 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow flex items-center justify-center gap-1 animate-pulse";
 
@@ -1066,14 +1199,15 @@
         // Almoxarifado Mock
         function gerarAlmoxarifadoMock() {
             almoxarifadoData = [
-                { id: 1, nome: "Ventosa de Silicone de Alta Temperatura", categoria: "Sistemas de Vácuo", quantidade: 14, minimo: 5, unidade: "un", local: "Prateleira A - Gaveta 2", foto: "" },
-                { id: 2, nome: "Filtro Regulador de Pressão Modular 1/4", categoria: "Sistemas Pneumáticos", quantidade: 3, minimo: 4, unidade: "un", local: "Painel de Manutenção C", foto: "" },
-                { id: 3, nome: "Óleo Sintético Mobil Gear ISO VG 220", categoria: "Fluidos & Lubrificantes", quantidade: 25, minimo: 10, unidade: "L", local: "Armazém Geral - Zona Norte", foto: "" }
+                { id: "1", nome: "Ventosa de Silicone de Alta Temperatura", categoria: "Sistemas de Vácuo", quantidade: 14, minimo: 5, unidade: "un", local: "Prateleira A - Gaveta 2", foto: "" },
+                { id: "2", nome: "Filtro Regulador de Pressão Modular 1/4", categoria: "Sistemas Pneumáticos", quantidade: 3, minimo: 4, unidade: "un", local: "Painel de Manutenção C", foto: "" },
+                { id: "3", nome: "Óleo Sintético Mobil Gear ISO VG 220", categoria: "Fluidos & Lubrificantes", quantidade: 25, minimo: 10, unidade: "L", local: "Armazém Geral - Zona Norte", foto: "" }
             ];
         }
 
         function renderAlmoxarifadoLista() {
             const tbody = document.getElementById('almoxarifadoTbody');
+            if(!tbody) return;
             const catFilter = document.getElementById('almoxCategoriaFilter').value;
             const search = document.getElementById('almoxSearch').value.toLowerCase();
             
@@ -1086,7 +1220,7 @@
 
             const filtrados = almoxarifadoData.filter(item => {
                 const matchCat = catFilter === "" || item.categoria === catFilter;
-                const matchSearch = item.nome.toLowerCase().includes(search) || item.categoria.toLowerCase().includes(search);
+                const matchSearch = (item.nome || "").toLowerCase().includes(search) || (item.categoria || "").toLowerCase().includes(search);
                 return matchCat && matchSearch;
             });
 
@@ -1106,11 +1240,11 @@
                         <td class="p-4 font-semibold text-slate-800 text-xs">${item.nome}</td>
                         <td class="p-4 text-xs text-slate-500">${item.categoria}</td>
                         <td class="p-4 text-xs">${badgeEstoque}</td>
-                        <td class="p-4 text-xs text-slate-500">${item.local}</td>
+                        <td class="p-4 text-xs text-slate-500">${item.local || ""}</td>
                         <td class="p-4 text-center">
                             <div class="flex gap-2 justify-center">
-                                <button onclick="editarItemAlmox(${item.id})" class="text-blue-600 hover:text-blue-800 p-1.5 hover:bg-blue-50 rounded-lg transition-all"><i class="fa-solid fa-pen"></i></button>
-                                <button onclick="deletarItemAlmox(${item.id})" class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-50 rounded-lg transition-all"><i class="fa-solid fa-trash"></i></button>
+                                <button onclick="editarItemAlmox('${item.id}')" class="text-blue-600 hover:text-blue-800 p-1.5 hover:bg-blue-50 rounded-lg transition-all"><i class="fa-solid fa-pen"></i></button>
+                                <button onclick="deletarItemAlmox('${item.id}')" class="text-red-600 hover:text-red-800 p-1.5 hover:bg-red-50 rounded-lg transition-all"><i class="fa-solid fa-trash"></i></button>
                             </div>
                         </td>
                     </tr>
@@ -1127,6 +1261,7 @@
             document.getElementById('novoItemQuantidade').value = "0";
             document.getElementById('novoItemMinimo').value = "0";
             document.getElementById('novoItemUnidade').value = "un";
+            document.getElementById('novoItemDescricao').value = "";
             removerFotoAnexada();
             document.getElementById('cadastroItemModal').classList.remove('hidden');
         }
@@ -1155,13 +1290,14 @@
             document.getElementById('novoItemImagem').value = "";
         }
 
-        function confirmarCadastroItem() {
+        async function confirmarCadastroItem() {
             const nome = document.getElementById('novoItemNome').value.trim();
             const categoria = document.getElementById('novoItemCategoria').value.trim();
             const local = document.getElementById('novoItemLocal').value.trim();
             const quantidade = parseInt(document.getElementById('novoItemQuantidade').value) || 0;
             const minimo = parseInt(document.getElementById('novoItemMinimo').value) || 0;
             const unidade = document.getElementById('novoItemUnidade').value.trim() || "un";
+            const descricao = document.getElementById('novoItemDescricao').value.trim();
             const editId = document.getElementById('editAlmoxIndex').value;
 
             if (!nome || !categoria) {
@@ -1169,6 +1305,60 @@
                 return;
             }
 
+            const dadosObj = {
+                id: editId || "",
+                item: nome,
+                categoria,
+                unidade,
+                quantidade,
+                estoqueMinimo: minimo,
+                localizacao: local,
+                descricao,
+                imagemUrl: fotoAnexadaBase64
+            };
+
+            // Envio para o Google Apps Script se estiver configurado
+            if (API_URL) {
+                try {
+                    showToast("Sincronizando peça com o Google Sheets...", "info");
+                    
+                    // Se há imagem nova anexada, realiza o upload primeiro
+                    if (fotoAnexadaBase64 && fotoAnexadaBase64.startsWith("data:")) {
+                        const base64Clean = fotoAnexadaBase64.split(",")[1];
+                        const mimeType = fotoAnexadaBase64.split(";")[0].split(":")[1];
+                        
+                        const uploadRes = await fetch(API_URL, {
+                            method: "POST",
+                            body: JSON.stringify({
+                                tipo: "uploadImagem",
+                                dados: {
+                                    base64: base64Clean,
+                                    nomeArquivo: `peca_${Date.now()}.jpg`,
+                                    mimeType: mimeType
+                                }
+                            })
+                        });
+                    }
+
+                    const payload = {
+                        tipo: editId ? "editarItemEstoque" : "cadastroItemEstoque",
+                        dados: dadosObj
+                    };
+
+                    await fetch(API_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        body: JSON.stringify(payload)
+                    });
+                    
+                    showToast("Sincronizado com a planilha!");
+                    setTimeout(() => baixarAlmoxarifadoDaPlanilha(), 1200);
+                } catch(err) {
+                    showToast("Salvo localmente devido a falha na ligação.", "error");
+                }
+            }
+
+            // Atualização local imediata
             if (editId) {
                 const item = almoxarifadoData.find(i => i.id == editId);
                 if (item) {
@@ -1178,18 +1368,20 @@
                     item.quantidade = quantidade;
                     item.minimo = minimo;
                     item.unidade = unidade;
+                    item.descricao = descricao;
                     if (fotoAnexadaBase64) item.foto = fotoAnexadaBase64;
                 }
                 showToast("Ficha do componente atualizada!");
             } else {
                 const novoObj = {
-                    id: Date.now(),
+                    id: "IT" + Date.now(),
                     nome,
                     categoria,
                     local,
                     quantidade,
                     minimo,
                     unidade,
+                    descricao,
                     foto: fotoAnexadaBase64
                 };
                 almoxarifadoData.push(novoObj);
@@ -1208,10 +1400,11 @@
             document.getElementById('editAlmoxIndex').value = id;
             document.getElementById('novoItemNome').value = item.nome;
             document.getElementById('novoItemCategoria').value = item.categoria;
-            document.getElementById('novoItemLocal').value = item.local;
+            document.getElementById('novoItemLocal').value = item.local || "";
             document.getElementById('novoItemQuantidade').value = item.quantidade;
             document.getElementById('novoItemMinimo').value = item.minimo;
             document.getElementById('novoItemUnidade').value = item.unidade;
+            document.getElementById('novoItemDescricao').value = item.descricao || "";
             
             if (item.foto) {
                 fotoAnexadaBase64 = item.foto;
@@ -1240,6 +1433,7 @@
 
         function renderPOPs() {
             const container = document.getElementById('popsContainer');
+            if(!container) return;
             const maqFilter = document.getElementById('popMaquinaFilter').value;
             const search = document.getElementById('popSearch').value.toLowerCase();
 
@@ -1319,6 +1513,7 @@
 
         function renderTreinamentos() {
             const tbody = document.getElementById('treinamentoTbody');
+            if(!tbody) return;
             tbody.innerHTML = treinamentoData.map(t => {
                 let badgeClass = "bg-slate-100 text-slate-800";
                 if (t.status === 'Qualificado') badgeClass = "bg-emerald-100 text-emerald-800 font-bold";
@@ -1378,6 +1573,7 @@
 
         function renderFuncionamentos() {
             const tbody = document.getElementById('funcionamentoTbody');
+            if(!tbody) return;
             tbody.innerHTML = funcionamentoData.map(f => `
                 <tr class="border-b last:border-0 hover:bg-slate-50/50">
                     <td class="p-2 font-medium text-slate-800">${f.maquina}</td>
@@ -1442,7 +1638,9 @@
 
         // Modais de Configuração Geral
         function toggleConfigModal(show) {
-            document.getElementById('configModal').classList.toggle('hidden', !show);
+            const modal = document.getElementById('configModal');
+            if(!modal) return;
+            modal.classList.toggle('hidden', !show);
             if (show) {
                 document.getElementById('apiInputUrl').value = API_URL;
             }
@@ -1467,15 +1665,18 @@
 
         function popularFiltroMaquinas(selectId) {
             const select = document.getElementById(selectId);
-            const maquinas = [...new Set(originalDatabase.map(i => i.maquina))];
-            if (maquinas.length === 0) {
-                // Maquinas padrão se a API não estiver conectada
-                select.innerHTML = `
-                    <option value="Guilhotina - GUI-001">Guilhotina - GUI-001</option>
-                    <option value="Robô Prensa - ROB-PR001">Robô Prensa - ROB-PR001</option>
-                `;
-                return;
+            if(!select) return;
+            let maquinas = [];
+            
+            if (originalDatabase && originalDatabase.length > 0) {
+                maquinas = [...new Set(originalDatabase.map(i => i.maquina))];
             }
+            
+            // Fallback caso a API não esteja conectada de imediato
+            if (maquinas.length === 0) {
+                maquinas = ["Guilhotina - GUI-001", "Robô Prensa - ROB-PR001", "Forno de Recozimento - FOR-01"];
+            }
+
             if (selectId === 'popMaquinaFilter') {
                 select.innerHTML = '<option value="">Todas as Máquinas</option>' + 
                     maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
@@ -1514,7 +1715,7 @@
             const databaseSummary = originalDatabase.slice(0, 10).map(i => `${i.maquina}: ${i.item}`).join('\n');
             const popSummary = popData.map(p => `POP: ${p.titulo} na ${p.maquina}`).join('\n');
 
-            const systemPrompt = `És o Engenheiro Sénior de Fiabilidade, Segurança e Processos Industriais (Indústria 5.0) do Grupo TBX. Tens ampla competência em LOTO (Lockout/Tagout), Lean Manufacturing, TPM, calibração, treinamento técnico, criação de POPs e Fornos Industriais de Recozimento Contínuo (comprimento total de 28,50m, zonas: Entrada 1,5m, Pré-aquecimento 6,5m, Recozimento 4,5m, Resfriamento 14,5m e Saída 1,5m). Sabes parametrizar o forno baseado na frequência da esteira (Hz), aço inoxidável AISI 304 e AISI 201, espessura e passo/espaçamento de quinas das peças. Responde de forma técnica, focando na segurança operacional, fiabilidade mecânica e controle metalúrgico dos processos industriais. Aqui estão os procedimentos cadastrados:\n${popSummary}\nE inventário:\n${databaseSummary}`;
+            const systemPrompt = `És o Engenheiro Sénior de Fiabilidade, Segurança e Processos Industriais (Indústria 5.0) do Grupo TBX. Tens ampla competência em LOTO (Lockout/Tagout), Lean Manufacturing, TPM, calibração, treinamento técnico, criação de POPs e Fornos Industriais de Recozimento Contínuo (comprimento total de 28,50m). Sabes parametrizar o forno baseado na frequência da esteira (Hz), aço inoxidável AISI 304 e AISI 201, espessura e passo/espaçamento de quinas das peças. Responde de forma técnica, focando na segurança operacional, fiabilidade mecânica e controle metalúrgico dos processos industriais. Aqui estão os procedimentos cadastrados:\n${popSummary}\nE inventário:\n${databaseSummary}`;
 
             try {
                 const responseText = await callGeminiAPI(query, systemPrompt);
@@ -1546,9 +1747,7 @@
                         const result = await response.json();
                         return result.candidates?.[0]?.content?.parts?.[0]?.text || "Nenhum resultado obtido.";
                     }
-                } catch (e) {
-                    // Retentativa exponencial silenciosa conforme as diretrizes estipuladas
-                }
+                } catch (e) {}
                 await new Promise(res => setTimeout(res, delay));
                 delay *= 2;
             }
@@ -1568,7 +1767,7 @@
                 messageDiv.className = "bg-slate-100 rounded-2xl p-3 text-xs text-slate-500 max-w-[85%] flex items-center gap-2";
                 messageDiv.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-blue-600"></i> <span>${text}</span>`;
             } else {
-                messageDiv.className = "bg-slate-100 rounded-2xl p-3 text-xs text-slate-750 max-w-[85%] shadow-sm leading-relaxed";
+                messageDiv.className = "bg-slate-100 rounded-2xl p-3 text-xs text-slate-755 max-w-[85%] shadow-sm leading-relaxed";
                 messageDiv.innerHTML = text.replace(/\n/g, '<br>');
             }
 
