@@ -200,15 +200,7 @@
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
                             <i class="fa-solid fa-sliders text-orange-600"></i> Parâmetros do Processo
                         </h3>
-                        <div class="flex items-center gap-1.5 bg-orange-50 border border-orange-200 px-2 py-1 rounded-lg">
-                            <span class="text-[9px] font-bold text-orange-700 uppercase">Estabilização</span>
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" id="fornoEstabilizacao" onchange="calcularParametrosForno()" class="sr-only peer">
-                                <div class="w-7 h-4 bg-slate-200 rounded-full peer peer-focus:ring-0 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-orange-600"></div>
-                            </label>
-                        </div>
                     </div>
-                    
                     <div id="containerNormalParams" class="space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Material da Peça</label>
@@ -235,16 +227,6 @@
                             <input type="range" id="fornoEspessura" min="0.5" max="20" step="0.5" value="2.5" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
                         </div>
                     </div>
-
-                    <div id="containerEstabilizacaoParams" class="hidden bg-orange-50/40 border border-orange-100 p-4 rounded-xl space-y-2">
-                        <span class="block text-xs font-bold text-orange-800 uppercase flex items-center gap-1">
-                            <i class="fa-solid fa-clock-rotate-left"></i> Rotina de Estabilização Ativa
-                        </span>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            O forno está configurado para o ciclo de setup térmico dinâmico por 8 horas.
-                        </p>
-                    </div>
-
                     <div>
                         <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
                             <span>Frequência da Esteira</span>
@@ -252,7 +234,6 @@
                         </label>
                         <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="35" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
                     </div>
-
                     <div id="fornoAlerta" class="hidden p-3 rounded-lg border text-[11px] font-semibold"></div>
                 </div>
 
@@ -261,36 +242,18 @@
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
                             <i class="fa-solid fa-chart-area text-blue-600"></i> Diagrama das Zonas Industriais (28,50 m)
                         </h3>
-                        
                         <div class="grid grid-cols-12 border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-[10px] text-white">
-                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1">
-                                <span>Entrada</span>
-                                <span class="font-normal opacity-80 text-[9px]">1,50 m</span>
-                            </div>
-                            <div class="col-span-3 bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1">
-                                <span> Pré-Aq.</span>
-                                <span class="font-normal opacity-80 text-[9px]">6,50 m</span>
-                            </div>
-                            <div class="col-span-2 bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1">
-                                <span class="animate-pulse"> Recoz.</span>
-                                <span class="font-normal opacity-80 text-[9px]">4,50 m</span>
-                            </div>
-                            <div class="col-span-5 bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1">
-                                <span> Resfriamento</span>
-                                <span class="font-normal opacity-80 text-[9px]">14,50 m</span>
-                            </div>
-                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center p-1">
-                                <span>Saída</span>
-                                <span class="font-normal opacity-80 text-[9px]">1,50 m</span>
-                            </div>
+                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1"><span>Entrada</span></div>
+                            <div class="col-span-3 bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1"><span> Pré-Aq.</span></div>
+                            <div class="col-span-2 bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1"><span class="animate-pulse"> Recoz.</span></div>
+                            <div class="col-span-5 bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1"><span> Resfriamento</span></div>
+                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center p-1"><span>Saída</span></div>
                         </div>
-
                         <div class="border rounded-xl p-3 bg-slate-100">
                             <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-wider" id="labelSimulacaoConveyor">Simulação da Esteira</span>
                             <div class="h-10 w-full bg-slate-200 rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
                         </div>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
                             <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Velocidade</span>
@@ -299,38 +262,6 @@
                         <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
                             <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider" id="fornoMetricLabelCiclo">Tempo de Ciclo</span>
                             <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoTempoCiclo">63 min</span>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center bg-indigo-50/20 border-indigo-100">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Atmosfera</span>
-                            <span class="block text-sm font-bold text-indigo-700 mt-2" id="fornoAtmosfera">N₂ Purificado</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-temperature-three-quarters text-orange-600"></i> Parametrização das 5 Bancadas
-                        </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 text-center">
-                            <div class="border rounded-xl p-3 bg-orange-50/30 border-orange-100">
-                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 1</span>
-                                <span class="block text-base font-bold text-orange-600" id="b1Temp">420°C</span>
-                            </div>
-                            <div class="border rounded-xl p-3 bg-orange-100/30 border-orange-200">
-                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 2</span>
-                                <span class="block text-base font-bold text-orange-700" id="b2Temp">595°C</span>
-                            </div>
-                            <div class="border rounded-xl p-3 bg-red-50/40 border-red-200">
-                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 3</span>
-                                <span class="block text-base font-bold text-red-600" id="b3Temp">700°C</span>
-                            </div>
-                            <div class="border rounded-xl p-3 bg-red-100/30 border-red-200">
-                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 4</span>
-                                <span class="block text-base font-bold text-red-700" id="b4Temp">700°C</span>
-                            </div>
-                            <div class="border rounded-xl p-3 bg-blue-50/40 border-blue-100">
-                                <span class="block text-[9px] font-bold text-slate-400 uppercase">Bancada 5</span>
-                                <span class="block text-base font-bold text-blue-600" id="b5Temp">280°C</span>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -384,18 +315,18 @@
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Grau de Urgência</label>
                         <select id="chamadoUrgencia" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                            <option value="Baixa">Baixa (Pode aguardar programação)</option>
-                            <option value="Média">Média (Requer atenção breve)</option>
                             <option value="Alta">Alta (Máquina Parada / Emergência)</option>
+                            <option value="Média" selected>Média (Requer atenção breve)</option>
+                            <option value="Baixa">Baixa (Pode aguardar programação)</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Defeito Apresentado / Sintoma</label>
-                        <textarea id="chamadoDefeito" rows="3" placeholder="Ex: Mangueira do pistão vazando óleo, barulho no rolamento..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                        <textarea id="chamadoDefeito" rows="3" placeholder="Ex: Mangueira do pistão vazando óleo..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Seu Nome (Relator)</label>
-                        <input type="text" id="chamadoRelator" placeholder="Nome do Operador ou Encarregado" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <select id="chamadoRelator" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
@@ -423,28 +354,24 @@
                 <button onclick="fecharModalAlertas()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-white">
-                
                 <div>
                     <h4 class="text-[11px] font-bold text-rose-600 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-rose-100 pb-1">
                         <i class="fa-solid fa-circle-exclamation"></i> Vencidas / Atrasadas (<span id="countVencidas">0</span>)
                     </h4>
                     <div id="listaAlertasVencidas" class="space-y-2"></div>
                 </div>
-
                 <div>
                     <h4 class="text-[11px] font-bold text-amber-600 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-amber-100 pb-1">
                         <i class="fa-solid fa-clock"></i> Pendentes Para Hoje (<span id="countHoje">0</span>)
                     </h4>
                     <div id="listaAlertasHoje" class="space-y-2"></div>
                 </div>
-
                 <div>
                     <h4 class="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-blue-100 pb-1">
                         <i class="fa-solid fa-calendar-days"></i> Programação (Próximos 7 dias) (<span id="countProximos">0</span>)
                     </h4>
                     <div id="listaAlertasProximos" class="space-y-2"></div>
                 </div>
-
             </div>
         </div>
     </div>
@@ -458,7 +385,7 @@
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label>
                         <div class="flex gap-2 items-center">
-                            <input type="text" id="novoItemNome" placeholder="Ex: Ventosa" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                            <input type="text" id="novoItemNome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
                             <div class="relative">
                                 <input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="absolute inset-0 opacity-0 cursor-pointer w-10 h-10">
                                 <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all">
@@ -470,7 +397,7 @@
                     <div id="fotoPreviewContainer" class="hidden relative border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-2 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <img id="fotoPreviewImg" src="" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" class="h-10 w-10 object-cover rounded-lg border">
-                            <span class="text-[10px] text-slate-500 font-medium">Foto anexada com sucesso</span>
+                            <span class="text-[10px] text-slate-500 font-medium">Foto anexada</span>
                         </div>
                         <button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1">
                             <i class="fa-solid fa-trash"></i> Remover
@@ -527,8 +454,7 @@
                         <div><span class="block font-bold text-slate-400 uppercase">Descrição</span><span id="movItemDescText" class="text-slate-700 font-medium">-</span></div>
                         <div><span class="block font-bold text-slate-400 uppercase">Localização</span><span id="movItemLocalText" class="text-slate-700 font-medium">-</span></div>
                         <div class="flex gap-2 pt-1 border-t">
-                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Ver Imagem</button>
-                            <button onclick="editarItemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-pencil"></i> Editar Item</button>
+                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3 font-sans">
@@ -543,7 +469,7 @@
                     </div>
                     <div class="font-sans">
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Responsável</label>
-                        <input type="text" id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
                     </div>
                     <div class="font-sans">
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label>
@@ -574,6 +500,7 @@
         let checklistStatus = [];
         let almoxarifadoData = [];
         let popData = [];
+        let equipesData = []; // NOVA VARIÁVEL GLOBAL DAS EQUIPES
         let fotoAnexadaBase64 = "";
         
         let currentView = 'home';
@@ -597,15 +524,15 @@
             if(!container) return;
             const toast = document.createElement('div');
             
-            let bgClass = "bg-blue-600 text-white shadow-blue-200";
+            let bgClass = "bg-emerald-600 text-white shadow-emerald-200";
             let icon = '<i class="fa-solid fa-circle-check"></i>';
             
             if (type === 'error') {
-                bgClass = "bg-red-600 text-white shadow-red-200";
+                bgClass = "bg-rose-600 text-white shadow-rose-200";
                 icon = '<i class="fa-solid fa-circle-xmark"></i>';
             } else if (type === 'info') {
-                bgClass = "bg-[#0b132b] text-white shadow-indigo-200";
-                icon = '<i class="fa-solid fa-microchip animate-pulse"></i>';
+                bgClass = "bg-[#0b132b] text-white shadow-slate-200";
+                icon = '<i class="fa-solid fa-microchip"></i>';
             }
             
             toast.className = `p-4 rounded-xl shadow-lg text-xs font-bold flex items-center gap-3 transition-all duration-300 transform translate-y-2 opacity-0 ${bgClass}`;
@@ -662,8 +589,22 @@
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
         function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
 
+        // --- SISTEMA DE EQUIPES (VALIDAÇÃO DE NOMES) ---
+        function gerarOptionsEquipes() {
+            if (!equipesData || equipesData.length === 0) {
+                return `<option value="">Nenhum colaborador cadastrado</option>`;
+            }
+            return `<option value="">Selecione o Nome...</option>` +
+            equipesData.map(eq => {
+                if(eq.membros.length === 0) return '';
+                return `<optgroup label="${eq.setor}">` +
+                       eq.membros.map(m => `<option value="${m}">${m}</option>`).join('') +
+                       `</optgroup>`;
+            }).join('');
+        }
+
         // --- SISTEMA DE CHAMADOS (CORRETIVA) ---
-        function abrirModalChamado() {
+        function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
             let maquinas = [];
             if (originalDatabase && originalDatabase.length > 0) {
@@ -672,15 +613,16 @@
                 maquinas = ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
             }
             select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            if(maquinaPre) select.value = maquinaPre;
+
+            document.getElementById('chamadoDefeito').value = defeitoPre;
             
-            document.getElementById('chamadoDefeito').value = "";
-            document.getElementById('chamadoRelator').value = "";
+            // Popula as equipes padronizadas
+            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes();
             document.getElementById('chamadoModal').classList.remove('hidden');
         }
 
-        function fecharModalChamado() {
-            document.getElementById('chamadoModal').classList.add('hidden');
-        }
+        function fecharModalChamado() { document.getElementById('chamadoModal').classList.add('hidden'); }
 
         async function enviarChamado() {
             const maquina = document.getElementById('chamadoMaquina').value;
@@ -690,7 +632,7 @@
             const btn = document.getElementById('btnEnviarChamado');
 
             if (!defeito || !relator) {
-                showToast("Preencha o defeito e o nome do relator.", "error");
+                showToast("Preencha o defeito e selecione o nome do relator.", "error");
                 return;
             }
 
@@ -700,77 +642,57 @@
 
             if (API_URL) {
                 try {
-                    const payload = {
-                        tipo: "chamado",
-                        dados: { maquina, urgencia, defeito, relator }
-                    };
-                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "chamado", dados: { maquina, urgencia, defeito, relator } }) });
                     showToast("OS de Manutenção criada com sucesso!");
-                } catch(e) {
-                    showToast("Falha na rede. Tente novamente.", "error");
-                }
+                } catch(e) { showToast("Falha na rede. Tente novamente.", "error"); }
             } else {
-                showToast("Modo Offline: Chamado não enviado.", "info");
+                showToast("Modo Offline: OS simulada com sucesso.", "info");
             }
 
-            btn.disabled = false;
-            btn.innerHTML = textoBtn;
-            fecharModalChamado();
+            btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
+        }
+
+        // Auto-abrir Chamado quando muda para "Problema"
+        function verificarStatusChamado(selectElement) {
+            if (selectElement.value === "Problema") {
+                const linha = selectElement.closest(".row-check");
+                const maquina = linha.getAttribute("data-maquina");
+                const item = linha.getAttribute("data-item");
+                const obsValue = linha.querySelector(".obs-inp").value.trim();
+                
+                const obsFinal = obsValue ? ` | Obs: ${obsValue}` : "";
+                abrirModalChamado(maquina, `Falha detectada no item de inspeção: ${item}${obsFinal}`);
+            }
         }
 
         // --- SISTEMA DE ALERTAS (PREDITIVA/PREVENTIVA) ---
         function calcularAlertas() {
-            let vencidas = [];
-            let hoje = [];
-            let proximos = [];
-            
-            const dataHoje = new Date();
-            dataHoje.setHours(0,0,0,0);
-            
-            const daqui7Dias = new Date(dataHoje);
-            daqui7Dias.setDate(dataHoje.getDate() + 7);
+            let vencidas = []; let hoje = []; let proximos = [];
+            const dataHoje = new Date(); dataHoje.setHours(0,0,0,0);
+            const daqui7Dias = new Date(dataHoje); daqui7Dias.setDate(dataHoje.getDate() + 7);
 
-            // Agrupa por máquina + periodicidade para não repetir itens no aviso
             const agrupado = {};
             originalDatabase.forEach(it => {
                 const chave = it.maquina + "|" + normalizar(it.periodicidade);
-                if (!agrupado[chave]) {
-                    agrupado[chave] = { maquina: it.maquina, setor: it.setor, periodicidade: it.periodicidade };
-                }
+                if (!agrupado[chave]) agrupado[chave] = { maquina: it.maquina, setor: it.setor, periodicidade: it.periodicidade };
             });
 
             for (let chave in agrupado) {
                 const info = agrupado[chave];
-                const statusAtivo = checklistStatus.find(s => 
-                    normalizar(s.maquina) === normalizar(info.maquina) && 
-                    normalizar(s.setor) === normalizar(info.setor) &&
-                    matchPeriodicidade(s.periodicidade, info.periodicidade)
-                );
-
+                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && matchPeriodicidade(s.periodicidade, info.periodicidade));
                 const intervalo = diasParaPeriodicidade(info.periodicidade);
                 
                 if (!statusAtivo || !statusAtivo.ultimoRegistro) {
-                    vencidas.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: "Nunca feito" });
-                    continue;
+                    vencidas.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: "Nunca feito" }); continue;
                 }
-
-                const dataUltima = new Date(statusAtivo.ultimoRegistro);
-                dataUltima.setHours(0,0,0,0);
-                
-                const dataProxima = new Date(dataUltima);
-                dataProxima.setDate(dataUltima.getDate() + intervalo);
-
+                const dataUltima = new Date(statusAtivo.ultimoRegistro); dataUltima.setHours(0,0,0,0);
+                const dataProxima = new Date(dataUltima); dataProxima.setDate(dataUltima.getDate() + intervalo);
                 const proxFormatada = dataProxima.toLocaleDateString('pt-BR');
 
-                if (dataProxima < dataHoje) {
-                    vencidas.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Venceu dia ${proxFormatada}` });
-                } else if (dataProxima.getTime() === dataHoje.getTime()) {
-                    hoje.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Vence Hoje` });
-                } else if (dataProxima > dataHoje && dataProxima <= daqui7Dias) {
-                    proximos.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Vence dia ${proxFormatada}` });
-                }
+                if (dataProxima < dataHoje) vencidas.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Venceu dia ${proxFormatada}` });
+                else if (dataProxima.getTime() === dataHoje.getTime()) hoje.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Vence Hoje` });
+                else if (dataProxima > dataHoje && dataProxima <= daqui7Dias) proximos.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Vence dia ${proxFormatada}` });
             }
-
             return { vencidas, hoje, proximos };
         }
 
@@ -778,86 +700,64 @@
             const alertas = calcularAlertas();
             const totalCriticos = alertas.vencidas.length + alertas.hoje.length;
             const badge = document.getElementById('badgeAlertas');
-            if (totalCriticos > 0) {
-                badge.innerText = totalCriticos;
-                badge.classList.remove('hidden');
-            } else {
-                badge.classList.add('hidden');
-            }
+            if (totalCriticos > 0) { badge.innerText = totalCriticos; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
         }
 
         function abrirModalAlertas() {
             const alertas = calcularAlertas();
-            
             document.getElementById('countVencidas').innerText = alertas.vencidas.length;
             document.getElementById('countHoje').innerText = alertas.hoje.length;
             document.getElementById('countProximos').innerText = alertas.proximos.length;
 
             const renderLista = (arr, icone, corTexto, corBg) => {
                 if (arr.length === 0) return `<div class="text-[10px] text-slate-400 italic">Nenhum registro.</div>`;
-                return arr.map(a => `
-                    <div class="flex justify-between items-center bg-white border border-slate-200 rounded-lg p-3 shadow-sm">
-                        <div>
-                            <span class="block text-xs font-bold text-slate-800">${a.maquina}</span>
-                            <span class="text-[10px] text-slate-500 font-medium">Revisão ${a.tipo}</span>
-                        </div>
-                        <span class="text-[9px] font-bold ${corBg} ${corTexto} px-2 py-1 rounded">${icone} ${a.alerta}</span>
-                    </div>
-                `).join('');
+                return arr.map(a => `<div class="flex justify-between items-center bg-white border border-slate-200 rounded-lg p-3 shadow-sm"><div><span class="block text-xs font-bold text-slate-800">${a.maquina}</span><span class="text-[10px] text-slate-500 font-medium">Revisão ${a.tipo}</span></div><span class="text-[9px] font-bold ${corBg} ${corTexto} px-2 py-1 rounded">${icone} ${a.alerta}</span></div>`).join('');
             };
 
             document.getElementById('listaAlertasVencidas').innerHTML = renderLista(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
             document.getElementById('listaAlertasHoje').innerHTML = renderLista(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
             document.getElementById('listaAlertasProximos').innerHTML = renderLista(alertas.proximos, '<i class="fa-solid fa-calendar"></i>', 'text-blue-700', 'bg-blue-100');
-
             document.getElementById('alertasModal').classList.remove('hidden');
         }
 
-        function fecharModalAlertas() {
-            document.getElementById('alertasModal').classList.add('hidden');
-        }
+        function fecharModalAlertas() { document.getElementById('alertasModal').classList.add('hidden'); }
 
-        // --- NÚCLEO ORIGINAL DA APLICAÇÃO ---
+        // --- NÚCLEO DA APLICAÇÃO ---
         async function baixarDadosDaPlanilha() {
             try {
                 const res = await fetch(`${API_URL}?action=carregarItens`);
-                if (!res.ok) throw new Error("A conexão falhou");
+                if (!res.ok) throw new Error();
                 const resJson = await res.json();
                 
-                let loadedItens = [];
-                let loadedStatus = [];
-                if (resJson && resJson.itens) {
-                    loadedItens = resJson.itens;
-                    loadedStatus = resJson.status || [];
-                }
-                
-                originalDatabase = loadedItens;
-                checklistStatus = loadedStatus;
+                originalDatabase = resJson.itens || [];
+                checklistStatus = resJson.status || [];
+                equipesData = resJson.equipes || []; // CAPTURA AS EQUIPES DO BACKEND!
                 
                 renderSetorCards();
                 atualizarBadgeAlertas();
                 showToast("Dossiê de Inspeções carregado!");
             } catch (e) { 
-                showToast("Erro ao carregar dados remotos. Ativando contingência.", "error"); 
+                showToast("Erro de rede. Modo Offline.", "error"); 
                 carregarChecklistMock();
             }
         }
 
         function carregarChecklistMock() {
+            equipesData = [
+                { setor: "Produção", membros: ["Rodrigo", "Claudio", "Fernando"] },
+                { setor: "Manutenção", membros: ["José (Mecânico)", "Carlos (Elétrico)"] }
+            ];
             originalDatabase = [
                 { item: "Verificar Oleo", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", obs: "" },
                 { item: "Filtros", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Semanal", obs: "" },
                 { item: "Aperto de facas", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Quinzenal", obs: "" }
             ];
-
             const ontem = new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString();
             checklistStatus = [
                 { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo", vencido: true, itensStatus: {} },
                 { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Quinzenal", ultimoRegistro: null, vencido: true, itensStatus: {} }
             ];
-
-            renderSetorCards();
-            atualizarBadgeAlertas();
+            renderSetorCards(); atualizarBadgeAlertas();
         }
 
         function normalizar(texto) { return String(texto||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
@@ -865,8 +765,7 @@
         function diasParaPeriodicidade(p) { const c = normalizar(p); if (c.includes("diar")||c.includes("intrad")||c.includes("turno")) return 1; if (c.includes("seman")) return 7; if (c.includes("quinzen")) return 15; if (c.includes("mens")||c.includes("mes")) return 30; return 1; }
 
         function renderSetorCards() {
-            const container = document.getElementById('setorCards');
-            if(!container) return;
+            const container = document.getElementById('setorCards'); if(!container) return;
             const setores = [...new Set(originalDatabase.map(i => i.setor))];
             
             container.innerHTML = setores.map(setor => {
@@ -886,8 +785,7 @@
         function selecionarSetor(setor) {
             selectedSetor = setor;
             document.getElementById('periodoHeaderLabel').innerText = `SETOR: ${setor.toUpperCase()} — SELECIONE A PERIODICIDADE`;
-            const container = document.getElementById('periodoCards');
-            if(!container) return;
+            const container = document.getElementById('periodoCards'); if(!container) return;
             
             const map = [ { id: "diaria", label: "Diária/ Intradiária" }, { id: "semanal", label: "Semanal" }, { id: "quinzenal", label: "Quinzenal" }, { id: "mensal", label: "Mensal" } ];
             const filterSetor = normalizar(setor);
@@ -908,27 +806,24 @@
         function selecionarPeriodo(periodoId, label) {
             selectedPeriodo = periodoId;
             document.getElementById('itensTopLabel').innerText = `${selectedSetor.toUpperCase()} · ${label.toUpperCase()}`;
-            const container = document.getElementById("checklistContainer");
-            container.innerHTML = "";
+            const container = document.getElementById("checklistContainer"); container.innerHTML = "";
 
             const filtrados = originalDatabase.filter(x => normalizar(x.setor) === normalizar(selectedSetor) && matchPeriodicidade(x.periodicidade, periodoId));
             if (filtrados.length === 0) {
                 container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm font-semibold">Nenhum item programado.</div>`;
-                alternarTela('checklist-itens');
-                return;
+                alternarTela('checklist-itens'); return;
             }
 
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
+            const optionsEquipesSelect = gerarOptionsEquipes(); // Opções do SELECT baseadas na aba equipes
 
             for (let maq in agrupado) {
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(selectedSetor) && matchPeriodicidade(s.periodicidade, periodoId));
-                let badgeHeader = "";
-                const isDiario = (periodoId === 'diaria');
+                let badgeHeader = ""; const isDiario = (periodoId === 'diaria');
 
                 if (statusAtivo && statusAtivo.ultimoRegistro) {
-                    const dataObj = new Date(statusAtivo.ultimoRegistro);
-                    const op = statusAtivo.operador || "Não Informado";
+                    const dataObj = new Date(statusAtivo.ultimoRegistro); const op = statusAtivo.operador || "Não Informado";
                     const dataProxima = new Date(dataObj.getTime());
                     
                     if(isDiario) dataProxima.setHours(dataProxima.getHours() + 2);
@@ -938,20 +833,15 @@
                     const colorClass = vencidoStatus ? 'bg-rose-600/20 text-red-500 border border-rose-500/30' : 'bg-emerald-600/20 text-emerald-500 border border-emerald-500/30';
                     const dataStr = dataObj.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
                     const horaStr = dataObj.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
-                    
                     let pStr = dataProxima.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit', year: isDiario ? undefined : 'numeric'});
                     if(isDiario) pStr += ` às ${dataProxima.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}`;
 
-                    badgeHeader = `
-                        <div class="flex flex-col gap-1.5 items-end">
-                            <span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span>
-                            <span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima Revisão: ${pStr}</span>
-                        </div>`;
+                    badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                 } else {
                     badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente</span>`;
                 }
 
-                let html = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"><div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between"><div class="flex items-center gap-3"><span class="tracking-tight text-lg font-bold">${maq}</span><button onclick="imprimirChecklistPapel('${maq}')" class="bg-slate-700 hover:bg-slate-600 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-print"></i> Imprimir p/ Papel</button></div>${badgeHeader}</div><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase"><tr><th class="p-4 w-[45%]">ITEM</th><th class="p-4 w-44">OPERADOR</th><th class="p-4 w-32">STATUS</th><th class="p-4">OBS</th><th class="p-4 text-center w-28">AÇÃO</th></tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
+                let html = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"><div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between"><div class="flex items-center gap-3"><span class="tracking-tight text-lg font-bold">${maq}</span><button onclick="imprimirChecklistPapel('${maq}')" class="bg-slate-700 hover:bg-slate-600 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-print"></i> Imprimir</button></div>${badgeHeader}</div><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase"><tr><th class="p-4 w-[45%]">ITEM</th><th class="p-4 w-44">OPERADOR</th><th class="p-4 w-32">STATUS</th><th class="p-4">OBS</th><th class="p-4 text-center w-28">AÇÃO</th></tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
                 
                 agrupado[maq].forEach((item) => {
                     const badgeObs = item.obs ? `<span class="bg-blue-50 text-blue-600 text-[10px] px-2.5 py-1 rounded-md font-bold inline-block mt-1.5"><i class="fa-solid fa-circle-info mr-1"></i>Obs: ${item.obs}</span>` : '';
@@ -961,7 +851,7 @@
                         const dateItem = new Date(itemLog.data);
                         metaHistorico = `<div class="text-[9px] text-slate-400 font-semibold mt-1"><i class="fa-solid fa-user-check text-slate-300"></i> Feito por <span class="text-slate-600 font-bold">${itemLog.operador}</span> em ${dateItem.toLocaleDateString('pt-BR')} às ${dateItem.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</div>`;
                     }
-                    html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><input type="text" class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs focus:ring-blue-500" placeholder="Nome"></td><td class="p-4 align-middle"><select class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle"><button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-paper-plane text-[10px]"></i> Registrar</button></td></tr>`;
+                    html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><select class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:ring-blue-500">${optionsEquipesSelect}</select></td><td class="p-4 align-middle"><select onchange="verificarStatusChamado(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle"><button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-paper-plane text-[10px]"></i></button></td></tr>`;
                 });
                 html += `</tbody></table></div></div>`;
                 container.innerHTML += html;
@@ -973,7 +863,7 @@
             const linha = botao.closest(".row-check");
             const inputOperador = linha.querySelector(".operador-inp");
             const operadorValue = inputOperador.value.trim();
-            if (!operadorValue) { showToast("Assinatura obrigatória.", "error"); return; }
+            if (!operadorValue) { showToast("Selecione seu nome na lista (Operador).", "error"); inputOperador.focus(); return; }
 
             botao.disabled = true;
             const originalContent = botao.innerHTML;
@@ -1023,11 +913,10 @@
             }
         }
 
-        // --- MÓDULOS EXTRAS (ALMOXARIFADO, FORNO, POPS, IMPRESSÃO, UPLOAD) PERMANECEM INALTERADOS ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
-            let tableRows = filtrados.map((item, index) => `<tr style="border-bottom: 1.5px solid #000000;"><td style="padding: 10px; font-size: 11px; text-align: center; border-right: 1.5px solid #000000; font-weight: bold; color: black !important;">${index + 1}</td><td style="padding: 10px; font-size: 11px; font-weight: bold; border-right: 1.5px solid #000000; color: black !important;">${item.item}${item.obs ? `<br><span style="font-size: 9px; color: #334155; font-weight: normal; font-style: italic;">Obs: ${item.obs}</span>` : ''}</td><td style="padding: 10px; width: 120px; border-right: 1.5px solid #000000; text-align: center; font-size: 10px; color: black !important; font-weight: bold;">[ &nbsp; ] OK &nbsp;&nbsp;&nbsp; [ &nbsp; ] NOK</td><td style="padding: 10px; width: 130px; border-right: 1.5px solid #000000;"></td><td style="padding: 10px;"></td></tr>`).join('');
+            let tableRows = filtrados.map((item, index) => `<tr style="border-bottom: 1.5px solid #000000;"><td style="padding: 10px; font-size: 11px; text-align: center; border-right: 1.5px solid #000000; font-weight: bold; color: black !important;">${index + 1}</td><td style="padding: 10px; font-size: 11px; font-weight: bold; border-right: 1.5px solid #000000; color: black !important;">${item.item}${item.obs ? `<br><span style="font-size: 9px; color: #334155; font-weight: normal; font-style: italic;">Obs: ${item.obs}</span>` : ''}</td><td style="padding: 10px; width: 120px; border-right: 1.5px solid #000000; text-align: center; font-size: 10px; color: black !important; font-weight: bold;">[   ] OK     [   ] NOK</td><td style="padding: 10px; width: 130px; border-right: 1.5px solid #000000;"></td><td style="padding: 10px;"></td></tr>`).join('');
             printArea.innerHTML = `<div style="font-family: Arial, sans-serif; color: #000; padding: 20px;"><div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #000000; padding-bottom: 15px; margin-bottom: 25px;"><div><h1 style="font-size: 18px; font-weight: bold; margin: 0; color: #000000;">FOLHA DE INSPECÇÃO OPERACIONAL</h1><p style="font-size: 10px; color: #000000; margin: 3px 0 0 0; font-weight: bold;">Controle e Manutenção</p></div><div style="text-align: right; font-size: 11px; line-height: 1.4; color: #000000;"><span style="font-weight: bold; display: block; font-size: 13px;">ATIVO: ${maquina}</span><span style="display: block; font-weight: bold;">Frequência: ${selectedPeriodo.toUpperCase()}</span></div></div><table style="width: 100%; border-collapse: collapse; border: 2px solid #000000; margin-bottom: 30px;"><thead><tr style="background-color: #f1f5f9; border-bottom: 2px solid #000000; text-align: left; font-size: 10px; font-weight: bold;"><th style="padding: 10px; width: 40px; text-align: center; border-right: 1.5px solid #000000; color: black !important;">Nº</th><th style="padding: 10px; border-right: 1.5px solid #000000; color: black !important;">ITEM DE VERIFICAÇÃO</th><th style="padding: 10px; width: 120px; text-align: center; border-right: 1.5px solid #000000; color: black !important;">AVALIAÇÃO</th><th style="padding: 10px; width: 130px; border-right: 1.5px solid #000000; color: black !important;">ASSINATURA</th><th style="padding: 10px; color: black !important;">OBSERVAÇÕES</th></tr></thead><tbody>${tableRows}</tbody></table><div style="margin-top: 50px; display: flex; justify-content: space-between; font-size: 11px; color: black !important; font-weight: bold;"><div style="width: 45%; text-align: center;"><div style="border-bottom: 1.5px solid #000000; margin-bottom: 6px; height: 40px;"></div><span>Assinatura Operador</span></div><div style="width: 45%; text-align: center;"><div style="border-bottom: 1.5px solid #000000; margin-bottom: 6px; height: 40px;"></div><span>Visto Engenharia</span></div></div></div>`;
             window.print();
         }
@@ -1041,15 +930,12 @@
                 if (Array.isArray(data)) {
                     almoxarifadoData = data.map(item => ({ id: item.id, nome: item.item, categoria: item.categoria, quantidade: item.quantidade, minimo: item.estoqueMinimo, unidade: item.unidade, local: item.localizacao, foto: item.imagem, descricao: item.descricao }));
                     renderAlmoxarifadoLista();
-                    const criticos = almoxarifadoData.filter(i => i.quantidade <= i.minimo).length;
-                    document.getElementById('kpiAlmoxStatus').innerText = criticos > 0 ? `${criticos} itens com estoque baixo!` : "Estoque técnico conforme";
                 }
             } catch(e) {}
         }
 
         function renderAlmoxarifadoLista() {
-            const tbody = document.getElementById('almoxarifadoTbody');
-            if(!tbody) return;
+            const tbody = document.getElementById('almoxarifadoTbody'); if(!tbody) return;
             const catFilter = document.getElementById('almoxCategoriaFilter').value;
             const search = document.getElementById('almoxSearch').value.toLowerCase();
             const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))];
@@ -1067,7 +953,7 @@
         function adicionarLinhaLocalizacao(valor = "") {
             const container = document.getElementById('localizacaoInputsContainer');
             const div = document.createElement('div'); div.className = "flex gap-2";
-            div.innerHTML = `<input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:ring-blue-500 text-slate-850" value="${valor}" placeholder="Ex: Prateleira A3"><button type="button" onclick="removerLinhaLocalizacao(this)" class="px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-400 hover:text-red-500 transition-all text-xs"><i class="fa-solid fa-xmark"></i></button>`;
+            div.innerHTML = `<input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:ring-blue-500 text-slate-850" value="${valor}"><button type="button" onclick="removerLinhaLocalizacao(this)" class="px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-400 hover:text-red-500 text-xs"><i class="fa-solid fa-xmark"></i></button>`;
             container.appendChild(div);
         }
 
@@ -1078,7 +964,6 @@
         }
 
         function abrirModalCadastroItem() {
-            document.getElementById('almoxModalTitle').innerText = "Cadastrar Novo Item";
             document.getElementById('editAlmoxIndex').value = ""; document.getElementById('novoItemNome').value = ""; document.getElementById('novoItemCategoria').value = ""; document.getElementById('novoItemQuantidade').value = "0"; document.getElementById('novoItemMinimo').value = "0"; document.getElementById('novoItemUnidade').value = "un"; document.getElementById('novoItemDescricao').value = "";
             document.getElementById('localizacaoInputsContainer').innerHTML = ""; adicionarLinhaLocalizacao("");
             removerFotoAnexada(); document.getElementById('cadastroItemModal').classList.remove('hidden');
@@ -1092,11 +977,9 @@
             reader.onload = function(evt) {
                 const img = new Image();
                 img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    let w = img.width, h = img.height;
+                    const canvas = document.createElement('canvas'); let w = img.width, h = img.height;
                     if (w > h) { if (w > 800) { h *= 800 / w; w = 800; } } else { if (h > 800) { w *= 800 / h; h = 800; } }
-                    canvas.width = w; canvas.height = h;
-                    canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                     fotoAnexadaBase64 = canvas.toDataURL('image/jpeg', 0.8);
                     const previewImg = document.getElementById('fotoPreviewImg');
                     previewImg.src = fotoAnexadaBase64; previewImg.onerror = null; 
@@ -1112,12 +995,10 @@
         async function confirmarCadastroItem() {
             const nome = document.getElementById('novoItemNome').value.trim(); const categoria = document.getElementById('novoItemCategoria').value.trim(); const quantidade = parseInt(document.getElementById('novoItemQuantidade').value) || 0; const minimo = parseInt(document.getElementById('novoItemMinimo').value) || 0; const unidade = document.getElementById('novoItemUnidade').value.trim() || "un"; const descricao = document.getElementById('novoItemDescricao').value.trim(); const editId = document.getElementById('editAlmoxIndex').value;
             const enderecosInput = Array.from(document.querySelectorAll('.localizacao-endereco-inp')).map(i => i.value.trim()).filter(Boolean);
-
             if (!nome || !categoria) { showToast("Nome e Família são obrigatórios.", "error"); return; }
 
             let base64Clean = "", mimeType = "", isNovaImagem = false;
             if (fotoAnexadaBase64 && fotoAnexadaBase64.startsWith("data:")) { base64Clean = fotoAnexadaBase64.split(",")[1]; mimeType = fotoAnexadaBase64.split(";")[0].split(":")[1]; isNovaImagem = true; }
-
             const dadosObj = { id: editId || "", item: nome, categoria, unidade, quantidade, estoqueMinimo: minimo, enderecos: enderecosInput, descricao, imagemUrl: isNovaImagem ? "" : fotoAnexadaBase64, imagemBase64: base64Clean, mimeType: mimeType };
 
             if (API_URL) {
@@ -1131,22 +1012,19 @@
             if (editId) {
                 const item = almoxarifadoData.find(i => i.id == editId);
                 if (item) { item.nome = nome; item.categoria = categoria; item.local = enderecosInput.join(" | "); item.quantidade = quantidade; item.minimo = minimo; item.unidade = unidade; item.descricao = descricao; if (isNovaImagem) item.foto = fotoAnexadaBase64; }
-            } else {
-                almoxarifadoData.push({ id: "IT" + Date.now(), nome, categoria, local: enderecosInput.join(" | "), quantidade, minimo, unidade, descricao, foto: isNovaImagem ? fotoAnexadaBase64 : "" });
-            }
+            } else { almoxarifadoData.push({ id: "IT" + Date.now(), nome, categoria, local: enderecosInput.join(" | "), quantidade, minimo, unidade, descricao, foto: isNovaImagem ? fotoAnexadaBase64 : "" }); }
             fecharModalCadastroItem(); renderAlmoxarifadoLista();
         }
 
         function editarItemAlmox(id) {
             const item = almoxarifadoData.find(i => i.id == id); if (!item) return;
-            document.getElementById('almoxModalTitle').innerText = "Editar Detalhes"; document.getElementById('editAlmoxIndex').value = id; document.getElementById('novoItemNome').value = item.nome; document.getElementById('novoItemCategoria').value = item.categoria; document.getElementById('novoItemQuantidade').value = item.quantidade; document.getElementById('novoItemMinimo').value = item.minimo; document.getElementById('novoItemUnidade').value = item.unidade; document.getElementById('novoItemDescricao').value = item.descricao || "";
+            document.getElementById('editAlmoxIndex').value = id; document.getElementById('novoItemNome').value = item.nome; document.getElementById('novoItemCategoria').value = item.categoria; document.getElementById('novoItemQuantidade').value = item.quantidade; document.getElementById('novoItemMinimo').value = item.minimo; document.getElementById('novoItemUnidade').value = item.unidade; document.getElementById('novoItemDescricao').value = item.descricao || "";
             document.getElementById('localizacaoInputsContainer').innerHTML = "";
             const enderecos = item.local ? item.local.split("|").map(s => s.trim()) : [""];
             enderecos.forEach(end => adicionarLinhaLocalizacao(end));
 
             if (item.foto && item.foto.trim() !== "") {
-                fotoAnexadaBase64 = item.foto;
-                const pImg = document.getElementById('fotoPreviewImg'); pImg.src = item.foto;
+                fotoAnexadaBase64 = item.foto; const pImg = document.getElementById('fotoPreviewImg'); pImg.src = item.foto;
                 pImg.onerror = function() { this.onerror=null; this.outerHTML='<div class="h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border text-slate-400"><i class="fa-solid fa-image"></i></div>'; };
                 document.getElementById('fotoPreviewContainer').classList.remove('hidden');
             } else { removerFotoAnexada(); }
@@ -1157,6 +1035,10 @@
             const select = document.getElementById('movItemSelect');
             select.innerHTML = almoxarifadoData.map(i => `<option value="${i.id}">${i.nome} (${i.quantidade} ${i.unidade})</option>`).join('');
             if (preSelectedId) select.value = preSelectedId;
+            
+            // Popula os responsaveis por equipe no modal de movimentação
+            document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes();
+
             atualizarInfoItemMov(); document.getElementById('movimentacaoModal').classList.remove('hidden');
         }
 
@@ -1176,14 +1058,10 @@
         async function confirmarMovimentacao() {
             const id = document.getElementById('movItemSelect').value; const tipo = document.getElementById('movTipo').value; const quantidade = parseInt(document.getElementById('movQuantidade').value) || 0; const responsavel = document.getElementById('movResponsavel').value.trim(); const motivo = document.getElementById('movMotivo').value.trim();
             const item = almoxarifadoData.find(i => i.id == id); if (!item) return;
-
             if (quantidade <= 0 || !responsavel) { showToast("Qtd e Responsável são obrigatórios.", "error"); return; }
 
             let novaQuantidade = item.quantidade;
-            if (tipo === "Saída") {
-                if (item.quantidade < quantidade) { showToast("Quantidade insuficiente.", "error"); return; }
-                novaQuantidade -= quantidade;
-            } else { novaQuantidade += quantidade; }
+            if (tipo === "Saída") { if (item.quantidade < quantidade) { showToast("Quantidade insuficiente.", "error"); return; } novaQuantidade -= quantidade; } else { novaQuantidade += quantidade; }
 
             if (API_URL) {
                 showToast("Registrando...", "info");
@@ -1195,16 +1073,10 @@
             item.quantidade = novaQuantidade; renderAlmoxarifadoLista(); fecharModalMovimentacao();
         }
 
-        function gerarAlmoxarifadoMock() {
-            almoxarifadoData = [ { id: "IT1", nome: "Sensor Ótico", categoria: "Sensores", quantidade: 5, minimo: 2, unidade: "un", local: "Prat. 1", foto: "", descricao: "" } ];
-        }
-        function gerarPOPsMock() {
-            popData = [ { id: 1, titulo: "LOTO", maquina: "Guilhotina - GUI-001", epis: "Luvas", ferramentas: "Cadeado", descricao: "Desligar energia." } ];
-        }
+        function gerarAlmoxarifadoMock() { almoxarifadoData = [ { id: "IT1", nome: "Sensor Ótico", categoria: "Sensores", quantidade: 5, minimo: 2, unidade: "un", local: "Prat. 1", foto: "", descricao: "" } ]; }
+        function gerarPOPsMock() { popData = [ { id: 1, titulo: "LOTO", maquina: "Guilhotina - GUI-001", epis: "Luvas", ferramentas: "Cadeado", descricao: "Desligar energia." } ]; }
         function renderPOPs() {
-            const container = document.getElementById('popsContainer');
-            const maqFilter = document.getElementById('popMaquinaFilter').value;
-            const search = document.getElementById('popSearch').value.toLowerCase();
+            const container = document.getElementById('popsContainer'); const maqFilter = document.getElementById('popMaquinaFilter').value; const search = document.getElementById('popSearch').value.toLowerCase();
             const filtrados = popData.filter(p => (maqFilter === "" || p.maquina === maqFilter) && (p.titulo.toLowerCase().includes(search) || p.descricao.toLowerCase().includes(search)));
             container.innerHTML = filtrados.map(p => `<div class="bg-white rounded-xl border p-5 shadow-sm"><span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">${p.maquina}</span><h4 class="font-bold text-slate-800 text-sm mb-3">${p.titulo}</h4><div class="text-xs text-slate-600 whitespace-pre-line leading-relaxed">${p.descricao}</div></div>`).join('');
         }
@@ -1237,16 +1109,8 @@
             }
         }
 
-        function toggleConfigModal(show) {
-            document.getElementById('configModal').classList.toggle('hidden', !show);
-            if (show) document.getElementById('apiInputUrl').value = API_URL;
-        }
-
-        function salvarConfigUrl() {
-            const url = document.getElementById('apiInputUrl').value.trim();
-            if (url) { localStorage.setItem("checklist_google_api_url", url); API_URL = url; document.getElementById('apiStatusAlert').classList.add('hidden'); toggleConfigModal(false); baixarDadosDaPlanilha(); } else { showToast("URL inválida.", "error"); }
-        }
-
+        function toggleConfigModal(show) { document.getElementById('configModal').classList.toggle('hidden', !show); if (show) document.getElementById('apiInputUrl').value = API_URL; }
+        function salvarConfigUrl() { const url = document.getElementById('apiInputUrl').value.trim(); if (url) { localStorage.setItem("checklist_google_api_url", url); API_URL = url; document.getElementById('apiStatusAlert').classList.add('hidden'); toggleConfigModal(false); baixarDadosDaPlanilha(); } else { showToast("URL inválida.", "error"); } }
         function visualizarImagem(base64) { document.getElementById('enlargedImg').src = base64; document.getElementById('viewImageModal').classList.remove('hidden'); }
         function fecharModalImagem() { document.getElementById('viewImageModal').classList.add('hidden'); }
     </script>
