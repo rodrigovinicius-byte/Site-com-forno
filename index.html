@@ -271,6 +271,7 @@
         </div>
     </main>
 
+    <!-- Modal: Configurar Conexão -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -297,6 +298,7 @@
         </div>
     </div>
 
+    <!-- Modal: Abertura de Chamado (OS) -->
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -341,8 +343,9 @@
         </div>
     </div>
 
+    <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm">
@@ -356,12 +359,14 @@
                 <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos">
-                </div>
+                <!-- Injetado via JS -->
+            </div>
         </div>
     </div>
 
+    <!-- Modal: Central de Alertas (Preditiva) -->
     <div id="alertasModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm">
@@ -369,34 +374,35 @@
                     </div>
                     <div>
                         <h3 class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3>
-                        <p class="text-[10px] text-slate-500 font-medium">Controle de Preventivas e Checklists</p>
+                        <p class="text-[10px] text-slate-500 font-medium">Controle de Preventivas e Rotina Operacional</p>
                     </div>
                 </div>
                 <button onclick="fecharModalAlertas()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-white">
                 <div>
-                    <h4 class="text-[11px] font-bold text-rose-600 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-rose-100 pb-1">
+                    <h4 class="text-[11px] font-bold text-rose-600 uppercase tracking-wider mb-2 flex items-center gap-2 border-b border-rose-100 pb-1">
                         <i class="fa-solid fa-circle-exclamation"></i> Vencidas / Atrasadas (<span id="countVencidas">0</span>)
                     </h4>
-                    <div id="listaAlertasVencidas" class="space-y-2"></div>
+                    <div id="listaAlertasVencidas" class="space-y-1"></div>
                 </div>
                 <div>
-                    <h4 class="text-[11px] font-bold text-amber-600 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-amber-100 pb-1">
+                    <h4 class="text-[11px] font-bold text-amber-600 uppercase tracking-wider mb-2 flex items-center gap-2 border-b border-amber-100 pb-1">
                         <i class="fa-solid fa-clock"></i> Pendentes Para Hoje (<span id="countHoje">0</span>)
                     </h4>
-                    <div id="listaAlertasHoje" class="space-y-2"></div>
+                    <div id="listaAlertasHoje" class="space-y-1"></div>
                 </div>
                 <div>
-                    <h4 class="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-3 flex items-center gap-2 border-b border-blue-100 pb-1">
+                    <h4 class="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-2 flex items-center gap-2 border-b border-blue-100 pb-1">
                         <i class="fa-solid fa-calendar-days"></i> Programação (Próximos 7 dias) (<span id="countProximos">0</span>)
                     </h4>
-                    <div id="listaAlertasProximos" class="space-y-2"></div>
+                    <div id="listaAlertasProximos" class="space-y-1"></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal: Cadastrar Novo Item Almoxarifado -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -462,6 +468,7 @@
         </div>
     </div>
 
+    <!-- Modal: Registrar Movimentação -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
@@ -489,7 +496,7 @@
                         </div>
                     </div>
                     <div class="font-sans">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Responsável</label>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
                         <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
                     </div>
                     <div class="font-sans">
@@ -505,6 +512,7 @@
         </div>
     </div>
 
+    <!-- Modal: Imagens -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -519,7 +527,7 @@
     <script>
         let originalDatabase = [];
         let checklistStatus = [];
-        let chamadosData = []; // NOVA VARIÁVEL PARA CHAMADOS ABERTOS
+        let chamadosData = []; 
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
@@ -611,14 +619,26 @@
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
         function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
 
-        // --- SISTEMA DE EQUIPES ---
-        function gerarOptionsEquipes() {
+        // --- SISTEMA DE EQUIPES (FORMATO NOME - SETOR, SEM OPTGROUP) ---
+        function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador cadastrado</option>`;
-            return `<option value="">Selecione o Nome...</option>` +
-            equipesData.map(eq => {
-                if(eq.membros.length === 0) return '';
-                return `<optgroup label="${eq.setor}">` + eq.membros.map(m => `<option value="${m}">${m}</option>`).join('') + `</optgroup>`;
-            }).join('');
+            let opcoes = `<option value="">Selecione o Nome...</option>`;
+            
+            equipesData.forEach(eq => {
+                const setor = eq.setor;
+                const setNorm = normalizar(setor);
+                
+                // Filtro para listar apenas manutenção
+                if (apenasManutencao && !setNorm.includes('manutencao') && !setNorm.includes('manutenção')) {
+                    return;
+                }
+                
+                eq.membros.forEach(m => {
+                    const nomeCompleto = `${m} - ${setor}`;
+                    opcoes += `<option value="${nomeCompleto}">${nomeCompleto}</option>`;
+                });
+            });
+            return opcoes;
         }
 
         // --- SISTEMA DE CHAMADOS (CORRETIVA) ---
@@ -632,7 +652,7 @@
             if(maquinaPre) select.value = maquinaPre;
 
             document.getElementById('chamadoDefeito').value = defeitoPre;
-            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes();
+            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(false);
             document.getElementById('chamadoModal').classList.remove('hidden');
         }
 
@@ -655,7 +675,7 @@
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "chamado", dados: { maquina, urgencia, defeito, relator } }) });
                     showToast("OS criada com sucesso!");
-                    setTimeout(() => baixarDadosDaPlanilha(), 1500); // Recarrega para pegar o chamado novo
+                    setTimeout(() => baixarDadosDaPlanilha(), 1500); 
                 } catch(e) { showToast("Falha na rede. Tente novamente.", "error"); }
             } else {
                 showToast("Modo Offline: OS simulada com sucesso.", "info");
@@ -671,7 +691,7 @@
                 const item = linha.getAttribute("data-item");
                 const obsValue = linha.querySelector(".obs-inp").value.trim();
                 const obsFinal = obsValue ? ` | Obs: ${obsValue}` : "";
-                abrirModalChamado(maquina, `Falha detectada na preventiva: ${item}${obsFinal}`);
+                abrirModalChamado(maquina, `Falha detectada na rotina: ${item}${obsFinal}`);
             }
         }
 
@@ -689,7 +709,7 @@
                     if(c.urgencia === "Baixa") urgenciaCor = "text-blue-600 bg-blue-100 border-blue-200";
 
                     return `
-                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm relative" id="card-os-${c.id}">
+                        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm relative" id="card-os-${c.id}">
                             <div class="flex justify-between items-start mb-3">
                                 <div>
                                     <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">${c.id} · Aberto em ${dataAbertura}</span>
@@ -699,12 +719,25 @@
                             </div>
                             <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3">
                                 <i class="fa-solid fa-quote-left text-slate-300 mr-1"></i> ${c.defeito}
+                                <span class="block text-[9px] text-slate-400 font-semibold mt-2">Relatado por: ${c.relator}</span>
                             </p>
-                            <div class="flex justify-between items-end">
-                                <span class="text-[10px] text-slate-500 font-medium"><i class="fa-solid fa-user text-slate-300"></i> Relatado por: ${c.relator}</span>
-                                <button onclick="fecharOS('${c.id}')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center gap-1.5 transition-all">
-                                    <i class="fa-solid fa-check-double"></i> Baixa / Fechar OS
-                                </button>
+                            
+                            <!-- NOVOS CAMPOS PARA FECHAMENTO DE OS -->
+                            <div class="mt-4 pt-4 border-t border-slate-200">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ação de Reparo / Solução Aplicada</label>
+                                <textarea id="resolucao-os-${c.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 mb-3 resize-none" placeholder="Descreva o que foi feito..."></textarea>
+                                
+                                <div class="flex flex-col sm:flex-row items-end gap-3">
+                                    <div class="w-full">
+                                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico Responsável</label>
+                                        <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold">
+                                            ${gerarOptionsEquipes(true)}
+                                        </select>
+                                    </div>
+                                    <button id="btn-fechar-os-${c.id}" onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]">
+                                        <i class="fa-solid fa-check-double"></i> Dar Baixa
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     `;
@@ -719,31 +752,61 @@
         }
 
         async function fecharOS(idOS) {
+            const resolucao = document.getElementById(`resolucao-os-${idOS}`).value.trim();
+            const solucionador = document.getElementById(`solucionador-os-${idOS}`).value;
+            
+            if (!resolucao || !solucionador) {
+                showToast("Preencha a solução aplicada e selecione o técnico responsável.", "error");
+                return;
+            }
+
             const card = document.getElementById(`card-os-${idOS}`);
-            card.style.opacity = '0.5';
-            card.style.pointerEvents = 'none';
+            const btn = document.getElementById(`btn-fechar-os-${idOS}`);
+            
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
+            btn.disabled = true;
 
             if (API_URL) {
                 try {
-                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "fecharChamado", dados: { id: idOS } }) });
-                    showToast(`Ordem ${idOS} fechada!`);
+                    const payload = {
+                        tipo: "fecharChamado",
+                        dados: { id: idOS, resolucao: resolucao, solucionador: solucionador }
+                    };
+                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
+                    showToast(`Ordem ${idOS} fechada e registrada!`);
                 } catch(e) {
                     showToast("Falha ao sincronizar baixa de OS.", "error");
-                    card.style.opacity = '1'; card.style.pointerEvents = 'auto'; return;
+                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Dar Baixa`;
+                    btn.disabled = false;
+                    return;
                 }
             } else {
                 showToast(`Modo Local: Ordem ${idOS} fechada.`);
             }
 
-            // Atualiza array local
             const index = chamadosData.findIndex(c => c.id === idOS);
             if(index !== -1) chamadosData[index].status = "Fechado";
             
+            card.style.opacity = '0.5'; card.style.pointerEvents = 'none';
             atualizarKPIs();
-            setTimeout(() => abrirGerenciamentoChamados(), 300); // Recarrega a lista do modal
+            setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE ALERTAS (PREDITIVA/PREVENTIVA) ---
+        // --- SISTEMA DE ALERTAS E ATALHO CHECKLIST ---
+        function irParaChecklist(setor, tipoOriginal) {
+            fecharModalAlertas();
+            selecionarSetor(setor);
+            
+            let pId = normalizar(tipoOriginal);
+            let pLabel = tipoOriginal;
+            if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
+            else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
+            else if (pId.includes('quinzen')) { pId = 'quinzenal'; pLabel = 'Quinzenal'; }
+            else if (pId.includes('mens')) { pId = 'mensal'; pLabel = 'Mensal'; }
+
+            selecionarPeriodo(pId, pLabel);
+        }
+
         function calcularAlertas() {
             let vencidas = []; let hoje = []; let proximos = [];
             const dataHoje = new Date(); dataHoje.setHours(0,0,0,0);
@@ -761,15 +824,15 @@
                 const intervalo = diasParaPeriodicidade(info.periodicidade);
                 
                 if (!statusAtivo || !statusAtivo.ultimoRegistro) {
-                    vencidas.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: "Nunca feito" }); continue;
+                    vencidas.push({ maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: "Nunca feito" }); continue;
                 }
                 const dataUltima = new Date(statusAtivo.ultimoRegistro); dataUltima.setHours(0,0,0,0);
                 const dataProxima = new Date(dataUltima); dataProxima.setDate(dataUltima.getDate() + intervalo);
                 const proxFormatada = dataProxima.toLocaleDateString('pt-BR');
 
-                if (dataProxima < dataHoje) vencidas.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Venceu dia ${proxFormatada}` });
-                else if (dataProxima.getTime() === dataHoje.getTime()) hoje.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Vence Hoje` });
-                else if (dataProxima > dataHoje && dataProxima <= daqui7Dias) proximos.push({ maquina: info.maquina, tipo: info.periodicidade, alerta: `Vence dia ${proxFormatada}` });
+                if (dataProxima < dataHoje) vencidas.push({ maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: `Venceu dia ${proxFormatada}` });
+                else if (dataProxima.getTime() === dataHoje.getTime()) hoje.push({ maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: `Vence Hoje` });
+                else if (dataProxima > dataHoje && dataProxima <= daqui7Dias) proximos.push({ maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: `Vence dia ${proxFormatada}` });
             }
             return { vencidas, hoje, proximos };
         }
@@ -779,15 +842,12 @@
             const pendentes = alertas.vencidas.length + alertas.hoje.length;
             const programados = alertas.proximos.length;
             
-            // Atualiza KPI Preventiva
             document.getElementById('kpiPendentesHoje').innerText = pendentes;
             document.getElementById('kpiProximosDias').innerText = programados;
 
-            // Atualiza Sino
             const badge = document.getElementById('badgeAlertas');
             if (pendentes > 0) { badge.innerText = pendentes; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
 
-            // Atualiza KPI Corretiva (Chamados)
             const osAbertas = chamadosData.filter(c => c.status !== "Fechado").length;
             document.getElementById('kpiChamadosAbertos').innerText = osAbertas;
         }
@@ -798,14 +858,41 @@
             document.getElementById('countHoje').innerText = alertas.hoje.length;
             document.getElementById('countProximos').innerText = alertas.proximos.length;
 
-            const renderLista = (arr, icone, corTexto, corBg) => {
-                if (arr.length === 0) return `<div class="text-[10px] text-slate-400 italic">Nenhum registro.</div>`;
-                return arr.map(a => `<div class="flex justify-between items-center bg-white border border-slate-200 rounded-lg p-3 shadow-sm"><div><span class="block text-xs font-bold text-slate-800">${a.maquina}</span><span class="text-[10px] text-slate-500 font-medium">Revisão ${a.tipo}</span></div><span class="text-[9px] font-bold ${corBg} ${corTexto} px-2 py-1 rounded">${icone} ${a.alerta}</span></div>`).join('');
+            const renderListaCategorizada = (arr, icone, corTexto, corBg) => {
+                if (arr.length === 0) return `<div class="text-[10px] text-slate-400 italic mb-2">Nenhum registro.</div>`;
+                
+                const diarias = arr.filter(a => normalizar(a.tipo).includes('diar') || normalizar(a.tipo).includes('intrad'));
+                const preventivas = arr.filter(a => !normalizar(a.tipo).includes('diar') && !normalizar(a.tipo).includes('intrad'));
+
+                let html = '';
+                const geraCard = (lista, tituloSub) => {
+                    if(lista.length === 0) return '';
+                    return `
+                        <div class="mb-2 mt-3 text-[9px] font-bold text-slate-400 uppercase tracking-wider">${tituloSub}</div>
+                        ${lista.map(a => `
+                            <div class="flex justify-between items-center bg-white border border-slate-200 rounded-lg p-3 shadow-sm mb-2 hover:bg-slate-50 transition-colors">
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-800">${a.maquina}</span>
+                                    <span class="text-[10px] text-slate-500 font-medium">${a.setor} · Revisão ${a.tipo}</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-[9px] font-bold ${corBg} ${corTexto} px-2 py-1 rounded hidden sm:inline-block">${icone} ${a.alerta}</span>
+                                    <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-slate-800 hover:bg-slate-700 text-white p-1.5 px-2.5 rounded transition-all text-[10px] font-bold flex gap-1.5 items-center shadow-sm">
+                                        Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    `;
+                };
+                html += geraCard(diarias, 'Rotina Operacional (Diária/Intradiária)');
+                html += geraCard(preventivas, 'Manutenção Preventiva Preditiva');
+                return html;
             };
 
-            document.getElementById('listaAlertasVencidas').innerHTML = renderLista(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
-            document.getElementById('listaAlertasHoje').innerHTML = renderLista(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
-            document.getElementById('listaAlertasProximos').innerHTML = renderLista(alertas.proximos, '<i class="fa-solid fa-calendar"></i>', 'text-blue-700', 'bg-blue-100');
+            document.getElementById('listaAlertasVencidas').innerHTML = renderListaCategorizada(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
+            document.getElementById('listaAlertasHoje').innerHTML = renderListaCategorizada(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
+            document.getElementById('listaAlertasProximos').innerHTML = renderListaCategorizada(alertas.proximos, '<i class="fa-solid fa-calendar"></i>', 'text-blue-700', 'bg-blue-100');
             document.getElementById('alertasModal').classList.remove('hidden');
         }
 
@@ -821,7 +908,7 @@
                 originalDatabase = resJson.itens || [];
                 checklistStatus = resJson.status || [];
                 equipesData = resJson.equipes || [];
-                chamadosData = resJson.chamados || []; // CAPTURA OS CHAMADOS DO BACKEND!
+                chamadosData = resJson.chamados || []; 
                 
                 renderSetorCards();
                 atualizarKPIs();
@@ -834,7 +921,7 @@
         function carregarChecklistMock() {
             equipesData = [
                 { setor: "Produção", membros: ["Rodrigo", "Claudio", "Fernando"] },
-                { setor: "Manutenção", membros: ["José (Mecânico)", "Carlos (Elétrico)"] }
+                { setor: "Manutenção", membros: ["José", "Carlos"] }
             ];
             originalDatabase = [
                 { item: "Verificar Oleo", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", obs: "" },
@@ -842,10 +929,10 @@
             ];
             const ontem = new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString();
             checklistStatus = [
-                { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo", vencido: true, itensStatus: {} }
+                { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", vencido: true, itensStatus: {} }
             ];
             chamadosData = [
-                { id: "OS-123", data: ontem, maquina: "Guilhotina - GUI-001", urgencia: "Alta", defeito: "Faca travou no meio do ciclo.", relator: "Rodrigo", status: "Aberto" }
+                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou no meio do ciclo.", relator: "Rodrigo - Produção", status: "Aberto" }
             ];
             renderSetorCards(); atualizarKPIs();
         }
@@ -906,7 +993,7 @@
 
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
-            const optionsEquipesSelect = gerarOptionsEquipes();
+            const optionsEquipesSelect = gerarOptionsEquipes(false);
 
             for (let maq in agrupado) {
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(selectedSetor) && matchPeriodicidade(s.periodicidade, periodoId));
@@ -1003,7 +1090,7 @@
             }
         }
 
-        // --- MÓDULOS EXTRAS (ALMOXARIFADO, FORNO, POPS, IMPRESSÃO, UPLOAD) PERMANECEM INALTERADOS ---
+        // --- ALMOXARIFADO ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
@@ -1029,10 +1116,14 @@
             const tbody = document.getElementById('almoxarifadoTbody'); if(!tbody) return;
             const catFilter = document.getElementById('almoxCategoriaFilter').value;
             const search = document.getElementById('almoxSearch').value.toLowerCase();
-            const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))];
+            
+            // ORDENAÇÃO ALFABÉTICA DAS CATEGORIAS
+            const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))].sort((a, b) => a.localeCompare(b));
+            
             const selectCat = document.getElementById('almoxCategoriaFilter');
             selectCat.innerHTML = '<option value="">Todas as Famílias</option>' + categorias.map(c => `<option value="${c}">${c}</option>`).join('');
             selectCat.value = catFilter;
+            
             const filtrados = almoxarifadoData.filter(item => (catFilter === "" || item.categoria === catFilter) && ((item.nome||"").toLowerCase().includes(search) || (item.id||"").toLowerCase().includes(search) || (item.categoria||"").toLowerCase().includes(search)));
             tbody.innerHTML = filtrados.map(item => {
                 const badgeEstoque = item.quantidade <= item.minimo ? `<span class="bg-red-50 text-red-600 border border-red-100 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>` : `<span class="bg-slate-50 text-slate-700 border border-slate-200 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>`;
@@ -1126,7 +1217,10 @@
             const select = document.getElementById('movItemSelect');
             select.innerHTML = almoxarifadoData.map(i => `<option value="${i.id}">${i.nome} (${i.quantidade} ${i.unidade})</option>`).join('');
             if (preSelectedId) select.value = preSelectedId;
-            document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes();
+            
+            // Requisitante APENAS da Manutenção
+            document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes(true);
+
             atualizarInfoItemMov(); document.getElementById('movimentacaoModal').classList.remove('hidden');
         }
 
