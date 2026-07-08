@@ -97,7 +97,7 @@
                     <div>
                         <span class="block text-[10px] font-bold text-blue-500 uppercase tracking-wider">Programação</span>
                         <span class="block text-xl font-black text-slate-800" id="kpiProximosDias">0</span>
-                        <span class="block text-[10px] text-blue-700 font-medium mt-0.5">Checklists (Próximos 7 dias)</span>
+                        <span class="block text-[10px] text-blue-700 font-medium mt-0.5">Preventivas (Próx. 7 dias)</span>
                     </div>
                 </button>
 
@@ -271,7 +271,6 @@
         </div>
     </main>
 
-    <!-- Modal: Configurar Conexão -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -298,7 +297,6 @@
         </div>
     </div>
 
-    <!-- Modal: Abertura de Chamado (OS) -->
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -343,7 +341,6 @@
         </div>
     </div>
 
-    <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
@@ -359,12 +356,10 @@
                 <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos">
-                <!-- Injetado via JS -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- Modal: Central de Alertas (Preditiva) -->
     <div id="alertasModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -402,7 +397,6 @@
         </div>
     </div>
 
-    <!-- Modal: Cadastrar Novo Item Almoxarifado -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -468,7 +462,6 @@
         </div>
     </div>
 
-    <!-- Modal: Registrar Movimentação -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
@@ -512,7 +505,6 @@
         </div>
     </div>
 
-    <!-- Modal: Imagens -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -531,7 +523,6 @@
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
-        let fotoAnexadaBase64 = "";
         
         let currentView = 'home';
         let selectedSetor = '';
@@ -556,24 +547,15 @@
             
             let bgClass = "bg-emerald-600 text-white shadow-emerald-200";
             let icon = '<i class="fa-solid fa-circle-check"></i>';
-            
-            if (type === 'error') {
-                bgClass = "bg-rose-600 text-white shadow-rose-200";
-                icon = '<i class="fa-solid fa-circle-xmark"></i>';
-            } else if (type === 'info') {
-                bgClass = "bg-[#0b132b] text-white shadow-slate-200";
-                icon = '<i class="fa-solid fa-microchip"></i>';
-            }
+            if (type === 'error') { bgClass = "bg-rose-600 text-white shadow-rose-200"; icon = '<i class="fa-solid fa-circle-xmark"></i>'; } 
+            else if (type === 'info') { bgClass = "bg-[#0b132b] text-white shadow-slate-200"; icon = '<i class="fa-solid fa-microchip"></i>'; }
             
             toast.className = `p-4 rounded-xl shadow-lg text-xs font-bold flex items-center gap-3 transition-all duration-300 transform translate-y-2 opacity-0 ${bgClass}`;
             toast.innerHTML = `${icon} <span>${message}</span>`;
             
             container.appendChild(toast);
             setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
-            setTimeout(() => {
-                toast.classList.add('translate-y-2', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
+            setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3500);
         }
 
         function alternarTela(novaTela) {
@@ -593,17 +575,13 @@
             } else {
                 btnVoltar.classList.remove('hidden');
                 if (novaTela === 'almoxarifado') {
-                    headerTitle.innerText = "Almoxarifado Técnico";
-                    headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
+                    headerTitle.innerText = "Almoxarifado Técnico"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
                 } else if (novaTela === 'pops') {
-                    headerTitle.innerText = "Procedimentos de Operação (POP)";
-                    headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO";
+                    headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO";
                 } else if (novaTela === 'forno') {
-                    headerTitle.innerText = "Parametrização do Forno";
-                    headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
+                    headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
                 } else {
-                    headerTitle.innerText = "Checklist de Máquinas";
-                    headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas";
+                    headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas";
                 }
             }
         }
@@ -621,7 +599,7 @@
 
         // --- SISTEMA DE EQUIPES (FORMATO NOME - SETOR, SEM OPTGROUP) ---
         function gerarOptionsEquipes(apenasManutencao = false) {
-            if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador cadastrado</option>`;
+            if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
             
             equipesData.forEach(eq => {
@@ -644,10 +622,7 @@
         // --- SISTEMA DE CHAMADOS (CORRETIVA) ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
-            let maquinas = [];
-            if (originalDatabase && originalDatabase.length > 0) maquinas = [...new Set(originalDatabase.map(i => i.maquina))];
-            else maquinas = ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
-            
+            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
             select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
             if(maquinaPre) select.value = maquinaPre;
 
@@ -665,22 +640,19 @@
             const relator = document.getElementById('chamadoRelator').value.trim();
             const btn = document.getElementById('btnEnviarChamado');
 
-            if (!defeito || !relator) { showToast("Preencha o defeito e selecione o nome do relator.", "error"); return; }
+            if (!defeito || !relator) { showToast("Preencha o defeito e selecione o relator.", "error"); return; }
 
-            btn.disabled = true;
-            const textoBtn = btn.innerHTML;
+            btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Registrando...`;
 
             if (API_URL) {
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "chamado", dados: { maquina, urgencia, defeito, relator } }) });
-                    showToast("OS criada com sucesso!");
-                    setTimeout(() => baixarDadosDaPlanilha(), 1500); 
+                    showToast("OS criada com sucesso!"); setTimeout(() => baixarDadosDaPlanilha(), 1500); 
                 } catch(e) { showToast("Falha na rede. Tente novamente.", "error"); }
             } else {
-                showToast("Modo Offline: OS simulada com sucesso.", "info");
+                showToast("Modo Offline: OS simulada.", "info");
             }
-
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
         }
 
@@ -690,8 +662,7 @@
                 const maquina = linha.getAttribute("data-maquina");
                 const item = linha.getAttribute("data-item");
                 const obsValue = linha.querySelector(".obs-inp").value.trim();
-                const obsFinal = obsValue ? ` | Obs: ${obsValue}` : "";
-                abrirModalChamado(maquina, `Falha detectada na rotina: ${item}${obsFinal}`);
+                abrirModalChamado(maquina, `Falha detectada: ${item}${obsValue ? ` | Obs: ${obsValue}` : ""}`);
             }
         }
 
@@ -700,85 +671,56 @@
             const abertos = chamadosData.filter(c => c.status !== "Fechado");
 
             if(abertos.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhuma Ordem de Serviço (OS) em aberto no momento. Tudo operante!</div>`;
+                container.innerHTML = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhuma Ordem de Serviço (OS) em aberto. Tudo operante!</div>`;
             } else {
                 container.innerHTML = abertos.map(c => {
                     const dataAbertura = new Date(c.data).toLocaleDateString('pt-BR');
-                    let urgenciaCor = "text-amber-600 bg-amber-100 border-amber-200";
-                    if(c.urgencia === "Alta") urgenciaCor = "text-rose-600 bg-rose-100 border-rose-200";
-                    if(c.urgencia === "Baixa") urgenciaCor = "text-blue-600 bg-blue-100 border-blue-200";
+                    let urgenciaCor = c.urgencia === "Alta" ? "text-rose-600 bg-rose-100 border-rose-200" : (c.urgencia === "Baixa" ? "text-blue-600 bg-blue-100 border-blue-200" : "text-amber-600 bg-amber-100 border-amber-200");
 
                     return `
                         <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm relative" id="card-os-${c.id}">
                             <div class="flex justify-between items-start mb-3">
-                                <div>
-                                    <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">${c.id} · Aberto em ${dataAbertura}</span>
-                                    <h4 class="font-bold text-slate-800 text-sm mt-0.5">${c.maquina}</h4>
-                                </div>
+                                <div><span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">${c.id} · Aberto em ${dataAbertura}</span><h4 class="font-bold text-slate-800 text-sm mt-0.5">${c.maquina}</h4></div>
                                 <span class="text-[9px] border px-2 py-0.5 rounded font-bold uppercase ${urgenciaCor}">${c.urgencia}</span>
                             </div>
-                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3">
-                                <i class="fa-solid fa-quote-left text-slate-300 mr-1"></i> ${c.defeito}
-                                <span class="block text-[9px] text-slate-400 font-semibold mt-2">Relatado por: ${c.relator}</span>
-                            </p>
-                            
-                            <!-- NOVOS CAMPOS PARA FECHAMENTO DE OS -->
+                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3"><i class="fa-solid fa-quote-left text-slate-300 mr-1"></i> ${c.defeito}<span class="block text-[9px] text-slate-400 font-semibold mt-2">Relatado por: ${c.relator}</span></p>
                             <div class="mt-4 pt-4 border-t border-slate-200">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ação de Reparo / Solução Aplicada</label>
                                 <textarea id="resolucao-os-${c.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 mb-3 resize-none" placeholder="Descreva o que foi feito..."></textarea>
-                                
                                 <div class="flex flex-col sm:flex-row items-end gap-3">
                                     <div class="w-full">
                                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico Responsável</label>
-                                        <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold">
-                                            ${gerarOptionsEquipes(true)}
-                                        </select>
+                                        <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold">${gerarOptionsEquipes(true)}</select>
                                     </div>
-                                    <button id="btn-fechar-os-${c.id}" onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]">
-                                        <i class="fa-solid fa-check-double"></i> Dar Baixa
-                                    </button>
+                                    <button id="btn-fechar-os-${c.id}" onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Dar Baixa</button>
                                 </div>
                             </div>
                         </div>
                     `;
                 }).join('');
             }
-
             document.getElementById('gerenciarChamadosModal').classList.remove('hidden');
         }
 
-        function fecharGerenciamentoChamados() {
-            document.getElementById('gerenciarChamadosModal').classList.add('hidden');
-        }
+        function fecharGerenciamentoChamados() { document.getElementById('gerenciarChamadosModal').classList.add('hidden'); }
 
         async function fecharOS(idOS) {
             const resolucao = document.getElementById(`resolucao-os-${idOS}`).value.trim();
             const solucionador = document.getElementById(`solucionador-os-${idOS}`).value;
             
-            if (!resolucao || !solucionador) {
-                showToast("Preencha a solução aplicada e selecione o técnico responsável.", "error");
-                return;
-            }
+            if (!resolucao || !solucionador) { showToast("Preencha a solução e o técnico responsável.", "error"); return; }
 
             const card = document.getElementById(`card-os-${idOS}`);
             const btn = document.getElementById(`btn-fechar-os-${idOS}`);
-            
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
-            btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; btn.disabled = true;
 
             if (API_URL) {
                 try {
-                    const payload = {
-                        tipo: "fecharChamado",
-                        dados: { id: idOS, resolucao: resolucao, solucionador: solucionador }
-                    };
-                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify(payload) });
-                    showToast(`Ordem ${idOS} fechada e registrada!`);
+                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "fecharChamado", dados: { id: idOS, resolucao: resolucao, solucionador: solucionador } }) });
+                    showToast(`Ordem ${idOS} fechada!`);
                 } catch(e) {
-                    showToast("Falha ao sincronizar baixa de OS.", "error");
-                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Dar Baixa`;
-                    btn.disabled = false;
-                    return;
+                    showToast("Falha ao sincronizar baixa.", "error");
+                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Dar Baixa`; btn.disabled = false; return;
                 }
             } else {
                 showToast(`Modo Local: Ordem ${idOS} fechada.`);
@@ -788,53 +730,64 @@
             if(index !== -1) chamadosData[index].status = "Fechado";
             
             card.style.opacity = '0.5'; card.style.pointerEvents = 'none';
-            atualizarKPIs();
-            setTimeout(() => abrirGerenciamentoChamados(), 1000); 
+            atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
         // --- SISTEMA DE ALERTAS E ATALHO CHECKLIST ---
         function irParaChecklist(setor, tipoOriginal) {
-            fecharModalAlertas();
-            selecionarSetor(setor);
-            
-            let pId = normalizar(tipoOriginal);
-            let pLabel = tipoOriginal;
+            fecharModalAlertas(); selecionarSetor(setor);
+            let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
             if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
             else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
             else if (pId.includes('quinzen')) { pId = 'quinzenal'; pLabel = 'Quinzenal'; }
             else if (pId.includes('mens')) { pId = 'mensal'; pLabel = 'Mensal'; }
-
             selecionarPeriodo(pId, pLabel);
         }
 
         function calcularAlertas() {
-            let vencidas = []; let hoje = []; let proximos = [];
-            const dataHoje = new Date(); dataHoje.setHours(0,0,0,0);
-            const daqui7Dias = new Date(dataHoje); daqui7Dias.setDate(dataHoje.getDate() + 7);
+            let alertasDict = { vencidas: {}, hoje: {}, proximos: {} };
+            const agora = new Date();
+            const hojeZero = new Date(agora); hojeZero.setHours(0,0,0,0);
+            const daqui7Dias = new Date(hojeZero); daqui7Dias.setDate(hojeZero.getDate() + 7);
 
-            const agrupado = {};
-            originalDatabase.forEach(it => {
-                const chave = it.maquina + "|" + normalizar(it.periodicidade);
-                if (!agrupado[chave]) agrupado[chave] = { maquina: it.maquina, setor: it.setor, periodicidade: it.periodicidade };
+            originalDatabase.forEach(item => {
+                const isDiario = normalizar(item.periodicidade).includes('diar') || normalizar(item.periodicidade).includes('intrad');
+                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(item.maquina) && normalizar(s.setor) === normalizar(item.setor) && matchPeriodicidade(s.periodicidade, item.periodicidade));
+                
+                let dataLog = null;
+                if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[item.item]) {
+                    dataLog = new Date(statusAtivo.itensStatus[item.item].data);
+                }
+
+                let categoriaTarget = null; let mensagem = "";
+
+                if (!dataLog) {
+                    categoriaTarget = isDiario ? 'hoje' : 'vencidas';
+                    mensagem = "Pendente de execução";
+                } else {
+                    if (isDiario) {
+                        let tempoHoras = item.tempoReanalise ? parseFloat(item.tempoReanalise) : 2;
+                        let dataProx = new Date(dataLog.getTime() + (tempoHoras * 60 * 60 * 1000));
+                        if (dataProx <= agora) { categoriaTarget = 'hoje'; mensagem = "Revisão Pendente"; }
+                    } else {
+                        let intervalo = diasParaPeriodicidade(item.periodicidade);
+                        let dataProx = new Date(dataLog); dataProx.setHours(0,0,0,0); dataProx.setDate(dataProx.getDate() + intervalo);
+
+                        if (dataProx < hojeZero) { categoriaTarget = 'vencidas'; mensagem = "Atrasada"; } 
+                        else if (dataProx.getTime() === hojeZero.getTime()) { categoriaTarget = 'hoje'; mensagem = "Vence Hoje"; } 
+                        else if (dataProx > hojeZero && dataProx <= daqui7Dias) { categoriaTarget = 'proximos'; mensagem = `Vence dia ${dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'})}`; }
+                    }
+                }
+
+                if (categoriaTarget) {
+                    const chave = `${item.maquina}|${item.periodicidade}`;
+                    if (!alertasDict[categoriaTarget][chave]) {
+                        alertasDict[categoriaTarget][chave] = { maquina: item.maquina, setor: item.setor, tipo: item.periodicidade, alerta: mensagem };
+                    }
+                }
             });
 
-            for (let chave in agrupado) {
-                const info = agrupado[chave];
-                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && matchPeriodicidade(s.periodicidade, info.periodicidade));
-                const intervalo = diasParaPeriodicidade(info.periodicidade);
-                
-                if (!statusAtivo || !statusAtivo.ultimoRegistro) {
-                    vencidas.push({ maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: "Nunca feito" }); continue;
-                }
-                const dataUltima = new Date(statusAtivo.ultimoRegistro); dataUltima.setHours(0,0,0,0);
-                const dataProxima = new Date(dataUltima); dataProxima.setDate(dataUltima.getDate() + intervalo);
-                const proxFormatada = dataProxima.toLocaleDateString('pt-BR');
-
-                if (dataProxima < dataHoje) vencidas.push({ maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: `Venceu dia ${proxFormatada}` });
-                else if (dataProxima.getTime() === dataHoje.getTime()) hoje.push({ maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: `Vence Hoje` });
-                else if (dataProxima > dataHoje && dataProxima <= daqui7Dias) proximos.push({ maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: `Vence dia ${proxFormatada}` });
-            }
-            return { vencidas, hoje, proximos };
+            return { vencidas: Object.values(alertasDict.vencidas), hoje: Object.values(alertasDict.hoje), proximos: Object.values(alertasDict.proximos) };
         }
 
         function atualizarKPIs() {
@@ -860,34 +813,20 @@
 
             const renderListaCategorizada = (arr, icone, corTexto, corBg) => {
                 if (arr.length === 0) return `<div class="text-[10px] text-slate-400 italic mb-2">Nenhum registro.</div>`;
-                
                 const diarias = arr.filter(a => normalizar(a.tipo).includes('diar') || normalizar(a.tipo).includes('intrad'));
                 const preventivas = arr.filter(a => !normalizar(a.tipo).includes('diar') && !normalizar(a.tipo).includes('intrad'));
 
-                let html = '';
                 const geraCard = (lista, tituloSub) => {
                     if(lista.length === 0) return '';
-                    return `
-                        <div class="mb-2 mt-3 text-[9px] font-bold text-slate-400 uppercase tracking-wider">${tituloSub}</div>
-                        ${lista.map(a => `
+                    return `<div class="mb-2 mt-3 text-[9px] font-bold text-slate-400 uppercase tracking-wider">${tituloSub}</div>` +
+                        lista.map(a => `
                             <div class="flex justify-between items-center bg-white border border-slate-200 rounded-lg p-3 shadow-sm mb-2 hover:bg-slate-50 transition-colors">
-                                <div>
-                                    <span class="block text-xs font-bold text-slate-800">${a.maquina}</span>
-                                    <span class="text-[10px] text-slate-500 font-medium">${a.setor} · Revisão ${a.tipo}</span>
-                                </div>
-                                <div class="flex items-center gap-2">
-                                    <span class="text-[9px] font-bold ${corBg} ${corTexto} px-2 py-1 rounded hidden sm:inline-block">${icone} ${a.alerta}</span>
-                                    <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-slate-800 hover:bg-slate-700 text-white p-1.5 px-2.5 rounded transition-all text-[10px] font-bold flex gap-1.5 items-center shadow-sm">
-                                        Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                    </button>
-                                </div>
+                                <div><span class="block text-xs font-bold text-slate-800">${a.maquina}</span><span class="text-[10px] text-slate-500 font-medium">${a.setor} · Revisão ${a.tipo}</span></div>
+                                <div class="flex items-center gap-2"><span class="text-[9px] font-bold ${corBg} ${corTexto} px-2 py-1 rounded hidden sm:inline-block">${icone} ${a.alerta}</span><button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-slate-800 hover:bg-slate-700 text-white p-1.5 px-2.5 rounded transition-all text-[10px] font-bold flex gap-1.5 items-center shadow-sm">Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i></button></div>
                             </div>
-                        `).join('')}
-                    `;
+                        `).join('');
                 };
-                html += geraCard(diarias, 'Rotina Operacional (Diária/Intradiária)');
-                html += geraCard(preventivas, 'Manutenção Preventiva Preditiva');
-                return html;
+                return geraCard(diarias, 'Rotina Operacional') + geraCard(preventivas, 'Manutenção Preventiva');
             };
 
             document.getElementById('listaAlertasVencidas').innerHTML = renderListaCategorizada(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
@@ -910,11 +849,9 @@
                 equipesData = resJson.equipes || [];
                 chamadosData = resJson.chamados || []; 
                 
-                renderSetorCards();
-                atualizarKPIs();
+                renderSetorCards(); atualizarKPIs();
             } catch (e) { 
-                showToast("Erro de rede. Modo Offline.", "error"); 
-                carregarChecklistMock();
+                showToast("Erro de rede. Modo Offline.", "error"); carregarChecklistMock();
             }
         }
 
@@ -924,7 +861,7 @@
                 { setor: "Manutenção", membros: ["José", "Carlos"] }
             ];
             originalDatabase = [
-                { item: "Verificar Oleo", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", obs: "" },
+                { item: "Verificar Oleo", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", tempoReanalise: 2, obs: "" },
                 { item: "Filtros", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Semanal", obs: "" }
             ];
             const ontem = new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString();
@@ -932,7 +869,7 @@
                 { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", vencido: true, itensStatus: {} }
             ];
             chamadosData = [
-                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou no meio do ciclo.", relator: "Rodrigo - Produção", status: "Aberto" }
+                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
             ];
             renderSetorCards(); atualizarKPIs();
         }
@@ -967,7 +904,17 @@
             const map = [ { id: "diaria", label: "Diária/ Intradiária" }, { id: "semanal", label: "Semanal" }, { id: "quinzenal", label: "Quinzenal" }, { id: "mensal", label: "Mensal" } ];
             const filterSetor = normalizar(setor);
 
-            container.innerHTML = map.map(p => {
+            // FILTRO DE ABAS VAZIAS (Só mostra a aba se existir máquina cadastrada nela para aquele setor)
+            const mapFiltrado = map.filter(p => {
+                return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id));
+            });
+
+            if(mapFiltrado.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400 font-medium">Nenhum checklist programado para este setor.</div>`;
+                return;
+            }
+
+            container.innerHTML = mapFiltrado.map(p => {
                 const maquinas = [...new Set(originalDatabase.filter(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id)).map(i => i.maquina))];
                 let atrasados = 0;
                 maquinas.forEach(maq => {
@@ -994,28 +941,27 @@
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
             const optionsEquipesSelect = gerarOptionsEquipes(false);
+            const isDiario = (periodoId === 'diaria');
 
             for (let maq in agrupado) {
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(selectedSetor) && matchPeriodicidade(s.periodicidade, periodoId));
-                let badgeHeader = ""; const isDiario = (periodoId === 'diaria');
+                let badgeHeader = "";
 
-                if (statusAtivo && statusAtivo.ultimoRegistro) {
-                    const dataObj = new Date(statusAtivo.ultimoRegistro); const op = statusAtivo.operador || "Não Informado";
-                    const dataProxima = new Date(dataObj.getTime());
-                    
-                    if(isDiario) dataProxima.setHours(dataProxima.getHours() + 2);
-                    else dataProxima.setDate(dataProxima.getDate() + diasParaPeriodicidade(statusAtivo.periodicidade));
-                    
-                    const vencidoStatus = (new Date() > dataProxima);
-                    const colorClass = vencidoStatus ? 'bg-rose-600/20 text-red-500 border border-rose-500/30' : 'bg-emerald-600/20 text-emerald-500 border border-emerald-500/30';
-                    const dataStr = dataObj.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
-                    const horaStr = dataObj.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
-                    let pStr = dataProxima.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit', year: isDiario ? undefined : 'numeric'});
-                    if(isDiario) pStr += ` às ${dataProxima.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'})}`;
+                if (!isDiario) {
+                    if (statusAtivo && statusAtivo.ultimoRegistro) {
+                        const dataUltima = new Date(statusAtivo.ultimoRegistro); const op = statusAtivo.operador || "Não Informado";
+                        const dataProxima = new Date(dataUltima); dataProxima.setDate(dataUltima.getDate() + diasParaPeriodicidade(statusAtivo.periodicidade));
+                        
+                        const vencidoStatus = (new Date() > dataProxima);
+                        const colorClass = vencidoStatus ? 'bg-rose-600/20 text-red-500 border border-rose-500/30' : 'bg-emerald-600/20 text-emerald-500 border border-emerald-500/30';
+                        const dataStr = dataUltima.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
+                        const horaStr = dataUltima.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
+                        const pStr = dataProxima.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit', year: 'numeric'});
 
-                    badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
-                } else {
-                    badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente</span>`;
+                        badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
+                    } else {
+                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente</span>`;
+                    }
                 }
 
                 let html = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden"><div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between"><div class="flex items-center gap-3"><span class="tracking-tight text-lg font-bold">${maq}</span><button onclick="imprimirChecklistPapel('${maq}')" class="bg-slate-700 hover:bg-slate-600 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5"><i class="fa-solid fa-print"></i> Imprimir</button></div>${badgeHeader}</div><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase"><tr><th class="p-4 w-[45%]">ITEM</th><th class="p-4 w-44">OPERADOR</th><th class="p-4 w-32">STATUS</th><th class="p-4">OBS</th><th class="p-4 text-center w-28">AÇÃO</th></tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
@@ -1023,12 +969,25 @@
                 agrupado[maq].forEach((item) => {
                     const badgeObs = item.obs ? `<span class="bg-blue-50 text-blue-600 text-[10px] px-2.5 py-1 rounded-md font-bold inline-block mt-1.5"><i class="fa-solid fa-circle-info mr-1"></i>Obs: ${item.obs}</span>` : '';
                     let metaHistorico = `<div class="text-[9px] text-slate-400 font-medium mt-1"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Sem registros locais</div>`;
+                    let textoProxima = "Aguardando";
+
                     if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[item.item]) {
                         const itemLog = statusAtivo.itensStatus[item.item];
                         const dateItem = new Date(itemLog.data);
                         metaHistorico = `<div class="text-[9px] text-slate-400 font-semibold mt-1"><i class="fa-solid fa-user-check text-slate-300"></i> Feito por <span class="text-slate-600 font-bold">${itemLog.operador}</span> em ${dateItem.toLocaleDateString('pt-BR')} às ${dateItem.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</div>`;
+                        
+                        if (isDiario) {
+                            let horas = item.tempoReanalise ? parseFloat(item.tempoReanalise) : 2; // Default 2h se vazio
+                            let dateProx = new Date(dateItem.getTime() + (horas * 60 * 60 * 1000));
+                            textoProxima = dateProx.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+                            if(new Date() > dateProx) textoProxima = `<span class="text-rose-600">Atrasado</span>`;
+                        }
                     }
-                    html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><select class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:ring-blue-500">${optionsEquipesSelect}</select></td><td class="p-4 align-middle"><select onchange="verificarStatusChamado(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle"><button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-paper-plane text-[10px]"></i></button></td></tr>`;
+
+                    // Se for diário, coloca o aviso de "Próxima" em cima do botão
+                    const headerBotaoInfo = isDiario ? `<div class="text-[9px] font-bold text-slate-500 mb-1.5 flex items-center justify-center gap-1"><i class="fa-solid fa-clock text-amber-500"></i> Próx: ${textoProxima}</div>` : '';
+
+                    html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><select class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:ring-blue-500">${optionsEquipesSelect}</select></td><td class="p-4 align-middle"><select onchange="verificarStatusChamado(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle">${headerBotaoInfo}<button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-paper-plane text-[10px]"></i> Registrar</button></td></tr>`;
                 });
                 html += `</tbody></table></div></div>`;
                 container.innerHTML += html;
@@ -1080,17 +1039,17 @@
                     checklistStatus.push({ maquina: payload.dados[0].maquina, setor: selectedSetor, periodicidade: payload.dados[0].periodicidade, ultimoRegistro: dataISO, operador: operadorValue, vencido: false, itensStatus: n });
                 }
                 setTimeout(() => {
-                    botao.disabled = false; botao.innerHTML = originalContent; botao.className = "btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg";
+                    botao.disabled = false; botao.innerHTML = originalContent; botao.className = "btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5";
                     selecionarPeriodo(selectedPeriodo, selectedPeriodo === "diaria" ? "Diária/ Intradiária" : selectedPeriodo.toUpperCase());
                     atualizarKPIs();
-                }, 2000);
+                }, 1500);
             } catch (err) {
                 showToast("Erro na rede.", "error");
                 botao.disabled = false; botao.innerHTML = originalContent;
             }
         }
 
-        // --- ALMOXARIFADO ---
+        // --- ALMOXARIFADO / FORNO / CONFIGURAÇÕES GERAIS ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
@@ -1117,7 +1076,6 @@
             const catFilter = document.getElementById('almoxCategoriaFilter').value;
             const search = document.getElementById('almoxSearch').value.toLowerCase();
             
-            // ORDENAÇÃO ALFABÉTICA DAS CATEGORIAS
             const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))].sort((a, b) => a.localeCompare(b));
             
             const selectCat = document.getElementById('almoxCategoriaFilter');
@@ -1218,7 +1176,7 @@
             select.innerHTML = almoxarifadoData.map(i => `<option value="${i.id}">${i.nome} (${i.quantidade} ${i.unidade})</option>`).join('');
             if (preSelectedId) select.value = preSelectedId;
             
-            // Requisitante APENAS da Manutenção
+            // REQUISITANTE APENAS DA EQUIPE DE MANUTENÇÃO (Passando TRUE na função)
             document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes(true);
 
             atualizarInfoItemMov(); document.getElementById('movimentacaoModal').classList.remove('hidden');
