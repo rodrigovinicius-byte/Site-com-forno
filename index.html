@@ -73,9 +73,10 @@
         </div>
 
         <div id="view-home" class="fade-in">
+            <!-- BALÕES SELETORES DO DASHBOARD -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 
-                <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-gradient-to-br from-rose-50 to-red-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
+                <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-rose-600 text-white rounded-xl"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                     <div>
                         <span class="block text-[10px] font-bold text-rose-500 uppercase tracking-wider">Manutenção Corretiva</span>
@@ -84,7 +85,7 @@
                     </div>
                 </button>
 
-                <button onclick="abrirModalAlertas()" class="nav-card text-left bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
+                <button onclick="abrirPreditiva('imediata')" class="nav-card text-left bg-amber-50 border border-amber-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-amber-500 text-white rounded-xl"><i class="fa-solid fa-clock text-lg"></i></div>
                     <div>
                         <span class="block text-[10px] font-bold text-amber-600 uppercase tracking-wider">Atenção Imediata</span>
@@ -93,7 +94,7 @@
                     </div>
                 </button>
 
-                <button onclick="abrirModalAlertas()" class="nav-card text-left bg-gradient-to-br from-blue-50 to-indigo-50 border border-blue-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
+                <button onclick="abrirPreditiva('programacao')" class="nav-card text-left bg-blue-50 border border-blue-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-blue-600 text-white rounded-xl"><i class="fa-solid fa-calendar-days text-lg"></i></div>
                     <div>
                         <span class="block text-[10px] font-bold text-blue-500 uppercase tracking-wider">Programação</span>
@@ -365,40 +366,44 @@
         </div>
     </div>
 
-    <!-- Modal: Central de Alertas (Preditiva) -->
-    <div id="alertasModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-4xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+    <!-- Modal: Central de Alertas Preditiva / Preventiva (Cards Dinâmicos) -->
+    <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-calendar-check"></i>
+                        <i id="iconPreditivaModal" class="fa-solid fa-calendar-check"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3>
-                        <p class="text-[10px] text-slate-500 font-medium">Controle de Preventivas e Rotina Operacional</p>
+                        <h3 id="preditivaModalTitle" class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3>
+                        <p id="preditivaModalDesc" class="text-[10px] text-slate-500 font-medium">Controle de Preventivas</p>
                     </div>
                 </div>
-                <button onclick="fecharModalAlertas()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharPreditiva()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50">
-                <div>
+                
+                <div id="containerVencidas" class="hidden">
                     <h4 class="text-[11px] font-bold text-rose-600 uppercase tracking-wider mb-2 flex items-center gap-2 border-b border-rose-200 pb-1">
                         <i class="fa-solid fa-circle-exclamation"></i> Vencidas / Atrasadas (<span id="countVencidas">0</span>)
                     </h4>
                     <div id="listaAlertasVencidas"></div>
                 </div>
-                <div>
+                
+                <div id="containerHoje" class="hidden">
                     <h4 class="text-[11px] font-bold text-amber-600 uppercase tracking-wider mb-2 flex items-center gap-2 border-b border-amber-200 pb-1">
                         <i class="fa-solid fa-clock"></i> Pendentes Para Hoje (<span id="countHoje">0</span>)
                     </h4>
                     <div id="listaAlertasHoje"></div>
                 </div>
-                <div>
+                
+                <div id="containerProximos" class="hidden">
                     <h4 class="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-2 flex items-center gap-2 border-b border-blue-200 pb-1">
                         <i class="fa-solid fa-calendar-days"></i> Programação (Próximos 7 dias) (<span id="countProximos">0</span>)
                     </h4>
                     <div id="listaAlertasProximos"></div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -498,7 +503,6 @@
                     </div>
                     <div class="font-sans">
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
-                        <!-- Apenas membros da Manutenção aparecerão aqui via JS -->
                         <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
                     </div>
                     <div class="font-sans">
@@ -739,9 +743,9 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE ALERTAS E ATALHO CHECKLIST ---
+        // --- SISTEMA DE ALERTAS PREDITIVOS (NOVO LAYOUT EM BALÃO) ---
         function irParaChecklist(setor, tipoOriginal) {
-            fecharModalAlertas(); selecionarSetor(setor);
+            fecharPreditiva(); selecionarSetor(setor);
             let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
             if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
             else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
@@ -753,10 +757,8 @@
         function calcularAlertas() {
             let alertasDict = { vencidas: {}, hoje: {}, proximos: {} };
             const agora = new Date();
-            const hojeZero = new Date(agora); hojeZero.setHours(0,0,0,0);
-            const daqui7Dias = new Date(hojeZero); daqui7Dias.setDate(hojeZero.getDate() + 7);
-
-            // Agrupa por Máquina + Periodicidade para mostrar 1 aviso por checklist e calcular Data da Máquina como um todo
+            const hojeZero = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
+            
             const agrupado = {};
             originalDatabase.forEach(item => {
                 const chave = item.maquina + "|" + normalizar(item.periodicidade);
@@ -773,8 +775,6 @@
             for (let chave in agrupado) {
                 const info = agrupado[chave];
                 const isDiario = normalizar(info.periodicidade).includes('diar') || normalizar(info.periodicidade).includes('intrad');
-                
-                // Busca o status mais recente consolidado dessa maquina+periodicidade
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && matchPeriodicidade(s.periodicidade, info.periodicidade));
                 
                 let dataProxFormatada = "Pendente";
@@ -782,7 +782,7 @@
                 let mensagem = "";
 
                 if (!statusAtivo || !statusAtivo.ultimoRegistro) {
-                    categoriaTarget = 'vencidas'; 
+                    categoriaTarget = isDiario ? 'hoje' : 'vencidas'; 
                     mensagem = "Pendente de execução";
                 } else {
                     const dataLog = new Date(statusAtivo.ultimoRegistro);
@@ -798,22 +798,21 @@
                         }
                     } else {
                         let intervalo = diasParaPeriodicidade(info.periodicidade);
-                        let dataProx = new Date(dataLog); 
-                        dataProx.setHours(0,0,0,0); 
-                        dataProx.setDate(dataProx.getDate() + intervalo);
+                        let dataProx = new Date(dataLog.getFullYear(), dataLog.getMonth(), dataLog.getDate() + intervalo); 
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
 
-                        if (dataProx < hojeZero) { 
+                        const diffTime = dataProx.getTime() - hojeZero.getTime();
+                        const diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                        if (diffDias < 0) { 
                             categoriaTarget = 'vencidas'; 
                             mensagem = "Atrasada"; 
-                        } 
-                        else if (dataProx.getTime() === hojeZero.getTime()) { 
+                        } else if (diffDias === 0) { 
                             categoriaTarget = 'hoje'; 
                             mensagem = "Vence Hoje"; 
-                        } 
-                        else if (dataProx > hojeZero && dataProx <= daqui7Dias) { 
+                        } else if (diffDias > 0 && diffDias <= 7) { 
                             categoriaTarget = 'proximos'; 
-                            mensagem = "No prazo"; 
+                            mensagem = `Vence em ${diffDias} dia(s)`; 
                         }
                     }
                 }
@@ -848,27 +847,32 @@
             if (osAbertas > 0) { badge.innerText = osAbertas; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
         }
 
-        function abrirModalAlertas() {
+        function abrirPreditiva(alvo) {
             const alertas = calcularAlertas();
-            document.getElementById('countVencidas').innerText = alertas.vencidas.length;
-            document.getElementById('countHoje').innerText = alertas.hoje.length;
-            document.getElementById('countProximos').innerText = alertas.proximos.length;
+            
+            const divVencidas = document.getElementById('containerVencidas');
+            const divHoje = document.getElementById('containerHoje');
+            const divProximos = document.getElementById('containerProximos');
+            const modalTitle = document.getElementById('preditivaModalTitle');
+            const modalDesc = document.getElementById('preditivaModalDesc');
+            const modalIcon = document.getElementById('iconPreditivaModal');
 
-            const renderListaCategorizada = (arr, icone, corTexto, corBg) => {
-                if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4">Nenhum registro.</div>`;
-                
+            const renderLista = (arr, icone, corTexto, corBg) => {
+                if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4">Nenhum registro encontrado.</div>`;
                 return arr.map(a => {
-                    let proxClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
-                    if(a.proxima === "Pendente" || a.alerta === "Atrasada") proxClass = "text-rose-700 bg-rose-50 border-rose-200";
+                    let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
+                    if(a.proxima === "Pendente" || a.alerta === "Atrasada" || a.alerta === "Revisão Pendente" || a.alerta === "Vence Hoje") {
+                        proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
+                    }
                     
                     return `
                         <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                                 <div class="space-y-1">
                                     <h4 class="text-sm font-bold text-slate-800">${a.maquina}</h4>
-                                    <div class="text-[10px] text-slate-500 font-medium">${a.setor} · Revisão ${a.tipo}</div>
+                                    <div class="text-[10px] text-slate-500 font-medium mb-1.5">${a.setor} · Revisão ${a.tipo}</div>
                                     <div class="inline-block mt-1">
-                                        <span class="text-[9px] font-bold ${proxClass} px-2 py-1 rounded border inline-flex items-center gap-1.5">
+                                        <span class="text-[10px] font-bold ${proxClass} px-2.5 py-1 rounded-md border inline-flex items-center gap-1.5 shadow-sm">
                                             <i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}
                                         </span>
                                     </div>
@@ -887,13 +891,32 @@
                 }).join('');
             };
 
-            document.getElementById('listaAlertasVencidas').innerHTML = renderListaCategorizada(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
-            document.getElementById('listaAlertasHoje').innerHTML = renderListaCategorizada(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
-            document.getElementById('listaAlertasProximos').innerHTML = renderListaCategorizada(alertas.proximos, '<i class="fa-solid fa-calendar"></i>', 'text-blue-700', 'bg-blue-100');
-            document.getElementById('alertasModal').classList.remove('hidden');
+            if (alvo === 'imediata') {
+                modalTitle.innerText = "Atenção Imediata";
+                modalDesc.innerText = "Rotinas e preventivas que exigem ação hoje ou estão atrasadas.";
+                modalIcon.className = "fa-solid fa-clock";
+                
+                divVencidas.classList.remove('hidden'); divHoje.classList.remove('hidden'); divProximos.classList.add('hidden');
+                
+                document.getElementById('countVencidas').innerText = alertas.vencidas.length;
+                document.getElementById('listaAlertasVencidas').innerHTML = renderLista(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
+                document.getElementById('countHoje').innerText = alertas.hoje.length;
+                document.getElementById('listaAlertasHoje').innerHTML = renderLista(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
+            } else {
+                modalTitle.innerText = "Programação";
+                modalDesc.innerText = "Manutenções preventivas agendadas para os próximos 7 dias.";
+                modalIcon.className = "fa-solid fa-calendar-days";
+                
+                divVencidas.classList.add('hidden'); divHoje.classList.add('hidden'); divProximos.classList.remove('hidden');
+                
+                document.getElementById('countProximos').innerText = alertas.proximos.length;
+                document.getElementById('listaAlertasProximos').innerHTML = renderLista(alertas.proximos, '<i class="fa-solid fa-calendar"></i>', 'text-blue-700', 'bg-blue-100');
+            }
+
+            document.getElementById('preditivaModal').classList.remove('hidden');
         }
 
-        function fecharModalAlertas() { document.getElementById('alertasModal').classList.add('hidden'); }
+        function fecharPreditiva() { document.getElementById('preditivaModal').classList.add('hidden'); }
 
         // --- NÚCLEO DA APLICAÇÃO ---
         async function baixarDadosDaPlanilha() {
@@ -923,12 +946,16 @@
                 { item: "Filtros", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Semanal", obs: "" },
                 { item: "Aperto Correias", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
             ];
-            const ontem = new Date(Date.now() - 36 * 60 * 60 * 1000).toISOString();
-            const cincoDiasAtras = new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString();
+            
+            const agora = new Date();
+            const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString();
+            
+            // Mock de Preventiva feita há 5 dias (Vai vencer em 2 dias, logo aparecerá na Programação de 7 dias)
+            const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
             
             checklistStatus = [
                 { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", vencido: true, itensStatus: {} },
-                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: cincoDiasAtras, operador: "José - Manutenção", vencido: false, itensStatus: {} }
+                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "José - Manutenção", vencido: false, itensStatus: {} }
             ];
             chamadosData = [
                 { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
@@ -1020,7 +1047,7 @@
 
                         badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                     } else {
-                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold border border-rose-200">Pendente de execução</span>`;
+                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente de execução</span>`;
                     }
                 }
 
@@ -1108,6 +1135,7 @@
             }
         }
 
+        // --- ALMOXARIFADO / FORNO / CONFIGURAÇÕES GERAIS ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
