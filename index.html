@@ -271,6 +271,7 @@
         </div>
     </main>
 
+    <!-- Modal: Configurar Conexão -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -297,6 +298,7 @@
         </div>
     </div>
 
+    <!-- Modal: Abertura de Chamado (OS) -->
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -341,6 +343,7 @@
         </div>
     </div>
 
+    <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
@@ -356,10 +359,12 @@
                 <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos">
-                </div>
+                <!-- Injetado via JS -->
+            </div>
         </div>
     </div>
 
+    <!-- Modal: Central de Alertas (Preditiva) -->
     <div id="alertasModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -397,6 +402,7 @@
         </div>
     </div>
 
+    <!-- Modal: Cadastrar Novo Item Almoxarifado -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -462,6 +468,7 @@
         </div>
     </div>
 
+    <!-- Modal: Registrar Movimentação -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
@@ -505,6 +512,7 @@
         </div>
     </div>
 
+    <!-- Modal: Imagens -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -523,6 +531,7 @@
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
+        let fotoAnexadaBase64 = "";
         
         let currentView = 'home';
         let selectedSetor = '';
@@ -597,20 +606,15 @@
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
         function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
 
-        // --- SISTEMA DE EQUIPES (FORMATO NOME - SETOR, SEM OPTGROUP) ---
+        // --- SISTEMA DE EQUIPES ---
         function gerarOptionsEquipes(apenasManutencao = false) {
-            if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador</option>`;
+            if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador cadastrado</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
             
             equipesData.forEach(eq => {
                 const setor = eq.setor;
                 const setNorm = normalizar(setor);
-                
-                // Filtro para listar apenas manutenção
-                if (apenasManutencao && !setNorm.includes('manutencao') && !setNorm.includes('manutenção')) {
-                    return;
-                }
-                
+                if (apenasManutencao && !setNorm.includes('manutencao') && !setNorm.includes('manutenção')) return;
                 eq.membros.forEach(m => {
                     const nomeCompleto = `${m} - ${setor}`;
                     opcoes += `<option value="${nomeCompleto}">${nomeCompleto}</option>`;
@@ -651,8 +655,9 @@
                     showToast("OS criada com sucesso!"); setTimeout(() => baixarDadosDaPlanilha(), 1500); 
                 } catch(e) { showToast("Falha na rede. Tente novamente.", "error"); }
             } else {
-                showToast("Modo Offline: OS simulada.", "info");
+                showToast("Modo Offline: OS simulada com sucesso.", "info");
             }
+
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
         }
 
@@ -750,42 +755,76 @@
             const hojeZero = new Date(agora); hojeZero.setHours(0,0,0,0);
             const daqui7Dias = new Date(hojeZero); daqui7Dias.setDate(hojeZero.getDate() + 7);
 
+            // Agrupa por Máquina + Periodicidade para mostrar 1 aviso por checklist, e não 1 por item
+            const agrupado = {};
             originalDatabase.forEach(item => {
-                const isDiario = normalizar(item.periodicidade).includes('diar') || normalizar(item.periodicidade).includes('intrad');
-                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(item.maquina) && normalizar(s.setor) === normalizar(item.setor) && matchPeriodicidade(s.periodicidade, item.periodicidade));
-                
-                let dataLog = null;
-                if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[item.item]) {
-                    dataLog = new Date(statusAtivo.itensStatus[item.item].data);
+                const chave = item.maquina + "|" + normalizar(item.periodicidade);
+                if (!agrupado[chave]) {
+                    agrupado[chave] = { 
+                        maquina: item.maquina, 
+                        setor: item.setor, 
+                        periodicidade: item.periodicidade,
+                        tempoReanalise: item.tempoReanalise 
+                    };
                 }
+            });
 
-                let categoriaTarget = null; let mensagem = "";
+            for (let chave in agrupado) {
+                const info = agrupado[chave];
+                const isDiario = normalizar(info.periodicidade).includes('diar') || normalizar(info.periodicidade).includes('intrad');
+                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && matchPeriodicidade(s.periodicidade, info.periodicidade));
+                
+                let dataProxFormatada = "Pendente";
+                let categoriaTarget = null;
+                let mensagem = "";
 
-                if (!dataLog) {
-                    categoriaTarget = isDiario ? 'hoje' : 'vencidas';
+                if (!statusAtivo || !statusAtivo.ultimoRegistro) {
+                    categoriaTarget = isDiario ? 'hoje' : 'vencidas'; 
                     mensagem = "Pendente de execução";
                 } else {
+                    const dataLog = new Date(statusAtivo.ultimoRegistro);
+                    
                     if (isDiario) {
-                        let tempoHoras = item.tempoReanalise ? parseFloat(item.tempoReanalise) : 2;
+                        let tempoHoras = info.tempoReanalise ? parseFloat(info.tempoReanalise) : 2;
                         let dataProx = new Date(dataLog.getTime() + (tempoHoras * 60 * 60 * 1000));
-                        if (dataProx <= agora) { categoriaTarget = 'hoje'; mensagem = "Revisão Pendente"; }
+                        dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' às ' + dataProx.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                        
+                        if (dataProx <= agora) { 
+                            categoriaTarget = 'hoje'; 
+                            mensagem = "Revisão Pendente"; 
+                        }
                     } else {
-                        let intervalo = diasParaPeriodicidade(item.periodicidade);
-                        let dataProx = new Date(dataLog); dataProx.setHours(0,0,0,0); dataProx.setDate(dataProx.getDate() + intervalo);
+                        let intervalo = diasParaPeriodicidade(info.periodicidade);
+                        let dataProx = new Date(dataLog); 
+                        dataProx.setHours(0,0,0,0); 
+                        dataProx.setDate(dataProx.getDate() + intervalo);
+                        dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
 
-                        if (dataProx < hojeZero) { categoriaTarget = 'vencidas'; mensagem = "Atrasada"; } 
-                        else if (dataProx.getTime() === hojeZero.getTime()) { categoriaTarget = 'hoje'; mensagem = "Vence Hoje"; } 
-                        else if (dataProx > hojeZero && dataProx <= daqui7Dias) { categoriaTarget = 'proximos'; mensagem = `Vence dia ${dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'})}`; }
+                        if (dataProx < hojeZero) { 
+                            categoriaTarget = 'vencidas'; 
+                            mensagem = "Atrasada"; 
+                        } 
+                        else if (dataProx.getTime() === hojeZero.getTime()) { 
+                            categoriaTarget = 'hoje'; 
+                            mensagem = "Vence Hoje"; 
+                        } 
+                        else if (dataProx > hojeZero && dataProx <= daqui7Dias) { 
+                            categoriaTarget = 'proximos'; 
+                            mensagem = `Vence dia ${dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'})}`; 
+                        }
                     }
                 }
 
                 if (categoriaTarget) {
-                    const chave = `${item.maquina}|${item.periodicidade}`;
-                    if (!alertasDict[categoriaTarget][chave]) {
-                        alertasDict[categoriaTarget][chave] = { maquina: item.maquina, setor: item.setor, tipo: item.periodicidade, alerta: mensagem };
-                    }
+                    alertasDict[categoriaTarget][chave] = { 
+                        maquina: info.maquina, 
+                        setor: info.setor, 
+                        tipo: info.periodicidade, 
+                        alerta: mensagem,
+                        proxima: dataProxFormatada
+                    };
                 }
-            });
+            }
 
             return { vencidas: Object.values(alertasDict.vencidas), hoje: Object.values(alertasDict.hoje), proximos: Object.values(alertasDict.proximos) };
         }
@@ -821,12 +860,23 @@
                     return `<div class="mb-2 mt-3 text-[9px] font-bold text-slate-400 uppercase tracking-wider">${tituloSub}</div>` +
                         lista.map(a => `
                             <div class="flex justify-between items-center bg-white border border-slate-200 rounded-lg p-3 shadow-sm mb-2 hover:bg-slate-50 transition-colors">
-                                <div><span class="block text-xs font-bold text-slate-800">${a.maquina}</span><span class="text-[10px] text-slate-500 font-medium">${a.setor} · Revisão ${a.tipo}</span></div>
-                                <div class="flex items-center gap-2"><span class="text-[9px] font-bold ${corBg} ${corTexto} px-2 py-1 rounded hidden sm:inline-block">${icone} ${a.alerta}</span><button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-slate-800 hover:bg-slate-700 text-white p-1.5 px-2.5 rounded transition-all text-[10px] font-bold flex gap-1.5 items-center shadow-sm">Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i></button></div>
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-800">${a.maquina}</span>
+                                    <span class="block text-[10px] text-slate-500 font-medium">${a.setor} · Revisão ${a.tipo}</span>
+                                    <div class="mt-1">
+                                        <span class="text-[9px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-100 flex inline-flex items-center gap-1">
+                                            <i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2">
+                                    <span class="text-[9px] font-bold ${corBg} ${corTexto} px-2 py-1 rounded hidden sm:inline-flex items-center gap-1">${icone} ${a.alerta}</span>
+                                    <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-slate-800 hover:bg-slate-700 text-white p-1.5 px-2.5 rounded transition-all text-[10px] font-bold flex gap-1.5 items-center shadow-sm">Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i></button>
+                                </div>
                             </div>
                         `).join('');
                 };
-                return geraCard(diarias, 'Rotina Operacional') + geraCard(preventivas, 'Manutenção Preventiva');
+                return geraCard(diarias, 'Rotina Operacional (Diária/Intradiária)') + geraCard(preventivas, 'Manutenção Preventiva Preditiva');
             };
 
             document.getElementById('listaAlertasVencidas').innerHTML = renderListaCategorizada(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
@@ -857,7 +907,7 @@
 
         function carregarChecklistMock() {
             equipesData = [
-                { setor: "Produção", membros: ["Rodrigo", "Claudio", "Fernando"] },
+                { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
                 { setor: "Manutenção", membros: ["José", "Carlos"] }
             ];
             originalDatabase = [
@@ -904,7 +954,7 @@
             const map = [ { id: "diaria", label: "Diária/ Intradiária" }, { id: "semanal", label: "Semanal" }, { id: "quinzenal", label: "Quinzenal" }, { id: "mensal", label: "Mensal" } ];
             const filterSetor = normalizar(setor);
 
-            // FILTRO DE ABAS VAZIAS (Só mostra a aba se existir máquina cadastrada nela para aquele setor)
+            // FILTRO DE ABAS VAZIAS (Só mostra a aba se existir máquina cadastrada nela)
             const mapFiltrado = map.filter(p => {
                 return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id));
             });
@@ -941,11 +991,10 @@
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
             const optionsEquipesSelect = gerarOptionsEquipes(false);
-            const isDiario = (periodoId === 'diaria');
 
             for (let maq in agrupado) {
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(selectedSetor) && matchPeriodicidade(s.periodicidade, periodoId));
-                let badgeHeader = "";
+                let badgeHeader = ""; const isDiario = (periodoId === 'diaria');
 
                 if (!isDiario) {
                     if (statusAtivo && statusAtivo.ultimoRegistro) {
@@ -977,14 +1026,14 @@
                         metaHistorico = `<div class="text-[9px] text-slate-400 font-semibold mt-1"><i class="fa-solid fa-user-check text-slate-300"></i> Feito por <span class="text-slate-600 font-bold">${itemLog.operador}</span> em ${dateItem.toLocaleDateString('pt-BR')} às ${dateItem.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</div>`;
                         
                         if (isDiario) {
-                            let horas = item.tempoReanalise ? parseFloat(item.tempoReanalise) : 2; // Default 2h se vazio
+                            let horas = item.tempoReanalise ? parseFloat(item.tempoReanalise) : 2; 
                             let dateProx = new Date(dateItem.getTime() + (horas * 60 * 60 * 1000));
                             textoProxima = dateProx.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
                             if(new Date() > dateProx) textoProxima = `<span class="text-rose-600">Atrasado</span>`;
                         }
                     }
 
-                    // Se for diário, coloca o aviso de "Próxima" em cima do botão
+                    // Se for diário, coloca o aviso de "Próxima" em cima do botão de registrar
                     const headerBotaoInfo = isDiario ? `<div class="text-[9px] font-bold text-slate-500 mb-1.5 flex items-center justify-center gap-1"><i class="fa-solid fa-clock text-amber-500"></i> Próx: ${textoProxima}</div>` : '';
 
                     html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><select class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:ring-blue-500">${optionsEquipesSelect}</select></td><td class="p-4 align-middle"><select onchange="verificarStatusChamado(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle">${headerBotaoInfo}<button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-paper-plane text-[10px]"></i> Registrar</button></td></tr>`;
@@ -1049,7 +1098,6 @@
             }
         }
 
-        // --- ALMOXARIFADO / FORNO / CONFIGURAÇÕES GERAIS ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
@@ -1075,13 +1123,10 @@
             const tbody = document.getElementById('almoxarifadoTbody'); if(!tbody) return;
             const catFilter = document.getElementById('almoxCategoriaFilter').value;
             const search = document.getElementById('almoxSearch').value.toLowerCase();
-            
             const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))].sort((a, b) => a.localeCompare(b));
-            
             const selectCat = document.getElementById('almoxCategoriaFilter');
             selectCat.innerHTML = '<option value="">Todas as Famílias</option>' + categorias.map(c => `<option value="${c}">${c}</option>`).join('');
             selectCat.value = catFilter;
-            
             const filtrados = almoxarifadoData.filter(item => (catFilter === "" || item.categoria === catFilter) && ((item.nome||"").toLowerCase().includes(search) || (item.id||"").toLowerCase().includes(search) || (item.categoria||"").toLowerCase().includes(search)));
             tbody.innerHTML = filtrados.map(item => {
                 const badgeEstoque = item.quantidade <= item.minimo ? `<span class="bg-red-50 text-red-600 border border-red-100 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>` : `<span class="bg-slate-50 text-slate-700 border border-slate-200 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>`;
@@ -1175,10 +1220,7 @@
             const select = document.getElementById('movItemSelect');
             select.innerHTML = almoxarifadoData.map(i => `<option value="${i.id}">${i.nome} (${i.quantidade} ${i.unidade})</option>`).join('');
             if (preSelectedId) select.value = preSelectedId;
-            
-            // REQUISITANTE APENAS DA EQUIPE DE MANUTENÇÃO (Passando TRUE na função)
             document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes(true);
-
             atualizarInfoItemMov(); document.getElementById('movimentacaoModal').classList.remove('hidden');
         }
 
