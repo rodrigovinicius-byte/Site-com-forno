@@ -131,7 +131,6 @@
             </div>
         </div>
 
-        <!-- Módulos (Ocultos inicialmente) -->
         <div id="view-checklist-setor" class="fade-in hidden">
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">SELECIONE O SETOR</span>
             <div id="setorCards" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
@@ -238,7 +237,6 @@
                         </label>
                         <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="35" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
                     </div>
-                    <div id="fornoAlerta" class="hidden p-3 rounded-lg border text-[11px] font-semibold"></div>
                 </div>
 
                 <div class="lg:col-span-8 space-y-6">
@@ -441,7 +439,6 @@
         </div>
     </div>
 
-    <!-- Modal: Cadastrar Novo Item Almoxarifado -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -536,6 +533,7 @@
                     </div>
                     <div class="font-sans">
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
+                        <!-- Apenas membros da Manutenção aparecerão aqui via JS -->
                         <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
                     </div>
                     <div class="font-sans">
@@ -777,7 +775,7 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE ALERTAS PREDITIVOS (NOVO LAYOUT EM BALÃO) ---
+        // --- SISTEMA DE ALERTAS PREDITIVOS (BALÕES E LISTA DE HISTÓRICO) ---
         function irParaChecklist(setor, tipoOriginal) {
             fecharPreditiva(); selecionarSetor(setor);
             let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
@@ -797,65 +795,61 @@
             originalDatabase.forEach(item => {
                 const chave = item.maquina + "|" + normalizar(item.periodicidade);
                 if (!agrupado[chave]) {
-                    agrupado[chave] = { 
-                        maquina: item.maquina, 
-                        setor: item.setor, 
-                        periodicidade: item.periodicidade,
-                        tempoReanalise: item.tempoReanalise 
-                    };
+                    agrupado[chave] = { maquina: item.maquina, setor: item.setor, periodicidade: item.periodicidade, tempoReanalise: item.tempoReanalise };
                 }
             });
 
             for (let chave in agrupado) {
                 const info = agrupado[chave];
                 const isDiario = normalizar(info.periodicidade).includes('diar') || normalizar(info.periodicidade).includes('intrad');
-                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && matchPeriodicidade(s.periodicidade, info.periodicidade));
+                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && normalizar(s.periodicidade) === normalizar(info.periodicidade));
                 
                 let dataProxFormatada = "Pendente";
                 let categoriaTarget = null;
                 let mensagem = "";
+                let historicoHoje = [];
+                let ultimoOperador = null;
 
                 if (!statusAtivo || !statusAtivo.ultimoRegistro) {
                     categoriaTarget = isDiario ? 'hoje' : 'vencidas'; 
                     mensagem = "Pendente de execução";
                 } else {
                     const dataLog = new Date(statusAtivo.ultimoRegistro);
-                    
+                    ultimoOperador = statusAtivo.operador;
+
                     if (isDiario) {
                         let tempoHoras = info.tempoReanalise ? parseFloat(info.tempoReanalise) : 2;
                         let dataProx = new Date(dataLog.getTime() + (tempoHoras * 60 * 60 * 1000));
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' às ' + dataProx.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
                         
-                        if (dataProx <= agora) { 
-                            categoriaTarget = 'hoje'; 
-                            mensagem = "Revisão Pendente"; 
+                        if (dataProx <= agora) { categoriaTarget = 'hoje'; mensagem = "Revisão Pendente"; }
+                        
+                        // Processa o histórico de hoje (top 10 únicas)
+                        if (statusAtivo.historico) {
+                            const strHoje = agora.toLocaleDateString('pt-BR');
+                            let arrHoje = statusAtivo.historico.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === strHoje);
+                            let unique = []; let seen = new Set();
+                            for(let h of arrHoje) {
+                                let mTime = new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                                if(!seen.has(mTime)) { seen.add(mTime); unique.push(h); if(unique.length === 10) break; }
+                            }
+                            historicoHoje = unique;
                         }
+
                     } else {
                         let intervalo = diasParaPeriodicidade(info.periodicidade);
                         
                         let dataProx = new Date(dataLog.getFullYear(), dataLog.getMonth(), dataLog.getDate() + intervalo); 
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
 
-                        // Calcula dias EXATOS de diferença zerando as horas, para evitar erro de Timezone
                         const diffTime = dataProx.getTime() - hojeZero.getTime();
                         const diffDias = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
-                        if (diffDias < 0) { 
-                            categoriaTarget = 'vencidas'; 
-                            mensagem = "Atrasada"; 
-                        } else if (diffDias === 0) { 
-                            categoriaTarget = 'hoje'; 
-                            mensagem = "Vence Hoje"; 
-                        } else if (diffDias === 1) { 
-                            categoriaTarget = 'amanha'; 
-                            mensagem = "Vence Amanhã"; 
-                        } else if (diffDias > 1 && diffDias <= 3) {
-                            categoriaTarget = 'dias3'; 
-                            mensagem = `Vence em ${diffDias} dia(s)`;
-                        } else if (diffDias > 3 && diffDias <= 7) {
-                            categoriaTarget = 'dias7'; 
-                            mensagem = `Vence em ${diffDias} dia(s)`;
-                        }
+                        if (diffDias < 0) { categoriaTarget = 'vencidas'; mensagem = "Atrasada"; } 
+                        else if (diffDias === 0) { categoriaTarget = 'hoje'; mensagem = "Vence Hoje"; } 
+                        else if (diffDias === 1) { categoriaTarget = 'amanha'; mensagem = "Vence Amanhã"; } 
+                        else if (diffDias > 1 && diffDias <= 3) { categoriaTarget = 'dias3'; mensagem = `Vence em ${diffDias} dia(s)`; } 
+                        else if (diffDias > 3 && diffDias <= 7) { categoriaTarget = 'dias7'; mensagem = `Vence em ${diffDias} dia(s)`; }
                     }
                 }
 
@@ -865,7 +859,10 @@
                         setor: info.setor, 
                         tipo: info.periodicidade, 
                         alerta: mensagem,
-                        proxima: dataProxFormatada
+                        proxima: dataProxFormatada,
+                        isDiario: isDiario,
+                        historicoHoje: historicoHoje,
+                        ultimoOperador: ultimoOperador
                     };
                 }
             }
@@ -910,14 +907,27 @@
             btnVoltar.classList.add('hidden'); 
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
+            document.getElementById('cardCountVencidas').innerText = `${alertas.vencidas.length} item(ns)`;
+            document.getElementById('cardCountHoje').innerText = `${alertas.hoje.length} item(ns)`;
+            document.getElementById('cardCountAmanha').innerText = `${alertas.amanha.length} item(ns)`;
+            document.getElementById('cardCountDias3').innerText = `${alertas.dias3.length} item(ns)`;
+            document.getElementById('cardCountDias7').innerText = `${alertas.dias7.length} item(ns)`;
+
             const renderLista = (arr, icone, corTexto, corBg) => {
                 if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4">Nenhum registro encontrado.</div>`;
                 return arr.map(a => {
-                    let proxClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
+                    let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
                     if(a.proxima === "Pendente" || a.alerta === "Atrasada" || a.alerta === "Revisão Pendente" || a.alerta === "Vence Hoje") {
-                        proxClass = "text-rose-700 bg-rose-50 border-rose-200";
+                        proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
                     }
                     
+                    let detalhesH = "";
+                    if (a.isDiario && a.historicoHoje && a.historicoHoje.length > 0) {
+                        detalhesH = `<div class="mt-2 space-y-1 border-t border-slate-100 pt-2"><span class="block text-[9px] font-bold text-slate-400 uppercase">Últimas Atualizações Hoje:</span><div class="flex flex-wrap gap-1">${a.historicoHoje.map(h => `<span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded border border-slate-200" title="Por ${h.operador}">${new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</span>`).join('')}</div></div>`;
+                    } else if (!a.isDiario && a.ultimoOperador) {
+                        detalhesH = `<div class="mt-2 text-[9px] text-slate-500 font-semibold border-t border-slate-100 pt-2"><i class="fa-solid fa-user-check text-slate-300"></i> Último registro por: ${a.ultimoOperador}</div>`;
+                    }
+
                     return `
                         <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -929,6 +939,7 @@
                                             <i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}
                                         </span>
                                     </div>
+                                    ${detalhesH}
                                 </div>
                                 <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end mt-2 sm:mt-0">
                                     <span class="text-[10px] font-bold ${corBg} ${corTexto} px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 whitespace-nowrap">
@@ -944,36 +955,20 @@
                 }).join('');
             };
 
+            document.getElementById('listaAlertasVencidas').innerHTML = renderLista(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
+            document.getElementById('listaAlertasHoje').innerHTML = renderLista(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
+            document.getElementById('listaAlertasAmanha').innerHTML = renderLista(alertas.amanha, '<i class="fa-solid fa-calendar-day"></i>', 'text-blue-700', 'bg-blue-100');
+            document.getElementById('listaAlertasDias3').innerHTML = renderLista(alertas.dias3, '<i class="fa-solid fa-calendar-days"></i>', 'text-indigo-700', 'bg-indigo-100');
+            document.getElementById('listaAlertasDias7').innerHTML = renderLista(alertas.dias7, '<i class="fa-solid fa-calendar-week"></i>', 'text-purple-700', 'bg-purple-100');
+
             if (alvo === 'imediata') {
-                modalTitle.innerText = "Atenção Imediata";
-                modalDesc.innerText = "Selecione a categoria para visualizar.";
-                modalIcon.className = "fa-solid fa-clock";
-                iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
-                
-                document.getElementById('cardCountVencidas').innerText = `${alertas.vencidas.length} item(ns)`;
-                document.getElementById('cardCountHoje').innerText = `${alertas.hoje.length} item(ns)`;
-                
-                document.getElementById('listaAlertasVencidas').innerHTML = renderLista(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
-                document.getElementById('listaAlertasHoje').innerHTML = renderLista(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
-                
-                divMenuImediata.classList.remove('hidden');
-                divMenuProgramacao.classList.add('hidden');
+                modalTitle.innerText = "Atenção Imediata"; modalDesc.innerText = "Selecione a categoria para visualizar.";
+                modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
+                divMenuImediata.classList.remove('hidden'); divMenuProgramacao.classList.add('hidden');
             } else {
-                modalTitle.innerText = "Programação";
-                modalDesc.innerText = "Selecione a categoria para visualizar.";
-                modalIcon.className = "fa-solid fa-calendar-days";
-                iconContainer.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm";
-                
-                document.getElementById('cardCountAmanha').innerText = `${alertas.amanha.length} item(ns)`;
-                document.getElementById('cardCountDias3').innerText = `${alertas.dias3.length} item(ns)`;
-                document.getElementById('cardCountDias7').innerText = `${alertas.dias7.length} item(ns)`;
-
-                document.getElementById('listaAlertasAmanha').innerHTML = renderLista(alertas.amanha, '<i class="fa-solid fa-calendar-day"></i>', 'text-blue-700', 'bg-blue-100');
-                document.getElementById('listaAlertasDias3').innerHTML = renderLista(alertas.dias3, '<i class="fa-solid fa-calendar-days"></i>', 'text-indigo-700', 'bg-indigo-100');
-                document.getElementById('listaAlertasDias7').innerHTML = renderLista(alertas.dias7, '<i class="fa-solid fa-calendar-week"></i>', 'text-purple-700', 'bg-purple-100');
-
-                divMenuProgramacao.classList.remove('hidden');
-                divMenuImediata.classList.add('hidden');
+                modalTitle.innerText = "Programação"; modalDesc.innerText = "Selecione a categoria para visualizar.";
+                modalIcon.className = "fa-solid fa-calendar-days"; iconContainer.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm";
+                divMenuProgramacao.classList.remove('hidden'); divMenuImediata.classList.add('hidden');
             }
 
             document.getElementById('preditivaModal').classList.remove('hidden');
@@ -986,27 +981,11 @@
             
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
-            if (tipo === 'vencidas') { 
-                document.getElementById('containerVencidas').classList.remove('hidden'); 
-                document.getElementById('preditivaModalTitle').innerText = "Vencidas / Atrasadas"; 
-                document.getElementById('preditivaModalDesc').innerText = "Itens que já passaram do prazo."; 
-            } else if (tipo === 'hoje') { 
-                document.getElementById('containerHoje').classList.remove('hidden'); 
-                document.getElementById('preditivaModalTitle').innerText = "Pendentes p/ Hoje"; 
-                document.getElementById('preditivaModalDesc').innerText = "Itens que devem ser executados hoje."; 
-            } else if (tipo === 'amanha') { 
-                document.getElementById('containerAmanha').classList.remove('hidden'); 
-                document.getElementById('preditivaModalTitle').innerText = "Vencem Amanhã"; 
-                document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o dia seguinte."; 
-            } else if (tipo === 'dias3') { 
-                document.getElementById('containerDias3').classList.remove('hidden'); 
-                document.getElementById('preditivaModalTitle').innerText = "Em até 3 dias"; 
-                document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o curto prazo."; 
-            } else if (tipo === 'dias7') { 
-                document.getElementById('containerDias7').classList.remove('hidden'); 
-                document.getElementById('preditivaModalTitle').innerText = "Em até 7 dias"; 
-                document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para fechar a semana."; 
-            }
+            if (tipo === 'vencidas') { document.getElementById('containerVencidas').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Vencidas / Atrasadas"; document.getElementById('preditivaModalDesc').innerText = "Itens que já passaram do prazo."; } 
+            else if (tipo === 'hoje') { document.getElementById('containerHoje').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Pendentes p/ Hoje"; document.getElementById('preditivaModalDesc').innerText = "Itens que devem ser executados hoje."; } 
+            else if (tipo === 'amanha') { document.getElementById('containerAmanha').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Vencem Amanhã"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o dia seguinte."; } 
+            else if (tipo === 'dias3') { document.getElementById('containerDias3').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Em até 3 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o curto prazo."; } 
+            else if (tipo === 'dias7') { document.getElementById('containerDias7').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Em até 7 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para fechar a semana."; }
         }
 
         function voltarPreditiva() {
@@ -1056,19 +1035,11 @@
             
             const agora = new Date();
             const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString();
-            const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
+            const cincoDiasAtras = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
             
             checklistStatus = [
-                { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", vencido: true, itensStatus: { "Verificar Oleo": { data: ontem, operador: "Rodrigo - Produção" } } },
-                { 
-                    maquina: "Guilhotina - GUI-001", 
-                    setor: "Manutenção", 
-                    periodicidade: "Semanal", 
-                    ultimoRegistro: preventinaFeitaRecente, 
-                    operador: "José - Manutenção", 
-                    vencido: false, 
-                    itensStatus: { "Aperto Correias": { data: preventinaFeitaRecente, operador: "José - Manutenção" } } 
-                }
+                { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", historico: [{data: ontem, operador: "Rodrigo - Produção"}], vencido: true, itensStatus: { "Verificar Oleo": [{ data: ontem, operador: "Rodrigo - Produção" }] } },
+                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: cincoDiasAtras, operador: "José - Manutenção", historico: [{data: cincoDiasAtras, operador: "José - Manutenção"}], vencido: false, itensStatus: { "Aperto Correias": [{ data: cincoDiasAtras, operador: "José - Manutenção" }] } }
             ];
             chamadosData = [
                 { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
@@ -1160,7 +1131,7 @@
 
                         badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                     } else {
-                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente de execução</span>`;
+                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold border border-rose-200">Pendente de execução</span>`;
                     }
                 }
 
@@ -1171,16 +1142,28 @@
                     let metaHistorico = `<div class="text-[9px] text-slate-400 font-medium mt-1"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Sem registros locais</div>`;
                     let textoProxima = "Aguardando";
 
-                    if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[item.item]) {
-                        const itemLog = statusAtivo.itensStatus[item.item];
-                        const dateItem = new Date(itemLog.data);
-                        metaHistorico = `<div class="text-[9px] text-slate-400 font-semibold mt-1"><i class="fa-solid fa-user-check text-slate-300"></i> Feito por <span class="text-slate-600 font-bold">${itemLog.operador}</span> em ${dateItem.toLocaleDateString('pt-BR')} às ${dateItem.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</div>`;
+                    if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[item.item] && statusAtivo.itensStatus[item.item].length > 0) {
+                        const histArray = statusAtivo.itensStatus[item.item];
                         
                         if (isDiario) {
-                            let horas = item.tempoReanalise ? parseFloat(item.tempoReanalise) : 2; 
-                            let dateProx = new Date(dateItem.getTime() + (horas * 60 * 60 * 1000));
-                            textoProxima = dateProx.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-                            if(new Date() > dateProx) textoProxima = `<span class="text-rose-600">Atrasado</span>`;
+                            const hojeStr = new Date().toLocaleDateString('pt-BR');
+                            const regsHoje = histArray.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === hojeStr).slice(0, 10);
+                            
+                            if (regsHoje.length > 0) {
+                                const ult = regsHoje[0];
+                                metaHistorico = `<div class="text-[9px] text-slate-500 font-semibold mt-1.5 space-y-0.5 border-l-2 border-blue-400 pl-2"><div class="text-blue-600 font-bold mb-1">Registros de Hoje (${regsHoje.length}/10):</div>${regsHoje.map((h, idx) => `<div><span class="text-slate-400">${idx+1}º</span> Feito por <span class="text-slate-700">${h.operador}</span> às ${new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`).join('')}</div>`;
+                                
+                                let horas = item.tempoReanalise ? parseFloat(item.tempoReanalise) : 2; 
+                                let dateProx = new Date(new Date(ult.data).getTime() + (horas * 60 * 60 * 1000));
+                                textoProxima = dateProx.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
+                                if(new Date() > dateProx) textoProxima = `<span class="text-rose-600">Atrasado</span>`;
+                            } else {
+                                metaHistorico = `<div class="text-[9px] text-slate-400 font-medium mt-1"><i class="fa-solid fa-clock text-amber-500"></i> Nenhum registro hoje</div>`;
+                            }
+                        } else {
+                            const ult = histArray[0];
+                            const dateItem = new Date(ult.data);
+                            metaHistorico = `<div class="text-[9px] text-slate-400 font-semibold mt-1"><i class="fa-solid fa-user-check text-slate-300"></i> Último: <span class="text-slate-600 font-bold">${ult.operador}</span> em ${dateItem.toLocaleDateString('pt-BR')} às ${dateItem.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</div>`;
                         }
                     }
 
@@ -1227,15 +1210,23 @@
                 
                 const dataISO = new Date().toISOString();
                 const statusIndex = checklistStatus.findIndex(s => normalizar(s.maquina) === normalizar(payload.dados[0].maquina) && normalizar(s.setor) === normalizar(selectedSetor) && normalizar(s.periodicidade) === normalizar(selectedPeriodo));
+                
+                const novaEntry = { data: dataISO, operador: operadorValue };
+
                 if (statusIndex !== -1) {
                     checklistStatus[statusIndex].ultimoRegistro = dataISO;
                     checklistStatus[statusIndex].operador = operadorValue;
                     checklistStatus[statusIndex].vencido = false;
+                    
+                    if (!checklistStatus[statusIndex].historico) checklistStatus[statusIndex].historico = [];
+                    checklistStatus[statusIndex].historico.unshift(novaEntry);
+
                     if (!checklistStatus[statusIndex].itensStatus) checklistStatus[statusIndex].itensStatus = {};
-                    checklistStatus[statusIndex].itensStatus[payload.dados[0].item] = { data: dataISO, operador: operadorValue };
+                    if (!checklistStatus[statusIndex].itensStatus[payload.dados[0].item]) checklistStatus[statusIndex].itensStatus[payload.dados[0].item] = [];
+                    checklistStatus[statusIndex].itensStatus[payload.dados[0].item].unshift(novaEntry);
                 } else {
-                    const n = {}; n[payload.dados[0].item] = { data: dataISO, operador: operadorValue };
-                    checklistStatus.push({ maquina: payload.dados[0].maquina, setor: selectedSetor, periodicidade: payload.dados[0].periodicidade, ultimoRegistro: dataISO, operador: operadorValue, vencido: false, itensStatus: n });
+                    const n = {}; n[payload.dados[0].item] = [novaEntry];
+                    checklistStatus.push({ maquina: payload.dados[0].maquina, setor: selectedSetor, periodicidade: payload.dados[0].periodicidade, ultimoRegistro: dataISO, operador: operadorValue, vencido: false, historico: [novaEntry], itensStatus: n });
                 }
                 setTimeout(() => {
                     botao.disabled = false; botao.innerHTML = originalContent; botao.className = "btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5";
