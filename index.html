@@ -53,6 +53,7 @@
                 <button onclick="abrirModalChamado()" class="bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold py-2 px-3.5 rounded-lg transition-all shadow-sm flex items-center gap-2">
                     <i class="fa-solid fa-triangle-exclamation"></i> Abrir Chamado
                 </button>
+                <!-- SINO AGORA APONTA EXCLUSIVAMENTE PARA CHAMADOS (OS) -->
                 <button onclick="abrirGerenciamentoChamados()" class="relative bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs py-2 px-3 rounded-lg transition-all shadow-sm">
                     <i class="fa-solid fa-bell text-sm"></i>
                     <span id="badgeAlertas" class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden border-2 border-[#0b132b]">0</span>
@@ -72,6 +73,7 @@
         </div>
 
         <div id="view-home" class="fade-in">
+            <!-- BALÕES SELETORES DO DASHBOARD -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -527,6 +529,7 @@
         </div>
     </div>
 
+    <!-- Modal: Imagens -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -771,7 +774,12 @@
             originalDatabase.forEach(item => {
                 const chave = item.maquina + "|" + normalizar(item.periodicidade);
                 if (!agrupado[chave]) {
-                    agrupado[chave] = { maquina: item.maquina, setor: item.setor, periodicidade: item.periodicidade, tempoReanalise: item.tempoReanalise };
+                    agrupado[chave] = { 
+                        maquina: item.maquina, 
+                        setor: item.setor, 
+                        periodicidade: item.periodicidade,
+                        tempoReanalise: item.tempoReanalise 
+                    };
                 }
             });
 
@@ -795,25 +803,43 @@
                         let dataProx = new Date(dataLog.getTime() + (tempoHoras * 60 * 60 * 1000));
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' às ' + dataProx.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
                         
-                        if (dataProx <= agora) { categoriaTarget = 'hoje'; mensagem = "Revisão Pendente"; }
+                        if (dataProx <= agora) { 
+                            categoriaTarget = 'hoje'; 
+                            mensagem = "Revisão Pendente"; 
+                        }
                     } else {
                         let intervalo = diasParaPeriodicidade(info.periodicidade);
                         let dataProx = new Date(dataLog.getFullYear(), dataLog.getMonth(), dataLog.getDate() + intervalo); 
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
 
                         const diffTime = dataProx.getTime() - hojeZero.getTime();
-                        const diffDias = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        // Arredondamento exato para evitar falhas de Timezone/DST
+                        const diffDias = Math.round(diffTime / (1000 * 60 * 60 * 24));
 
-                        if (diffDias < 0) { categoriaTarget = 'vencidas'; mensagem = "Atrasada"; } 
-                        else if (diffDias === 0) { categoriaTarget = 'hoje'; mensagem = "Vence Hoje"; } 
-                        else if (diffDias > 0 && diffDias <= 7) { categoriaTarget = 'proximos'; mensagem = `Vence em ${diffDias} dia(s)`; }
+                        if (diffDias < 0) { 
+                            categoriaTarget = 'vencidas'; 
+                            mensagem = "Atrasada"; 
+                        } else if (diffDias === 0) { 
+                            categoriaTarget = 'hoje'; 
+                            mensagem = "Vence Hoje"; 
+                        } else if (diffDias > 0 && diffDias <= 7) { 
+                            categoriaTarget = 'proximos'; 
+                            mensagem = `Vence em ${diffDias} dia(s)`; 
+                        }
                     }
                 }
 
                 if (categoriaTarget) {
-                    alertasDict[categoriaTarget][chave] = { maquina: info.maquina, setor: info.setor, tipo: info.periodicidade, alerta: mensagem, proxima: dataProxFormatada };
+                    alertasDict[categoriaTarget][chave] = { 
+                        maquina: info.maquina, 
+                        setor: info.setor, 
+                        tipo: info.periodicidade, 
+                        alerta: mensagem,
+                        proxima: dataProxFormatada
+                    };
                 }
             }
+
             return { vencidas: Object.values(alertasDict.vencidas), hoje: Object.values(alertasDict.hoje), proximos: Object.values(alertasDict.proximos) };
         }
 
@@ -828,13 +854,14 @@
             const osAbertas = chamadosData.filter(c => c.status !== "Fechado").length;
             document.getElementById('kpiChamadosAbertos').innerText = osAbertas;
 
+            // SINO MOSTRA APENAS O NÚMERO DE CHAMADOS / OS ABERTOS
             const badge = document.getElementById('badgeAlertas');
             if (osAbertas > 0) { badge.innerText = osAbertas; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
         }
 
-        // Funções para controle do novo modal de menu (Balões)
         function abrirPreditiva(alvo) {
             const alertas = calcularAlertas();
+            
             const divMenu = document.getElementById('preditivaImediataMenu');
             const divVencidas = document.getElementById('containerVencidas');
             const divHoje = document.getElementById('containerHoje');
@@ -853,9 +880,34 @@
             const renderLista = (arr, icone, corTexto, corBg) => {
                 if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4">Nenhum registro.</div>`;
                 return arr.map(a => {
-                    let proxClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
-                    if(a.proxima === "Pendente" || a.alerta === "Atrasada" || a.alerta === "Revisão Pendente" || a.alerta === "Vence Hoje") proxClass = "text-rose-700 bg-rose-50 border-rose-200";
-                    return `<div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3"><div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3"><div class="space-y-1"><h4 class="text-sm font-bold text-slate-800">${a.maquina}</h4><div class="text-[10px] text-slate-500 font-medium">${a.setor} · Revisão ${a.tipo}</div><div class="inline-block mt-1"><span class="text-[9px] font-bold ${proxClass} px-2 py-1 rounded border inline-flex items-center gap-1.5"><i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}</span></div></div><div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end mt-2 sm:mt-0"><span class="text-[10px] font-bold ${corBg} ${corTexto} px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 whitespace-nowrap">${icone} ${a.alerta}</span><button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-[#0b132b] hover:bg-slate-800 text-white py-1.5 px-4 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap">Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i></button></div></div></div>`;
+                    let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
+                    if(a.proxima === "Pendente" || a.alerta === "Atrasada" || a.alerta === "Revisão Pendente" || a.alerta === "Vence Hoje") {
+                        proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
+                    }
+                    
+                    return `
+                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
+                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                                <div class="space-y-1">
+                                    <h4 class="text-sm font-bold text-slate-800">${a.maquina}</h4>
+                                    <div class="text-[10px] text-slate-500 font-medium">${a.setor} · Revisão ${a.tipo}</div>
+                                    <div class="mt-2">
+                                        <span class="text-[9px] font-bold ${proxClass} px-2.5 py-1 rounded-md border inline-flex items-center gap-1.5 shadow-sm">
+                                            <i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3 w-full sm:w-auto justify-between sm:justify-end mt-2 sm:mt-0">
+                                    <span class="text-[10px] font-bold ${corBg} ${corTexto} px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 whitespace-nowrap">
+                                        ${icone} ${a.alerta}
+                                    </span>
+                                    <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-[#0b132b] hover:bg-slate-800 text-white py-1.5 px-4 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap">
+                                        Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
                 }).join('');
             };
 
@@ -917,7 +969,15 @@
             
             checklistStatus = [
                 { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", vencido: true, itensStatus: {} },
-                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "José - Manutenção", vencido: false, itensStatus: {} }
+                { 
+                    maquina: "Guilhotina - GUI-001", 
+                    setor: "Manutenção", 
+                    periodicidade: "Semanal", 
+                    ultimoRegistro: preventinaFeitaRecente, 
+                    operador: "José - Manutenção", 
+                    vencido: false, 
+                    itensStatus: { "Aperto Correias": { data: preventinaFeitaRecente, operador: "José - Manutenção" } } 
+                }
             ];
             chamadosData = [ { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" } ];
             renderSetorCards(); atualizarKPIs();
