@@ -37,12 +37,11 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 
-                <!-- Logo como Botão Home -->
-                <button onclick="alternarTela('home')" class="bg-white px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-2 shadow-sm border border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer">
+                <div class="bg-white px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-2 shadow-sm border border-slate-200">
                     <span class="text-[9px] font-extrabold text-slate-400 tracking-[0.25em] uppercase font-sans">GRUPO</span>
                     <div class="h-4 w-[1.5px] bg-[#e11d48]"></div>
                     <span class="text-sm font-black text-[#0f172a] tracking-tight font-sans">TBX</span>
-                </button>
+                </div>
 
                 <div>
                     <h1 id="headerTitle" class="font-bold text-lg tracking-tight text-white leading-tight">Checklist de Manutenção</h1>
@@ -73,6 +72,7 @@
         </div>
 
         <div id="view-home" class="fade-in">
+            <!-- 4 BALÕES SELETORES DO DASHBOARD -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -113,6 +113,7 @@
 
             </div>
 
+            <!-- MÓDULOS PRINCIPAIS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <button onclick="abrirModuloChecklist()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clipboard-check text-xl"></i></div>
@@ -406,7 +407,52 @@
         </div>
     </div>
 
-    <!-- Modal: Resumo/Status Completo da Máquina (Z-index 60 para sobrepor o Sino) -->
+    <!-- Modal: Registro de Intervenção/Melhoria -->
+    <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-5 border-b pb-4">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200">
+                        <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p>
+                    </div>
+                </div>
+                <div class="space-y-4 mb-5">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label>
+                        <select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Ação</label>
+                        <select id="intervTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="Modificação">Modificação de Projeto/Estrutura</option>
+                            <option value="Manutenção Forçada">Manutenção Corretiva Forçada</option>
+                            <option value="Melhoria">Melhoria / Setup Específico</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label>
+                        <textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label>
+                        <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="fecharModalIntervencao()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-check"></i> Salvar Registro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Resumo/Status Completo da Máquina (Z-index alto para sobrepor alertas) -->
     <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -443,7 +489,14 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 
-                <!-- Menu Programação (7 Dias) -->
+                <div id="preditivaVencidasMenu" class="hidden">
+                    <div id="listaAlertasVencidas"></div>
+                </div>
+
+                <div id="preditivaImediataMenu" class="hidden">
+                    <div id="listaAlertasHoje"></div>
+                </div>
+
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
@@ -470,9 +523,6 @@
                     </button>
                 </div>
 
-                <!-- Containers das Listas Diretas -->
-                <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
-                <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
                 <div id="containerDias3" class="hidden"><div id="listaAlertasDias3"></div></div>
                 <div id="containerDias7" class="hidden"><div id="listaAlertasDias7"></div></div>
@@ -576,7 +626,6 @@
                     </div>
                     <div class="font-sans">
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
-                        <!-- Apenas membros da Manutenção aparecerão aqui via JS -->
                         <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
                     </div>
                     <div class="font-sans">
@@ -690,15 +739,12 @@
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
         function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
-        
-        function abrirModuloIntervencoes() { 
-            alternarTela('intervencoes'); 
-            renderListaIntervencoes();
-        }
+        function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
 
         function gerarOptionsEquipes(apenasManutencao = false) {
-            if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador cadastrado</option>`;
+            if (!equipesData || equipesData.length === 0) return `<option value="Sem Equipe">Nenhum colaborador cadastrado</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
+            let encontrouAlguem = false;
             
             equipesData.forEach(eq => {
                 const setor = eq.setor;
@@ -707,8 +753,12 @@
                 eq.membros.forEach(m => {
                     const nomeCompleto = `${m} - ${setor}`;
                     opcoes += `<option value="${nomeCompleto}">${nomeCompleto}</option>`;
+                    encontrouAlguem = true;
                 });
             });
+            if (apenasManutencao && !encontrouAlguem) {
+                return `<option value="">Cadastre equipe de Manutenção na aba 'Equipes'</option><option value="Sistema - Fallback">Modo de Emergência</option>`;
+            }
             return opcoes;
         }
 
@@ -832,7 +882,7 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE INTERVENÇÕES INDIRETAS E OS FECHADAS ---
+        // --- SISTEMA DE INTERVENÇÕES ---
         function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -1118,7 +1168,6 @@
                                     ${detalhesH}
                                 </div>
                                 <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto mt-3 sm:mt-0">
-                                    <!-- NOVO BOTÃO DE STATUS -->
                                     <button onclick="abrirResumoMaquina('${a.maquina}', '${a.setor}', '${a.tipo}')" class="bg-blue-600 hover:bg-blue-500 text-white py-1.5 px-3 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
                                         <i class="fa-solid fa-list-check"></i> Status
                                     </button>
@@ -1358,7 +1407,7 @@
 
                         badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                     } else {
-                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente de execução</span>`;
+                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold border border-rose-200">Pendente de execução</span>`;
                     }
                 }
 
@@ -1466,7 +1515,6 @@
             }
         }
 
-        // --- ALMOXARIFADO / FORNO / CONFIGURAÇÕES GERAIS ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
