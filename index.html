@@ -17,12 +17,10 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
         
         @media print {
+            @page { size: landscape; margin: 10mm; }
             body { background: white !important; color: black !important; font-size: 11px !important; }
-            .no-print, header, nav, footer, button, .modal, #apiStatusAlert, #toastContainer { display: none !important; }
+            .no-print, header, nav, footer, button, .modal, #apiStatusAlert, #toastContainer, main.no-print { display: none !important; }
             #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
-            table { page-break-inside: auto; width: 100% !important; border-collapse: collapse !important; }
-            tr { page-break-inside: avoid; page-break-after: auto; }
-            th, td { border: 1.5px solid #000000 !important; padding: 8px !important; color: black !important; }
         }
     </style>
 </head>
@@ -41,7 +39,7 @@
                     <span class="text-[9px] font-extrabold text-slate-400 tracking-[0.25em] uppercase font-sans">GRUPO</span>
                     <div class="h-4 w-[1.5px] bg-[#e11d48]"></div>
                     <span class="text-sm font-black text-[#0f172a] tracking-tight font-sans">TBX</span>
-                </button>
+                </div>
 
                 <div>
                     <h1 id="headerTitle" class="font-bold text-lg tracking-tight text-white leading-tight">Checklist de Manutenção</h1>
@@ -62,7 +60,7 @@
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 no-print">
+    <main id="mainContent" class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 no-print">
         
         <div id="apiStatusAlert" class="mb-6 p-4 rounded-xl border flex items-center justify-between text-xs bg-amber-50 border-amber-200 text-amber-800">
             <span class="flex items-center gap-2">
@@ -389,7 +387,7 @@
     </div>
 
     <!-- Modal: Detalhes de OS Específica -->
-    <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
+    <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
@@ -444,7 +442,7 @@
     </div>
 
     <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
-    <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+    <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
                 <div class="flex items-center gap-3">
@@ -527,8 +525,8 @@
     </div>
 
     <!-- Modal: Central de Alertas Preditiva / Preventiva (Balões) -->
-    <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+    <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
                     <button id="btnVoltarPreditiva" onclick="voltarPreditiva()" class="hidden text-slate-400 hover:text-slate-700 p-2 -ml-2 transition-colors"><i class="fa-solid fa-arrow-left text-lg"></i></button>
@@ -583,7 +581,7 @@
     </div>
 
     <!-- Modal: Cadastrar Novo Item Almoxarifado -->
-    <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 overflow-y-auto no-print">
+    <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
                 <h3 id="almoxModalTitle" class="text-xl font-bold text-slate-900">Cadastrar Novo Item</h3>
@@ -649,7 +647,7 @@
     </div>
 
     <!-- Modal: Registrar Movimentação -->
-    <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+    <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
                 <h3 class="text-lg font-bold text-slate-900 font-sans">Registrar Movimentação</h3>
@@ -693,7 +691,7 @@
     </div>
 
     <!-- Modal: Imagens -->
-    <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print" onclick="fecharModalImagem()">
+    <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
             <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1">
@@ -702,7 +700,7 @@
         </div>
     </div>
 
-    <div id="printArea" class="hidden p-8 font-sans text-black"></div>
+    <div id="printArea" class="hidden font-sans text-black"></div>
 
     <script>
         let originalDatabase = [];
@@ -1247,12 +1245,20 @@
             } else if (alvo === 'programacao') {
                 modalTitle.innerText = "Programação"; modalDesc.innerText = "Selecione a janela de planejamento futuro.";
                 modalIcon.className = "fa-solid fa-calendar-days"; iconContainer.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm";
+                
+                // Abre o submenu de programação
+                const menuProg = document.getElementById('preditivaProgramacaoMenu');
+                if(menuProg) menuProg.classList.remove('hidden');
+                
                 document.getElementById('cardCountAmanha').innerText = `${alertas.amanha.length} item(ns)`;
                 document.getElementById('cardCountDias3').innerText = `${alertas.dias3.length} item(ns)`;
                 document.getElementById('cardCountDias7').innerText = `${alertas.dias7.length} item(ns)`;
-                const menuProg = document.getElementById('preditivaProgramacaoMenu');
-                if(menuProg) menuProg.classList.remove('hidden');
+
+                document.getElementById('listaAlertasAmanha').innerHTML = renderLista(alertas.amanha);
+                document.getElementById('listaAlertasDias3').innerHTML = renderLista(alertas.dias3);
+                document.getElementById('listaAlertasDias7').innerHTML = renderLista(alertas.dias7);
             }
+
             document.getElementById('preditivaModal').classList.remove('hidden');
         }
 
@@ -1305,40 +1311,58 @@
                 container.innerHTML = `<div class="text-center text-slate-400 py-4 text-sm">Sem itens para exibir.</div>`;
             } else {
                 container.innerHTML = itensDaMaquina.map(it => {
-                    let badge = `<span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-[9px] font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
+                    let badge = `<span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
                     let info = `<div class="text-[9px] text-slate-400 italic">Nunca verificado.</div>`;
                     
                     if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[it.item] && statusAtivo.itensStatus[it.item].length > 0) {
-                        const ult = statusAtivo.itensStatus[it.item][0];
-                        const dateL = new Date(ult.data);
-                        
-                        let atrasado = false;
+                        const histArray = statusAtivo.itensStatus[it.item];
+
                         if(normalizar(periodicidade).includes('diar') || normalizar(periodicidade).includes('intrad')) {
-                            const horas = it.tempoReanalise ? parseFloat(it.tempoReanalise) : 2;
-                            if (new Date() > new Date(dateL.getTime() + (horas * 60 * 60 * 1000))) atrasado = true;
+                            const hojeStr = new Date().toLocaleDateString('pt-BR');
+                            const regsHoje = histArray.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === hojeStr).slice(0, 10);
+
+                            if (regsHoje.length > 0) {
+                                const ult = regsHoje[0];
+                                const horas = it.tempoReanalise ? parseFloat(it.tempoReanalise) : 2;
+                                let atrasado = new Date() > new Date(new Date(ult.data).getTime() + (horas * 60 * 60 * 1000));
+
+                                if (atrasado) {
+                                    badge = `<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
+                                } else {
+                                    badge = `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
+                                }
+
+                                info = `<div class="text-[9px] text-slate-500 font-semibold mt-1.5 space-y-0.5 border-l-2 border-blue-400 pl-2">
+                                        <div class="text-blue-600 font-bold mb-1">Registros de Hoje (${regsHoje.length}/10):</div>
+                                        ${regsHoje.map((h, idx) => `<div><span class="text-slate-400">${idx+1}º</span> Feito por <span class="text-slate-700">${h.operador}</span> às ${new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`).join('')}
+                                       </div>`;
+                            } else {
+                                info = `<div class="text-[9px] text-slate-400 font-medium mt-1"><i class="fa-solid fa-clock text-amber-500"></i> Nenhum registro hoje</div>`;
+                            }
                         } else {
+                            const ult = histArray[0];
+                            const dateL = new Date(ult.data);
                             const inter = diasParaPeriodicidade(periodicidade);
                             const dataProx = new Date(dateL.getFullYear(), dateL.getMonth(), dateL.getDate() + inter);
                             const hojeZero = new Date(); hojeZero.setHours(0,0,0,0);
-                            if (dataProx < hojeZero) atrasado = true;
-                        }
 
-                        if(atrasado) {
-                            badge = `<span class="bg-rose-100 text-rose-700 px-2 py-1 rounded text-[9px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
-                        } else {
-                            badge = `<span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[9px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
-                        }
+                            if (dataProx < hojeZero) {
+                                badge = `<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
+                            } else {
+                                badge = `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
+                            }
 
-                        info = `<div class="text-[10px] text-slate-500 font-medium">Realizado por <span class="font-bold text-slate-700">${ult.operador}</span> em ${dateL.toLocaleDateString('pt-BR')} às ${dateL.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`;
+                            info = `<div class="text-[10px] text-slate-500 font-medium mt-1">Realizado por <span class="font-bold text-slate-700">${ult.operador}</span> em ${dateL.toLocaleDateString('pt-BR')} às ${dateL.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`;
+                        }
                     }
 
                     return `
-                        <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                            <div>
-                                <span class="font-bold text-slate-800 text-xs">${it.item}</span>
+                        <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div class="space-y-1">
+                                <span class="font-bold text-slate-800 text-sm block">${it.item}</span>
                                 ${info}
                             </div>
-                            <div>${badge}</div>
+                            <div class="mt-2 sm:mt-0 flex-shrink-0">${badge}</div>
                         </div>
                     `;
                 }).join('');
@@ -1571,8 +1595,8 @@
             try {
                 if (API_URL) await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
                 showToast(`Gravado: ${payload.dados[0].item}`);
-                botao.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i>`;
-                botao.className = "btn-registrar w-full bg-emerald-500 text-white border border-emerald-600 text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5";
+                botao.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i> Verificado`;
+                botao.className = "btn-registrar w-full bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5";
                 linha.querySelector(".obs-inp").value = "";
                 
                 const dataISO = new Date().toISOString();
@@ -1596,7 +1620,6 @@
                     checklistStatus.push({ maquina: payload.dados[0].maquina, setor: selectedSetor, periodicidade: payload.dados[0].periodicidade, ultimoRegistro: dataISO, operador: operadorValue, vencido: false, historico: [novaEntry], itensStatus: n });
                 }
                 
-                // Sem Timeout de "voltar a cor", ele chama o selecionarPeriodo e a tabela é re-renderizada logicamente com o botão Verdinho de "Verificado".
                 setTimeout(() => {
                     selecionarPeriodo(selectedPeriodo, selectedPeriodo === "diaria" ? "Diária/ Intradiária" : selectedPeriodo.toUpperCase());
                     atualizarKPIs();
@@ -1609,15 +1632,80 @@
             }
         }
 
-        // --- ALMOXARIFADO / FORNO / CONFIGURAÇÕES GERAIS ---
+        // --- IMPRESSÃO ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
-            const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
-            let tableRows = filtrados.map((item, index) => `<tr style="border-bottom: 1.5px solid #000000;"><td style="padding: 10px; font-size: 11px; text-align: center; border-right: 1.5px solid #000000; font-weight: bold; color: black !important;">${index + 1}</td><td style="padding: 10px; font-size: 11px; font-weight: bold; border-right: 1.5px solid #000000; color: black !important;">${item.item}${item.obs ? `<br><span style="font-size: 9px; color: #334155; font-weight: normal; font-style: italic;">Obs: ${item.obs}</span>` : ''}</td><td style="padding: 10px; width: 120px; border-right: 1.5px solid #000000; text-align: center; font-size: 10px; color: black !important; font-weight: bold;">[   ] OK     [   ] NOK</td><td style="padding: 10px; width: 130px; border-right: 1.5px solid #000000;"></td><td style="padding: 10px;"></td></tr>`).join('');
-            printArea.innerHTML = `<div style="font-family: Arial, sans-serif; color: #000; padding: 20px;"><div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #000000; padding-bottom: 15px; margin-bottom: 25px;"><div><h1 style="font-size: 18px; font-weight: bold; margin: 0; color: #000000;">FOLHA DE INSPECÇÃO OPERACIONAL</h1><p style="font-size: 10px; color: #000000; margin: 3px 0 0 0; font-weight: bold;">Controle e Manutenção</p></div><div style="text-align: right; font-size: 11px; line-height: 1.4; color: #000000;"><span style="font-weight: bold; display: block; font-size: 13px;">ATIVO: ${maquina}</span><span style="display: block; font-weight: bold;">Frequência: ${selectedPeriodo.toUpperCase()}</span></div></div><table style="width: 100%; border-collapse: collapse; border: 2px solid #000000; margin-bottom: 30px;"><thead><tr style="background-color: #f1f5f9; border-bottom: 2px solid #000000; text-align: left; font-size: 10px; font-weight: bold;"><th style="padding: 10px; width: 40px; text-align: center; border-right: 1.5px solid #000000; color: black !important;">Nº</th><th style="padding: 10px; border-right: 1.5px solid #000000; color: black !important;">ITEM DE VERIFICAÇÃO</th><th style="padding: 10px; width: 120px; text-align: center; border-right: 1.5px solid #000000; color: black !important;">AVALIAÇÃO</th><th style="padding: 10px; width: 130px; border-right: 1.5px solid #000000; color: black !important;">ASSINATURA</th><th style="padding: 10px; color: black !important;">OBSERVAÇÕES</th></tr></thead><tbody>${tableRows}</tbody></table><div style="margin-top: 50px; display: flex; justify-content: space-between; font-size: 11px; color: black !important; font-weight: bold;"><div style="width: 45%; text-align: center;"><div style="border-bottom: 1.5px solid #000000; margin-bottom: 6px; height: 40px;"></div><span>Assinatura Operador</span></div><div style="width: 45%; text-align: center;"><div style="border-bottom: 1.5px solid #000000; margin-bottom: 6px; height: 40px;"></div><span>Visto Engenharia</span></div></div></div>`;
+            const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina) && normalizar(x.periodicidade) === normalizar(selectedPeriodo));
+            if(filtrados.length === 0) return;
+
+            const periodicidadeStr = filtrados[0].periodicidade.toUpperCase();
+            const setorStr = filtrados[0].setor;
+
+            // Gera colunas para hoje e os próximos 6 dias (7 dias no total)
+            const dates = Array.from({length: 7}, (_, i) => {
+                const d = new Date();
+                d.setDate(d.getDate() + i);
+                return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
+            });
+
+            let tableHtml = `
+            <div style="margin-bottom: 15px; font-size: 11px; font-weight: bold; color: black; display: flex; justify-content: space-between; border-bottom: 2px solid black; padding-bottom: 5px;">
+                <span>${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</span>
+                <span style="font-size: 14px; text-transform: uppercase;">Checklist Impresso - ${maquina}</span>
+            </div>
+            <table style="width: 100%; border-collapse: collapse; border: 2px solid black; text-align: left;">
+                <tbody>
+                    <tr>
+                        <td style="width: 160px; font-weight: bold; background-color: #e2e8f0; padding: 6px; border: 1px solid black; -webkit-print-color-adjust: exact; print-color-adjust: exact;">MÁQUINA/ EQUIPAMENTO</td>
+                        <td colspan="7" style="font-weight: bold; font-size: 14px; text-transform: uppercase; padding: 6px; border: 1px solid black;">${maquina}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; background-color: #e2e8f0; padding: 6px; border: 1px solid black; -webkit-print-color-adjust: exact; print-color-adjust: exact;">PERIODICIDADE</td>
+                        <td colspan="7" style="font-weight: bold; font-size: 12px; text-transform: uppercase; padding: 6px; border: 1px solid black;">${periodicidadeStr}</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; background-color: #e2e8f0; padding: 6px; border: 1px solid black; -webkit-print-color-adjust: exact; print-color-adjust: exact;">DIAS DA SEMANA</td>
+                        ${dates.map(d => `<td style="font-weight: bold; text-align: center; width: 11%; padding: 6px; border: 1px solid black; background-color: #e2e8f0; -webkit-print-color-adjust: exact; print-color-adjust: exact;">${d}</td>`).join('')}
+                    </tr>
+            `;
+
+            filtrados.forEach(item => {
+                tableHtml += `
+                    <tr>
+                        <td style="font-weight: bold; background-color: #e2e8f0; padding: 6px; border: 1px solid black; -webkit-print-color-adjust: exact; print-color-adjust: exact;">ITEM</td>
+                        <td colspan="7" style="font-weight: bold; padding: 6px; border: 1px solid black; background-color: #f8fafc; -webkit-print-color-adjust: exact; print-color-adjust: exact;">
+                            <div style="display: flex; justify-content: space-between;">
+                                <span style="font-size: 11px;">${item.item}</span>
+                                <span style="font-weight: normal; font-size: 10px; font-style: italic;">Setor: ${setorStr}</span>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; background-color: #e2e8f0; padding: 6px; border: 1px solid black; -webkit-print-color-adjust: exact; print-color-adjust: exact;">Operador / Manutentor</td>
+                        ${dates.map(() => `<td style="border: 1px solid black;"></td>`).join('')}
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; background-color: #e2e8f0; padding: 6px; border: 1px solid black; -webkit-print-color-adjust: exact; print-color-adjust: exact;">Status</td>
+                        ${dates.map(() => `
+                            <td style="font-size: 10px; padding: 6px; border: 1px solid black;">
+                                <div style="margin-bottom: 4px;"><span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black; margin-right: 4px; vertical-align: middle;"></span>OK</div>
+                                <div><span style="display: inline-block; width: 10px; height: 10px; border: 1px solid black; margin-right: 4px; vertical-align: middle;"></span>Problema</div>
+                            </td>`).join('')}
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; background-color: #e2e8f0; padding: 6px; border: 1px solid black; height: 35px; -webkit-print-color-adjust: exact; print-color-adjust: exact;">OBS:</td>
+                        ${dates.map(() => `<td style="border: 1px solid black;"></td>`).join('')}
+                    </tr>
+                `;
+            });
+
+            tableHtml += `</tbody></table>`;
+
+            printArea.innerHTML = tableHtml;
             window.print();
         }
 
+        // --- ALMOXARIFADO E ETC ---
         async function baixarAlmoxarifadoDaPlanilha() {
             if (!API_URL) return;
             try {
