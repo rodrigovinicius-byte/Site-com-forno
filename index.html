@@ -72,7 +72,6 @@
         </div>
 
         <div id="view-home" class="fade-in">
-            <!-- BALÕES SELETORES DO DASHBOARD -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
                 
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -271,7 +270,6 @@
         </div>
     </main>
 
-    <!-- Modal: Configurar Conexão -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -298,7 +296,6 @@
         </div>
     </div>
 
-    <!-- Modal: Abertura de Chamado (OS) -->
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -343,7 +340,6 @@
         </div>
     </div>
 
-    <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
@@ -359,12 +355,10 @@
                 <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos">
-                <!-- Injetado via JS -->
-            </div>
+                </div>
         </div>
     </div>
 
-    <!-- Modal: Central de Alertas Preditiva / Preventiva (Balões) -->
     <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -382,7 +376,6 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 
-                <!-- Menu de Balões para Atenção Imediata -->
                 <div id="preditivaImediataMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('vencidas')" class="nav-card bg-white border border-rose-200 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center w-full gap-3 transition-colors hover:bg-rose-50/50">
                         <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl">
@@ -401,7 +394,6 @@
                     </button>
                 </div>
 
-                <!-- Menu de Balões para Programação (7 Dias) -->
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
@@ -428,7 +420,6 @@
                     </button>
                 </div>
 
-                <!-- Containers das Listas -->
                 <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
@@ -504,7 +495,6 @@
         </div>
     </div>
 
-    <!-- Modal: Registrar Movimentação -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
@@ -533,7 +523,6 @@
                     </div>
                     <div class="font-sans">
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
-                        <!-- Apenas membros da Manutenção aparecerão aqui via JS -->
                         <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
                     </div>
                     <div class="font-sans">
@@ -549,7 +538,6 @@
         </div>
     </div>
 
-    <!-- Modal: Imagens -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -643,7 +631,6 @@
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
         function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
 
-        // --- SISTEMA DE EQUIPES ---
         function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador cadastrado</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
@@ -660,7 +647,6 @@
             return opcoes;
         }
 
-        // --- SISTEMA DE CHAMADOS (CORRETIVA) ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -775,7 +761,7 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE ALERTAS PREDITIVOS (BALÕES E LISTA DE HISTÓRICO) ---
+        // --- SISTEMA DE ALERTAS PREDITIVOS ---
         function irParaChecklist(setor, tipoOriginal) {
             fecharPreditiva(); selecionarSetor(setor);
             let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
@@ -802,7 +788,13 @@
             for (let chave in agrupado) {
                 const info = agrupado[chave];
                 const isDiario = normalizar(info.periodicidade).includes('diar') || normalizar(info.periodicidade).includes('intrad');
-                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && normalizar(s.periodicidade) === normalizar(info.periodicidade));
+                
+                // CÓDIGO CORRIGIDO AQUI: Compara as strings normalizadas exatamente.
+                const statusAtivo = checklistStatus.find(s => 
+                    normalizar(s.maquina) === normalizar(info.maquina) && 
+                    normalizar(s.setor) === normalizar(info.setor) && 
+                    normalizar(s.periodicidade) === normalizar(info.periodicidade)
+                );
                 
                 let dataProxFormatada = "Pendente";
                 let categoriaTarget = null;
@@ -824,7 +816,6 @@
                         
                         if (dataProx <= agora) { categoriaTarget = 'hoje'; mensagem = "Revisão Pendente"; }
                         
-                        // Processa o histórico de hoje (top 10 únicas)
                         if (statusAtivo.historico) {
                             const strHoje = agora.toLocaleDateString('pt-BR');
                             let arrHoje = statusAtivo.historico.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === strHoje);
@@ -897,7 +888,6 @@
             
             const divMenuImediata = document.getElementById('preditivaImediataMenu');
             const divMenuProgramacao = document.getElementById('preditivaProgramacaoMenu');
-            
             const modalTitle = document.getElementById('preditivaModalTitle');
             const modalDesc = document.getElementById('preditivaModalDesc');
             const modalIcon = document.getElementById('iconPreditivaModal');
@@ -916,9 +906,9 @@
             const renderLista = (arr, icone, corTexto, corBg) => {
                 if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4">Nenhum registro encontrado.</div>`;
                 return arr.map(a => {
-                    let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
+                    let proxClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
                     if(a.proxima === "Pendente" || a.alerta === "Atrasada" || a.alerta === "Revisão Pendente" || a.alerta === "Vence Hoje") {
-                        proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
+                        proxClass = "text-rose-700 bg-rose-50 border-rose-200";
                     }
                     
                     let detalhesH = "";
@@ -931,7 +921,7 @@
                     return `
                         <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
                             <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                <div class="space-y-1">
+                                <div class="space-y-1 w-full">
                                     <h4 class="text-sm font-bold text-slate-800">${a.maquina}</h4>
                                     <div class="text-[10px] text-slate-500 font-medium mb-1.5">${a.setor} · Revisão ${a.tipo}</div>
                                     <div class="inline-block mt-1">
@@ -983,9 +973,9 @@
 
             if (tipo === 'vencidas') { document.getElementById('containerVencidas').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Vencidas / Atrasadas"; document.getElementById('preditivaModalDesc').innerText = "Itens que já passaram do prazo."; } 
             else if (tipo === 'hoje') { document.getElementById('containerHoje').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Pendentes p/ Hoje"; document.getElementById('preditivaModalDesc').innerText = "Itens que devem ser executados hoje."; } 
-            else if (tipo === 'amanha') { document.getElementById('containerAmanha').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Vencem Amanhã"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o dia seguinte."; } 
-            else if (tipo === 'dias3') { document.getElementById('containerDias3').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Em até 3 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o curto prazo."; } 
-            else if (tipo === 'dias7') { document.getElementById('containerDias7').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Em até 7 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para fechar a semana."; }
+            else if (tipo === 'amanha') { document.getElementById('containerAmanha').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 1 dia (Amanhã)"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o dia seguinte."; } 
+            else if (tipo === 'dias3') { document.getElementById('containerDias3').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 3 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o curto prazo."; } 
+            else if (tipo === 'dias7') { document.getElementById('containerDias7').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 7 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para fechar a semana."; }
         }
 
         function voltarPreditiva() {
@@ -1023,27 +1013,19 @@
         }
 
         function carregarChecklistMock() {
-            equipesData = [
-                { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
-                { setor: "Manutenção", membros: ["José", "Carlos"] }
-            ];
+            equipesData = [ { setor: "Produção", membros: ["Rodrigo", "Claudio"] }, { setor: "Manutenção", membros: ["José", "Carlos"] } ];
             originalDatabase = [
                 { item: "Verificar Oleo", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", tempoReanalise: 2, obs: "" },
                 { item: "Filtros", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Semanal", obs: "" },
                 { item: "Aperto Correias", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
             ];
-            
-            const agora = new Date();
-            const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString();
-            const cincoDiasAtras = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
+            const agora = new Date(); const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString(); const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
             
             checklistStatus = [
                 { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", historico: [{data: ontem, operador: "Rodrigo - Produção"}], vencido: true, itensStatus: { "Verificar Oleo": [{ data: ontem, operador: "Rodrigo - Produção" }] } },
-                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: cincoDiasAtras, operador: "José - Manutenção", historico: [{data: cincoDiasAtras, operador: "José - Manutenção"}], vencido: false, itensStatus: { "Aperto Correias": [{ data: cincoDiasAtras, operador: "José - Manutenção" }] } }
+                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "José - Manutenção", historico: [{data: preventinaFeitaRecente, operador: "José - Manutenção"}], vencido: false, itensStatus: { "Aperto Correias": [{ data: preventinaFeitaRecente, operador: "José - Manutenção" }] } }
             ];
-            chamadosData = [
-                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
-            ];
+            chamadosData = [ { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" } ];
             renderSetorCards(); atualizarKPIs();
         }
 
@@ -1060,8 +1042,7 @@
                 let pendentes = 0;
                 maquinasDoSetor.forEach(maq => {
                     const st = checklistStatus.filter(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(setor));
-                    if (st.length === 0) pendentes++;
-                    else if (st.some(s => s.vencido)) pendentes++;
+                    if (st.length === 0) pendentes++; else if (st.some(s => s.vencido)) pendentes++;
                 });
 
                 const badge = pendentes > 0 ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold mt-3">${pendentes} pendente(s)</span>` : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold mt-3">Tudo conforme</span>`;
@@ -1077,14 +1058,8 @@
             const map = [ { id: "diaria", label: "Diária/ Intradiária" }, { id: "semanal", label: "Semanal" }, { id: "quinzenal", label: "Quinzenal" }, { id: "mensal", label: "Mensal" } ];
             const filterSetor = normalizar(setor);
 
-            const mapFiltrado = map.filter(p => {
-                return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id));
-            });
-
-            if(mapFiltrado.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400 font-medium">Nenhum checklist programado para este setor.</div>`;
-                return;
-            }
+            const mapFiltrado = map.filter(p => { return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id)); });
+            if(mapFiltrado.length === 0) { container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400 font-medium">Nenhum checklist programado.</div>`; return; }
 
             container.innerHTML = mapFiltrado.map(p => {
                 const maquinas = [...new Set(originalDatabase.filter(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id)).map(i => i.maquina))];
@@ -1105,10 +1080,7 @@
             const container = document.getElementById("checklistContainer"); container.innerHTML = "";
 
             const filtrados = originalDatabase.filter(x => normalizar(x.setor) === normalizar(selectedSetor) && matchPeriodicidade(x.periodicidade, periodoId));
-            if (filtrados.length === 0) {
-                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm font-semibold">Nenhum item programado.</div>`;
-                alternarTela('checklist-itens'); return;
-            }
+            if (filtrados.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm font-semibold">Nenhum item programado.</div>`; alternarTela('checklist-itens'); return; }
 
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
@@ -1131,7 +1103,7 @@
 
                         badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                     } else {
-                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold border border-rose-200">Pendente de execução</span>`;
+                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente de execução</span>`;
                     }
                 }
 
@@ -1239,7 +1211,7 @@
             }
         }
 
-        // --- ALMOXARIFADO / FORNO / CONFIGURAÇÕES GERAIS ---
+        // --- MÓDULOS EXTRAS PERMANECEM INALTERADOS ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
