@@ -37,11 +37,12 @@
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 
-                <div class="bg-white px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-2 shadow-sm border border-slate-200">
+                <!-- Logo como Botão Home -->
+                <button onclick="alternarTela('home')" class="bg-white px-3.5 py-1.5 rounded-lg flex items-center justify-center gap-2 shadow-sm border border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer">
                     <span class="text-[9px] font-extrabold text-slate-400 tracking-[0.25em] uppercase font-sans">GRUPO</span>
                     <div class="h-4 w-[1.5px] bg-[#e11d48]"></div>
                     <span class="text-sm font-black text-[#0f172a] tracking-tight font-sans">TBX</span>
-                </div>
+                </button>
 
                 <div>
                     <h1 id="headerTitle" class="font-bold text-lg tracking-tight text-white leading-tight">Checklist de Manutenção</h1>
@@ -72,7 +73,6 @@
         </div>
 
         <div id="view-home" class="fade-in">
-            <!-- 4 BALÕES SELETORES DO DASHBOARD -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -113,7 +113,6 @@
 
             </div>
 
-            <!-- MÓDULOS PRINCIPAIS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <button onclick="abrirModuloChecklist()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clipboard-check text-xl"></i></div>
@@ -157,6 +156,7 @@
                     <i class="fa-solid fa-plus"></i> Registrar Intervenção
                 </button>
             </div>
+
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -296,7 +296,7 @@
                             <div class="col-span-1 bg-slate-800 flex flex-col justify-center p-1"><span>Saída</span></div>
                         </div>
                         <div class="border rounded-xl p-3 bg-slate-100">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-wider">Simulação da Esteira</span>
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-wider" id="labelSimulacaoConveyor">Simulação da Esteira</span>
                             <div class="h-10 w-full bg-slate-200 rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
                         </div>
                     </div>
@@ -406,108 +406,8 @@
         </div>
     </div>
 
-    <!-- Modal: Detalhes de OS Específica -->
-    <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-file-lines"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3>
-                        <p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p>
-                    </div>
-                </div>
-                <button onclick="fecharDetalhesOS()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="p-6 overflow-y-auto space-y-5 bg-white">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Máquina / Equipamento</span>
-                        <span class="block font-bold text-slate-800 text-sm" id="detOsMaquina"></span>
-                    </div>
-                    <span class="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-1 rounded font-bold border border-emerald-200" id="detOsStatus"></span>
-                </div>
-                
-                <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 space-y-3">
-                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-[10px]">
-                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataAbertura"></span></div>
-                        <div><span class="block font-bold text-slate-400 uppercase">Relator</span><span class="font-semibold text-slate-700" id="detOsRelator"></span></div>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Defeito Relatado</span>
-                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p>
-                    </div>
-                </div>
-
-                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3">
-                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2">
-                        <i class="fa-solid fa-wrench"></i> Fechamento (Reparo)
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-[10px]">
-                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataFechamento"></span></div>
-                        <div><span class="block font-bold text-slate-400 uppercase">Técnico</span><span class="font-semibold text-slate-700" id="detOsSolucionador"></span></div>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Solução Aplicada</span>
-                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-emerald-100 font-medium" id="detOsResolucao"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Registro de Intervenção/Melhoria -->
-    <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
-            <div class="p-6">
-                <div class="flex items-center gap-3 mb-5 border-b pb-4">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200">
-                        <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3>
-                        <p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p>
-                    </div>
-                </div>
-                <div class="space-y-4 mb-5">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label>
-                        <select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Ação</label>
-                        <select id="intervTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                            <option value="Modificação">Modificação de Projeto/Estrutura</option>
-                            <option value="Manutenção Forçada">Manutenção Corretiva Forçada</option>
-                            <option value="Melhoria">Melhoria / Setup Específico</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label>
-                        <textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label>
-                        <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="fecharModalIntervencao()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
-                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-check"></i> Salvar Registro
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Resumo/Status Completo da Máquina -->
-    <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+    <!-- Modal: Resumo/Status Completo da Máquina (Z-index 60 para sobrepor o Sino) -->
+    <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
@@ -543,15 +443,7 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 
-                <div id="preditivaVencidasMenu" class="hidden">
-                    <div id="listaAlertasVencidas"></div>
-                </div>
-
-                <div id="preditivaImediataMenu" class="hidden">
-                    <div id="listaAlertasHoje"></div>
-                </div>
-
-                <!-- Menu de Balões para Programação (7 Dias) -->
+                <!-- Menu Programação (7 Dias) -->
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
@@ -578,7 +470,9 @@
                     </button>
                 </div>
 
-                <!-- Containers das Listas -->
+                <!-- Containers das Listas Diretas -->
+                <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
+                <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
                 <div id="containerDias3" class="hidden"><div id="listaAlertasDias3"></div></div>
                 <div id="containerDias7" class="hidden"><div id="listaAlertasDias7"></div></div>
@@ -587,7 +481,7 @@
         </div>
     </div>
 
-    <!-- Modal: Novo Cadastro Almoxarifado -->
+    <!-- Modal: Cadastrar Novo Item Almoxarifado -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -682,6 +576,7 @@
                     </div>
                     <div class="font-sans">
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
+                        <!-- Apenas membros da Manutenção aparecerão aqui via JS -->
                         <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
                     </div>
                     <div class="font-sans">
@@ -694,6 +589,16 @@
                     <button onclick="confirmarMovimentacao()" class="w-full py-3 bg-[#047857] hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">Confirmar</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal: Imagens -->
+    <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print" onclick="fecharModalImagem()">
+        <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
+            <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
+            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1">
+                <i class="fa-solid fa-xmark"></i> Fechar
+            </button>
         </div>
     </div>
 
@@ -785,7 +690,11 @@
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
         function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
-        function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
+        
+        function abrirModuloIntervencoes() { 
+            alternarTela('intervencoes'); 
+            renderListaIntervencoes();
+        }
 
         function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador cadastrado</option>`;
@@ -803,6 +712,7 @@
             return opcoes;
         }
 
+        // --- SISTEMA DE CHAMADOS E INTERVENÇÕES ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -922,7 +832,7 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE INTERVENÇÕES ---
+        // --- SISTEMA DE INTERVENÇÕES INDIRETAS E OS FECHADAS ---
         function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -1027,7 +937,7 @@
 
         function fecharDetalhesOS() { document.getElementById('detalhesOsModal').classList.add('hidden'); }
 
-        // --- SISTEMA DE ALERTAS PREDITIVOS (BALÕES) ---
+        // --- SISTEMA DE ALERTAS PREDITIVOS ---
         function irParaChecklist(setor, tipoOriginal) {
             fecharPreditiva(); selecionarSetor(setor);
             let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
@@ -1062,7 +972,6 @@
                 let historicoHoje = [];
                 let ultimoOperador = null;
 
-                // NOVA MANIPULAÇÃO: Constrói a lista item a item com o status e auditoria individual solicitada na imagem_df82de.png
                 const subItens = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(info.maquina) && normalizar(x.setor) === normalizar(info.setor) && normalizar(x.periodicidade) === normalizar(info.periodicidade));
                 const subItensStatus = subItens.map(it => {
                     let statusStr = "Pendente";
@@ -1117,17 +1026,19 @@
                     }
                 }
 
-                alertasDict[categoriaTarget || (isDiario ? 'hoje' : 'vencidas')][chave] = { 
-                    maquina: info.maquina, 
-                    setor: info.setor, 
-                    tipo: info.periodicidade, 
-                    alerta: mensagem,
-                    proxima: dataProxFormatada,
-                    isDiario: isDiario,
-                    historicoHoje: historicoHoje,
-                    ultimoOperador: ultimoOperador,
-                    subItensStatus: subItensStatus
-                };
+                if (categoriaTarget) {
+                    alertasDict[categoriaTarget][chave] = { 
+                        maquina: info.maquina, 
+                        setor: info.setor, 
+                        tipo: info.periodicidade, 
+                        alerta: mensagem,
+                        proxima: dataProxFormatada,
+                        isDiario: isDiario,
+                        historicoHoje: historicoHoje,
+                        ultimoOperador: ultimoOperador,
+                        subItensStatus: subItensStatus
+                    };
+                }
             }
 
             return { 
@@ -1176,22 +1087,18 @@
             const renderLista = (arr) => {
                 if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4 p-4 text-center">Nenhum registro encontrado para esta janela de tempo.</div>`;
                 return arr.map(a => {
-                    let proxClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
+                    let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
                     if(a.proxima === "Pendente" || a.alerta.includes("Atrasada") || a.alerta.includes("Pendente") || a.alerta === "Vence Hoje") {
-                        proxClass = "text-rose-700 bg-rose-50 border-rose-200";
+                        proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
                     }
                     
-                    // CORREÇÃO EXATA DO FLUXO: Mapeia o bloco item por item usando a mesma tipografia pedida
                     let detalhesH = "";
                     if (a.subItensStatus && a.subItensStatus.length > 0) {
                         detalhesH = `<div class="mt-3 text-[9px] text-slate-500 font-semibold border-t border-slate-100 pt-2 space-y-1">`;
                         a.subItensStatus.forEach(si => {
                             let isPendente = si.status === "Pendente";
-                            let iconSi = isPendente 
-                                ? `<i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1.5"></i>`
-                                : `<i class="fa-solid fa-user-check text-slate-300 mr-1.5"></i>`;
+                            let iconSi = isPendente ? `<i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1.5"></i>` : `<i class="fa-solid fa-user-check text-slate-300 mr-1.5"></i>`;
                             let textCor = isPendente ? "text-rose-600 font-bold" : "text-slate-600 font-medium";
-                            
                             detalhesH += `<div class="flex items-start gap-0.5">${iconSi}<div><span class="text-slate-800 font-bold">${si.nome}:</span> <span class="${textCor}">${isPendente ? 'Pendente' : 'Último registro ' + si.status}</span></div></div>`;
                         });
                         detalhesH += `</div>`;
@@ -1210,8 +1117,12 @@
                                     </div>
                                     ${detalhesH}
                                 </div>
-                                <div class="flex items-center gap-3 w-full sm:w-auto justify-end mt-2 sm:mt-0">
-                                    <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-[#0b132b] hover:bg-slate-800 text-white py-1.5 px-4 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap">
+                                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto mt-3 sm:mt-0">
+                                    <!-- NOVO BOTÃO DE STATUS -->
+                                    <button onclick="abrirResumoMaquina('${a.maquina}', '${a.setor}', '${a.tipo}')" class="bg-blue-600 hover:bg-blue-500 text-white py-1.5 px-3 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
+                                        <i class="fa-solid fa-list-check"></i> Status
+                                    </button>
+                                    <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-[#0b132b] hover:bg-slate-800 text-white py-1.5 px-4 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
                                         Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i>
                                     </button>
                                 </div>
@@ -1316,8 +1227,7 @@
             document.getElementById('resumoMaquinaModal').classList.remove('hidden');
         }
 
-        function abrirResumoMaquina(maquina, setor, periodicidade) { fecharResumoMaquina(); }
-        function fecharResumoMaquina() { const el = document.getElementById('resumoMaquinaModal'); if(el) el.classList.add('hidden'); }
+        function fecharResumoMaquina() { document.getElementById('resumoMaquinaModal').classList.add('hidden'); }
 
         // --- NÚCLEO DA APLICAÇÃO ---
         async function baixarDadosDaPlanilha() {
@@ -1344,9 +1254,9 @@
                 { setor: "Manutenção", membros: ["José", "Carlos"] }
             ];
             originalDatabase = [
-                { item: "Verificar Oleo Canola", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", tempoReanalise: 2, obs: "" },
-                { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
-                { item: "Verificar Aperto Dos Parafusos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
+                { item: "Verificar Oleo", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", tempoReanalise: 2, obs: "" },
+                { item: "Filtros", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Semanal", obs: "" },
+                { item: "Aperto Correias", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
             ];
             
             const agora = new Date();
@@ -1354,8 +1264,13 @@
             const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
             
             checklistStatus = [
-                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", historico: [{data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção"}], vencido: false, itensStatus: { "Verificar Oleo Canola": [{ data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção" }] } }
+                { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", historico: [{data: ontem, operador: "Rodrigo - Produção"}], vencido: true, itensStatus: { "Verificar Oleo": [{ data: ontem, operador: "Rodrigo - Produção" }] } },
+                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "José - Manutenção", historico: [{data: preventinaFeitaRecente, operador: "José - Manutenção"}], vencido: false, itensStatus: { "Aperto Correias": [{ data: preventinaFeitaRecente, operador: "José - Manutenção" }] } }
             ];
+            chamadosData = [
+                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
+            ];
+            intervencoesData = [];
             renderSetorCards(); atualizarKPIs();
         }
 
@@ -1436,14 +1351,14 @@
                         const dataProxima = new Date(dataUltima); dataProxima.setDate(dataUltima.getDate() + diasParaPeriodicidade(statusAtivo.periodicidade));
                         
                         const vencidoStatus = (new Date() > dataProxima);
-                        const colorClass = vencidoStatus ? 'bg-rose-600/20 text-red-500 border border-rose-500/30' : 'bg-emerald-600/20 text-emerald-500 border border-emerald-500/30';
+                        const colorClass = vencidoStatus ? 'bg-rose-600/20 text-rose-500 border border-rose-500/30' : 'bg-emerald-600/20 text-emerald-500 border border-emerald-500/30';
                         const dataStr = dataUltima.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
                         const horaStr = dataUltima.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
                         const pStr = dataProxima.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit', year: 'numeric'});
 
                         badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                     } else {
-                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold border border-rose-200">Pendente de execução</span>`;
+                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente de execução</span>`;
                     }
                 }
 
@@ -1551,7 +1466,15 @@
             }
         }
 
-        // --- ALMOXARIFADO ---
+        // --- ALMOXARIFADO / FORNO / CONFIGURAÇÕES GERAIS ---
+        function imprimirChecklistPapel(maquina) {
+            const printArea = document.getElementById('printArea');
+            const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
+            let tableRows = filtrados.map((item, index) => `<tr style="border-bottom: 1.5px solid #000000;"><td style="padding: 10px; font-size: 11px; text-align: center; border-right: 1.5px solid #000000; font-weight: bold; color: black !important;">${index + 1}</td><td style="padding: 10px; font-size: 11px; font-weight: bold; border-right: 1.5px solid #000000; color: black !important;">${item.item}${item.obs ? `<br><span style="font-size: 9px; color: #334155; font-weight: normal; font-style: italic;">Obs: ${item.obs}</span>` : ''}</td><td style="padding: 10px; width: 120px; border-right: 1.5px solid #000000; text-align: center; font-size: 10px; color: black !important; font-weight: bold;">[   ] OK     [   ] NOK</td><td style="padding: 10px; width: 130px; border-right: 1.5px solid #000000;"></td><td style="padding: 10px;"></td></tr>`).join('');
+            printArea.innerHTML = `<div style="font-family: Arial, sans-serif; color: #000; padding: 20px;"><div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #000000; padding-bottom: 15px; margin-bottom: 25px;"><div><h1 style="font-size: 18px; font-weight: bold; margin: 0; color: #000000;">FOLHA DE INSPECÇÃO OPERACIONAL</h1><p style="font-size: 10px; color: #000000; margin: 3px 0 0 0; font-weight: bold;">Controle e Manutenção</p></div><div style="text-align: right; font-size: 11px; line-height: 1.4; color: #000000;"><span style="font-weight: bold; display: block; font-size: 13px;">ATIVO: ${maquina}</span><span style="display: block; font-weight: bold;">Frequência: ${selectedPeriodo.toUpperCase()}</span></div></div><table style="width: 100%; border-collapse: collapse; border: 2px solid #000000; margin-bottom: 30px;"><thead><tr style="background-color: #f1f5f9; border-bottom: 2px solid #000000; text-align: left; font-size: 10px; font-weight: bold;"><th style="padding: 10px; width: 40px; text-align: center; border-right: 1.5px solid #000000; color: black !important;">Nº</th><th style="padding: 10px; border-right: 1.5px solid #000000; color: black !important;">ITEM DE VERIFICAÇÃO</th><th style="padding: 10px; width: 120px; text-align: center; border-right: 1.5px solid #000000; color: black !important;">AVALIAÇÃO</th><th style="padding: 10px; width: 130px; border-right: 1.5px solid #000000; color: black !important;">ASSINATURA</th><th style="padding: 10px; color: black !important;">OBSERVAÇÕES</th></tr></thead><tbody>${tableRows}</tbody></table><div style="margin-top: 50px; display: flex; justify-content: space-between; font-size: 11px; color: black !important; font-weight: bold;"><div style="width: 45%; text-align: center;"><div style="border-bottom: 1.5px solid #000000; margin-bottom: 6px; height: 40px;"></div><span>Assinatura Operador</span></div><div style="width: 45%; text-align: center;"><div style="border-bottom: 1.5px solid #000000; margin-bottom: 6px; height: 40px;"></div><span>Visto Engenharia</span></div></div></div>`;
+            window.print();
+        }
+
         async function baixarAlmoxarifadoDaPlanilha() {
             if (!API_URL) return;
             try {
@@ -1571,7 +1494,7 @@
             const search = document.getElementById('almoxSearch').value.toLowerCase();
             const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))].sort((a, b) => a.localeCompare(b));
             const selectCat = document.getElementById('almoxCategoriaFilter');
-            selectCat.innerHTML = '<option value="">Todas as Famílias</option>' +  categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+            selectCat.innerHTML = '<option value="">Todas as Famílias</option>' + categorias.map(c => `<option value="${c}">${c}</option>`).join('');
             selectCat.value = catFilter;
             const filtrados = almoxarifadoData.filter(item => (catFilter === "" || item.categoria === catFilter) && ((item.nome||"").toLowerCase().includes(search) || (item.id||"").toLowerCase().includes(search) || (item.categoria||"").toLowerCase().includes(search)));
             tbody.innerHTML = filtrados.map(item => {
@@ -1710,7 +1633,7 @@
         }
         function popularFiltroMaquinas(selectId) {
             const select = document.getElementById(selectId);
-            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))];
+            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Guilhotina"];
             select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
         }
 
@@ -1718,7 +1641,14 @@
             const espessura = parseFloat(document.getElementById('fornoEspessura').value); const freq = parseFloat(document.getElementById('fornoFrequencia').value); const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value); const espacamento = parseFloat(document.getElementById('fornoEspacamento').value); const isEstabilizacao = document.getElementById('fornoEstabilizacao').checked;
             document.getElementById('valEspessura').innerText = `${espessura.toFixed(1)} mm`; document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
             const velocidadeEsteira = freq * 0.02; const tempoTotalCiclo = 28.50 / velocidadeEsteira; 
-            if (isEstabilizacao) { renderVisualEsteira(300, 10); } else { renderVisualEsteira(compPeca, espacamento); }
+            
+            if (isEstabilizacao) {
+                document.getElementById('containerNormalParams').classList.add('hidden'); document.getElementById('containerEstabilizacaoParams').classList.remove('hidden');
+                renderVisualEsteira(300, 10);
+            } else {
+                document.getElementById('containerNormalParams').classList.remove('hidden'); document.getElementById('containerEstabilizacaoParams').classList.add('hidden');
+                renderVisualEsteira(compPeca, espacamento);
+            }
             document.getElementById('fornoVelocidade').innerText = `${velocidadeEsteira.toFixed(2)} m/min`; document.getElementById('fornoTempoCiclo').innerText = `${Math.round(tempoTotalCiclo)} min`;
         }
 
