@@ -72,38 +72,47 @@
         </div>
 
         <div id="view-home" class="fade-in">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-rose-600 text-white rounded-xl"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                     <div>
-                        <span class="block text-[10px] font-bold text-rose-500 uppercase tracking-wider">Manutenção Corretiva</span>
+                        <span class="block text-[9px] font-bold text-rose-500 uppercase tracking-wider">Corretivas</span>
                         <span class="block text-xl font-black text-slate-800" id="kpiChamadosAbertos">0</span>
-                        <span class="block text-[10px] text-rose-700 font-medium mt-0.5">Chamados Abertos (OS)</span>
+                        <span class="block text-[10px] text-rose-700 font-medium mt-0.5">Chamados Abertos</span>
                     </div>
                 </button>
 
-                <button onclick="abrirPreditiva('imediata')" class="nav-card text-left bg-amber-50 border border-amber-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
+                <button onclick="abrirPreditiva('vencidas')" class="nav-card text-left bg-red-50 border border-red-200 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full hover:bg-red-100/50">
+                    <div class="p-3 bg-red-600 text-white rounded-xl"><i class="fa-solid fa-circle-xmark text-lg"></i></div>
+                    <div>
+                        <span class="block text-[9px] font-bold text-red-600 uppercase tracking-wider">Em Atraso</span>
+                        <span class="block text-xl font-black text-slate-800" id="kpiAtrasadas">0</span>
+                        <span class="block text-[10px] text-red-700 font-medium mt-0.5">Checklists Vencidos</span>
+                    </div>
+                </button>
+
+                <button onclick="abrirPreditiva('hoje')" class="nav-card text-left bg-amber-50 border border-amber-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-amber-500 text-white rounded-xl"><i class="fa-solid fa-clock text-lg"></i></div>
                     <div>
-                        <span class="block text-[10px] font-bold text-amber-600 uppercase tracking-wider">Atenção Imediata</span>
+                        <span class="block text-[9px] font-bold text-amber-600 uppercase tracking-wider">Para Hoje</span>
                         <span class="block text-xl font-black text-slate-800" id="kpiPendentesHoje">0</span>
-                        <span class="block text-[10px] text-amber-700 font-medium mt-0.5">Pendentes / Vencem Hoje</span>
+                        <span class="block text-[10px] text-amber-700 font-medium mt-0.5">Revisões do Dia</span>
                     </div>
                 </button>
 
                 <button onclick="abrirPreditiva('programacao')" class="nav-card text-left bg-blue-50 border border-blue-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-blue-600 text-white rounded-xl"><i class="fa-solid fa-calendar-days text-lg"></i></div>
                     <div>
-                        <span class="block text-[10px] font-bold text-blue-500 uppercase tracking-wider">Programação</span>
+                        <span class="block text-[9px] font-bold text-blue-500 uppercase tracking-wider">Programação</span>
                         <span class="block text-xl font-black text-slate-800" id="kpiProximosDias">0</span>
-                        <span class="block text-[10px] text-blue-700 font-medium mt-0.5">Preventivas (Próx. 7 dias)</span>
+                        <span class="block text-[10px] text-blue-700 font-medium mt-0.5">Próximos 7 dias</span>
                     </div>
                 </button>
 
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <button onclick="abrirModuloChecklist()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clipboard-check text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Inspeção & Checklist</h2>
@@ -114,6 +123,12 @@
                     <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-boxes-stacked text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Almoxarifado Técnico</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Controle detalhado de quantidades, localizações e movimentação de peças.</p>
+                </button>
+                
+                <button onclick="abrirModuloIntervencoes()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-11 h-11 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1.5 text-base">Intervenções & Melhorias</h2>
+                    <p class="text-xs text-slate-500 leading-relaxed">Registro direto de corretivas forçadas e modificações em equipamentos.</p>
                 </button>
 
                 <button onclick="abrirModuloPOPs()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
@@ -127,6 +142,35 @@
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Curva do Forno</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Parametrização detalhada das bancadas e tempo de encharque térmico.</p>
                 </button>
+            </div>
+        </div>
+
+        <div id="view-intervencoes" class="fade-in hidden">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
+                <div>
+                    <h2 class="font-bold text-slate-800 text-base">Histórico de Intervenções Diretas</h2>
+                    <p class="text-xs text-slate-500">Log de modificações e manutenções forçadas (sem OS prévia).</p>
+                </div>
+                <button onclick="abrirModalNovaIntervencao()" class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm w-full sm:w-auto justify-center">
+                    <i class="fa-solid fa-plus"></i> Registrar Intervenção
+                </button>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-400 border-b border-slate-150 tracking-wider">
+                            <tr>
+                                <th class="p-4 w-32">DATA / HORA</th>
+                                <th class="p-4 w-48">MÁQUINA</th>
+                                <th class="p-4 w-32">TIPO</th>
+                                <th class="p-4">DESCRIÇÃO DO QUE FOI FEITO</th>
+                                <th class="p-4 w-40">RESPONSÁVEL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="intervencoesTbody" class="divide-y divide-slate-100 text-xs"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -354,8 +398,25 @@
                 </div>
                 <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos">
+            <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos"></div>
+        </div>
+    </div>
+
+    <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900" id="tituloResumoMaquina">Status da Máquina</h3>
+                        <p class="text-[10px] text-slate-500 font-medium" id="subtituloResumoMaquina">Histórico de Verificação dos Itens</p>
+                    </div>
                 </div>
+                <button onclick="fecharResumoMaquina()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-5 overflow-y-auto space-y-3 flex-grow bg-slate-50" id="listaResumoMaquina"></div>
         </div>
     </div>
 
@@ -376,15 +437,11 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 
+                <div id="preditivaVencidasMenu" class="hidden">
+                    <div id="listaAlertasVencidas"></div>
+                </div>
+
                 <div id="preditivaImediataMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
-                    <button onclick="mostrarListaPreditiva('vencidas')" class="nav-card bg-white border border-rose-200 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center w-full gap-3 transition-colors hover:bg-rose-50/50">
-                        <div class="w-12 h-12 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center text-xl">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                        </div>
-                        <h4 class="font-extrabold text-slate-800 text-base">Vencidas / Atrasadas</h4>
-                        <span class="bg-rose-600 text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider" id="cardCountVencidas">0 itens</span>
-                    </button>
-                    
                     <button onclick="mostrarListaPreditiva('hoje')" class="nav-card bg-white border border-amber-200 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center w-full gap-3 transition-colors hover:bg-amber-50/50">
                         <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
                             <i class="fa-solid fa-clock"></i>
@@ -420,12 +477,55 @@
                     </button>
                 </div>
 
-                <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
                 <div id="containerDias3" class="hidden"><div id="listaAlertasDias3"></div></div>
                 <div id="containerDias7" class="hidden"><div id="listaAlertasDias7"></div></div>
 
+            </div>
+        </div>
+    </div>
+
+    <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-5 border-b pb-4">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200">
+                        <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p>
+                    </div>
+                </div>
+                <div class="space-y-4 mb-5">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label>
+                        <select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Ação</label>
+                        <select id="intervTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="Modificação">Modificação de Projeto/Estrutura</option>
+                            <option value="Manutenção Forçada">Manutenção Corretiva Forçada</option>
+                            <option value="Melhoria">Melhoria / Setup Específico</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label>
+                        <textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label>
+                        <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="fecharModalIntervencao()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-check"></i> Salvar Registro
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -553,6 +653,7 @@
         let originalDatabase = [];
         let checklistStatus = [];
         let chamadosData = []; 
+        let intervencoesData = []; // NOVA VARIÁVEL GLOBAL
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
@@ -593,8 +694,11 @@
         }
 
         function alternarTela(novaTela) {
-            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'forno'];
-            telas.forEach(t => document.getElementById(`view-${t}`).classList.add('hidden'));
+            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'forno', 'intervencoes'];
+            telas.forEach(t => {
+                const el = document.getElementById(`view-${t}`);
+                if(el) el.classList.add('hidden');
+            });
             document.getElementById(`view-${novaTela}`).classList.remove('hidden');
             currentView = novaTela;
 
@@ -604,8 +708,7 @@
 
             if (novaTela === 'home') {
                 btnVoltar.classList.add('hidden');
-                headerTitle.innerText = "Checklist de Manutenção";
-                headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
+                headerTitle.innerText = "Checklist de Manutenção"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
             } else {
                 btnVoltar.classList.remove('hidden');
                 if (novaTela === 'almoxarifado') {
@@ -614,6 +717,8 @@
                     headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO";
                 } else if (novaTela === 'forno') {
                     headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
+                } else if (novaTela === 'intervencoes') {
+                    headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta";
                 } else {
                     headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas";
                 }
@@ -630,7 +735,13 @@
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
         function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
+        
+        function abrirModuloIntervencoes() { 
+            alternarTela('intervencoes'); 
+            renderListaIntervencoes();
+        }
 
+        // --- SISTEMA DE EQUIPES ---
         function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador cadastrado</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
@@ -647,6 +758,7 @@
             return opcoes;
         }
 
+        // --- SISTEMA DE CHAMADOS (OS) ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -678,7 +790,7 @@
                     showToast("OS criada com sucesso!"); setTimeout(() => baixarDadosDaPlanilha(), 1500); 
                 } catch(e) { showToast("Falha na rede. Tente novamente.", "error"); }
             } else {
-                showToast("Modo Offline: OS simulada com sucesso.", "info");
+                showToast("Modo Offline: OS simulada.", "info");
             }
 
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
@@ -761,7 +873,71 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE ALERTAS PREDITIVOS ---
+        // --- SISTEMA DE INTERVENÇÕES E MELHORIAS (CORRETIVA DIRETA) ---
+        function abrirModalNovaIntervencao() {
+            const select = document.getElementById('intervMaquina');
+            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
+            select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            
+            document.getElementById('intervDescricao').value = "";
+            document.getElementById('intervResponsavel').innerHTML = gerarOptionsEquipes(true); // Só manutenção
+            document.getElementById('intervencaoModal').classList.remove('hidden');
+        }
+
+        function fecharModalIntervencao() { document.getElementById('intervencaoModal').classList.add('hidden'); }
+
+        async function enviarIntervencao() {
+            const maquina = document.getElementById('intervMaquina').value;
+            const tipo = document.getElementById('intervTipo').value;
+            const descricao = document.getElementById('intervDescricao').value.trim();
+            const responsavel = document.getElementById('intervResponsavel').value.trim();
+            const btn = document.getElementById('btnEnviarIntervencao');
+
+            if (!descricao || !responsavel) { showToast("Preencha a descrição e selecione o técnico.", "error"); return; }
+
+            btn.disabled = true; const textoBtn = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
+
+            const novaIntervencao = { data: new Date().toISOString(), maquina, tipo, descricao, responsavel };
+
+            if (API_URL) {
+                try {
+                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "intervencao", dados: novaIntervencao }) });
+                    showToast("Registro efetuado com sucesso!");
+                } catch(e) { showToast("Salvo localmente.", "info"); }
+            } else {
+                showToast("Modo Offline: Registro simulado.", "info");
+            }
+            
+            intervencoesData.unshift(novaIntervencao);
+            renderListaIntervencoes();
+            
+            btn.disabled = false; btn.innerHTML = textoBtn; fecharModalIntervencao();
+        }
+
+        function renderListaIntervencoes() {
+            const tbody = document.getElementById('intervencoesTbody');
+            if (intervencoesData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhuma intervenção registrada até o momento.</td></tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = intervencoesData.map(i => {
+                const dataFormatada = new Date(i.data).toLocaleDateString('pt-BR') + ' às ' + new Date(i.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                let tipoBadge = `<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold">${i.tipo}</span>`;
+                if(i.tipo === "Manutenção Forçada") tipoBadge = `<span class="bg-rose-50 text-rose-600 px-2 py-1 rounded font-bold">${i.tipo}</span>`;
+                
+                return `<tr class="hover:bg-slate-50/50">
+                    <td class="p-4 font-semibold text-slate-500">${dataFormatada}</td>
+                    <td class="p-4 font-bold text-slate-800">${i.maquina}</td>
+                    <td class="p-4">${tipoBadge}</td>
+                    <td class="p-4 text-slate-600 italic">"${i.descricao}"</td>
+                    <td class="p-4 font-medium text-slate-700">${i.responsavel}</td>
+                </tr>`;
+            }).join('');
+        }
+
+        // --- SISTEMA DE ALERTAS PREDITIVOS (BALÕES E LISTA DE HISTÓRICO) ---
         function irParaChecklist(setor, tipoOriginal) {
             fecharPreditiva(); selecionarSetor(setor);
             let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
@@ -788,13 +964,7 @@
             for (let chave in agrupado) {
                 const info = agrupado[chave];
                 const isDiario = normalizar(info.periodicidade).includes('diar') || normalizar(info.periodicidade).includes('intrad');
-                
-                // CÓDIGO CORRIGIDO AQUI: Compara as strings normalizadas exatamente.
-                const statusAtivo = checklistStatus.find(s => 
-                    normalizar(s.maquina) === normalizar(info.maquina) && 
-                    normalizar(s.setor) === normalizar(info.setor) && 
-                    normalizar(s.periodicidade) === normalizar(info.periodicidade)
-                );
+                const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && normalizar(s.periodicidade) === normalizar(info.periodicidade));
                 
                 let dataProxFormatada = "Pendente";
                 let categoriaTarget = null;
@@ -829,7 +999,6 @@
 
                     } else {
                         let intervalo = diasParaPeriodicidade(info.periodicidade);
-                        
                         let dataProx = new Date(dataLog.getFullYear(), dataLog.getMonth(), dataLog.getDate() + intervalo); 
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
 
@@ -869,11 +1038,15 @@
 
         function atualizarKPIs() {
             const alertas = calcularAlertas();
-            const pendentes = alertas.vencidas.length + alertas.hoje.length;
+            const pendentes = alertas.hoje.length; // O KPI PENDENTES HOJE não soma mais os vencidos (pedido para separar em balões)
             const programados = alertas.amanha.length + alertas.dias3.length + alertas.dias7.length;
+            const vencidasCard = alertas.vencidas.length;
             
             document.getElementById('kpiPendentesHoje').innerText = pendentes;
             document.getElementById('kpiProximosDias').innerText = programados;
+            
+            const badgeAtrasadas = document.getElementById('kpiAtrasadas');
+            if(badgeAtrasadas) badgeAtrasadas.innerText = vencidasCard;
 
             const osAbertas = chamadosData.filter(c => c.status !== "Fechado").length;
             document.getElementById('kpiChamadosAbertos').innerText = osAbertas;
@@ -888,6 +1061,8 @@
             
             const divMenuImediata = document.getElementById('preditivaImediataMenu');
             const divMenuProgramacao = document.getElementById('preditivaProgramacaoMenu');
+            const divVencidas = document.getElementById('preditivaVencidasMenu');
+            
             const modalTitle = document.getElementById('preditivaModalTitle');
             const modalDesc = document.getElementById('preditivaModalDesc');
             const modalIcon = document.getElementById('iconPreditivaModal');
@@ -896,12 +1071,7 @@
 
             btnVoltar.classList.add('hidden'); 
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => document.getElementById(id).classList.add('hidden'));
-
-            document.getElementById('cardCountVencidas').innerText = `${alertas.vencidas.length} item(ns)`;
-            document.getElementById('cardCountHoje').innerText = `${alertas.hoje.length} item(ns)`;
-            document.getElementById('cardCountAmanha').innerText = `${alertas.amanha.length} item(ns)`;
-            document.getElementById('cardCountDias3').innerText = `${alertas.dias3.length} item(ns)`;
-            document.getElementById('cardCountDias7').innerText = `${alertas.dias7.length} item(ns)`;
+            divMenuImediata.classList.add('hidden'); divMenuProgramacao.classList.add('hidden'); divVencidas.classList.add('hidden');
 
             const renderLista = (arr, icone, corTexto, corBg) => {
                 if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4">Nenhum registro encontrado.</div>`;
@@ -954,11 +1124,19 @@
             if (alvo === 'imediata') {
                 modalTitle.innerText = "Atenção Imediata"; modalDesc.innerText = "Selecione a categoria para visualizar.";
                 modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
-                divMenuImediata.classList.remove('hidden'); divMenuProgramacao.classList.add('hidden');
+                document.getElementById('cardCountHoje').innerText = `${alertas.hoje.length} item(ns)`;
+                divMenuImediata.classList.remove('hidden');
+            } else if (alvo === 'vencidas') {
+                modalTitle.innerText = "Em Atraso"; modalDesc.innerText = "Manutenções que já passaram do limite estabelecido.";
+                modalIcon.className = "fa-solid fa-circle-xmark"; iconContainer.className = "w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-sm";
+                divVencidas.classList.remove('hidden');
             } else {
                 modalTitle.innerText = "Programação"; modalDesc.innerText = "Selecione a categoria para visualizar.";
                 modalIcon.className = "fa-solid fa-calendar-days"; iconContainer.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm";
-                divMenuProgramacao.classList.remove('hidden'); divMenuImediata.classList.add('hidden');
+                document.getElementById('cardCountAmanha').innerText = `${alertas.amanha.length} item(ns)`;
+                document.getElementById('cardCountDias3').innerText = `${alertas.dias3.length} item(ns)`;
+                document.getElementById('cardCountDias7').innerText = `${alertas.dias7.length} item(ns)`;
+                divMenuProgramacao.classList.remove('hidden');
             }
 
             document.getElementById('preditivaModal').classList.remove('hidden');
@@ -974,8 +1152,8 @@
             if (tipo === 'vencidas') { document.getElementById('containerVencidas').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Vencidas / Atrasadas"; document.getElementById('preditivaModalDesc').innerText = "Itens que já passaram do prazo."; } 
             else if (tipo === 'hoje') { document.getElementById('containerHoje').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Pendentes p/ Hoje"; document.getElementById('preditivaModalDesc').innerText = "Itens que devem ser executados hoje."; } 
             else if (tipo === 'amanha') { document.getElementById('containerAmanha').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 1 dia (Amanhã)"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o dia seguinte."; } 
-            else if (tipo === 'dias3') { document.getElementById('containerDias3').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 3 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o curto prazo."; } 
-            else if (tipo === 'dias7') { document.getElementById('containerDias7').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 7 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para fechar a semana."; }
+            else if (tipo === 'dias3') { document.getElementById('containerDias3').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Em até 3 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o curto prazo."; } 
+            else if (tipo === 'dias7') { document.getElementById('containerDias7').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Em até 7 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para fechar a semana."; }
         }
 
         function voltarPreditiva() {
@@ -994,6 +1172,64 @@
 
         function fecharPreditiva() { document.getElementById('preditivaModal').classList.add('hidden'); }
 
+        // --- RESUMO / STATUS GERAL DA MÁQUINA ---
+        function abrirResumoMaquina(maquina, setor, periodicidade) {
+            const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maquina) && normalizar(s.setor) === normalizar(setor) && normalizar(s.periodicidade) === normalizar(periodicidade));
+            const itensDaMaquina = originalDatabase.filter(i => normalizar(i.maquina) === normalizar(maquina) && normalizar(i.setor) === normalizar(setor) && normalizar(i.periodicidade) === normalizar(periodicidade));
+            
+            const container = document.getElementById('listaResumoMaquina');
+            document.getElementById('tituloResumoMaquina').innerText = `Status: ${maquina}`;
+            document.getElementById('subtituloResumoMaquina').innerText = `Checklist ${periodicidade} · Setor ${setor}`;
+
+            if(itensDaMaquina.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 py-4 text-sm">Sem itens para exibir.</div>`;
+            } else {
+                container.innerHTML = itensDaMaquina.map(it => {
+                    let badge = `<span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-[9px] font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
+                    let info = `<div class="text-[9px] text-slate-400 italic">Nunca verificado.</div>`;
+                    
+                    if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[it.item] && statusAtivo.itensStatus[it.item].length > 0) {
+                        const ult = statusAtivo.itensStatus[it.item][0];
+                        const dateL = new Date(ult.data);
+                        
+                        let atrasado = false;
+                        if(normalizar(periodicidade).includes('diar') || normalizar(periodicidade).includes('intrad')) {
+                            const horas = it.tempoReanalise ? parseFloat(it.tempoReanalise) : 2;
+                            if (new Date() > new Date(dateL.getTime() + (horas * 60 * 60 * 1000))) atrasado = true;
+                        } else {
+                            const inter = diasParaPeriodicidade(periodicidade);
+                            const dataProx = new Date(dateL.getFullYear(), dateL.getMonth(), dateL.getDate() + inter);
+                            const hojeZero = new Date(); hojeZero.setHours(0,0,0,0);
+                            if (dataProx < hojeZero) atrasado = true;
+                        }
+
+                        if(atrasado) {
+                            badge = `<span class="bg-rose-100 text-rose-700 px-2 py-1 rounded text-[9px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
+                        } else {
+                            badge = `<span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[9px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
+                        }
+
+                        info = `<div class="text-[10px] text-slate-500 font-medium">Realizado por <span class="font-bold text-slate-700">${ult.operador}</span> em ${dateL.toLocaleDateString('pt-BR')} às ${dateL.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`;
+                    }
+
+                    return `
+                        <div class="bg-white border border-slate-200 p-3 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
+                            <div>
+                                <span class="font-bold text-slate-800 text-xs">${it.item}</span>
+                                ${info}
+                            </div>
+                            <div>${badge}</div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            document.getElementById('resumoMaquinaModal').classList.remove('hidden');
+        }
+
+        function fecharResumoMaquina() {
+            document.getElementById('resumoMaquinaModal').classList.add('hidden');
+        }
+
         // --- NÚCLEO DA APLICAÇÃO ---
         async function baixarDadosDaPlanilha() {
             try {
@@ -1005,6 +1241,7 @@
                 checklistStatus = resJson.status || [];
                 equipesData = resJson.equipes || [];
                 chamadosData = resJson.chamados || []; 
+                intervencoesData = resJson.intervencoes || [];
                 
                 renderSetorCards(); atualizarKPIs();
             } catch (e) { 
@@ -1013,19 +1250,30 @@
         }
 
         function carregarChecklistMock() {
-            equipesData = [ { setor: "Produção", membros: ["Rodrigo", "Claudio"] }, { setor: "Manutenção", membros: ["José", "Carlos"] } ];
+            equipesData = [
+                { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
+                { setor: "Manutenção", membros: ["José", "Carlos"] }
+            ];
             originalDatabase = [
                 { item: "Verificar Oleo", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", tempoReanalise: 2, obs: "" },
                 { item: "Filtros", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Semanal", obs: "" },
                 { item: "Aperto Correias", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
             ];
-            const agora = new Date(); const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString(); const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
+            
+            const agora = new Date();
+            const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString();
+            const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
             
             checklistStatus = [
                 { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", historico: [{data: ontem, operador: "Rodrigo - Produção"}], vencido: true, itensStatus: { "Verificar Oleo": [{ data: ontem, operador: "Rodrigo - Produção" }] } },
                 { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "José - Manutenção", historico: [{data: preventinaFeitaRecente, operador: "José - Manutenção"}], vencido: false, itensStatus: { "Aperto Correias": [{ data: preventinaFeitaRecente, operador: "José - Manutenção" }] } }
             ];
-            chamadosData = [ { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" } ];
+            chamadosData = [
+                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
+            ];
+            intervencoesData = [
+                { data: ontem, maquina: "Guilhotina - GUI-001", tipo: "Melhoria", descricao: "Trocado rolamento Zz por blindado.", responsavel: "José - Manutenção" }
+            ];
             renderSetorCards(); atualizarKPIs();
         }
 
@@ -1042,7 +1290,8 @@
                 let pendentes = 0;
                 maquinasDoSetor.forEach(maq => {
                     const st = checklistStatus.filter(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(setor));
-                    if (st.length === 0) pendentes++; else if (st.some(s => s.vencido)) pendentes++;
+                    if (st.length === 0) pendentes++;
+                    else if (st.some(s => s.vencido)) pendentes++;
                 });
 
                 const badge = pendentes > 0 ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold mt-3">${pendentes} pendente(s)</span>` : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold mt-3">Tudo conforme</span>`;
@@ -1058,8 +1307,14 @@
             const map = [ { id: "diaria", label: "Diária/ Intradiária" }, { id: "semanal", label: "Semanal" }, { id: "quinzenal", label: "Quinzenal" }, { id: "mensal", label: "Mensal" } ];
             const filterSetor = normalizar(setor);
 
-            const mapFiltrado = map.filter(p => { return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id)); });
-            if(mapFiltrado.length === 0) { container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400 font-medium">Nenhum checklist programado.</div>`; return; }
+            const mapFiltrado = map.filter(p => {
+                return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id));
+            });
+
+            if(mapFiltrado.length === 0) {
+                container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400 font-medium">Nenhum checklist programado para este setor.</div>`;
+                return;
+            }
 
             container.innerHTML = mapFiltrado.map(p => {
                 const maquinas = [...new Set(originalDatabase.filter(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id)).map(i => i.maquina))];
@@ -1080,7 +1335,10 @@
             const container = document.getElementById("checklistContainer"); container.innerHTML = "";
 
             const filtrados = originalDatabase.filter(x => normalizar(x.setor) === normalizar(selectedSetor) && matchPeriodicidade(x.periodicidade, periodoId));
-            if (filtrados.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm font-semibold">Nenhum item programado.</div>`; alternarTela('checklist-itens'); return; }
+            if (filtrados.length === 0) {
+                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm font-semibold">Nenhum item programado.</div>`;
+                alternarTela('checklist-itens'); return;
+            }
 
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
@@ -1103,11 +1361,12 @@
 
                         badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                     } else {
-                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente de execução</span>`;
+                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold border border-rose-200">Pendente de execução</span>`;
                     }
                 }
 
-                let html = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6"><div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between"><div class="flex items-center gap-3"><span class="tracking-tight text-lg font-bold">${maq}</span><button onclick="imprimirChecklistPapel('${maq}')" class="bg-slate-700 hover:bg-slate-600 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors"><i class="fa-solid fa-print"></i> Imprimir</button></div>${badgeHeader}</div><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase"><tr><th class="p-4 w-[45%]">ITEM</th><th class="p-4 w-44">OPERADOR</th><th class="p-4 w-32">STATUS</th><th class="p-4">OBS</th><th class="p-4 text-center w-28">AÇÃO</th></tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
+                // Header da Máquina Agora tem Botão de "Ver Status Completo" ao lado de imprimir
+                let html = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6"><div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between"><div class="flex items-center gap-3"><span class="tracking-tight text-lg font-bold">${maq}</span><button onclick="abrirResumoMaquina('${maq}', '${selectedSetor}', '${periodoId}')" class="bg-blue-600 hover:bg-blue-500 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm ml-2"><i class="fa-solid fa-list-check"></i> Ver Status</button><button onclick="imprimirChecklistPapel('${maq}')" class="bg-slate-700 hover:bg-slate-600 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors"><i class="fa-solid fa-print"></i> Imprimir</button></div>${badgeHeader}</div><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase"><tr><th class="p-4 w-[45%]">ITEM</th><th class="p-4 w-44">OPERADOR</th><th class="p-4 w-32">STATUS</th><th class="p-4">OBS</th><th class="p-4 text-center w-28">AÇÃO</th></tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
                 
                 agrupado[maq].forEach((item) => {
                     const badgeObs = item.obs ? `<span class="bg-blue-50 text-blue-600 text-[10px] px-2.5 py-1 rounded-md font-bold inline-block mt-1.5"><i class="fa-solid fa-circle-info mr-1"></i>Obs: ${item.obs}</span>` : '';
@@ -1211,7 +1470,7 @@
             }
         }
 
-        // --- MÓDULOS EXTRAS PERMANECEM INALTERADOS ---
+        // --- ALMOXARIFADO / FORNO / CONFIGURAÇÕES GERAIS ---
         function imprimirChecklistPapel(maquina) {
             const printArea = document.getElementById('printArea');
             const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina));
