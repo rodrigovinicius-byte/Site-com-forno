@@ -128,9 +128,9 @@
                 </button>
                 
                 <button onclick="abrirModuloIntervencoes()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
-                    <div class="w-11 h-11 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
+                    <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Intervenções & Melhorias</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Registro direto de corretivas forçadas e modificações em equipamentos.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Histórico de OS fechadas e registro de manutenções forçadas.</p>
                 </button>
 
                 <button onclick="abrirModuloPOPs()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
@@ -151,11 +151,11 @@
         <div id="view-intervencoes" class="fade-in hidden">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div>
-                    <h2 class="font-bold text-slate-800 text-base">Histórico de Intervenções Diretas</h2>
-                    <p class="text-xs text-slate-500">Log de modificações e manutenções forçadas (sem OS prévia).</p>
+                    <h2 class="font-bold text-slate-800 text-base">Histórico de Intervenções e OS</h2>
+                    <p class="text-xs text-slate-500">Log unificado de manutenções corretivas (OS) e modificações diretas.</p>
                 </div>
-                <button onclick="abrirModalNovaIntervencao()" class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm w-full sm:w-auto justify-center">
-                    <i class="fa-solid fa-plus"></i> Registrar Intervenção
+                <button onclick="abrirModalNovaIntervencao()" class="bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm w-full sm:w-auto justify-center">
+                    <i class="fa-solid fa-plus"></i> Registrar Intervenção Manual
                 </button>
             </div>
 
@@ -168,7 +168,7 @@
                                 <th class="p-4 w-48">MÁQUINA</th>
                                 <th class="p-4 w-32">TIPO</th>
                                 <th class="p-4">DESCRIÇÃO DO QUE FOI FEITO</th>
-                                <th class="p-4 w-40">RESPONSÁVEL</th>
+                                <th class="p-4 w-40">TÉCNICO</th>
                             </tr>
                         </thead>
                         <tbody id="intervencoesTbody" class="divide-y divide-slate-100 text-xs"></tbody>
@@ -389,6 +389,61 @@
         </div>
     </div>
 
+    <!-- Modal: Detalhes de OS Específica -->
+    <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3>
+                        <p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p>
+                    </div>
+                </div>
+                <button onclick="fecharDetalhesOS()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-5 bg-white">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Máquina / Equipamento</span>
+                        <span class="block font-bold text-slate-800 text-sm" id="detOsMaquina"></span>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-1 rounded font-bold border border-emerald-200" id="detOsStatus"></span>
+                </div>
+                
+                <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 space-y-3">
+                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataAbertura"></span></div>
+                        <div><span class="block font-bold text-slate-400 uppercase">Relator</span><span class="font-semibold text-slate-700" id="detOsRelator"></span></div>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Defeito Relatado</span>
+                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p>
+                    </div>
+                </div>
+
+                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3">
+                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2">
+                        <i class="fa-solid fa-wrench"></i> Fechamento (Reparo)
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataFechamento"></span></div>
+                        <div><span class="block font-bold text-slate-400 uppercase">Técnico</span><span class="font-semibold text-slate-700" id="detOsSolucionador"></span></div>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Solução Aplicada</span>
+                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-emerald-100 font-medium" id="detOsResolucao"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
@@ -490,7 +545,20 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 
-                <!-- Menu para Programação (7 Dias) -->
+                <div id="preditivaVencidasMenu" class="hidden">
+                    <div id="listaAlertasVencidas"></div>
+                </div>
+
+                <div id="preditivaImediataMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden">
+                    <button onclick="mostrarListaPreditiva('hoje')" class="nav-card bg-white border border-amber-200 rounded-2xl p-6 shadow-sm flex flex-col items-center justify-center w-full gap-3 transition-colors hover:bg-amber-50/50">
+                        <div class="w-12 h-12 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-clock"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-base">Pendentes p/ Hoje</h4>
+                        <span class="bg-amber-500 text-white text-[10px] px-3 py-1 rounded-full font-bold uppercase tracking-wider" id="cardCountHoje">0 itens</span>
+                    </button>
+                </div>
+
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
@@ -517,8 +585,6 @@
                     </button>
                 </div>
 
-                <!-- Containers das Listas -->
-                <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
                 <div id="containerDias3" class="hidden"><div id="listaAlertasDias3"></div></div>
@@ -535,7 +601,6 @@
                 <h3 id="almoxModalTitle" class="text-xl font-bold text-slate-900">Cadastrar Novo Item</h3>
                 <input type="hidden" id="editAlmoxIndex">
                 <div class="space-y-4 font-sans text-slate-600">
-                    <!-- ... campos do almoxarifado (inalterados) ... -->
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label>
                         <div class="flex gap-2 items-center">
@@ -743,6 +808,7 @@
             renderListaIntervencoes();
         }
 
+        // --- SISTEMA DE EQUIPES ---
         function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador cadastrado</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
@@ -759,7 +825,7 @@
             return opcoes;
         }
 
-        // --- SISTEMA DE CHAMADOS (CORRETIVA) ---
+        // --- SISTEMA DE CHAMADOS E INTERVENÇÕES (CORRETIVAS) ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -868,13 +934,18 @@
             }
 
             const index = chamadosData.findIndex(c => c.id === idOS);
-            if(index !== -1) chamadosData[index].status = "Fechado";
+            if(index !== -1) {
+                chamadosData[index].status = "Fechado";
+                chamadosData[index].dataFechamento = new Date().toISOString();
+                chamadosData[index].resolucao = resolucao;
+                chamadosData[index].solucionador = solucionador;
+            }
             
             card.style.opacity = '0.5'; card.style.pointerEvents = 'none';
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE INTERVENÇÕES E MELHORIAS (CORRETIVA DIRETA) ---
+        // --- SISTEMA DE INTERVENÇÕES INDIRETAS / MELHORIAS ---
         function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -905,6 +976,7 @@
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "intervencao", dados: novaIntervencao }) });
                     showToast("Registro efetuado com sucesso!");
+                    setTimeout(() => baixarDadosDaPlanilha(), 1000);
                 } catch(e) { showToast("Salvo localmente.", "info"); }
             } else {
                 showToast("Modo Offline: Registro simulado.", "info");
@@ -918,25 +990,67 @@
 
         function renderListaIntervencoes() {
             const tbody = document.getElementById('intervencoesTbody');
-            if (intervencoesData.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhuma intervenção registrada até o momento.</td></tr>`;
+            let combined = [];
+            
+            // Junta as intervenções manuais
+            intervencoesData.forEach(i => {
+                combined.push({
+                    isOS: false, id: i.id, data: new Date(i.data), maquina: i.maquina, tipo: i.tipo,
+                    descricao: i.descricao, responsavel: i.responsavel
+                });
+            });
+            
+            // Junta as OSs Fechadas
+            chamadosData.filter(c => c.status === "Fechado").forEach(c => {
+                combined.push({
+                    isOS: true, id: c.id, data: c.dataFechamento ? new Date(c.dataFechamento) : new Date(c.data),
+                    maquina: c.maquina, tipo: "OS Fechada", descricao: c.resolucao || "Reparo realizado.",
+                    defeito: c.defeito, relator: c.relator, responsavel: c.solucionador
+                });
+            });
+            
+            combined.sort((a, b) => b.data - a.data); // Mais recentes primeiro
+            
+            if (combined.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhum histórico de manutenção registrado.</td></tr>`;
                 return;
             }
             
-            tbody.innerHTML = intervencoesData.map(i => {
-                const dataFormatada = new Date(i.data).toLocaleDateString('pt-BR') + ' às ' + new Date(i.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-                let tipoBadge = `<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold">${i.tipo}</span>`;
-                if(i.tipo === "Manutenção Forçada") tipoBadge = `<span class="bg-rose-50 text-rose-600 px-2 py-1 rounded font-bold">${i.tipo}</span>`;
+            tbody.innerHTML = combined.map(i => {
+                const dataFormatada = i.data.toLocaleDateString('pt-BR') + ' às ' + i.data.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                let tipoBadge = `<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold border border-blue-100 text-[10px]">${i.tipo}</span>`;
+                if(i.tipo === "Manutenção Forçada") tipoBadge = `<span class="bg-rose-50 text-rose-600 px-2 py-1 rounded font-bold border border-rose-100 text-[10px]">${i.tipo}</span>`;
+                if(i.isOS) tipoBadge = `<span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-bold border border-emerald-100 text-[10px]"><i class="fa-solid fa-clipboard-check"></i> OS Concluída</span>`;
                 
-                return `<tr class="hover:bg-slate-50/50">
-                    <td class="p-4 font-semibold text-slate-500">${dataFormatada}</td>
-                    <td class="p-4 font-bold text-slate-800">${i.maquina}</td>
-                    <td class="p-4">${tipoBadge}</td>
-                    <td class="p-4 text-slate-600 italic">"${i.descricao}"</td>
-                    <td class="p-4 font-medium text-slate-700">${i.responsavel}</td>
-                </tr>`;
+                let descHtml = `<span class="text-slate-600 italic">"${i.descricao}"</span>`;
+                if (i.isOS) {
+                    descHtml = `<div class="flex items-center gap-2"><span class="text-slate-600 truncate max-w-[200px]" title="${i.descricao}">${i.descricao}</span><button onclick="abrirDetalhesOS('${i.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-2 py-1 rounded text-[9px] font-bold border border-slate-200 transition-colors flex items-center gap-1 shadow-sm"><i class="fa-regular fa-file-lines"></i> Ver OS</button></div>`;
+                }
+                
+                return `<tr class="hover:bg-slate-50/50 border-b border-slate-100 last:border-0"><td class="p-4 font-semibold text-slate-500 whitespace-nowrap">${dataFormatada}</td><td class="p-4 font-bold text-slate-800">${i.maquina}</td><td class="p-4">${tipoBadge}</td><td class="p-4">${descHtml}</td><td class="p-4 font-medium text-slate-700">${i.responsavel}</td></tr>`;
             }).join('');
         }
+
+        function abrirDetalhesOS(id) {
+            const os = chamadosData.find(c => c.id === id);
+            if(!os) return;
+
+            document.getElementById('detOsId').innerText = os.id;
+            document.getElementById('detOsStatus').innerText = os.status;
+            document.getElementById('detOsMaquina').innerText = os.maquina;
+            
+            document.getElementById('detOsDataAbertura').innerText = new Date(os.data).toLocaleDateString('pt-BR') + ' às ' + new Date(os.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+            document.getElementById('detOsRelator').innerText = os.relator;
+            document.getElementById('detOsDefeito').innerText = os.defeito;
+
+            document.getElementById('detOsDataFechamento').innerText = os.dataFechamento ? (new Date(os.dataFechamento).toLocaleDateString('pt-BR') + ' às ' + new Date(os.dataFechamento).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})) : '-';
+            document.getElementById('detOsSolucionador').innerText = os.solucionador || '-';
+            document.getElementById('detOsResolucao').innerText = os.resolucao || '-';
+
+            document.getElementById('detalhesOsModal').classList.remove('hidden');
+        }
+
+        function fecharDetalhesOS() { document.getElementById('detalhesOsModal').classList.add('hidden'); }
 
         // --- SISTEMA DE ALERTAS PREDITIVOS ---
         function irParaChecklist(setor, tipoOriginal) {
@@ -985,8 +1099,7 @@
                         let dataProx = new Date(dataLog.getTime() + (tempoHoras * 60 * 60 * 1000));
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' às ' + dataProx.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
                         
-                        if (dataProx <= agora) { categoriaTarget = 'vencidas'; mensagem = "Revisão Atrasada"; } // Diário atrasado vai para vencidas agora
-                        else { categoriaTarget = 'hoje'; mensagem = "Revisão para Hoje"; } // Diário no prazo fica em hoje
+                        if (dataProx <= agora) { categoriaTarget = 'hoje'; mensagem = "Revisão Pendente"; }
                         
                         if (statusAtivo.historico) {
                             const strHoje = agora.toLocaleDateString('pt-BR');
@@ -1061,7 +1174,10 @@
             currentModalMode = alvo;
             const alertas = calcularAlertas();
             
+            const divMenuImediata = document.getElementById('preditivaImediataMenu');
             const divMenuProgramacao = document.getElementById('preditivaProgramacaoMenu');
+            const divVencidas = document.getElementById('preditivaVencidasMenu');
+            
             const modalTitle = document.getElementById('preditivaModalTitle');
             const modalDesc = document.getElementById('preditivaModalDesc');
             const modalIcon = document.getElementById('iconPreditivaModal');
@@ -1070,13 +1186,14 @@
 
             btnVoltar.classList.add('hidden'); 
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => document.getElementById(id).classList.add('hidden'));
+            divMenuImediata.classList.add('hidden'); divMenuProgramacao.classList.add('hidden'); divVencidas.classList.add('hidden');
 
             const renderLista = (arr, icone, corTexto, corBg) => {
                 if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4">Nenhum registro encontrado.</div>`;
                 return arr.map(a => {
-                    let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
-                    if(a.proxima === "Pendente" || a.alerta.includes("Atrasada") || a.alerta.includes("Pendente") || a.alerta === "Vence Hoje") {
-                        proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
+                    let proxClass = "text-emerald-700 bg-emerald-50 border-emerald-200";
+                    if(a.proxima === "Pendente" || a.alerta === "Atrasada" || a.alerta === "Revisão Pendente" || a.alerta === "Vence Hoje") {
+                        proxClass = "text-rose-700 bg-rose-50 border-rose-200";
                     }
                     
                     let detalhesH = "";
@@ -1113,29 +1230,27 @@
                 }).join('');
             };
 
-            if (alvo === 'vencidas') {
-                modalTitle.innerText = "Em Atraso / Vencidas"; modalDesc.innerText = "Manutenções que já passaram do prazo limite.";
-                modalIcon.className = "fa-solid fa-circle-xmark"; iconContainer.className = "w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-sm";
-                document.getElementById('listaAlertasVencidas').innerHTML = renderLista(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
-                document.getElementById('containerVencidas').classList.remove('hidden');
-                divMenuProgramacao.classList.add('hidden');
-            } else if (alvo === 'hoje') {
-                modalTitle.innerText = "Para Hoje"; modalDesc.innerText = "Manutenções programadas para o dia de hoje.";
+            document.getElementById('listaAlertasVencidas').innerHTML = renderLista(alertas.vencidas, '<i class="fa-solid fa-triangle-exclamation"></i>', 'text-rose-700', 'bg-rose-100');
+            document.getElementById('listaAlertasHoje').innerHTML = renderLista(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
+            document.getElementById('listaAlertasAmanha').innerHTML = renderLista(alertas.amanha, '<i class="fa-solid fa-calendar-day"></i>', 'text-blue-700', 'bg-blue-100');
+            document.getElementById('listaAlertasDias3').innerHTML = renderLista(alertas.dias3, '<i class="fa-solid fa-calendar-days"></i>', 'text-indigo-700', 'bg-indigo-100');
+            document.getElementById('listaAlertasDias7').innerHTML = renderLista(alertas.dias7, '<i class="fa-solid fa-calendar-week"></i>', 'text-purple-700', 'bg-purple-100');
+
+            if (alvo === 'imediata') {
+                modalTitle.innerText = "Atenção Imediata"; modalDesc.innerText = "Selecione a categoria para visualizar.";
                 modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
-                document.getElementById('listaAlertasHoje').innerHTML = renderLista(alertas.hoje, '<i class="fa-solid fa-clock"></i>', 'text-amber-700', 'bg-amber-100');
-                document.getElementById('containerHoje').classList.remove('hidden');
-                divMenuProgramacao.classList.add('hidden');
-            } else if (alvo === 'programacao') {
+                document.getElementById('cardCountHoje').innerText = `${alertas.hoje.length} item(ns)`;
+                divMenuImediata.classList.remove('hidden');
+            } else if (alvo === 'vencidas') {
+                modalTitle.innerText = "Em Atraso"; modalDesc.innerText = "Manutenções que já passaram do limite estabelecido.";
+                modalIcon.className = "fa-solid fa-circle-xmark"; iconContainer.className = "w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-sm";
+                divVencidas.classList.remove('hidden');
+            } else {
                 modalTitle.innerText = "Programação"; modalDesc.innerText = "Selecione a categoria para visualizar.";
                 modalIcon.className = "fa-solid fa-calendar-days"; iconContainer.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm";
                 document.getElementById('cardCountAmanha').innerText = `${alertas.amanha.length} item(ns)`;
                 document.getElementById('cardCountDias3').innerText = `${alertas.dias3.length} item(ns)`;
                 document.getElementById('cardCountDias7').innerText = `${alertas.dias7.length} item(ns)`;
-                
-                document.getElementById('listaAlertasAmanha').innerHTML = renderLista(alertas.amanha, '<i class="fa-solid fa-calendar-day"></i>', 'text-blue-700', 'bg-blue-100');
-                document.getElementById('listaAlertasDias3').innerHTML = renderLista(alertas.dias3, '<i class="fa-solid fa-calendar-days"></i>', 'text-indigo-700', 'bg-indigo-100');
-                document.getElementById('listaAlertasDias7').innerHTML = renderLista(alertas.dias7, '<i class="fa-solid fa-calendar-week"></i>', 'text-purple-700', 'bg-purple-100');
-                
                 divMenuProgramacao.classList.remove('hidden');
             }
 
@@ -1143,21 +1258,30 @@
         }
 
         function mostrarListaPreditiva(tipo) {
+            document.getElementById('preditivaImediataMenu').classList.add('hidden');
             document.getElementById('preditivaProgramacaoMenu').classList.add('hidden');
             document.getElementById('btnVoltarPreditiva').classList.remove('hidden');
             
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => document.getElementById(id).classList.add('hidden'));
 
-            if (tipo === 'amanha') { document.getElementById('containerAmanha').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Vencem Amanhã"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o dia seguinte."; } 
-            else if (tipo === 'dias3') { document.getElementById('containerDias3').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Em até 3 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o curto prazo."; } 
-            else if (tipo === 'dias7') { document.getElementById('containerDias7').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Em até 7 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para fechar a semana."; }
+            if (tipo === 'vencidas') { document.getElementById('containerVencidas').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Vencidas / Atrasadas"; document.getElementById('preditivaModalDesc').innerText = "Itens que já passaram do prazo."; } 
+            else if (tipo === 'hoje') { document.getElementById('containerHoje').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Pendentes p/ Hoje"; document.getElementById('preditivaModalDesc').innerText = "Itens que devem ser executados hoje."; } 
+            else if (tipo === 'amanha') { document.getElementById('containerAmanha').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 1 dia (Amanhã)"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o dia seguinte."; } 
+            else if (tipo === 'dias3') { document.getElementById('containerDias3').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 3 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para o curto prazo."; } 
+            else if (tipo === 'dias7') { document.getElementById('containerDias7').classList.remove('hidden'); document.getElementById('preditivaModalTitle').innerText = "Por 7 dias"; document.getElementById('preditivaModalDesc').innerText = "Manutenções programadas para fechar a semana."; }
         }
 
         function voltarPreditiva() {
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => document.getElementById(id).classList.add('hidden'));
             document.getElementById('btnVoltarPreditiva').classList.add('hidden'); 
-            document.getElementById('preditivaProgramacaoMenu').classList.remove('hidden');
-            document.getElementById('preditivaModalTitle').innerText = "Programação"; 
+            
+            if (currentModalMode === 'programacao') {
+                document.getElementById('preditivaProgramacaoMenu').classList.remove('hidden');
+                document.getElementById('preditivaModalTitle').innerText = "Programação"; 
+            } else {
+                document.getElementById('preditivaImediataMenu').classList.remove('hidden');
+                document.getElementById('preditivaModalTitle').innerText = "Atenção Imediata"; 
+            }
             document.getElementById('preditivaModalDesc').innerText = "Selecione a categoria para visualizar.";
         }
 
@@ -1217,9 +1341,7 @@
             document.getElementById('resumoMaquinaModal').classList.remove('hidden');
         }
 
-        function fecharResumoMaquina() {
-            document.getElementById('resumoMaquinaModal').classList.add('hidden');
-        }
+        function fecharResumoMaquina() { document.getElementById('resumoMaquinaModal').classList.add('hidden'); }
 
         // --- NÚCLEO DA APLICAÇÃO ---
         async function baixarDadosDaPlanilha() {
@@ -1241,10 +1363,7 @@
         }
 
         function carregarChecklistMock() {
-            equipesData = [
-                { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
-                { setor: "Manutenção", membros: ["José", "Carlos"] }
-            ];
+            equipesData = [ { setor: "Produção", membros: ["Rodrigo", "Claudio"] }, { setor: "Manutenção", membros: ["José", "Carlos"] } ];
             originalDatabase = [
                 { item: "Verificar Oleo", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", tempoReanalise: 2, obs: "" },
                 { item: "Filtros", maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Semanal", obs: "" },
@@ -1259,10 +1378,8 @@
                 { maquina: "Robô Prensa - ROB-PR001", setor: "Produção", periodicidade: "Diária", ultimoRegistro: ontem, operador: "Rodrigo - Produção", historico: [{data: ontem, operador: "Rodrigo - Produção"}], vencido: true, itensStatus: { "Verificar Oleo": [{ data: ontem, operador: "Rodrigo - Produção" }] } },
                 { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "José - Manutenção", historico: [{data: preventinaFeitaRecente, operador: "José - Manutenção"}], vencido: false, itensStatus: { "Aperto Correias": [{ data: preventinaFeitaRecente, operador: "José - Manutenção" }] } }
             ];
-            chamadosData = [
-                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
-            ];
-            intervencoesData = [];
+            chamadosData = [ { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Fechado", dataFechamento: agora.toISOString(), resolucao: "Limpeza da pista de rolamento da faca efetuada.", solucionador: "José - Manutenção" } ];
+            intervencoesData = [ { data: ontem, maquina: "Guilhotina - GUI-001", tipo: "Melhoria", descricao: "Trocado rolamento Zz por blindado.", responsavel: "José - Manutenção" } ];
             renderSetorCards(); atualizarKPIs();
         }
 
@@ -1279,8 +1396,7 @@
                 let pendentes = 0;
                 maquinasDoSetor.forEach(maq => {
                     const st = checklistStatus.filter(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(setor));
-                    if (st.length === 0) pendentes++;
-                    else if (st.some(s => s.vencido)) pendentes++;
+                    if (st.length === 0) pendentes++; else if (st.some(s => s.vencido)) pendentes++;
                 });
 
                 const badge = pendentes > 0 ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold mt-3">${pendentes} pendente(s)</span>` : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold mt-3">Tudo conforme</span>`;
@@ -1296,14 +1412,8 @@
             const map = [ { id: "diaria", label: "Diária/ Intradiária" }, { id: "semanal", label: "Semanal" }, { id: "quinzenal", label: "Quinzenal" }, { id: "mensal", label: "Mensal" } ];
             const filterSetor = normalizar(setor);
 
-            const mapFiltrado = map.filter(p => {
-                return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id));
-            });
-
-            if(mapFiltrado.length === 0) {
-                container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400 font-medium">Nenhum checklist programado para este setor.</div>`;
-                return;
-            }
+            const mapFiltrado = map.filter(p => { return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id)); });
+            if(mapFiltrado.length === 0) { container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400 font-medium">Nenhum checklist programado.</div>`; return; }
 
             container.innerHTML = mapFiltrado.map(p => {
                 const maquinas = [...new Set(originalDatabase.filter(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id)).map(i => i.maquina))];
@@ -1324,10 +1434,7 @@
             const container = document.getElementById("checklistContainer"); container.innerHTML = "";
 
             const filtrados = originalDatabase.filter(x => normalizar(x.setor) === normalizar(selectedSetor) && matchPeriodicidade(x.periodicidade, periodoId));
-            if (filtrados.length === 0) {
-                container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm font-semibold">Nenhum item programado.</div>`;
-                alternarTela('checklist-itens'); return;
-            }
+            if (filtrados.length === 0) { container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm font-semibold">Nenhum item programado.</div>`; alternarTela('checklist-itens'); return; }
 
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
@@ -1350,7 +1457,7 @@
 
                         badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                     } else {
-                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold">Pendente de execução</span>`;
+                        badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold border border-rose-200">Pendente de execução</span>`;
                     }
                 }
 
