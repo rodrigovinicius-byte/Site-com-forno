@@ -70,7 +70,6 @@
         </div>
 
         <div id="view-home" class="fade-in">
-            <!-- 4 BALÕES SELETORES DO DASHBOARD -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -111,7 +110,6 @@
 
             </div>
 
-            <!-- MÓDULOS PRINCIPAIS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <button onclick="abrirModuloChecklist()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clipboard-check text-xl"></i></div>
@@ -314,7 +312,6 @@
         </div>
     </main>
 
-    <!-- Modal: Configurar Conexão -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -341,7 +338,6 @@
         </div>
     </div>
 
-    <!-- Modal: Abertura de Chamado (OS) -->
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -386,7 +382,6 @@
         </div>
     </div>
 
-    <!-- Modal: Detalhes de OS Específica -->
     <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -441,7 +436,6 @@
         </div>
     </div>
 
-    <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
@@ -460,7 +454,6 @@
         </div>
     </div>
 
-    <!-- Modal: Registro de Intervenção/Melhoria -->
     <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -505,7 +498,6 @@
         </div>
     </div>
 
-    <!-- Modal: Resumo/Status Completo da Máquina (Z-index alto para sobrepor alertas) -->
     <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -524,7 +516,6 @@
         </div>
     </div>
 
-    <!-- Modal: Central de Alertas Preditiva / Preventiva (Balões) -->
     <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -542,7 +533,6 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 
-                <!-- Menu Programação (7 Dias) -->
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
@@ -569,7 +559,6 @@
                     </button>
                 </div>
 
-                <!-- Containers das Listas Diretas -->
                 <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
@@ -580,7 +569,6 @@
         </div>
     </div>
 
-    <!-- Modal: Cadastrar Novo Item Almoxarifado -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -646,7 +634,6 @@
         </div>
     </div>
 
-    <!-- Modal: Registrar Movimentação -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
@@ -690,7 +677,6 @@
         </div>
     </div>
 
-    <!-- Modal: Imagens -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -700,7 +686,6 @@
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO (NOVO LAYOUT PAISAGEM) -->
     <div id="printArea" class="hidden"></div>
 
     <script>
@@ -1685,8 +1670,14 @@
         function imprimirChecklistPapel(maquina, periodo) {
             const printArea = document.getElementById('printArea');
             const pId = periodo ? normalizar(periodo) : normalizar(selectedPeriodo);
+            const sId = normalizar(selectedSetor); 
             
-            const filtrados = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(maquina) && matchPeriodicidade(x.periodicidade, pId));
+            const filtrados = originalDatabase.filter(x => 
+                normalizar(x.maquina) === normalizar(maquina) && 
+                matchPeriodicidade(x.periodicidade, pId) && 
+                normalizar(x.setor) === sId
+            );
+
             if(filtrados.length === 0) {
                 showToast("Não foi possível gerar a impressão (sem itens).", "error");
                 return;
@@ -1719,7 +1710,7 @@
                 </div>
                 <div style="text-align: right;">
                     <div style="font-size: 16px; font-weight: bold; text-transform: uppercase; color: #0f172a;">${maquina}</div>
-                    <div style="font-size: 11px; font-weight: bold; color: #475569; margin-top: 2px;">PERÍODO: ${periodicidadeStr}</div>
+                    <div style="font-size: 11px; font-weight: bold; color: #475569; margin-top: 2px;">PERÍODO: ${periodicidadeStr} | SETOR: ${selectedSetor.toUpperCase()}</div>
                 </div>
             </div>
             <table class="t-print">
@@ -1754,11 +1745,12 @@
                     `).join('')}
                 </tr>
                 <tr style="border-bottom: 2px solid #000;">
-                    <td class="t-light" style="height: 38px; vertical-align: top; padding-top: 6px;">
-                        OBS:<br>
-                        <span style="font-weight: normal; font-size: 9px; font-style: italic; color: #334155;">${obsText}</span>
+                    <td class="t-light" style="height: 38px; vertical-align: middle; text-align: center;">
+                        OBS:
                     </td>
-                    <td colspan="7" style="border: 1px solid black;"></td>
+                    <td colspan="7" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155;">
+                        ${obsText}
+                    </td>
                 </tr>
                 <tr style="border: none !important;">
                     <td colspan="8" style="height: 15px; border: none !important; background: white !important;"></td>
@@ -1769,7 +1761,6 @@
             tableHtml += `</table>`;
             printArea.innerHTML = tableHtml;
             
-            // Timeout para dar tempo de renderizar antes da aba de print
             setTimeout(() => { window.print(); }, 200);
         }
 
