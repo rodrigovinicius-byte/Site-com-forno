@@ -70,6 +70,7 @@
         </div>
 
         <div id="view-home" class="fade-in">
+            <!-- 4 BALÕES SELETORES DO DASHBOARD -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -110,6 +111,7 @@
 
             </div>
 
+            <!-- MÓDULOS PRINCIPAIS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <button onclick="abrirModuloChecklist()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clipboard-check text-xl"></i></div>
@@ -312,6 +314,7 @@
         </div>
     </main>
 
+    <!-- Modal: Configurar Conexão -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -338,6 +341,7 @@
         </div>
     </div>
 
+    <!-- Modal: Abertura de Chamado (OS) -->
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -382,6 +386,7 @@
         </div>
     </div>
 
+    <!-- Modal: Detalhes de OS Específica -->
     <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -436,6 +441,7 @@
         </div>
     </div>
 
+    <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
@@ -454,6 +460,7 @@
         </div>
     </div>
 
+    <!-- Modal: Registro de Intervenção/Melhoria -->
     <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -498,6 +505,7 @@
         </div>
     </div>
 
+    <!-- Modal: Resumo/Status Completo da Máquina (Z-index alto para sobrepor alertas) -->
     <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -516,6 +524,7 @@
         </div>
     </div>
 
+    <!-- Modal: Central de Alertas Preditiva / Preventiva (Balões) -->
     <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -533,6 +542,7 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 
+                <!-- Menu Programação (7 Dias) -->
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
@@ -559,6 +569,7 @@
                     </button>
                 </div>
 
+                <!-- Containers das Listas Diretas -->
                 <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
@@ -569,6 +580,7 @@
         </div>
     </div>
 
+    <!-- Modal: Cadastrar Novo Item Almoxarifado -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -634,6 +646,7 @@
         </div>
     </div>
 
+    <!-- Modal: Registrar Movimentação -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
@@ -677,6 +690,7 @@
         </div>
     </div>
 
+    <!-- Modal: Imagens -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -686,6 +700,7 @@
         </div>
     </div>
 
+    <!-- ÁREA DE IMPRESSÃO (NOVO LAYOUT PAISAGEM) -->
     <div id="printArea" class="hidden"></div>
 
     <script>
@@ -1433,7 +1448,9 @@
             originalDatabase = [
                 { item: "Verificar Oleo Canola", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", tempoReanalise: 2, obs: "" },
                 { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
-                { item: "Verificar Aperto Dos Parafusos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
+                { item: "Verificar Aperto Dos Parafusos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
+                { item: "Verificar folga nas Engrenagens", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
+                { item: "Verificar e completar Fluidos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
             ];
             
             const agora = new Date();
@@ -1666,7 +1683,7 @@
             }
         }
 
-        // --- IMPRESSÃO PAISAGEM / GRID 7 DIAS COM INSTRUÇÃO NO CABEÇALHO ---
+        // --- IMPRESSÃO PAISAGEM / GRID DINÂMICO COM QUEBRA EVITADA ---
         function imprimirChecklistPapel(maquina, periodo) {
             const printArea = document.getElementById('printArea');
             const pId = periodo ? normalizar(periodo) : normalizar(selectedPeriodo);
@@ -1685,11 +1702,28 @@
 
             const periodicidadeStr = filtrados[0].periodicidade.toUpperCase();
             
-            const dates = Array.from({length: 7}, (_, i) => {
+            // Lógica para determinar a quantidade de colunas e o avanço dos dias
+            let numCols = 7;
+            let stepDays = 1;
+            let labelTopo = "DIAS DA SEMANA";
+
+            if (pId !== 'diaria') {
+                numCols = 4;
+                stepDays = diasParaPeriodicidade(pId);
+                if (pId === 'semanal') labelTopo = "PRÓXIMAS SEMANAS";
+                else if (pId === 'quinzenal') labelTopo = "PRÓXIMAS QUINZENAS";
+                else if (pId === 'mensal') labelTopo = "PRÓXIMOS MESES";
+                else labelTopo = "PRÓXIMAS DATAS";
+            }
+
+            const dates = Array.from({length: numCols}, (_, i) => {
                 const d = new Date();
-                d.setDate(d.getDate() + i);
+                d.setDate(d.getDate() + (i * stepDays));
                 return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
             });
+
+            const colWidth = 82 / numCols; // Para as colunas dividirem o espaço corretamente (A primeira sempre tem 18%)
+            const colspanValue = numCols;
 
             let tableHtml = `
             <style>
@@ -1698,11 +1732,14 @@
                 .t-dark { background-color: #0b132b !important; color: #ffffff !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 .t-light { font-weight: bold; background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 .c-box { display: inline-block; width: 10px; height: 10px; border: 1px solid #000; margin-right: 4px; vertical-align: middle; background-color: #fff; }
+                .item-block { page-break-inside: avoid; break-inside: avoid; } /* ESSENCIAL para não quebrar a tabela na metade do item */
+                
                 @media print {
                     @page { size: landscape; margin: 8mm; }
                     body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 }
             </style>
+            
             <div style="font-size: 10px; margin-bottom: 15px; font-family: Arial; display: flex; justify-content: space-between; align-items: flex-start;">
                 <div style="line-height: 1.5; text-align: left;">
                     <div style="font-size: 14px; font-weight: bold; color: #0f172a; margin-bottom: 2px;">DOCUMENTO: CHECKLIST MANUTENÇÃO / PRODUÇÃO</div>
@@ -1715,46 +1752,53 @@
                     <div style="font-size: 16px; font-weight: bold; text-transform: uppercase; color: #0f172a;">${maquina}</div>
                 </div>
             </div>
+            
             <table class="t-print">
-                <tr>
-                    <td class="t-dark" style="width: 18%;">DIAS DA SEMANA</td>
-                    ${dates.map(d => `<td class="t-light" style="text-align: center; width: 11.7%; font-size: 11px;">${d}</td>`).join('')}
-                </tr>
+                <thead>
+                    <tr>
+                        <td class="t-dark" style="width: 18%;">${labelTopo}</td>
+                        ${dates.map(d => `<td class="t-light" style="text-align: center; width: ${colWidth}%; font-size: 11px;">${d}</td>`).join('')}
+                    </tr>
+                </thead>
             `;
 
             filtrados.forEach(item => {
                 let obsText = item.obs ? item.obs : "";
+                
+                // Usando TBODY isolado para que a impressão não quebre no meio do item (page-break-inside)
                 tableHtml += `
-                <tr>
-                    <td class="t-light" style="font-size: 11px; text-transform: uppercase;">ITEM</td>
-                    <td colspan="7" style="font-size: 11px; font-weight: bold;">
-                        ${item.item}
-                    </td>
-                </tr>
-                <tr>
-                    <td class="t-light">Operador / Manutentor</td>
-                    ${dates.map(() => `<td></td>`).join('')}
-                </tr>
-                <tr>
-                    <td class="t-light">Status</td>
-                    ${dates.map(() => `
-                        <td style="text-align: center; padding: 8px 2px;">
-                            <div style="margin-bottom: 6px;"><span class="c-box"></span> OK</div>
-                            <div><span class="c-box"></span> Problema</div>
+                <tbody class="item-block">
+                    <tr>
+                        <td class="t-light" style="font-size: 11px; text-transform: uppercase;">ITEM</td>
+                        <td colspan="${colspanValue}" style="font-size: 11px; font-weight: bold;">
+                            ${item.item}
                         </td>
-                    `).join('')}
-                </tr>
-                <tr style="border-bottom: 2px solid #000;">
-                    <td class="t-light" style="vertical-align: middle; padding: 4px 6px;">
-                        OBS
-                    </td>
-                    <td colspan="7" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155; height: 38px;">
-                        ${obsText}
-                    </td>
-                </tr>
-                <tr style="border: none !important;">
-                    <td colspan="8" style="height: 15px; border: none !important; background: white !important;"></td>
-                </tr>
+                    </tr>
+                    <tr>
+                        <td class="t-light">Operador / Manutentor</td>
+                        ${dates.map(() => `<td></td>`).join('')}
+                    </tr>
+                    <tr>
+                        <td class="t-light">Status</td>
+                        ${dates.map(() => `
+                            <td style="text-align: center; padding: 8px 2px;">
+                                <div style="margin-bottom: 6px;"><span class="c-box"></span> OK</div>
+                                <div><span class="c-box"></span> Problema</div>
+                            </td>
+                        `).join('')}
+                    </tr>
+                    <tr style="border-bottom: 2px solid #000;">
+                        <td class="t-light" style="vertical-align: middle; padding: 4px 6px;">
+                            OBS
+                        </td>
+                        <td colspan="${colspanValue}" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155; height: 38px;">
+                            ${obsText}
+                        </td>
+                    </tr>
+                    <tr style="border: none !important;">
+                        <td colspan="${colspanValue + 1}" style="height: 15px; border: none !important; background: white !important;"></td>
+                    </tr>
+                </tbody>
                 `;
             });
 
