@@ -26,10 +26,8 @@
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col relative overflow-x-hidden text-slate-800">
 
-    <!-- Ajuste no Toast para não estourar a tela no mobile -->
     <div id="toastContainer" class="fixed top-5 left-5 right-5 sm:left-auto sm:right-5 z-[9999] flex flex-col gap-3 pointer-events-none sm:max-w-sm font-sans"></div>
 
-    <!-- CABEÇALHO CORRIGIDO E RESPONSIVO PARA MOBILE -->
     <header class="bg-[#0b132b] text-white shadow-md border-b border-slate-800 sticky top-0 z-40 no-print">
         <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             
@@ -76,7 +74,6 @@
         </div>
 
         <div id="view-home" class="fade-in">
-            <!-- 4 BALÕES SELETORES DO DASHBOARD -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -117,7 +114,6 @@
 
             </div>
 
-            <!-- MÓDULOS PRINCIPAIS -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <button onclick="abrirModuloChecklist()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clipboard-check text-xl"></i></div>
@@ -143,12 +139,20 @@
                     <p class="text-xs text-slate-500 leading-relaxed">Guias de execução passo a passo de bloqueios de segurança e LOTO.</p>
                 </button>
 
-                <button onclick="abrirModuloForno()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
-                    <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-fire text-xl"></i></div>
-                    <h2 class="font-bold text-slate-800 mb-1.5 text-base">Curva do Forno</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Parametrização detalhada das bancadas e tempo de encharque térmico.</p>
+                <button onclick="abrirModuloMaquinas()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-gears text-xl"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1.5 text-base">Máquinas & Parâmetros</h2>
+                    <p class="text-xs text-slate-500 leading-relaxed">Ajustes de processo, setup de fornos, gases e curvas de temperatura.</p>
                 </button>
             </div>
+        </div>
+
+        <div id="view-maquinas-selecao" class="fade-in hidden">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6">
+                <h2 class="font-bold text-slate-800 text-base">Supervisão de Processos</h2>
+                <p class="text-xs text-slate-500">Selecione o equipamento abaixo para acessar o painel de parâmetros (IHM).</p>
+            </div>
+            <div id="listaMaquinasParametros" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
         </div>
 
         <div id="view-intervencoes" class="fade-in hidden">
@@ -245,82 +249,139 @@
             <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </div>
 
-        <div id="view-forno" class="fade-in hidden">
+        <div id="view-forno-detalhes" class="fade-in hidden">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-sliders text-orange-600"></i> Parâmetros do Processo
+                
+                <div class="lg:col-span-4 space-y-6">
+                    
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-orange-600"></i> Setup e Dimensões
+                            </h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Modo do Forno (Atmosfera)</label>
+                                <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                    <option value="aco-304">Produção: Aço Inoxidável 304</option>
+                                    <option value="aco-201">Produção: Aço Inoxidável 201</option>
+                                    <option value="estabilizacao">Repasso: Estabilização (8 a 12h)</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tam. Cuba (mm)</label>
+                                    <input type="number" id="fornoPecaComprimento" value="700" min="10" max="2000" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaço L/L (mm)</label>
+                                    <input type="number" id="fornoEspacamento" value="40" min="0" max="1000" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                    <span>Espessura da Chapa</span>
+                                    <span class="text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded" id="valEspessura">0.8 mm</span>
+                                </label>
+                                <input type="range" id="fornoEspessura" min="0.4" max="5.0" step="0.1" value="0.8" oninput="calcularParametrosForno()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-md space-y-4 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 opacity-5 text-6xl"><i class="fa-solid fa-flask"></i></div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2 relative z-10 border-b border-slate-700 pb-2">
+                            <i class="fa-solid fa-wind text-cyan-400"></i> Quebrador de Amônia (H2)
                         </h3>
-                    </div>
-                    <div id="containerNormalParams" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Material da Peça</label>
-                            <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
-                                <option value="aco-304">Aço Inoxidável AISI 304</option>
-                                <option value="aco-201">Aço Inoxidável AISI 201</option>
-                            </select>
-                        </div>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="grid grid-cols-2 gap-4 relative z-10">
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tamanho (mm)</label>
-                                <input type="number" id="fornoPecaComprimento" value="150" min="10" max="2000" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Temp. Quebra</span>
+                                <span class="block text-xl font-bold text-rose-500 mt-1">820 °C</span>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaçamento (mm)</label>
-                                <input type="number" id="fornoEspacamento" value="50" min="0" max="1000" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Vazão (m³/H)</label>
+                                <input type="number" id="fornoVazaoGas" value="45" min="0" max="60" oninput="calcularParametrosForno()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none text-center font-bold">
                             </div>
                         </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
-                                <span>Espessura da Parede/Chapa</span>
-                                <span class="text-blue-600 font-bold" id="valEspessura">2.5 mm</span>
-                            </label>
-                            <input type="range" id="fornoEspessura" min="0.5" max="20" step="0.5" value="2.5" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                        <div class="pt-2 border-t border-slate-700 relative z-10">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bancada de Filtros</span>
+                                <span class="text-[9px] bg-slate-800 px-2 py-0.5 rounded font-bold text-slate-300 border border-slate-700">Ciclo: 168h</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="flex-1 bg-cyan-600 text-white text-xs font-bold py-2 rounded-lg shadow border border-cyan-500">Bancada A (Ativa)</button>
+                                <button class="flex-1 bg-slate-800 text-slate-400 text-xs font-bold py-2 rounded-lg shadow border border-slate-700">Bancada B (300°C)</button>
+                            </div>
+                            <p class="text-[9px] text-slate-400 mt-2 italic text-center">Bancada em repouso deve ser aquecida a 300°C para purga.</p>
                         </div>
-                    </div>
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
-                            <span>Frequência da Esteira</span>
-                            <span class="text-orange-600 font-bold" id="valFrequencia">35.0 Hz</span>
-                        </label>
-                        <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="35" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
                     </div>
                 </div>
 
                 <div class="lg:col-span-8 space-y-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-area text-blue-600"></i> Diagrama das Zonas Industriais (28,50 m)
-                        </h3>
-                        <div class="grid grid-cols-12 border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-[10px] text-white">
-                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1"><span>Entrada</span></div>
-                            <div class="col-span-3 bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1"><span> Pré-Aq.</span></div>
-                            <div class="col-span-2 bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1"><span class="animate-pulse"> Recoz.</span></div>
-                            <div class="col-span-5 bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1"><span> Resfriamento</span></div>
-                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center p-1"><span>Saída</span></div>
+                    
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Velocidade Atual</span>
+                            <span class="block text-xl font-bold text-slate-800 mt-1" id="fornoVelocidade">0,80</span>
+                            <span class="block text-[9px] text-slate-400 font-medium">metros / min</span>
                         </div>
-                        <div class="border rounded-xl p-3 bg-slate-100">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-wider" id="labelSimulacaoConveyor">Simulação da Esteira</span>
-                            <div class="h-10 w-full bg-slate-200 rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
+                            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Tempo de Ciclo</span>
+                            <span class="block text-xl font-bold text-slate-800 mt-1" id="fornoTempoCiclo">48</span>
+                            <span class="block text-[9px] text-slate-400 font-medium">minutos no forno</span>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm text-center relative overflow-hidden">
+                            <div class="absolute -right-2 -top-2 opacity-10 text-4xl"><i class="fa-solid fa-cubes-stacked"></i></div>
+                            <span class="block text-[9px] font-bold text-blue-600 uppercase tracking-wider relative z-10">Carga Simultânea</span>
+                            <span class="block text-2xl font-black text-blue-700 mt-1 relative z-10" id="fornoCapacidade">51</span>
+                            <span class="block text-[9px] text-blue-600/80 font-medium relative z-10">Peças dentro do forno</span>
+                        </div>
+                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 shadow-sm text-center relative overflow-hidden">
+                            <div class="absolute -right-2 -top-2 opacity-10 text-4xl"><i class="fa-solid fa-stopwatch"></i></div>
+                            <span class="block text-[9px] font-bold text-emerald-600 uppercase tracking-wider relative z-10">Produtividade</span>
+                            <span class="block text-2xl font-black text-emerald-700 mt-1 relative z-10" id="fornoProdutividade">64</span>
+                            <span class="block text-[9px] text-emerald-600/80 font-medium relative z-10">Peças prontas / hora</span>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Velocidade</span>
-                            <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoVelocidade">0,45 m/min</span>
+
+                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="block text-xs font-bold text-orange-900 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-gears"></i> Controle do Inversor da Esteira
+                            </label>
+                            <span class="text-orange-700 font-black text-lg bg-orange-200 px-3 py-1 rounded-lg border border-orange-300" id="valFrequencia">32.0 Hz</span>
                         </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider" id="fornoMetricLabelCiclo">Tempo de Ciclo</span>
-                            <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoTempoCiclo">63 min</span>
+                        <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="32" oninput="calcularParametrosForno()" class="w-full h-3 bg-orange-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
+                        <div id="alertaInteligenteFrequencia" class="mt-3 min-h-[20px] bg-white p-2.5 rounded-lg border border-orange-100"></div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-temperature-arrow-up text-rose-600"></i> Zonas de Aquecimento (Setpoint)
+                        </h3>
+                        
+                        <div class="grid grid-cols-5 gap-2 text-center" id="blocosResistencias">
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R1</span><span class="text-lg font-black text-rose-700" id="setR1">1050°</span></div>
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R2</span><span class="text-lg font-black text-rose-700" id="setR2">1080°</span></div>
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R3</span><span class="text-lg font-black text-rose-700" id="setR3">1080°</span></div>
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R4</span><span class="text-lg font-black text-rose-700" id="setR4">1080°</span></div>
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R5</span><span class="text-lg font-black text-rose-700" id="setR5">1060°</span></div>
+                        </div>
+
+                        <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 mt-4">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Visão Física da Esteira (Ocupação em ~38 metros)</span>
+                            </div>
+                            <div class="h-10 w-full bg-slate-200 rounded-lg flex items-center px-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
     </main>
 
-    <!-- Modal: Configurar Conexão -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -347,7 +408,6 @@
         </div>
     </div>
 
-    <!-- Modal: Abertura de Chamado (OS) -->
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -392,7 +452,6 @@
         </div>
     </div>
 
-    <!-- Modal: Detalhes de OS Específica -->
     <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -447,7 +506,6 @@
         </div>
     </div>
 
-    <!-- Modal: Gerenciamento de Chamados Abertos (OS) -->
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
@@ -466,7 +524,6 @@
         </div>
     </div>
 
-    <!-- Modal: Registro de Intervenção/Melhoria -->
     <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -511,7 +568,6 @@
         </div>
     </div>
 
-    <!-- Modal: Resumo/Status Completo da Máquina (Z-index alto para sobrepor alertas) -->
     <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -530,7 +586,6 @@
         </div>
     </div>
 
-    <!-- Modal: Central de Alertas Preditiva / Preventiva (Balões) -->
     <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -548,7 +603,6 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 
-                <!-- Menu Programação (7 Dias) -->
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
                         <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
@@ -575,10 +629,8 @@
                     </button>
                 </div>
 
-                <!-- Menu Para Hoje (Setores) -->
                 <div id="preditivaHojeMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden"></div>
 
-                <!-- Containers das Listas Diretas -->
                 <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
@@ -589,7 +641,6 @@
         </div>
     </div>
 
-    <!-- Modal: Cadastrar Novo Item Almoxarifado -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -655,7 +706,6 @@
         </div>
     </div>
 
-    <!-- Modal: Registrar Movimentação -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
@@ -699,7 +749,6 @@
         </div>
     </div>
 
-    <!-- Modal: Imagens -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -709,7 +758,6 @@
         </div>
     </div>
 
-    <!-- ÁREA DE IMPRESSÃO (NOVO LAYOUT PAISAGEM) -->
     <div id="printArea" class="hidden"></div>
 
     <script>
@@ -758,7 +806,7 @@
         }
 
         function alternarTela(novaTela) {
-            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'forno', 'intervencoes'];
+            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'maquinas-selecao', 'forno-detalhes', 'intervencoes'];
             telas.forEach(t => {
                 const el = document.getElementById(`view-${t}`);
                 if(el) el.classList.add('hidden');
@@ -779,8 +827,10 @@
                     headerTitle.innerText = "Almoxarifado Técnico"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
                 } else if (novaTela === 'pops') {
                     headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO";
-                } else if (novaTela === 'forno') {
-                    headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
+                } else if (novaTela === 'maquinas-selecao') {
+                    headerTitle.innerText = "Máquinas & Parâmetros"; headerSubtitle.innerText = "Grupo TBX · Seleção de Equipamento";
+                } else if (novaTela === 'forno-detalhes') {
+                    headerTitle.innerText = "HMI: Forno Contínuo de Recozimento"; headerSubtitle.innerText = "Grupo TBX · Controle de Atmosfera e Aquecimento";
                 } else if (novaTela === 'intervencoes') {
                     headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta";
                 } else {
@@ -792,14 +842,138 @@
         function voltar() {
             if (currentView === 'checklist-itens') alternarTela('checklist-periodo');
             else if (currentView === 'checklist-periodo') alternarTela('checklist-setor');
+            else if (currentView === 'forno-detalhes') alternarTela('maquinas-selecao');
             else alternarTela('home');
         }
 
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
-        function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
         function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
+
+        // --- SISTEMA DE MÁQUINAS E PARÂMETROS ---
+        function abrirModuloMaquinas() { 
+            alternarTela('maquinas-selecao'); 
+            const container = document.getElementById('listaMaquinasParametros');
+            let maquinasUnicas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Forno de Recozimento Contínuo", "Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
+            
+            container.innerHTML = maquinasUnicas.map(maq => {
+                let isForno = normalizar(maq).includes('forno');
+                let icone = isForno ? 'fa-fire' : 'fa-microchip';
+                let cor = isForno ? 'text-orange-600 bg-orange-100' : 'text-slate-600 bg-slate-100';
+                
+                return `
+                <button onclick="selecionarMaquinaParametros('${maq}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-10 h-10 rounded-xl ${cor} flex items-center justify-center mb-3 shadow-sm"><i class="fa-solid ${icone} text-lg"></i></div>
+                    <h3 class="font-bold text-slate-800 text-sm mb-1">${maq}</h3>
+                    <p class="text-[10px] text-slate-500">Acessar painel de controle</p>
+                </button>
+                `;
+            }).join('');
+        }
+
+        function selecionarMaquinaParametros(maquina) {
+            if (normalizar(maquina).includes('forno')) {
+                alternarTela('forno-detalhes');
+                calcularParametrosForno();
+            } else {
+                showToast(`Painel para "${maquina}" em desenvolvimento.`, "info");
+            }
+        }
+
+        // CÁLCULO FÍSICO DO FORNO
+        function calcularParametrosForno() {
+            const material = document.getElementById('fornoMaterial').value;
+            const espessura = parseFloat(document.getElementById('fornoEspessura').value); 
+            const freq = parseFloat(document.getElementById('fornoFrequencia').value); 
+            const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value) || 1; 
+            const espacamento = parseFloat(document.getElementById('fornoEspacamento').value) || 0; 
+            const vazaoGas = document.getElementById('fornoVazaoGas').value;
+            
+            document.getElementById('valEspessura').innerText = `${espessura.toFixed(1)} mm`; 
+            document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
+            
+            // Fator de conversão fictício aproximado (32Hz rodando em ~48 min os 38m = ~0.8m/min)
+            const velocidadeEsteira = freq * 0.025; // m/min
+            const velocidadeMMporMin = velocidadeEsteira * 1000; // mm/min
+            const comprimentoFornoMM = 38000; // ~38 metros (Baseado no seu dado de 50 peças x 74cm)
+            const tempoTotalCiclo = comprimentoFornoMM / velocidadeMMporMin; // em minutos
+            
+            const espacoPorPeca = compPeca + espacamento;
+            let capacidade = 0;
+            let produtividadeHora = 0;
+            
+            if (espacoPorPeca > 0) {
+                capacidade = Math.floor(comprimentoFornoMM / espacoPorPeca);
+                produtividadeHora = Math.floor((velocidadeMMporMin * 60) / espacoPorPeca);
+            }
+
+            // Define Temperaturas baseadas no Material
+            let r1="1050°", r2="1080°", r3="1080°", r4="1080°", r5="1060°";
+            if(material === "aco-201") {
+                r1="1020°"; r2="1060°"; r3="1060°"; r4="1060°"; r5="1040°";
+            } else if (material === "estabilizacao") {
+                r1="1000°"; r2="1000°"; r3="1000°"; r4="1000°"; r5="1000°";
+                showToast("Modo de Estabilização: Passar peças repetidamente (8 a 12h).", "info");
+            }
+            document.getElementById('setR1').innerText = r1;
+            document.getElementById('setR2').innerText = r2;
+            document.getElementById('setR3').innerText = r3;
+            document.getElementById('setR4').innerText = r4;
+            document.getElementById('setR5').innerText = r5;
+
+            // Assistente Térmico
+            let freqIdeal = 50 - ((espessura - 0.4) * (35 / 4.6)); 
+            let freqMin = freqIdeal - 6;
+            let freqMax = freqIdeal + 6;
+            
+            let avisoInteligente = "";
+            if (freq > freqMax) {
+                avisoInteligente = `<span class="text-rose-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-triangle-exclamation"></i> Risco! Rápido demais para chapa de ${espessura}mm. (Sugerido: ~${Math.round(freqIdeal)} Hz)</span>`;
+            } else if (freq < freqMin) {
+                avisoInteligente = `<span class="text-amber-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> Lento. Risco de superaquecimento e gasto de energia. (Sugerido: ~${Math.round(freqIdeal)} Hz)</span>`;
+            } else {
+                avisoInteligente = `<span class="text-emerald-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-check"></i> Encharque Térmico Otimizado! Velocidade ideal.</span>`;
+            }
+            if (material === "estabilizacao") {
+                avisoInteligente = `<span class="text-blue-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-spinner"></i> Esteira rodando para criar estabilização de atmosfera interna.</span>`;
+            }
+            
+            document.getElementById('alertaInteligenteFrequencia').innerHTML = avisoInteligente;
+
+            document.getElementById('fornoVelocidade').innerText = velocidadeEsteira.toFixed(2); 
+            document.getElementById('fornoTempoCiclo').innerText = Math.round(tempoTotalCiclo);
+            document.getElementById('fornoCapacidade').innerText = capacidade;
+            document.getElementById('fornoProdutividade').innerText = produtividadeHora;
+
+            renderVisualEsteira(compPeca, espacamento, capacidade);
+        }
+
+        function renderVisualEsteira(comprimento, espacamento, totalNoForno) {
+            const area = document.getElementById('conveyorVisualArea'); 
+            area.innerHTML = "";
+            
+            const blocosParaDesenhar = Math.min(totalNoForno, 50); 
+            let propTotal = comprimento + espacamento;
+            let w = Math.max(10, (comprimento / propTotal) * 40); 
+            let m = Math.max(2, (espacamento / propTotal) * 40);
+
+            for (let i = 0; i < blocosParaDesenhar; i++) {
+                const peca = document.createElement('div'); 
+                peca.className = "h-7 bg-slate-700 rounded-sm shadow-sm flex items-center justify-center shrink-0 border-l-2 border-r-2 border-slate-900/50"; 
+                peca.style.width = `${w}px`; 
+                peca.style.marginRight = `${m}px`; 
+                if(w > 20) { peca.innerHTML = `<span class="text-[8px] text-white/50 font-bold rotate-90">AÇO</span>`; }
+                area.appendChild(peca);
+            }
+            
+            if (totalNoForno > 50) {
+                const textExtra = document.createElement('div');
+                textExtra.className = "text-[10px] text-slate-400 font-bold shrink-0 ml-2 italic";
+                textExtra.innerText = `+ ${totalNoForno - 50} peças...`;
+                area.appendChild(textExtra);
+            }
+        }
 
         function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="Sem Equipe">Nenhum colaborador cadastrado</option>`;
@@ -866,7 +1040,7 @@
                 const maquina = linha.getAttribute("data-maquina");
                 const item = linha.getAttribute("data-item");
                 const obsValue = linha.querySelector(".obs-inp").value.trim();
-                abrirModalChamado(maquina, `Falha detectada: ${item}${obsValue ? ` | Obs: ${obsValue}` : ""}`);
+                abrirModalChamado(maquina, `Falha detectada: ${item}${obsValue ? ` | Orientação: ${obsValue}` : ""}`);
             }
         }
 
@@ -1048,16 +1222,6 @@
         function fecharDetalhesOS() { document.getElementById('detalhesOsModal').classList.add('hidden'); }
 
         // --- SISTEMA DE ALERTAS PREDITIVOS ---
-        function irParaChecklist(setor, tipoOriginal) {
-            fecharPreditiva(); selecionarSetor(setor);
-            let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
-            if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
-            else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
-            else if (pId.includes('quinzen')) { pId = 'quinzenal'; pLabel = 'Quinzenal'; }
-            else if (pId.includes('mens')) { pId = 'mensal'; pLabel = 'Mensal'; }
-            selecionarPeriodo(pId, pLabel);
-        }
-
         function calcularAlertas() {
             let alertasDict = { vencidas: {}, hoje: {}, amanha: {}, dias3: {}, dias7: {} };
             const agora = new Date();
@@ -1297,6 +1461,16 @@
             document.getElementById('preditivaModal').classList.remove('hidden');
         }
 
+        function irParaChecklist(setor, tipoOriginal) {
+            fecharPreditiva(); selecionarSetor(setor);
+            let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
+            if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
+            else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
+            else if (pId.includes('quinzen')) { pId = 'quinzenal'; pLabel = 'Quinzenal'; }
+            else if (pId.includes('mens')) { pId = 'mensal'; pLabel = 'Mensal'; }
+            selecionarPeriodo(pId, pLabel);
+        }
+
         function mostrarListaHojeSetor(setor) {
             const divMenuHoje = document.getElementById('preditivaHojeMenu');
             if(divMenuHoje) divMenuHoje.classList.add('hidden');
@@ -1466,7 +1640,7 @@
                 { setor: "Manutenção", membros: ["José", "Carlos"] }
             ];
             originalDatabase = [
-                { item: "Verificar Oleo Canola", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", tempoReanalise: 2, obs: "" },
+                { item: "Verificar Oleo Canola", maquina: "Forno de Recozimento Contínuo", setor: "Produção", periodicidade: "Diária", tempoReanalise: 2, obs: "" },
                 { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
                 { item: "Verificar Aperto Dos Parafusos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
                 { item: "Verificar folga nas Engrenagens", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
@@ -1722,7 +1896,6 @@
 
             const periodicidadeStr = filtrados[0].periodicidade.toUpperCase();
             
-            // Lógica para determinar a quantidade de colunas e o avanço dos dias
             let numCols = 7;
             let stepDays = 1;
             let labelTopo = "DIAS DA SEMANA";
@@ -1742,7 +1915,7 @@
                 return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
             });
 
-            const colWidth = 82 / numCols; // Para as colunas dividirem o espaço corretamente (A primeira sempre tem 18%)
+            const colWidth = 82 / numCols; 
             const colspanValue = numCols;
 
             let tableHtml = `
@@ -1752,7 +1925,7 @@
                 .t-dark { background-color: #0b132b !important; color: #ffffff !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 .t-light { font-weight: bold; background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 .c-box { display: inline-block; width: 10px; height: 10px; border: 1px solid #000; margin-right: 4px; vertical-align: middle; background-color: #fff; }
-                .item-block { page-break-inside: avoid; break-inside: avoid; } /* ESSENCIAL para não quebrar a tabela na metade do item */
+                .item-block { page-break-inside: avoid; break-inside: avoid; } 
                 
                 @media print {
                     @page { size: landscape; margin: 8mm; }
@@ -1785,7 +1958,6 @@
             filtrados.forEach(item => {
                 let obsText = item.obs ? item.obs : "";
                 
-                // Usando TBODY isolado para que a impressão não quebre no meio do item (page-break-inside)
                 tableHtml += `
                 <tbody class="item-block">
                     <tr>
@@ -1978,7 +2150,6 @@
             item.quantidade = novaQuantidade; renderAlmoxarifadoLista(); fecharModalMovimentacao();
         }
 
-        function gerarAlmoxarifadoMock() { almoxarifadoData = [ { id: "IT1", nome: "Sensor Ótico", categoria: "Sensores", quantidade: 5, minimo: 2, unidade: "un", local: "Prat. 1", foto: "", descricao: "" } ]; }
         function gerarPOPsMock() { popData = [ { id: 1, titulo: "LOTO", maquina: "Guilhotina - GUI-001", epis: "Luvas", ferramentas: "Cadeado", descricao: "Desligar energia." } ]; }
         function renderPOPs() {
             const container = document.getElementById('popsContainer'); const maqFilter = document.getElementById('popMaquinaFilter').value; const search = document.getElementById('popSearch').value.toLowerCase();
@@ -1989,31 +2160,6 @@
             const select = document.getElementById(selectId);
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Guilhotina"];
             select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
-        }
-
-        function calcularParametrosForno() {
-            const espessura = parseFloat(document.getElementById('fornoEspessura').value); const freq = parseFloat(document.getElementById('fornoFrequencia').value); const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value); const espacamento = parseFloat(document.getElementById('fornoEspacamento').value); const isEstabilizacao = document.getElementById('fornoEstabilizacao')?.checked;
-            document.getElementById('valEspessura').innerText = `${espessura.toFixed(1)} mm`; document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
-            const velocidadeEsteira = freq * 0.02; const tempoTotalCiclo = 28.50 / velocidadeEsteira; 
-            
-            if (isEstabilizacao) {
-                document.getElementById('containerNormalParams').classList.add('hidden'); document.getElementById('containerEstabilizacaoParams').classList.remove('hidden');
-                renderVisualEsteira(300, 10);
-            } else {
-                document.getElementById('containerNormalParams').classList.remove('hidden'); 
-                const contEst = document.getElementById('containerEstabilizacaoParams');
-                if(contEst) contEst.classList.add('hidden');
-                renderVisualEsteira(compPeca, espacamento);
-            }
-            document.getElementById('fornoVelocidade').innerText = `${velocidadeEsteira.toFixed(2)} m/min`; document.getElementById('fornoTempoCiclo').innerText = `${Math.round(tempoTotalCiclo)} min`;
-        }
-
-        function renderVisualEsteira(comprimento, espacamento) {
-            const area = document.getElementById('conveyorVisualArea'); area.innerHTML = "";
-            const w = Math.min(100, Math.max(15, comprimento * 0.15)); const m = Math.min(60, Math.max(4, espacamento * 0.15));
-            for (let i = 0; i < 15; i++) {
-                const peca = document.createElement('div'); peca.className = "h-6 bg-slate-400 rounded border border-slate-500 shadow flex items-center justify-center text-[8px] text-white font-bold shrink-0"; peca.style.width = `${w}px`; peca.style.marginRight = `${m}px`; peca.innerText = "AÇO"; area.appendChild(peca);
-            }
         }
 
         function toggleConfigModal(show) { document.getElementById('configModal').classList.toggle('hidden', !show); if (show) document.getElementById('apiInputUrl').value = API_URL; }
