@@ -575,6 +575,9 @@
                     </button>
                 </div>
 
+                <!-- Menu Para Hoje (Setores) -->
+                <div id="preditivaHojeMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden"></div>
+
                 <!-- Containers das Listas Diretas -->
                 <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
@@ -723,6 +726,7 @@
         let selectedPeriodo = '';
         let API_URL = localStorage.getItem("checklist_google_api_url") || "";
         let currentModalMode = '';
+        let currentPreditivaMenu = '';
 
         window.onload = () => {
             if (API_URL) {
@@ -1176,11 +1180,61 @@
             if (osAbertas > 0) { badge.innerText = osAbertas; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
         }
 
+        function renderListaAlertas(arr) {
+            if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4 p-4 text-center">Nenhum registro encontrado para esta janela de tempo.</div>`;
+            return arr.map(a => {
+                let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
+                if(a.proxima === "Pendente" || a.alerta.includes("Atrasada") || a.alerta.includes("Pendente") || a.alerta === "Vence Hoje") {
+                    proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
+                }
+                
+                let detalhesH = "";
+                if (a.subItensStatus && a.subItensStatus.length > 0) {
+                    detalhesH = `<div class="mt-3 text-[9px] text-slate-500 font-semibold border-t border-slate-100 pt-2 space-y-1">`;
+                    a.subItensStatus.forEach(si => {
+                        let isPendente = si.status === "Pendente";
+                        let iconSi = isPendente 
+                            ? `<i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1.5"></i>`
+                            : `<i class="fa-solid fa-user-check text-slate-300 mr-1.5"></i>`;
+                        let textCor = isPendente ? "text-rose-600 font-bold" : "text-slate-600 font-medium";
+                        detalhesH += `<div class="flex items-start gap-0.5">${iconSi}<div><span class="text-slate-800 font-bold">${si.nome}:</span> <span class="${textCor}">${isPendente ? 'Pendente' : 'Último registro ' + si.status}</span></div></div>`;
+                    });
+                    detalhesH += `</div>`;
+                }
+
+                return `
+                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <div class="space-y-1 w-full">
+                                <h4 class="text-sm font-bold text-slate-800">${a.maquina}</h4>
+                                <div class="text-[10px] text-slate-500 font-medium mb-1.5">${a.setor} · Revisão ${a.tipo}</div>
+                                <div class="inline-block mt-1">
+                                    <span class="text-[10px] font-bold ${proxClass} px-2.5 py-1 rounded-md border inline-flex items-center gap-1.5 shadow-sm">
+                                        <i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}
+                                    </span>
+                                </div>
+                                ${detalhesH}
+                            </div>
+                            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto mt-3 sm:mt-0">
+                                <button onclick="abrirResumoMaquina('${a.maquina}', '${a.setor}', '${a.tipo}')" class="bg-blue-600 hover:bg-blue-500 text-white py-1.5 px-3 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
+                                    <i class="fa-solid fa-list-check"></i> Status
+                                </button>
+                                <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-[#0b132b] hover:bg-slate-800 text-white py-1.5 px-4 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
+                                    Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         function abrirPreditiva(alvo) {
             currentModalMode = alvo;
             const alertas = calcularAlertas();
             
             const divMenuProgramacao = document.getElementById('preditivaProgramacaoMenu');
+            const divMenuHoje = document.getElementById('preditivaHojeMenu');
             const modalTitle = document.getElementById('preditivaModalTitle');
             const modalDesc = document.getElementById('preditivaModalDesc');
             const modalIcon = document.getElementById('iconPreditivaModal');
@@ -1193,67 +1247,44 @@
                 if(el) el.classList.add('hidden');
             });
             if(divMenuProgramacao) divMenuProgramacao.classList.add('hidden');
-
-            const renderLista = (arr) => {
-                if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4 p-4 text-center">Nenhum registro encontrado para esta janela de tempo.</div>`;
-                return arr.map(a => {
-                    let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
-                    if(a.proxima === "Pendente" || a.alerta.includes("Atrasada") || a.alerta.includes("Pendente") || a.alerta === "Vence Hoje") {
-                        proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
-                    }
-                    
-                    let detalhesH = "";
-                    if (a.subItensStatus && a.subItensStatus.length > 0) {
-                        detalhesH = `<div class="mt-3 text-[9px] text-slate-500 font-semibold border-t border-slate-100 pt-2 space-y-1">`;
-                        a.subItensStatus.forEach(si => {
-                            let isPendente = si.status === "Pendente";
-                            let iconSi = isPendente 
-                                ? `<i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1.5"></i>`
-                                : `<i class="fa-solid fa-user-check text-slate-300 mr-1.5"></i>`;
-                            let textCor = isPendente ? "text-rose-600 font-bold" : "text-slate-600 font-medium";
-                            detalhesH += `<div class="flex items-start gap-0.5">${iconSi}<div><span class="text-slate-800 font-bold">${si.nome}:</span> <span class="${textCor}">${isPendente ? 'Pendente' : 'Último registro ' + si.status}</span></div></div>`;
-                        });
-                        detalhesH += `</div>`;
-                    }
-
-                    return `
-                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
-                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                <div class="space-y-1 w-full">
-                                    <h4 class="text-sm font-bold text-slate-800">${a.maquina}</h4>
-                                    <div class="text-[10px] text-slate-500 font-medium mb-1.5">${a.setor} · Revisão ${a.tipo}</div>
-                                    <div class="inline-block mt-1">
-                                        <span class="text-[10px] font-bold ${proxClass} px-2.5 py-1 rounded-md border inline-flex items-center gap-1.5 shadow-sm">
-                                            <i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}
-                                        </span>
-                                    </div>
-                                    ${detalhesH}
-                                </div>
-                                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto mt-3 sm:mt-0">
-                                    <button onclick="abrirResumoMaquina('${a.maquina}', '${a.setor}', '${a.tipo}')" class="bg-blue-600 hover:bg-blue-500 text-white py-1.5 px-3 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
-                                        <i class="fa-solid fa-list-check"></i> Status
-                                    </button>
-                                    <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-[#0b132b] hover:bg-slate-800 text-white py-1.5 px-4 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
-                                        Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            };
+            if(divMenuHoje) divMenuHoje.classList.add('hidden');
 
             if (alvo === 'vencidas') {
+                currentPreditivaMenu = '';
                 modalTitle.innerText = "Em Atraso / Vencidas"; modalDesc.innerText = "Inspeções com prazos operacionais estourados.";
                 modalIcon.className = "fa-solid fa-circle-xmark"; iconContainer.className = "w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-sm";
-                document.getElementById('listaAlertasVencidas').innerHTML = renderLista(alertas.vencidas);
+                document.getElementById('listaAlertasVencidas').innerHTML = renderListaAlertas(alertas.vencidas);
                 document.getElementById('containerVencidas').classList.remove('hidden');
+                
             } else if (alvo === 'hoje') {
-                modalTitle.innerText = "Para Hoje"; modalDesc.innerText = "Manutenções programadas para o dia atual.";
+                currentPreditivaMenu = 'hoje';
+                modalTitle.innerText = "Para Hoje"; modalDesc.innerText = "Selecione o setor para ver os checklists do dia.";
                 modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
-                document.getElementById('listaAlertasHoje').innerHTML = renderLista(alertas.hoje);
-                document.getElementById('containerHoje').classList.remove('hidden');
+                
+                // Mapeia automaticamente os setores que possuem itens para hoje
+                const setoresHoje = [...new Set(alertas.hoje.map(a => a.setor))];
+                
+                if (setoresHoje.length > 0 && divMenuHoje) {
+                    divMenuHoje.innerHTML = setoresHoje.map(setor => {
+                        const count = alertas.hoje.filter(a => a.setor === setor).length;
+                        return `
+                            <button onclick="mostrarListaHojeSetor('${setor}')" class="nav-card bg-white border border-amber-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-amber-50/50">
+                                <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg">
+                                    <i class="fa-solid fa-industry"></i>
+                                </div>
+                                <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">${setor}</h4>
+                                <span class="bg-amber-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold">${count} tarefas</span>
+                            </button>
+                        `;
+                    }).join('');
+                    divMenuHoje.classList.remove('hidden');
+                } else {
+                    document.getElementById('listaAlertasHoje').innerHTML = renderListaAlertas(alertas.hoje);
+                    document.getElementById('containerHoje').classList.remove('hidden');
+                }
+
             } else if (alvo === 'programacao') {
+                currentPreditivaMenu = 'programacao';
                 modalTitle.innerText = "Programação"; modalDesc.innerText = "Selecione a janela de planejamento futuro.";
                 modalIcon.className = "fa-solid fa-calendar-days"; iconContainer.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm";
                 
@@ -1264,6 +1295,25 @@
                 if(divMenuProgramacao) divMenuProgramacao.classList.remove('hidden');
             }
             document.getElementById('preditivaModal').classList.remove('hidden');
+        }
+
+        function mostrarListaHojeSetor(setor) {
+            const divMenuHoje = document.getElementById('preditivaHojeMenu');
+            if(divMenuHoje) divMenuHoje.classList.add('hidden');
+            document.getElementById('btnVoltarPreditiva').classList.remove('hidden');
+            
+            ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
+            });
+
+            const alertas = calcularAlertas();
+            const alertasSetor = alertas.hoje.filter(a => a.setor === setor);
+
+            document.getElementById('listaAlertasHoje').innerHTML = renderListaAlertas(alertasSetor);
+            document.getElementById('containerHoje').classList.remove('hidden'); 
+            document.getElementById('preditivaModalTitle').innerText = `Para Hoje: ${setor}`;
+            document.getElementById('preditivaModalDesc').innerText = "Inspeções programadas para a data atual.";
         }
 
         function mostrarListaPreditiva(tipo) {
@@ -1277,63 +1327,19 @@
             });
 
             const alertas = calcularAlertas();
-            const renderLista = (arr) => {
-                if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4 p-4 text-center">Nenhum registro encontrado para esta janela de tempo.</div>`;
-                return arr.map(a => {
-                    let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
-                    if(a.proxima === "Pendente" || a.alerta.includes("Atrasada") || a.alerta.includes("Pendente") || a.alerta === "Vence Hoje") {
-                        proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
-                    }
-                    let detalhesH = "";
-                    if (a.subItensStatus && a.subItensStatus.length > 0) {
-                        detalhesH = `<div class="mt-3 text-[9px] text-slate-500 font-semibold border-t border-slate-100 pt-2 space-y-1">`;
-                        a.subItensStatus.forEach(si => {
-                            let isPendente = si.status === "Pendente";
-                            let iconSi = isPendente ? `<i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1.5"></i>` : `<i class="fa-solid fa-user-check text-slate-300 mr-1.5"></i>`;
-                            let textCor = isPendente ? "text-rose-600 font-bold" : "text-slate-600 font-medium";
-                            detalhesH += `<div class="flex items-start gap-0.5">${iconSi}<div><span class="text-slate-800 font-bold">${si.nome}:</span> <span class="${textCor}">${isPendente ? 'Pendente' : 'Último registro ' + si.status}</span></div></div>`;
-                        });
-                        detalhesH += `</div>`;
-                    }
-                    return `
-                        <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
-                            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                                <div class="space-y-1 w-full">
-                                    <h4 class="text-sm font-bold text-slate-800">${a.maquina}</h4>
-                                    <div class="text-[10px] text-slate-500 font-medium mb-1.5">${a.setor} · Revisão ${a.tipo}</div>
-                                    <div class="inline-block mt-1">
-                                        <span class="text-[10px] font-bold ${proxClass} px-2.5 py-1 rounded-md border inline-flex items-center gap-1.5 shadow-sm">
-                                            <i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}
-                                        </span>
-                                    </div>
-                                    ${detalhesH}
-                                </div>
-                                <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto mt-3 sm:mt-0">
-                                    <button onclick="abrirResumoMaquina('${a.maquina}', '${a.setor}', '${a.tipo}')" class="bg-blue-600 hover:bg-blue-500 text-white py-1.5 px-3 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
-                                        <i class="fa-solid fa-list-check"></i> Status
-                                    </button>
-                                    <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-[#0b132b] hover:bg-slate-800 text-white py-1.5 px-4 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
-                                        Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            };
 
             if (tipo === 'amanha') { 
-                document.getElementById('listaAlertasAmanha').innerHTML = renderLista(alertas.amanha);
+                document.getElementById('listaAlertasAmanha').innerHTML = renderListaAlertas(alertas.amanha);
                 document.getElementById('containerAmanha').classList.remove('hidden'); 
                 document.getElementById('preditivaModalTitle').innerText = "Vencem Amanhã"; 
             } 
             else if (tipo === 'dias3') { 
-                document.getElementById('listaAlertasDias3').innerHTML = renderLista(alertas.dias3);
+                document.getElementById('listaAlertasDias3').innerHTML = renderListaAlertas(alertas.dias3);
                 document.getElementById('containerDias3').classList.remove('hidden'); 
                 document.getElementById('preditivaModalTitle').innerText = "Em até 3 dias"; 
             } 
             else if (tipo === 'dias7') { 
-                document.getElementById('listaAlertasDias7').innerHTML = renderLista(alertas.dias7);
+                document.getElementById('listaAlertasDias7').innerHTML = renderListaAlertas(alertas.dias7);
                 document.getElementById('containerDias7').classList.remove('hidden'); 
                 document.getElementById('preditivaModalTitle').innerText = "Em até 7 dias"; 
             }
@@ -1345,10 +1351,18 @@
                 if(el) el.classList.add('hidden');
             });
             document.getElementById('btnVoltarPreditiva').classList.add('hidden'); 
-            const divMenuProg = document.getElementById('preditivaProgramacaoMenu');
-            if(divMenuProg) divMenuProg.classList.remove('hidden');
-            document.getElementById('preditivaModalTitle').innerText = "Programação"; 
-            document.getElementById('preditivaModalDesc').innerText = "Selecione a janela de planejamento futuro.";
+            
+            if (currentPreditivaMenu === 'programacao') {
+                const divMenuProg = document.getElementById('preditivaProgramacaoMenu');
+                if(divMenuProg) divMenuProg.classList.remove('hidden');
+                document.getElementById('preditivaModalTitle').innerText = "Programação"; 
+                document.getElementById('preditivaModalDesc').innerText = "Selecione a janela de planejamento futuro.";
+            } else if (currentPreditivaMenu === 'hoje') {
+                const divMenuHoje = document.getElementById('preditivaHojeMenu');
+                if(divMenuHoje) divMenuHoje.classList.remove('hidden');
+                document.getElementById('preditivaModalTitle').innerText = "Para Hoje"; 
+                document.getElementById('preditivaModalDesc').innerText = "Selecione o setor para ver os checklists do dia.";
+            }
         }
 
         function fecharPreditiva() { document.getElementById('preditivaModal').classList.add('hidden'); }
@@ -1561,10 +1575,10 @@
                     }
                 }
 
-                let html = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6"><div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between"><div class="flex items-center gap-3"><span class="tracking-tight text-lg font-bold">${maq}</span><button onclick="abrirResumoMaquina('${maq}', '${selectedSetor}', '${periodoId}')" class="bg-blue-600 hover:bg-blue-500 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm ml-2"><i class="fa-solid fa-list-check"></i> Ver Status</button><button onclick="imprimirChecklistPapel('${maq}', '${periodoId}')" class="bg-slate-700 hover:bg-slate-600 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors"><i class="fa-solid fa-print"></i> Imprimir</button></div>${badgeHeader}</div><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase"><tr><th class="p-4 w-[45%]">ITEM</th><th class="p-4 w-44">OPERADOR</th><th class="p-4 w-32">STATUS</th><th class="p-4">OBS</th><th class="p-4 text-center w-28">AÇÃO</th></tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
+                let html = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6"><div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between"><div class="flex items-center gap-3"><span class="tracking-tight text-lg font-bold">${maq}</span><button onclick="abrirResumoMaquina('${maq}', '${selectedSetor}', '${periodoId}')" class="bg-blue-600 hover:bg-blue-500 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm ml-2"><i class="fa-solid fa-list-check"></i> Ver Status</button><button onclick="imprimirChecklistPapel('${maq}', '${periodoId}')" class="bg-slate-700 hover:bg-slate-600 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors"><i class="fa-solid fa-print"></i> Imprimir</button></div>${badgeHeader}</div><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase"><tr><th class="p-4 w-[45%]">ITEM</th><th class="p-4 w-44">OPERADOR</th><th class="p-4 w-32">STATUS</th><th class="p-4">ORIENTAÇÃO</th><th class="p-4 text-center w-28">AÇÃO</th></tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
                 
                 agrupado[maq].forEach((item) => {
-                    const badgeObs = item.obs ? `<div class="text-[10px] text-slate-500 mt-1 leading-tight"><strong class="text-blue-600"><i class="fa-solid fa-circle-info"></i> Obs:</strong> ${item.obs}</div>` : '';
+                    const badgeObs = item.obs ? `<div class="text-[10px] text-slate-500 mt-1 leading-tight"><strong class="text-blue-600"><i class="fa-solid fa-circle-info"></i> Orientação:</strong> ${item.obs}</div>` : '';
                     let metaHistorico = `<div class="text-[9px] text-slate-400 font-medium mt-1"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Sem registros locais</div>`;
                     let textoProxima = "Aguardando";
                     let isAtrasado = true;
@@ -1795,7 +1809,7 @@
                     </tr>
                     <tr style="border-bottom: 2px solid #000;">
                         <td class="t-light" style="vertical-align: middle; padding: 4px 6px;">
-                            OBS
+                            Orientação
                         </td>
                         <td colspan="${colspanValue}" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155; height: 38px;">
                             ${obsText}
@@ -1978,7 +1992,7 @@
         }
 
         function calcularParametrosForno() {
-            const espessura = parseFloat(document.getElementById('fornoEspessura').value); const freq = parseFloat(document.getElementById('fornoFrequencia').value); const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value); const espacamento = parseFloat(document.getElementById('fornoEspacamento').value); const isEstabilizacao = document.getElementById('fornoEstabilizacao').checked;
+            const espessura = parseFloat(document.getElementById('fornoEspessura').value); const freq = parseFloat(document.getElementById('fornoFrequencia').value); const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value); const espacamento = parseFloat(document.getElementById('fornoEspacamento').value); const isEstabilizacao = document.getElementById('fornoEstabilizacao')?.checked;
             document.getElementById('valEspessura').innerText = `${espessura.toFixed(1)} mm`; document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
             const velocidadeEsteira = freq * 0.02; const tempoTotalCiclo = 28.50 / velocidadeEsteira; 
             
@@ -1986,7 +2000,9 @@
                 document.getElementById('containerNormalParams').classList.add('hidden'); document.getElementById('containerEstabilizacaoParams').classList.remove('hidden');
                 renderVisualEsteira(300, 10);
             } else {
-                document.getElementById('containerNormalParams').classList.remove('hidden'); document.getElementById('containerEstabilizacaoParams').classList.add('hidden');
+                document.getElementById('containerNormalParams').classList.remove('hidden'); 
+                const contEst = document.getElementById('containerEstabilizacaoParams');
+                if(contEst) contEst.classList.add('hidden');
                 renderVisualEsteira(compPeca, espacamento);
             }
             document.getElementById('fornoVelocidade').innerText = `${velocidadeEsteira.toFixed(2)} m/min`; document.getElementById('fornoTempoCiclo').innerText = `${Math.round(tempoTotalCiclo)} min`;
