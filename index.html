@@ -148,11 +148,20 @@
         </div>
 
         <div id="view-maquinas-selecao" class="fade-in hidden">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6">
-                <h2 class="font-bold text-slate-800 text-base">Supervisão de Processos</h2>
-                <p class="text-xs text-slate-500">Selecione o equipamento abaixo para acessar o painel de parâmetros (IHM).</p>
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="font-bold text-slate-800 text-base">Supervisão de Processos</h2>
+                    <p class="text-xs text-slate-500" id="maquinasBreadcrumb">Selecione uma Família de Equipamentos.</p>
+                </div>
+                <div class="w-full sm:w-72 relative">
+                    <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400 text-sm"></i>
+                    <input type="text" id="buscaMaquina" oninput="buscarMaquina()" placeholder="Buscar máquina..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm">
+                </div>
             </div>
-            <div id="listaMaquinasParametros" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"></div>
+            <div class="mb-4 hidden" id="btnVoltarNivelMaquinaContainer">
+                <button onclick="voltarNivelMaquina()" class="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1.5"><i class="fa-solid fa-arrow-left"></i> Voltar Categoria</button>
+            </div>
+            <div id="listaMaquinasParametros" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"></div>
         </div>
 
         <div id="view-intervencoes" class="fade-in hidden">
@@ -641,125 +650,6 @@
         </div>
     </div>
 
-    <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
-        <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
-            <div class="p-8 space-y-6">
-                <h3 id="almoxModalTitle" class="text-xl font-bold text-slate-900">Cadastrar Novo Item</h3>
-                <input type="hidden" id="editAlmoxIndex">
-                <div class="space-y-4 font-sans text-slate-600">
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label>
-                        <div class="flex gap-2 items-center">
-                            <input type="text" id="novoItemNome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
-                            <div class="relative">
-                                <input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="absolute inset-0 opacity-0 cursor-pointer w-10 h-10">
-                                <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all">
-                                    <i class="fa-solid fa-camera text-slate-500"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="fotoPreviewContainer" class="hidden relative border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-2 flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <img id="fotoPreviewImg" src="" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" class="h-10 w-10 object-cover rounded-lg border">
-                            <span class="text-[10px] text-slate-500 font-medium">Foto anexada</span>
-                        </div>
-                        <button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1">
-                            <i class="fa-solid fa-trash"></i> Remover
-                        </button>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label>
-                        <textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label>
-                            <input type="text" id="novoItemCategoria" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label>
-                            <input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label>
-                            <input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label>
-                            <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label>
-                        <div id="localizacaoInputsContainer" class="space-y-2"></div>
-                        <button type="button" onclick="adicionarLinhaLocalizacao()" class="text-[10px] text-blue-600 font-bold mt-2 flex items-center gap-1 hover:text-blue-700"><i class="fa-solid fa-plus"></i> Endereço</button>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3 pt-3 border-t">
-                    <button onclick="fecharModalCadastroItem()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
-                    <button onclick="confirmarCadastroItem()" class="w-full py-3 bg-[#0b132b] hover:bg-slate-850 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
-        <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
-            <div class="p-8 space-y-4">
-                <h3 class="text-lg font-bold text-slate-900 font-sans">Registrar Movimentação</h3>
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label>
-                        <select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select>
-                    </div>
-                    <div class="bg-slate-50 border border-slate-150 rounded-xl p-3 text-[10px] space-y-2 text-slate-600 font-sans">
-                        <div><span class="block font-bold text-slate-400 uppercase">Descrição</span><span id="movItemDescText" class="text-slate-700 font-medium">-</span></div>
-                        <div><span class="block font-bold text-slate-400 uppercase">Localização</span><span id="movItemLocalText" class="text-slate-700 font-medium">-</span></div>
-                        <div class="flex gap-2 pt-1 border-t">
-                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button>
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-3 font-sans">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label>
-                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label>
-                            <input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
-                        </div>
-                    </div>
-                    <div class="font-sans">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
-                        <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
-                    </div>
-                    <div class="font-sans">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label>
-                        <textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-3 pt-3 border-t font-sans">
-                    <button onclick="fecharModalMovimentacao()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
-                    <button onclick="confirmarMovimentacao()" class="w-full py-3 bg-[#047857] hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">Confirmar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
-        <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
-            <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
-            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1">
-                <i class="fa-solid fa-xmark"></i> Fechar
-            </button>
-        </div>
-    </div>
-
-    <div id="printArea" class="hidden"></div>
-
     <script>
         let originalDatabase = [];
         let checklistStatus = [];
@@ -768,6 +658,7 @@
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
+        let maquinasData = []; // NOVO: Armazena hierarquia de máquinas
         
         let currentView = 'home';
         let selectedSetor = '';
@@ -775,6 +666,9 @@
         let API_URL = localStorage.getItem("checklist_google_api_url") || "";
         let currentModalMode = '';
         let currentPreditivaMenu = '';
+        let currentNivelMaquina = 'familia';
+        let selFamilia = '';
+        let selSubfamilia = '';
 
         window.onload = () => {
             if (API_URL) {
@@ -846,30 +740,112 @@
             else alternarTela('home');
         }
 
-        function abrirModuloChecklist() { alternarTela('checklist-setor'); }
-        function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
-        function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
-        function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
-
         // --- SISTEMA DE MÁQUINAS E PARÂMETROS ---
         function abrirModuloMaquinas() { 
             alternarTela('maquinas-selecao'); 
+            document.getElementById('buscaMaquina').value = '';
+            renderNivelMaquina('familia');
+        }
+
+        function renderNivelMaquina(nivel, filtro = '') {
+            currentNivelMaquina = nivel;
             const container = document.getElementById('listaMaquinasParametros');
-            let maquinasUnicas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Forno de Recozimento Contínuo", "Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
+            const breadcrumb = document.getElementById('maquinasBreadcrumb');
+            const btnVoltar = document.getElementById('btnVoltarNivelMaquinaContainer');
             
-            container.innerHTML = maquinasUnicas.map(maq => {
-                let isForno = normalizar(maq).includes('forno');
-                let icone = isForno ? 'fa-fire' : 'fa-microchip';
-                let cor = isForno ? 'text-orange-600 bg-orange-100' : 'text-slate-600 bg-slate-100';
+            let html = '';
+
+            if (nivel === 'familia') {
+                selFamilia = ''; selSubfamilia = '';
+                breadcrumb.innerText = "Famílias de Equipamentos";
+                btnVoltar.classList.add('hidden');
                 
-                return `
-                <button onclick="selecionarMaquinaParametros('${maq}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full">
-                    <div class="w-10 h-10 rounded-xl ${cor} flex items-center justify-center mb-3 shadow-sm"><i class="fa-solid ${icone} text-lg"></i></div>
-                    <h3 class="font-bold text-slate-800 text-sm mb-1">${maq}</h3>
-                    <p class="text-[10px] text-slate-500">Acessar painel de controle</p>
-                </button>
-                `;
-            }).join('');
+                const familias = [...new Set(maquinasData.map(m => m.familia))].sort();
+                if(familias.length === 0) html = `<div class="col-span-full text-center p-10 text-slate-400">Nenhuma máquina cadastrada na Planilha.</div>`;
+                
+                familias.forEach(f => {
+                    const count = maquinasData.filter(m => m.familia === f).length;
+                    html += `<button onclick="renderNivelMaquina('subfamilia', '${f}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-blue-50 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3"><i class="fa-solid fa-layer-group text-lg"></i></div>
+                        <h3 class="font-bold text-slate-800 text-sm mb-1">${f}</h3>
+                        <p class="text-[10px] text-slate-500">${count} equipamento(s)</p>
+                    </button>`;
+                });
+            } 
+            else if (nivel === 'subfamilia') {
+                selFamilia = filtro;
+                breadcrumb.innerHTML = `<span class="text-slate-400">Família:</span> <span class="font-bold text-slate-700">${selFamilia}</span>`;
+                btnVoltar.classList.remove('hidden');
+                
+                const maquinasDaFamilia = maquinasData.filter(m => m.familia === selFamilia);
+                const subfamilias = [...new Set(maquinasDaFamilia.map(m => m.subfamilia))].filter(Boolean).sort();
+                
+                // Se não tem subfamília, pula direto para as máquinas
+                if (subfamilias.length === 0) {
+                    renderNivelMaquina('maquinas', selFamilia);
+                    return;
+                }
+
+                subfamilias.forEach(sub => {
+                    const count = maquinasDaFamilia.filter(m => m.subfamilia === sub).length;
+                    html += `<button onclick="renderNivelMaquina('maquinas_sub', '${sub}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-indigo-50 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mb-3"><i class="fa-solid fa-folder-tree text-lg"></i></div>
+                        <h3 class="font-bold text-slate-800 text-sm mb-1">${sub}</h3>
+                        <p class="text-[10px] text-slate-500">${count} equipamento(s)</p>
+                    </button>`;
+                });
+                
+                // Mostra as máquinas soltas sem subfamília
+                const semSub = maquinasDaFamilia.filter(m => !m.subfamilia);
+                semSub.forEach(m => { html += gerarCardMaquina(m); });
+            }
+            else if (nivel === 'maquinas' || nivel === 'maquinas_sub') {
+                if (nivel === 'maquinas_sub') selSubfamilia = filtro;
+                breadcrumb.innerHTML = `<span class="text-slate-400">Família:</span> <span class="font-bold text-slate-700">${selFamilia}</span> ${selSubfamilia ? `<span class="text-slate-400 mx-1">></span> <span class="text-slate-400">Subfamília:</span> <span class="font-bold text-slate-700">${selSubfamilia}</span>` : ''}`;
+                btnVoltar.classList.remove('hidden');
+                
+                const filtradas = maquinasData.filter(m => m.familia === selFamilia && (nivel === 'maquinas' || m.subfamilia === selSubfamilia));
+                filtradas.forEach(m => { html += gerarCardMaquina(m); });
+            }
+
+            container.innerHTML = html;
+        }
+
+        function gerarCardMaquina(m) {
+            let isForno = normalizar(m.nome).includes('forno');
+            let icone = isForno ? 'fa-fire' : 'fa-microchip';
+            let cor = isForno ? 'text-orange-600 bg-orange-100' : 'text-slate-600 bg-slate-100';
+            return `<button onclick="selecionarMaquinaParametros('${m.nome}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-slate-50">
+                <div class="w-10 h-10 rounded-xl ${cor} flex items-center justify-center mb-3 shadow-sm"><i class="fa-solid ${icone} text-lg"></i></div>
+                <h3 class="font-bold text-slate-800 text-sm mb-1 line-clamp-2">${m.nome}</h3>
+                <p class="text-[10px] text-slate-500 mt-auto pt-2">Acessar painel (HMI)</p>
+            </button>`;
+        }
+
+        function voltarNivelMaquina() {
+            if (currentNivelMaquina === 'maquinas_sub') renderNivelMaquina('subfamilia', selFamilia);
+            else if (currentNivelMaquina === 'subfamilia' || currentNivelMaquina === 'maquinas') renderNivelMaquina('familia');
+        }
+
+        function buscarMaquina() {
+            const termo = document.getElementById('buscaMaquina').value.toLowerCase();
+            const container = document.getElementById('listaMaquinasParametros');
+            const breadcrumb = document.getElementById('maquinasBreadcrumb');
+            const btnVoltar = document.getElementById('btnVoltarNivelMaquinaContainer');
+
+            if (!termo) { renderNivelMaquina('familia'); return; }
+
+            btnVoltar.classList.add('hidden');
+            breadcrumb.innerText = `Buscando por: "${termo}"`;
+            
+            const filtradas = maquinasData.filter(m => m.nome.toLowerCase().includes(termo) || m.familia.toLowerCase().includes(termo) || m.subfamilia.toLowerCase().includes(termo));
+
+            if (filtradas.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center p-10 text-slate-400">Nenhum equipamento encontrado.</div>`;
+                return;
+            }
+
+            container.innerHTML = filtradas.map(m => gerarCardMaquina(m)).join('');
         }
 
         function selecionarMaquinaParametros(maquina) {
@@ -881,7 +857,7 @@
             }
         }
 
-        // CÁLCULO FÍSICO DO FORNO
+        // CÁLCULO FÍSICO DO FORNO DE RECOZIMENTO CONTÍNUO
         function calcularParametrosForno() {
             const material = document.getElementById('fornoMaterial').value;
             const espessura = parseFloat(document.getElementById('fornoEspessura').value); 
@@ -893,10 +869,10 @@
             document.getElementById('valEspessura').innerText = `${espessura.toFixed(1)} mm`; 
             document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
             
-            // Fator de conversão fictício aproximado (32Hz rodando em ~48 min os 38m = ~0.8m/min)
+            // Fator de conversão aproximado: 32Hz resultando em ciclo de 48min numa extensão de ~38m
             const velocidadeEsteira = freq * 0.025; // m/min
             const velocidadeMMporMin = velocidadeEsteira * 1000; // mm/min
-            const comprimentoFornoMM = 38000; // ~38 metros (Baseado no seu dado de 50 peças x 74cm)
+            const comprimentoFornoMM = 38000; // ~38 metros (Baseado em 50 a 55 peças de 700mm)
             const tempoTotalCiclo = comprimentoFornoMM / velocidadeMMporMin; // em minutos
             
             const espacoPorPeca = compPeca + espacamento;
@@ -908,24 +884,18 @@
                 produtividadeHora = Math.floor((velocidadeMMporMin * 60) / espacoPorPeca);
             }
 
-            // Define Temperaturas baseadas no Material
+            // Setpoints de Temperatura baseados no Material
             let r1="1050°", r2="1080°", r3="1080°", r4="1080°", r5="1060°";
             if(material === "aco-201") {
                 r1="1020°"; r2="1060°"; r3="1060°"; r4="1060°"; r5="1040°";
             } else if (material === "estabilizacao") {
                 r1="1000°"; r2="1000°"; r3="1000°"; r4="1000°"; r5="1000°";
-                showToast("Modo de Estabilização: Passar peças repetidamente (8 a 12h).", "info");
             }
-            document.getElementById('setR1').innerText = r1;
-            document.getElementById('setR2').innerText = r2;
-            document.getElementById('setR3').innerText = r3;
-            document.getElementById('setR4').innerText = r4;
-            document.getElementById('setR5').innerText = r5;
+            document.getElementById('setR1').innerText = r1; document.getElementById('setR2').innerText = r2; document.getElementById('setR3').innerText = r3; document.getElementById('setR4').innerText = r4; document.getElementById('setR5').innerText = r5;
 
-            // Assistente Térmico
+            // Assistente Térmico (IA de Encharque)
             let freqIdeal = 50 - ((espessura - 0.4) * (35 / 4.6)); 
-            let freqMin = freqIdeal - 6;
-            let freqMax = freqIdeal + 6;
+            let freqMin = freqIdeal - 6; let freqMax = freqIdeal + 6;
             
             let avisoInteligente = "";
             if (freq > freqMax) {
@@ -935,10 +905,10 @@
             } else {
                 avisoInteligente = `<span class="text-emerald-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-check"></i> Encharque Térmico Otimizado! Velocidade ideal.</span>`;
             }
-            if (material === "estabilizacao") {
-                avisoInteligente = `<span class="text-blue-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-spinner"></i> Esteira rodando para criar estabilização de atmosfera interna.</span>`;
-            }
             
+            if (material === "estabilizacao") {
+                avisoInteligente = `<span class="text-blue-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-spinner animate-spin"></i> Passando peças para estabilização de atmosfera interna.</span>`;
+            }
             document.getElementById('alertaInteligenteFrequencia').innerHTML = avisoInteligente;
 
             document.getElementById('fornoVelocidade').innerText = velocidadeEsteira.toFixed(2); 
@@ -950,30 +920,27 @@
         }
 
         function renderVisualEsteira(comprimento, espacamento, totalNoForno) {
-            const area = document.getElementById('conveyorVisualArea'); 
-            area.innerHTML = "";
-            
+            const area = document.getElementById('conveyorVisualArea'); area.innerHTML = "";
             const blocosParaDesenhar = Math.min(totalNoForno, 50); 
             let propTotal = comprimento + espacamento;
             let w = Math.max(10, (comprimento / propTotal) * 40); 
             let m = Math.max(2, (espacamento / propTotal) * 40);
 
             for (let i = 0; i < blocosParaDesenhar; i++) {
-                const peca = document.createElement('div'); 
-                peca.className = "h-7 bg-slate-700 rounded-sm shadow-sm flex items-center justify-center shrink-0 border-l-2 border-r-2 border-slate-900/50"; 
-                peca.style.width = `${w}px`; 
-                peca.style.marginRight = `${m}px`; 
+                const peca = document.createElement('div'); peca.className = "h-7 bg-slate-700 rounded-sm shadow-sm flex items-center justify-center shrink-0 border-l-2 border-r-2 border-slate-900/50"; peca.style.width = `${w}px`; peca.style.marginRight = `${m}px`; 
                 if(w > 20) { peca.innerHTML = `<span class="text-[8px] text-white/50 font-bold rotate-90">AÇO</span>`; }
                 area.appendChild(peca);
             }
-            
             if (totalNoForno > 50) {
-                const textExtra = document.createElement('div');
-                textExtra.className = "text-[10px] text-slate-400 font-bold shrink-0 ml-2 italic";
-                textExtra.innerText = `+ ${totalNoForno - 50} peças...`;
-                area.appendChild(textExtra);
+                const textExtra = document.createElement('div'); textExtra.className = "text-[10px] text-slate-400 font-bold shrink-0 ml-2 italic"; textExtra.innerText = `+ ${totalNoForno - 50} peças...`; area.appendChild(textExtra);
             }
         }
+
+        // Funções de inicialização originais mantidas
+        function abrirModuloChecklist() { alternarTela('checklist-setor'); }
+        function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
+        function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
+        function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
 
         function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="Sem Equipe">Nenhum colaborador cadastrado</option>`;
@@ -999,8 +966,8 @@
         // --- SISTEMA DE CHAMADOS E INTERVENÇÕES ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
-            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
-            select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            let maquinasUnicas = maquinasData.length > 0 ? maquinasData.map(m => m.nome) : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Forno", "Guilhotina"]);
+            select.innerHTML = maquinasUnicas.map(m => `<option value="${m}">${m}</option>`).join('');
             if(maquinaPre) select.value = maquinaPre;
 
             document.getElementById('chamadoDefeito').value = defeitoPre;
@@ -1116,11 +1083,10 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE INTERVENÇÕES INDIRETAS E OS FECHADAS ---
         function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
-            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
-            select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            let maquinasUnicas = maquinasData.length > 0 ? maquinasData.map(m => m.nome) : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Forno", "Guilhotina"]);
+            select.innerHTML = maquinasUnicas.map(m => `<option value="${m}">${m}</option>`).join('');
             
             document.getElementById('intervDescricao').value = "";
             document.getElementById('intervResponsavel').innerHTML = gerarOptionsEquipes(true); 
@@ -1425,9 +1391,7 @@
                 modalTitle.innerText = "Para Hoje"; modalDesc.innerText = "Selecione o setor para ver os checklists do dia.";
                 modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
                 
-                // Mapeia automaticamente os setores que possuem itens para hoje
                 const setoresHoje = [...new Set(alertas.hoje.map(a => a.setor))];
-                
                 if (setoresHoje.length > 0 && divMenuHoje) {
                     divMenuHoje.innerHTML = setoresHoje.map(setor => {
                         const count = alertas.hoje.filter(a => a.setor === setor).length;
@@ -1627,6 +1591,7 @@
                 equipesData = resJson.equipes || [];
                 chamadosData = resJson.chamados || []; 
                 intervencoesData = resJson.intervencoes || [];
+                maquinasData = resJson.maquinas || []; // NOVO
                 
                 renderSetorCards(); atualizarKPIs();
             } catch (e) { 
@@ -1641,10 +1606,14 @@
             ];
             originalDatabase = [
                 { item: "Verificar Oleo Canola", maquina: "Forno de Recozimento Contínuo", setor: "Produção", periodicidade: "Diária", tempoReanalise: 2, obs: "" },
-                { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
-                { item: "Verificar Aperto Dos Parafusos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
-                { item: "Verificar folga nas Engrenagens", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
-                { item: "Verificar e completar Fluidos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
+                { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
+            ];
+            maquinasData = [
+                { familia: "Fornos e Aquecimento", subfamilia: "Recozimento", nome: "Forno de Recozimento Contínuo" },
+                { familia: "Robôs", subfamilia: "Prensa", nome: "Robô Prensa - ROB-PR001" },
+                { familia: "Robôs", subfamilia: "Prensa", nome: "Robô Prensa - ROB-PR002" },
+                { familia: "Robôs", subfamilia: "Solda", nome: "Robô Solda - ROB-SL001" },
+                { familia: "Corte", subfamilia: "Guilhotina", nome: "Guilhotina - GUI-001" }
             ];
             
             const agora = new Date();
@@ -1877,7 +1846,6 @@
             }
         }
 
-        // --- IMPRESSÃO PAISAGEM / GRID DINÂMICO COM QUEBRA EVITADA ---
         function imprimirChecklistPapel(maquina, periodo) {
             const printArea = document.getElementById('printArea');
             const pId = periodo ? normalizar(periodo) : normalizar(selectedPeriodo);
@@ -1889,20 +1857,14 @@
                 normalizar(x.setor) === sId
             );
 
-            if(filtrados.length === 0) {
-                showToast("Não foi possível gerar a impressão (sem itens).", "error");
-                return;
-            }
+            if(filtrados.length === 0) { showToast("Não foi possível gerar a impressão (sem itens).", "error"); return; }
 
             const periodicidadeStr = filtrados[0].periodicidade.toUpperCase();
             
-            let numCols = 7;
-            let stepDays = 1;
-            let labelTopo = "DIAS DA SEMANA";
+            let numCols = 7; let stepDays = 1; let labelTopo = "DIAS DA SEMANA";
 
             if (pId !== 'diaria') {
-                numCols = 4;
-                stepDays = diasParaPeriodicidade(pId);
+                numCols = 4; stepDays = diasParaPeriodicidade(pId);
                 if (pId === 'semanal') labelTopo = "PRÓXIMAS SEMANAS";
                 else if (pId === 'quinzenal') labelTopo = "PRÓXIMAS QUINZENAS";
                 else if (pId === 'mensal') labelTopo = "PRÓXIMOS MESES";
@@ -1910,13 +1872,11 @@
             }
 
             const dates = Array.from({length: numCols}, (_, i) => {
-                const d = new Date();
-                d.setDate(d.getDate() + (i * stepDays));
+                const d = new Date(); d.setDate(d.getDate() + (i * stepDays));
                 return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
             });
 
-            const colWidth = 82 / numCols; 
-            const colspanValue = numCols;
+            const colWidth = 82 / numCols; const colspanValue = numCols;
 
             let tableHtml = `
             <style>
@@ -1926,11 +1886,7 @@
                 .t-light { font-weight: bold; background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 .c-box { display: inline-block; width: 10px; height: 10px; border: 1px solid #000; margin-right: 4px; vertical-align: middle; background-color: #fff; }
                 .item-block { page-break-inside: avoid; break-inside: avoid; } 
-                
-                @media print {
-                    @page { size: landscape; margin: 8mm; }
-                    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                }
+                @media print { @page { size: landscape; margin: 8mm; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
             </style>
             
             <div style="font-size: 10px; margin-bottom: 15px; font-family: Arial; display: flex; justify-content: space-between; align-items: flex-start;">
@@ -1947,56 +1903,21 @@
             </div>
             
             <table class="t-print">
-                <thead>
-                    <tr>
-                        <td class="t-dark" style="width: 18%;">${labelTopo}</td>
-                        ${dates.map(d => `<td class="t-light" style="text-align: center; width: ${colWidth}%; font-size: 11px;">${d}</td>`).join('')}
-                    </tr>
-                </thead>
-            `;
+                <thead><tr><td class="t-dark" style="width: 18%;">${labelTopo}</td>${dates.map(d => `<td class="t-light" style="text-align: center; width: ${colWidth}%; font-size: 11px;">${d}</td>`).join('')}</tr></thead>`;
 
             filtrados.forEach(item => {
                 let obsText = item.obs ? item.obs : "";
-                
                 tableHtml += `
                 <tbody class="item-block">
-                    <tr>
-                        <td class="t-light" style="font-size: 11px; text-transform: uppercase;">ITEM</td>
-                        <td colspan="${colspanValue}" style="font-size: 11px; font-weight: bold;">
-                            ${item.item}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="t-light">Operador / Manutentor</td>
-                        ${dates.map(() => `<td></td>`).join('')}
-                    </tr>
-                    <tr>
-                        <td class="t-light">Status</td>
-                        ${dates.map(() => `
-                            <td style="text-align: center; padding: 8px 2px;">
-                                <div style="margin-bottom: 6px;"><span class="c-box"></span> OK</div>
-                                <div><span class="c-box"></span> Problema</div>
-                            </td>
-                        `).join('')}
-                    </tr>
-                    <tr style="border-bottom: 2px solid #000;">
-                        <td class="t-light" style="vertical-align: middle; padding: 4px 6px;">
-                            Orientação
-                        </td>
-                        <td colspan="${colspanValue}" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155; height: 38px;">
-                            ${obsText}
-                        </td>
-                    </tr>
-                    <tr style="border: none !important;">
-                        <td colspan="${colspanValue + 1}" style="height: 15px; border: none !important; background: white !important;"></td>
-                    </tr>
-                </tbody>
-                `;
+                    <tr><td class="t-light" style="font-size: 11px; text-transform: uppercase;">ITEM</td><td colspan="${colspanValue}" style="font-size: 11px; font-weight: bold;">${item.item}</td></tr>
+                    <tr><td class="t-light">Operador / Manutentor</td>${dates.map(() => `<td></td>`).join('')}</tr>
+                    <tr><td class="t-light">Status</td>${dates.map(() => `<td style="text-align: center; padding: 8px 2px;"><div style="margin-bottom: 6px;"><span class="c-box"></span> OK</div><div><span class="c-box"></span> Problema</div></td>`).join('')}</tr>
+                    <tr style="border-bottom: 2px solid #000;"><td class="t-light" style="vertical-align: middle; padding: 4px 6px;">Orientação</td><td colspan="${colspanValue}" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155; height: 38px;">${obsText}</td></tr>
+                    <tr style="border: none !important;"><td colspan="${colspanValue + 1}" style="height: 15px; border: none !important; background: white !important;"></td></tr>
+                </tbody>`;
             });
-
             tableHtml += `</table>`;
             printArea.innerHTML = tableHtml;
-            
             setTimeout(() => { window.print(); }, 200);
         }
 
@@ -2158,8 +2079,8 @@
         }
         function popularFiltroMaquinas(selectId) {
             const select = document.getElementById(selectId);
-            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Guilhotina"];
-            select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            let maquinasUnicas = maquinasData.length > 0 ? maquinasData.map(m => m.nome) : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Forno", "Guilhotina"]);
+            select.innerHTML = '<option value="">Todas</option>' + maquinasUnicas.map(m => `<option value="${m}">${m}</option>`).join('');
         }
 
         function toggleConfigModal(show) { document.getElementById('configModal').classList.toggle('hidden', !show); if (show) document.getElementById('apiInputUrl').value = API_URL; }
