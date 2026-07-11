@@ -164,6 +164,178 @@
             <div id="listaMaquinasParametros" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"></div>
         </div>
 
+        <div id="view-forno-detalhes" class="fade-in hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <div class="lg:col-span-4 space-y-6">
+                    
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-orange-600"></i> Setup da Peça
+                            </h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Modo do Forno</label>
+                                <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                    <option value="aco-304">Produção: Aço Inox 304</option>
+                                    <option value="aco-201">Produção: Aço Inox 201</option>
+                                    <option value="estabilizacao">Repasso: Estabilização (8 a 12h)</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tam. Cuba (cm)</label>
+                                    <input type="number" id="fornoPecaComprimento" value="67" min="1" max="200" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaço L/L (cm)</label>
+                                    <input type="number" id="fornoEspacamento" value="2.5" min="0" max="100" step="0.5" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                </div>
+                            </div>
+                            <div class="pt-2 border-t border-slate-100">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                    <span>Espessura da Chapa</span>
+                                    <span class="text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded" id="valEspessura">0.8 mm</span>
+                                </label>
+                                <input type="range" id="fornoEspessura" min="0.4" max="5.0" step="0.1" value="0.8" oninput="calcularParametrosForno()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-md space-y-4 relative overflow-hidden">
+                        <div class="absolute -right-4 -top-4 opacity-5 text-6xl"><i class="fa-solid fa-flask"></i></div>
+                        <h3 class="text-sm font-bold text-white flex items-center gap-2 relative z-10 border-b border-slate-700 pb-2">
+                            <i class="fa-solid fa-wind text-cyan-400"></i> Quebrador de Amônia (H2)
+                        </h3>
+                        <div class="grid grid-cols-2 gap-4 relative z-10">
+                            <div>
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Temp. Quebra</span>
+                                <span class="block text-xl font-bold text-rose-500 mt-1">820 °C</span>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Vazão Gás (m³/H)</label>
+                                <input type="number" id="fornoVazaoGas" value="45" min="0" max="60" oninput="calcularParametrosForno()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none text-center font-bold">
+                            </div>
+                        </div>
+                        <div class="pt-2 border-t border-slate-700 relative z-10">
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bancada de Filtros</span>
+                                <span class="text-[9px] bg-slate-800 px-2 py-0.5 rounded font-bold text-slate-300 border border-slate-700">Ciclo: 168h</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button class="flex-1 bg-cyan-600 text-white text-xs font-bold py-2 rounded-lg shadow border border-cyan-500 flex justify-center items-center gap-1.5"><i class="fa-solid fa-check-circle"></i> Bancada A</button>
+                                <button class="flex-1 bg-slate-800 text-slate-400 text-xs font-bold py-2 rounded-lg shadow border border-slate-700 flex justify-center items-center gap-1.5"><i class="fa-solid fa-fire"></i> Bancada B (300°)</button>
+                            </div>
+                            <p class="text-[9px] text-slate-400 mt-2 italic text-center">Bancada em repouso deve ser aquecida a 300°C para purga e limpeza.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-8 space-y-6">
+                    
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
+                            <i class="fa-solid fa-fire-flame-curved text-rose-600"></i> Diagrama Térmico do Forno (28,50 Metros)
+                        </h3>
+                        
+                        <div class="grid grid-cols-12 rounded-xl overflow-hidden h-16 shadow text-center font-bold text-[10px] text-white border border-slate-300">
+                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center border-r border-slate-900 shadow-inner">
+                                <span class="rotate-[-90deg] sm:rotate-0 text-[8px] sm:text-[10px]">ENTRADA</span>
+                            </div>
+                            <div class="col-span-2 bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900">
+                                <span>PRÉ-AQUECIMENTO</span>
+                            </div>
+                            <div class="col-span-4 bg-gradient-to-r from-rose-600 to-red-700 flex flex-col justify-center border-r border-slate-900 relative">
+                                <span class="animate-pulse absolute top-1 left-0 right-0 text-[8px] text-white/70">ZONA QUENTE (H2)</span>
+                                <span class="mt-2 text-xs">RECOZIMENTO</span>
+                            </div>
+                            <div class="col-span-4 bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900">
+                                <span>RESFRIAMENTO (ÁGUA)</span>
+                            </div>
+                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center shadow-inner">
+                                <span class="rotate-[-90deg] sm:rotate-0 text-[8px] sm:text-[10px]">SAÍDA</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-5 gap-2 text-center" id="blocosResistencias">
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 1</span><span class="text-xl font-black text-rose-700" id="setR1">1050°</span></div>
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 2</span><span class="text-xl font-black text-rose-700" id="setR2">1080°</span></div>
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 3</span><span class="text-xl font-black text-rose-700" id="setR3">1080°</span></div>
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 4</span><span class="text-xl font-black text-rose-700" id="setR4">1080°</span></div>
+                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 5</span><span class="text-xl font-black text-rose-700" id="setR5">1060°</span></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 shadow-sm">
+                        <div class="flex justify-between items-center mb-3">
+                            <label class="block text-xs font-bold text-orange-900 uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-gears"></i> Controle do Inversor da Esteira
+                            </label>
+                            <span class="text-orange-700 font-black text-xl bg-orange-200 px-4 py-1.5 rounded-xl border border-orange-300 shadow-inner" id="valFrequencia">32.0 Hz</span>
+                        </div>
+                        <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="32" oninput="calcularParametrosForno()" class="w-full h-3 bg-orange-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
+                        <div id="alertaInteligenteFrequencia" class="mt-3 min-h-[20px] bg-white p-2.5 rounded-lg border border-orange-100"></div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                            <div class="bg-slate-800 text-white text-xs font-bold uppercase tracking-wider p-3 text-center">Desempenho da Esteira</div>
+                            <div class="p-4 grid grid-cols-2 gap-4">
+                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Velocidade Atual</span>
+                                    <span class="block text-xl font-black text-blue-600" id="fornoVelocidade">0,94</span>
+                                    <span class="block text-[9px] text-slate-500 font-medium">m/min</span>
+                                </div>
+                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Tempo de Esteira</span>
+                                    <span class="block text-xl font-black text-blue-600" id="fornoTempoEsteira">00:30:24</span>
+                                    <span class="block text-[9px] text-slate-500 font-medium">HH:MM:SS</span>
+                                </div>
+                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Tempo de Ciclo</span>
+                                    <span class="block text-xl font-black text-blue-600" id="fornoTempoCiclo">00:00:44</span>
+                                    <span class="block text-[9px] text-slate-500 font-medium">HH:MM:SS</span>
+                                </div>
+                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças / Hora</span>
+                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasHora">80.94</span>
+                                    <span class="block text-[9px] text-slate-500 font-medium">unidades estimadas</span>
+                                </div>
+                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças / Turno</span>
+                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasTurno">971</span>
+                                    <span class="block text-[9px] text-slate-500 font-medium">unidades (12h)</span>
+                                </div>
+                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças / Dia</span>
+                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasDia">1942</span>
+                                    <span class="block text-[9px] text-slate-500 font-medium">unidades (24h)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-50 rounded-2xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col">
+                            <div class="bg-indigo-900 text-white text-xs font-bold uppercase tracking-wider p-3 text-center">Planejamento de Lote</div>
+                            <div class="p-5 flex-1 flex flex-col justify-center space-y-5">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-indigo-400 uppercase mb-2 tracking-wider">Total de Peças do Lote</label>
+                                    <input type="number" id="fornoLoteTotal" value="1000" min="1" oninput="calcularParametrosForno()" class="w-full bg-white border border-indigo-200 rounded-xl p-3 text-lg focus:outline-none focus:border-indigo-500 font-black text-indigo-900 text-center shadow-inner">
+                                </div>
+                                <div class="bg-white p-4 rounded-xl border border-indigo-100 text-center flex-1 flex flex-col justify-center shadow-sm">
+                                    <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2">Previsão Finalização</span>
+                                    <span class="block text-lg font-black text-indigo-700 leading-tight" id="fornoPrevisaoLote">-</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div id="view-intervencoes" class="fade-in hidden">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div>
@@ -225,20 +397,11 @@
                     </button>
                 </div>
             </div>
-
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-400 border-b border-slate-150 tracking-wider">
-                            <tr>
-                                <th class="p-4 w-20">FOTO</th>
-                                <th class="p-4">ID DA PEÇA</th>
-                                <th class="p-4">ITEM / FAMÍLIA</th>
-                                <th class="p-4">FAMÍLIA</th>
-                                <th class="p-4">QTD. ATUAL</th>
-                                <th class="p-4">LOCALIZAÇÃO</th>
-                                <th class="p-4 text-center w-28">AÇÕES</th>
-                            </tr>
+                            <tr><th class="p-4 w-20">FOTO</th><th class="p-4">ID DA PEÇA</th><th class="p-4">ITEM / FAMÍLIA</th><th class="p-4">FAMÍLIA</th><th class="p-4">QTD. ATUAL</th><th class="p-4">LOCALIZAÇÃO</th><th class="p-4 text-center w-28">AÇÕES</th></tr>
                         </thead>
                         <tbody id="almoxarifadoTbody"></tbody>
                     </table>
@@ -256,137 +419,6 @@
                 </div>
             </div>
             <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
-        </div>
-
-        <div id="view-forno-detalhes" class="fade-in hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                <div class="lg:col-span-4 space-y-6">
-                    
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                        <div class="flex justify-between items-center border-b pb-3 border-slate-100">
-                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fa-solid fa-sliders text-orange-600"></i> Setup e Dimensões
-                            </h3>
-                        </div>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Modo do Forno (Atmosfera)</label>
-                                <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
-                                    <option value="aco-304">Produção: Aço Inoxidável 304</option>
-                                    <option value="aco-201">Produção: Aço Inoxidável 201</option>
-                                    <option value="estabilizacao">Repasso: Estabilização (8 a 12h)</option>
-                                </select>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tam. Cuba (mm)</label>
-                                    <input type="number" id="fornoPecaComprimento" value="700" min="10" max="2000" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaço L/L (mm)</label>
-                                    <input type="number" id="fornoEspacamento" value="40" min="0" max="1000" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
-                                </div>
-                            </div>
-                            <div class="pt-2 border-t border-slate-100">
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
-                                    <span>Espessura da Chapa</span>
-                                    <span class="text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded" id="valEspessura">0.8 mm</span>
-                                </label>
-                                <input type="range" id="fornoEspessura" min="0.4" max="5.0" step="0.1" value="0.8" oninput="calcularParametrosForno()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-md space-y-4 relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 opacity-5 text-6xl"><i class="fa-solid fa-flask"></i></div>
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2 relative z-10 border-b border-slate-700 pb-2">
-                            <i class="fa-solid fa-wind text-cyan-400"></i> Quebrador de Amônia (H2)
-                        </h3>
-                        <div class="grid grid-cols-2 gap-4 relative z-10">
-                            <div>
-                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Temp. Quebra</span>
-                                <span class="block text-xl font-bold text-rose-500 mt-1">820 °C</span>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Vazão (m³/H)</label>
-                                <input type="number" id="fornoVazaoGas" value="45" min="0" max="60" oninput="calcularParametrosForno()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none text-center font-bold">
-                            </div>
-                        </div>
-                        <div class="pt-2 border-t border-slate-700 relative z-10">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bancada de Filtros</span>
-                                <span class="text-[9px] bg-slate-800 px-2 py-0.5 rounded font-bold text-slate-300 border border-slate-700">Ciclo: 168h</span>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="flex-1 bg-cyan-600 text-white text-xs font-bold py-2 rounded-lg shadow border border-cyan-500">Bancada A (Ativa)</button>
-                                <button class="flex-1 bg-slate-800 text-slate-400 text-xs font-bold py-2 rounded-lg shadow border border-slate-700">Bancada B (300°C)</button>
-                            </div>
-                            <p class="text-[9px] text-slate-400 mt-2 italic text-center">Bancada em repouso deve ser aquecida a 300°C para purga.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-8 space-y-6">
-                    
-                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
-                            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Velocidade Atual</span>
-                            <span class="block text-xl font-bold text-slate-800 mt-1" id="fornoVelocidade">0,80</span>
-                            <span class="block text-[9px] text-slate-400 font-medium">metros / min</span>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center">
-                            <span class="block text-[9px] font-bold text-slate-400 uppercase tracking-wider">Tempo de Ciclo</span>
-                            <span class="block text-xl font-bold text-slate-800 mt-1" id="fornoTempoCiclo">48</span>
-                            <span class="block text-[9px] text-slate-400 font-medium">minutos no forno</span>
-                        </div>
-                        <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 shadow-sm text-center relative overflow-hidden">
-                            <div class="absolute -right-2 -top-2 opacity-10 text-4xl"><i class="fa-solid fa-cubes-stacked"></i></div>
-                            <span class="block text-[9px] font-bold text-blue-600 uppercase tracking-wider relative z-10">Carga Simultânea</span>
-                            <span class="block text-2xl font-black text-blue-700 mt-1 relative z-10" id="fornoCapacidade">51</span>
-                            <span class="block text-[9px] text-blue-600/80 font-medium relative z-10">Peças dentro do forno</span>
-                        </div>
-                        <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 shadow-sm text-center relative overflow-hidden">
-                            <div class="absolute -right-2 -top-2 opacity-10 text-4xl"><i class="fa-solid fa-stopwatch"></i></div>
-                            <span class="block text-[9px] font-bold text-emerald-600 uppercase tracking-wider relative z-10">Produtividade</span>
-                            <span class="block text-2xl font-black text-emerald-700 mt-1 relative z-10" id="fornoProdutividade">64</span>
-                            <span class="block text-[9px] text-emerald-600/80 font-medium relative z-10">Peças prontas / hora</span>
-                        </div>
-                    </div>
-
-                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 shadow-sm">
-                        <div class="flex justify-between items-center mb-3">
-                            <label class="block text-xs font-bold text-orange-900 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-gears"></i> Controle do Inversor da Esteira
-                            </label>
-                            <span class="text-orange-700 font-black text-lg bg-orange-200 px-3 py-1 rounded-lg border border-orange-300" id="valFrequencia">32.0 Hz</span>
-                        </div>
-                        <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="32" oninput="calcularParametrosForno()" class="w-full h-3 bg-orange-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
-                        <div id="alertaInteligenteFrequencia" class="mt-3 min-h-[20px] bg-white p-2.5 rounded-lg border border-orange-100"></div>
-                    </div>
-
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-temperature-arrow-up text-rose-600"></i> Zonas de Aquecimento (Setpoint)
-                        </h3>
-                        
-                        <div class="grid grid-cols-5 gap-2 text-center" id="blocosResistencias">
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R1</span><span class="text-lg font-black text-rose-700" id="setR1">1050°</span></div>
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R2</span><span class="text-lg font-black text-rose-700" id="setR2">1080°</span></div>
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R3</span><span class="text-lg font-black text-rose-700" id="setR3">1080°</span></div>
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R4</span><span class="text-lg font-black text-rose-700" id="setR4">1080°</span></div>
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl"><span class="block text-[10px] font-bold text-rose-500 mb-1">R5</span><span class="text-lg font-black text-rose-700" id="setR5">1060°</span></div>
-                        </div>
-
-                        <div class="border border-slate-200 rounded-xl p-3 bg-slate-50 mt-4">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Visão Física da Esteira (Ocupação em ~38 metros)</span>
-                            </div>
-                            <div class="h-10 w-full bg-slate-200 rounded-lg flex items-center px-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </main>
@@ -650,6 +682,125 @@
         </div>
     </div>
 
+    <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
+        <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
+            <div class="p-8 space-y-6">
+                <h3 id="almoxModalTitle" class="text-xl font-bold text-slate-900">Cadastrar Novo Item</h3>
+                <input type="hidden" id="editAlmoxIndex">
+                <div class="space-y-4 font-sans text-slate-600">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label>
+                        <div class="flex gap-2 items-center">
+                            <input type="text" id="novoItemNome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                            <div class="relative">
+                                <input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="absolute inset-0 opacity-0 cursor-pointer w-10 h-10">
+                                <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all">
+                                    <i class="fa-solid fa-camera text-slate-500"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="fotoPreviewContainer" class="hidden relative border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-2 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <img id="fotoPreviewImg" src="" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" class="h-10 w-10 object-cover rounded-lg border">
+                            <span class="text-[10px] text-slate-500 font-medium">Foto anexada</span>
+                        </div>
+                        <button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Remover
+                        </button>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label>
+                        <textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label>
+                            <input type="text" id="novoItemCategoria" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label>
+                            <input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label>
+                            <input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label>
+                            <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label>
+                        <div id="localizacaoInputsContainer" class="space-y-2"></div>
+                        <button type="button" onclick="adicionarLinhaLocalizacao()" class="text-[10px] text-blue-600 font-bold mt-2 flex items-center gap-1 hover:text-blue-700"><i class="fa-solid fa-plus"></i> Endereço</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-3 border-t">
+                    <button onclick="fecharModalCadastroItem()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button onclick="confirmarCadastroItem()" class="w-full py-3 bg-[#0b132b] hover:bg-slate-850 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
+        <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
+            <div class="p-8 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 font-sans">Registrar Movimentação</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label>
+                        <select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-150 rounded-xl p-3 text-[10px] space-y-2 text-slate-600 font-sans">
+                        <div><span class="block font-bold text-slate-400 uppercase">Descrição</span><span id="movItemDescText" class="text-slate-700 font-medium">-</span></div>
+                        <div><span class="block font-bold text-slate-400 uppercase">Localização</span><span id="movItemLocalText" class="text-slate-700 font-medium">-</span></div>
+                        <div class="flex gap-2 pt-1 border-t">
+                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 font-sans">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label>
+                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label>
+                            <input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
+                    </div>
+                    <div class="font-sans">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
+                        <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
+                    </div>
+                    <div class="font-sans">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label>
+                        <textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-3 border-t font-sans">
+                    <button onclick="fecharModalMovimentacao()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button onclick="confirmarMovimentacao()" class="w-full py-3 bg-[#047857] hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
+        <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
+            <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
+            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1">
+                <i class="fa-solid fa-xmark"></i> Fechar
+            </button>
+        </div>
+    </div>
+
+    <div id="printArea" class="hidden"></div>
+
     <script>
         let originalDatabase = [];
         let checklistStatus = [];
@@ -658,7 +809,7 @@
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
-        let maquinasData = []; // NOVO: Armazena hierarquia de máquinas
+        let maquinasData = []; 
         
         let currentView = 'home';
         let selectedSetor = '';
@@ -780,7 +931,6 @@
                 const maquinasDaFamilia = maquinasData.filter(m => m.familia === selFamilia);
                 const subfamilias = [...new Set(maquinasDaFamilia.map(m => m.subfamilia))].filter(Boolean).sort();
                 
-                // Se não tem subfamília, pula direto para as máquinas
                 if (subfamilias.length === 0) {
                     renderNivelMaquina('maquinas', selFamilia);
                     return;
@@ -795,7 +945,6 @@
                     </button>`;
                 });
                 
-                // Mostra as máquinas soltas sem subfamília
                 const semSub = maquinasDaFamilia.filter(m => !m.subfamilia);
                 semSub.forEach(m => { html += gerarCardMaquina(m); });
             }
@@ -862,27 +1011,68 @@
             const material = document.getElementById('fornoMaterial').value;
             const espessura = parseFloat(document.getElementById('fornoEspessura').value); 
             const freq = parseFloat(document.getElementById('fornoFrequencia').value); 
-            const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value) || 1; 
-            const espacamento = parseFloat(document.getElementById('fornoEspacamento').value) || 0; 
-            const vazaoGas = document.getElementById('fornoVazaoGas').value;
+            const compPecaCM = parseFloat(document.getElementById('fornoPecaComprimento').value) || 67; 
+            const espacamentoCM = parseFloat(document.getElementById('fornoEspacamento').value) || 2.5; 
+            const loteTotal = parseInt(document.getElementById('fornoLoteTotal').value) || 0;
             
             document.getElementById('valEspessura').innerText = `${espessura.toFixed(1)} mm`; 
             document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
             
-            // Fator de conversão aproximado: 32Hz resultando em ciclo de 48min numa extensão de ~38m
-            const velocidadeEsteira = freq * 0.025; // m/min
-            const velocidadeMMporMin = velocidadeEsteira * 1000; // mm/min
-            const comprimentoFornoMM = 38000; // ~38 metros (Baseado em 50 a 55 peças de 700mm)
-            const tempoTotalCiclo = comprimentoFornoMM / velocidadeMMporMin; // em minutos
+            // Fator Exato Extraído da Planilha: 32 Hz = 0.015625 m/s = 0.9375 m/min
+            // Fator multiplicador de Hz para m/min = 0.9375 / 32 = 0.029296875
+            const fatorVelocidade = 0.029296875;
+            const velocidadeMmin = freq * fatorVelocidade; // m/min
+            const velocidadeMs = velocidadeMmin / 60; // m/s
+            const velocidadeMh = velocidadeMmin * 60; // m/h
+            const comprimentoFornoM = 28.5; // Metros
             
-            const espacoPorPeca = compPeca + espacamento;
+            // Tempo de esteira (Ponta a Ponta)
+            const tempoEsteiraMin = comprimentoFornoM / velocidadeMmin;
+            const tempoEsteiraSegundosTotais = Math.round(tempoEsteiraMin * 60);
+            const teMin = Math.floor(tempoEsteiraSegundosTotais / 60);
+            const teSeg = tempoEsteiraSegundosTotais % 60;
+            const tempoEsteiraFormatado = `00:${String(teMin).padStart(2, '0')}:${String(teSeg).padStart(2, '0')}`;
+            
+            // Espaço e Capacidade
+            const espacoPorPecaM = (compPecaCM + espacamentoCM) / 100;
             let capacidade = 0;
             let produtividadeHora = 0;
+            let tempoCicloFormatado = "00:00:00";
+            let tempoCicloSegundosTotais = 0;
+            let tempoCicloMin = 0;
             
-            if (espacoPorPeca > 0) {
-                capacidade = Math.floor(comprimentoFornoMM / espacoPorPeca);
-                produtividadeHora = Math.floor((velocidadeMMporMin * 60) / espacoPorPeca);
+            if (espacoPorPecaM > 0) {
+                capacidade = Math.floor(comprimentoFornoM / espacoPorPecaM);
+                
+                // Tempo de Ciclo = Espaço da Peça / Velocidade (m/min)
+                tempoCicloMin = espacoPorPecaM / velocidadeMmin;
+                tempoCicloSegundosTotais = Math.round(tempoCicloMin * 60);
+                const tcMin = Math.floor(tempoCicloSegundosTotais / 60);
+                const tcSeg = tempoCicloSegundosTotais % 60;
+                tempoCicloFormatado = `00:${String(tcMin).padStart(2, '0')}:${String(tcSeg).padStart(2, '0')}`;
+                
+                // Peças/Hora
+                produtividadeHora = velocidadeMh / espacoPorPecaM;
             }
+
+            // Previsão de Lote (Igual Planilha Direita)
+            let previsaoStr = "-";
+            if (loteTotal > 0 && tempoCicloMin > 0) {
+                // Multiplica a qtd do lote pelo tempo que demora para sair cada peça
+                const tempoTotalLoteSegundos = Math.round(loteTotal * tempoCicloSegundosTotais);
+                const lh = Math.floor(tempoTotalLoteSegundos / 3600);
+                const lm = Math.floor((tempoTotalLoteSegundos % 3600) / 60);
+                const ls = tempoTotalLoteSegundos % 60;
+                const tempoEstimadoFormat = `${String(lh).padStart(2, '0')}:${String(lm).padStart(2, '0')}:${String(ls).padStart(2, '0')}`;
+
+                const agora = new Date();
+                agora.setSeconds(agora.getSeconds() + tempoTotalLoteSegundos);
+                const dataFim = agora.toLocaleDateString('pt-BR');
+                const horaFim = agora.toLocaleTimeString('pt-BR');
+
+                previsaoStr = `<span class="text-xs text-indigo-500 font-bold mb-1 block">Tempo Requerido: ${tempoEstimadoFormat}</span> ${dataFim} às ${horaFim}`;
+            }
+            document.getElementById('fornoPrevisaoLote').innerHTML = previsaoStr;
 
             // Setpoints de Temperatura baseados no Material
             let r1="1050°", r2="1080°", r3="1080°", r4="1080°", r5="1060°";
@@ -911,12 +1101,16 @@
             }
             document.getElementById('alertaInteligenteFrequencia').innerHTML = avisoInteligente;
 
-            document.getElementById('fornoVelocidade').innerText = velocidadeEsteira.toFixed(2); 
-            document.getElementById('fornoTempoCiclo').innerText = Math.round(tempoTotalCiclo);
+            // Atualiza Interface KPIs
+            document.getElementById('fornoVelocidade').innerText = velocidadeMmin.toFixed(2); 
+            document.getElementById('fornoTempoEsteira').innerText = tempoEsteiraFormatado;
+            document.getElementById('fornoTempoCiclo').innerText = tempoCicloFormatado;
             document.getElementById('fornoCapacidade').innerText = capacidade;
-            document.getElementById('fornoProdutividade').innerText = produtividadeHora;
+            document.getElementById('fornoPecasHora').innerText = produtividadeHora.toFixed(2);
+            document.getElementById('fornoPecasTurno').innerText = Math.round(produtividadeHora * 12);
+            document.getElementById('fornoPecasDia').innerText = Math.round(produtividadeHora * 24);
 
-            renderVisualEsteira(compPeca, espacamento, capacidade);
+            renderVisualEsteira(compPecaCM, espacamentoCM, capacidade);
         }
 
         function renderVisualEsteira(comprimento, espacamento, totalNoForno) {
@@ -936,7 +1130,6 @@
             }
         }
 
-        // Funções de inicialização originais mantidas
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
@@ -1391,7 +1584,9 @@
                 modalTitle.innerText = "Para Hoje"; modalDesc.innerText = "Selecione o setor para ver os checklists do dia.";
                 modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
                 
+                // Mapeia automaticamente os setores que possuem itens para hoje
                 const setoresHoje = [...new Set(alertas.hoje.map(a => a.setor))];
+                
                 if (setoresHoje.length > 0 && divMenuHoje) {
                     divMenuHoje.innerHTML = setoresHoje.map(setor => {
                         const count = alertas.hoje.filter(a => a.setor === setor).length;
