@@ -16,6 +16,10 @@
         .fade-in { animation: fadeIn .2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
         
+        /* Ocultar setas de input number no Firefox e Chrome */
+        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type="number"] { -moz-appearance: textfield; }
+
         @media print {
             @page { size: landscape; margin: 8mm; }
             body { background: white !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -75,7 +79,6 @@
 
         <div id="view-home" class="fade-in">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-rose-600 text-white rounded-xl"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                     <div>
@@ -84,7 +87,6 @@
                         <span class="block text-[10px] text-rose-700 font-medium mt-0.5">Chamados Abertos</span>
                     </div>
                 </button>
-
                 <button onclick="abrirPreditiva('vencidas')" class="nav-card text-left bg-red-50 border border-red-200 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full hover:bg-red-100/50 transition-colors">
                     <div class="p-3 bg-red-600 text-white rounded-xl"><i class="fa-solid fa-circle-xmark text-lg"></i></div>
                     <div>
@@ -93,7 +95,6 @@
                         <span class="block text-[10px] text-red-700 font-medium mt-0.5">Checklists Vencidos</span>
                     </div>
                 </button>
-
                 <button onclick="abrirPreditiva('hoje')" class="nav-card text-left bg-amber-50 border border-amber-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full hover:bg-amber-100/50 transition-colors">
                     <div class="p-3 bg-amber-500 text-white rounded-xl"><i class="fa-solid fa-clock text-lg"></i></div>
                     <div>
@@ -102,7 +103,6 @@
                         <span class="block text-[10px] text-amber-700 font-medium mt-0.5">Revisões do Dia</span>
                     </div>
                 </button>
-
                 <button onclick="abrirPreditiva('programacao')" class="nav-card text-left bg-blue-50 border border-blue-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full hover:bg-blue-100/50 transition-colors">
                     <div class="p-3 bg-blue-600 text-white rounded-xl"><i class="fa-solid fa-calendar-days text-lg"></i></div>
                     <div>
@@ -111,7 +111,6 @@
                         <span class="block text-[10px] text-blue-700 font-medium mt-0.5">Próximos 7 dias</span>
                     </div>
                 </button>
-
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -120,25 +119,21 @@
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Inspeção & Checklist</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Painel de execução com acompanhamento de atrasos e impressão.</p>
                 </button>
-
                 <button onclick="abrirModuloAlmoxarifado()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-boxes-stacked text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Almoxarifado Técnico</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Controle detalhado de quantidades, localizações e movimentação de peças.</p>
                 </button>
-                
                 <button onclick="abrirModuloIntervencoes()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Intervenções & Melhorias</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Registro direto de corretivas forçadas e modificações em equipamentos.</p>
                 </button>
-
                 <button onclick="abrirModuloPOPs()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-book-open text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Procedimentos (POP)</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Guias de execução passo a passo de bloqueios de segurança e LOTO.</p>
                 </button>
-
                 <button onclick="abrirModuloMaquinas()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-gears text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Máquinas & Parâmetros</h2>
@@ -172,34 +167,34 @@
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                         <div class="flex justify-between items-center border-b pb-3 border-slate-100">
                             <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fa-solid fa-sliders text-orange-600"></i> Setup da Peça
+                                <i class="fa-solid fa-sliders text-orange-600"></i> Setup de Carga e Chapa
                             </h3>
                         </div>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Modo do Forno</label>
-                                <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-800">
-                                    <option value="aco-304">Produção: Aço Inox 304</option>
-                                    <option value="aco-201">Produção: Aço Inox 201</option>
-                                    <option value="estabilizacao">Repasso: Estabilização (8 a 12h)</option>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Modo e Perfil de Aço</label>
+                                <select id="fornoMaterial" onchange="mudarMaterialForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                    <option value="aco-304">Aço Inox 304 (Validação Padrão)</option>
+                                    <option value="aco-201">Aço Inox 201</option>
+                                    <option value="estabilizacao">Estabilização Atmosférica</option>
                                 </select>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tam. Cuba (cm)</label>
-                                    <input type="number" id="fornoPecaComprimento" value="67" min="1" max="200" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                    <input type="number" id="fornoPecaComprimento" value="70" min="1" max="200" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800 text-center">
                                 </div>
                                 <div>
                                     <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaço L/L (cm)</label>
-                                    <input type="number" id="fornoEspacamento" value="2.5" min="0" max="100" step="0.5" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                    <input type="number" id="fornoEspacamento" value="4" min="0" max="100" step="0.5" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800 text-center">
                                 </div>
                             </div>
                             <div class="pt-2 border-t border-slate-100">
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
-                                    <span>Espessura da Chapa</span>
-                                    <span class="text-blue-600 font-bold bg-blue-50 px-2 py-0.5 rounded" id="valEspessura">0.8 mm</span>
-                                </label>
-                                <input type="range" id="fornoEspessura" min="0.4" max="5.0" step="0.1" value="0.8" oninput="calcularParametrosForno()" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espessura da Chapa (mm)</label>
+                                <div class="flex items-center gap-3">
+                                    <input type="number" id="fornoEspessura" min="0.40" max="5.00" step="0.05" value="0.80" oninput="calcularParametrosForno()" class="w-24 bg-white border border-blue-300 rounded-lg p-2 text-sm focus:outline-none focus:border-blue-600 font-black text-blue-700 text-center shadow-inner">
+                                    <span class="text-xs text-slate-500 font-medium leading-tight">Altere em incrementos de 0.05 mm para ajuste fino de encharque.</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -207,7 +202,7 @@
                     <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-md space-y-4 relative overflow-hidden">
                         <div class="absolute -right-4 -top-4 opacity-5 text-6xl"><i class="fa-solid fa-flask"></i></div>
                         <h3 class="text-sm font-bold text-white flex items-center gap-2 relative z-10 border-b border-slate-700 pb-2">
-                            <i class="fa-solid fa-wind text-cyan-400"></i> Quebrador de Amônia (H2)
+                            <i class="fa-solid fa-wind text-cyan-400"></i> Quebrador de Amônia (H₂)
                         </h3>
                         <div class="grid grid-cols-2 gap-4 relative z-10">
                             <div>
@@ -216,7 +211,7 @@
                             </div>
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Vazão Gás (m³/H)</label>
-                                <input type="number" id="fornoVazaoGas" value="45" min="0" max="60" oninput="calcularParametrosForno()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none text-center font-bold">
+                                <input type="number" id="fornoVazaoGas" value="45" min="0" max="60" oninput="calcularParametrosForno()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none text-center font-bold shadow-inner">
                             </div>
                         </div>
                         <div class="pt-2 border-t border-slate-700 relative z-10">
@@ -228,7 +223,7 @@
                                 <button class="flex-1 bg-cyan-600 text-white text-xs font-bold py-2 rounded-lg shadow border border-cyan-500 flex justify-center items-center gap-1.5"><i class="fa-solid fa-check-circle"></i> Bancada A</button>
                                 <button class="flex-1 bg-slate-800 text-slate-400 text-xs font-bold py-2 rounded-lg shadow border border-slate-700 flex justify-center items-center gap-1.5"><i class="fa-solid fa-fire"></i> Bancada B (300°)</button>
                             </div>
-                            <p class="text-[9px] text-slate-400 mt-2 italic text-center">Bancada em repouso deve ser aquecida a 300°C para purga e limpeza.</p>
+                            <p class="text-[9px] text-slate-400 mt-2 italic text-center">Bancada B em repouso deve ser aquecida a 300°C para purga.</p>
                         </div>
                     </div>
                 </div>
@@ -236,102 +231,128 @@
                 <div class="lg:col-span-8 space-y-6">
                     
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
-                            <i class="fa-solid fa-fire-flame-curved text-rose-600"></i> Diagrama Térmico do Forno (28,50 Metros)
-                        </h3>
+                        <div class="flex justify-between items-end border-b border-slate-100 pb-2">
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-fire-flame-curved text-rose-600"></i> Diagrama de Zonas e Resistências
+                            </h3>
+                            <span class="text-[10px] font-bold text-slate-400 uppercase">Extensão total: 38 Metros</span>
+                        </div>
                         
-                        <div class="grid grid-cols-12 rounded-xl overflow-hidden h-16 shadow text-center font-bold text-[10px] text-white border border-slate-300">
+                        <div class="grid grid-cols-12 rounded-xl overflow-hidden h-[70px] shadow text-center font-bold text-[10px] text-white border border-slate-300">
                             <div class="col-span-1 bg-slate-800 flex flex-col justify-center border-r border-slate-900 shadow-inner">
-                                <span class="rotate-[-90deg] sm:rotate-0 text-[8px] sm:text-[10px]">ENTRADA</span>
+                                <span class="text-[9px]">ENTRADA</span><span class="text-[8px] text-slate-400 font-normal mt-0.5">2,0 m</span>
                             </div>
                             <div class="col-span-2 bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900">
-                                <span>PRÉ-AQUECIMENTO</span>
+                                <span class="text-[9px]">PRÉ-AQUEC.</span><span class="text-[8px] text-orange-200 font-normal mt-0.5">6,0 m</span>
                             </div>
                             <div class="col-span-4 bg-gradient-to-r from-rose-600 to-red-700 flex flex-col justify-center border-r border-slate-900 relative">
-                                <span class="animate-pulse absolute top-1 left-0 right-0 text-[8px] text-white/70">ZONA QUENTE (H2)</span>
-                                <span class="mt-2 text-xs">RECOZIMENTO</span>
+                                <span class="animate-pulse absolute top-1 left-0 right-0 text-[8px] text-white/70 tracking-widest">ZONA QUENTE (RECOZIMENTO)</span>
+                                <span class="mt-2 text-xs">12,0 Metros</span>
                             </div>
                             <div class="col-span-4 bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900">
-                                <span>RESFRIAMENTO (ÁGUA)</span>
+                                <span class="text-[9px]">RESFRIAMENTO (H₂)</span><span class="text-[8px] text-blue-200 font-normal mt-0.5">16,0 m</span>
                             </div>
                             <div class="col-span-1 bg-slate-800 flex flex-col justify-center shadow-inner">
-                                <span class="rotate-[-90deg] sm:rotate-0 text-[8px] sm:text-[10px]">SAÍDA</span>
+                                <span class="text-[9px]">SAÍDA</span><span class="text-[8px] text-slate-400 font-normal mt-0.5">2,0 m</span>
                             </div>
                         </div>
 
-                        <div class="grid grid-cols-5 gap-2 text-center" id="blocosResistencias">
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 1</span><span class="text-xl font-black text-rose-700" id="setR1">1050°</span></div>
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 2</span><span class="text-xl font-black text-rose-700" id="setR2">1080°</span></div>
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 3</span><span class="text-xl font-black text-rose-700" id="setR3">1080°</span></div>
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 4</span><span class="text-xl font-black text-rose-700" id="setR4">1080°</span></div>
-                            <div class="bg-rose-50 border border-rose-200 p-3 rounded-xl shadow-sm"><span class="block text-[9px] font-bold text-rose-500 mb-1">RESISTÊNCIA 5</span><span class="text-xl font-black text-rose-700" id="setR5">1060°</span></div>
+                        <div class="grid grid-cols-5 gap-2 text-center">
+                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
+                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R1 (°C)</span>
+                                <input type="number" id="fornoR1" value="1050" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-xl focus:outline-none">
+                            </div>
+                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
+                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R2 (°C)</span>
+                                <input type="number" id="fornoR2" value="1080" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-xl focus:outline-none">
+                            </div>
+                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
+                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R3 (°C)</span>
+                                <input type="number" id="fornoR3" value="1080" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-xl focus:outline-none">
+                            </div>
+                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
+                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R4 (°C)</span>
+                                <input type="number" id="fornoR4" value="1080" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-xl focus:outline-none">
+                            </div>
+                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
+                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R5 (°C)</span>
+                                <input type="number" id="fornoR5" value="1060" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-xl focus:outline-none">
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="bg-orange-50 p-5 rounded-2xl border border-orange-200 shadow-sm">
-                        <div class="flex justify-between items-center mb-3">
-                            <label class="block text-xs font-bold text-orange-900 uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-gears"></i> Controle do Inversor da Esteira
-                            </label>
-                            <span class="text-orange-700 font-black text-xl bg-orange-200 px-4 py-1.5 rounded-xl border border-orange-300 shadow-inner" id="valFrequencia">32.0 Hz</span>
+                        <div class="mt-4 pt-4 border-t border-slate-100">
+                            <h4 class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
+                                <i class="fa-solid fa-user-tie text-blue-600"></i> Análise de Engenharia do Processo
+                            </h4>
+                            <div id="painelEspecialista" class="space-y-2">
+                                </div>
                         </div>
-                        <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="32" oninput="calcularParametrosForno()" class="w-full h-3 bg-orange-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
-                        <div id="alertaInteligenteFrequencia" class="mt-3 min-h-[20px] bg-white p-2.5 rounded-lg border border-orange-100"></div>
+
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         
-                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-                            <div class="bg-slate-800 text-white text-xs font-bold uppercase tracking-wider p-3 text-center">Desempenho da Esteira</div>
-                            <div class="p-4 grid grid-cols-2 gap-4">
-                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Velocidade Atual</span>
-                                    <span class="block text-xl font-black text-blue-600" id="fornoVelocidade">0,94</span>
-                                    <span class="block text-[9px] text-slate-500 font-medium">m/min</span>
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                            <div class="bg-orange-50 text-orange-900 text-xs font-bold uppercase tracking-wider p-3 text-center border-b border-orange-100">Inversor da Esteira</div>
+                            <div class="p-5 flex-1 flex flex-col justify-center space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider">Frequência</label>
+                                    <span class="text-orange-700 font-black text-xl" id="valFrequencia">32.0 Hz</span>
                                 </div>
-                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Tempo de Esteira</span>
-                                    <span class="block text-xl font-black text-blue-600" id="fornoTempoEsteira">00:30:24</span>
-                                    <span class="block text-[9px] text-slate-500 font-medium">HH:MM:SS</span>
-                                </div>
-                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Tempo de Ciclo</span>
-                                    <span class="block text-xl font-black text-blue-600" id="fornoTempoCiclo">00:00:44</span>
-                                    <span class="block text-[9px] text-slate-500 font-medium">HH:MM:SS</span>
-                                </div>
-                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças / Hora</span>
-                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasHora">80.94</span>
-                                    <span class="block text-[9px] text-slate-500 font-medium">unidades estimadas</span>
-                                </div>
-                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças / Turno</span>
-                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasTurno">971</span>
-                                    <span class="block text-[9px] text-slate-500 font-medium">unidades (12h)</span>
-                                </div>
-                                <div class="text-center bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças / Dia</span>
-                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasDia">1942</span>
-                                    <span class="block text-[9px] text-slate-500 font-medium">unidades (24h)</span>
+                                <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="32" oninput="calcularParametrosForno()" class="w-full h-3 bg-orange-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
+                                
+                                <div class="grid grid-cols-2 gap-3 mt-4">
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
+                                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Velocidade</span>
+                                        <span class="block text-lg font-black text-blue-600 mt-0.5" id="fornoVelocidade">0,94</span>
+                                        <span class="block text-[8px] text-slate-500 font-medium">m/min</span>
+                                    </div>
+                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
+                                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Tempo Est.</span>
+                                        <span class="block text-lg font-black text-blue-600 mt-0.5" id="fornoTempoEsteira">00:30:24</span>
+                                        <span class="block text-[8px] text-slate-500 font-medium">Tempo total (38m)</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="bg-indigo-50 rounded-2xl border border-indigo-200 shadow-sm overflow-hidden flex flex-col">
-                            <div class="bg-indigo-900 text-white text-xs font-bold uppercase tracking-wider p-3 text-center">Planejamento de Lote</div>
-                            <div class="p-5 flex-1 flex flex-col justify-center space-y-5">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-indigo-400 uppercase mb-2 tracking-wider">Total de Peças do Lote</label>
-                                    <input type="number" id="fornoLoteTotal" value="1000" min="1" oninput="calcularParametrosForno()" class="w-full bg-white border border-indigo-200 rounded-xl p-3 text-lg focus:outline-none focus:border-indigo-500 font-black text-indigo-900 text-center shadow-inner">
+                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
+                            <div class="bg-slate-800 text-white text-xs font-bold uppercase tracking-wider p-3 text-center">Desempenho e Lote</div>
+                            <div class="p-4 grid grid-cols-3 gap-2 border-b border-slate-100">
+                                <div class="text-center">
+                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasHora">80</span>
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças/Hora</span>
                                 </div>
-                                <div class="bg-white p-4 rounded-xl border border-indigo-100 text-center flex-1 flex flex-col justify-center shadow-sm">
-                                    <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2">Previsão Finalização</span>
-                                    <span class="block text-lg font-black text-indigo-700 leading-tight" id="fornoPrevisaoLote">-</span>
+                                <div class="text-center border-l border-r border-slate-100">
+                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasTurno">971</span>
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças/12h</span>
+                                </div>
+                                <div class="text-center">
+                                    <span class="block text-xl font-black text-blue-600" id="fornoCapacidade">51</span>
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Dentro</span>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-slate-50 flex-1 flex items-center gap-4">
+                                <div class="w-1/3">
+                                    <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1">Total Lote</label>
+                                    <input type="number" id="fornoLoteTotal" value="1000" min="1" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm focus:outline-none focus:border-blue-500 font-black text-slate-800 text-center shadow-inner">
+                                </div>
+                                <div class="w-2/3">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Término Previsto</span>
+                                    <span class="block text-sm font-black text-indigo-700 leading-tight" id="fornoPrevisaoLote">-</span>
                                 </div>
                             </div>
                         </div>
 
                     </div>
+
+                    <div class="border border-slate-200 rounded-xl p-3 bg-white shadow-sm">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Simulação da Carga na Esteira (~38m)</span>
+                        </div>
+                        <div class="h-10 w-full bg-slate-100 rounded-lg flex items-center px-1 overflow-hidden relative shadow-inner border border-slate-200" id="conveyorVisualArea"></div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -397,11 +418,20 @@
                     </button>
                 </div>
             </div>
+
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-400 border-b border-slate-150 tracking-wider">
-                            <tr><th class="p-4 w-20">FOTO</th><th class="p-4">ID DA PEÇA</th><th class="p-4">ITEM / FAMÍLIA</th><th class="p-4">FAMÍLIA</th><th class="p-4">QTD. ATUAL</th><th class="p-4">LOCALIZAÇÃO</th><th class="p-4 text-center w-28">AÇÕES</th></tr>
+                            <tr>
+                                <th class="p-4 w-20">FOTO</th>
+                                <th class="p-4">ID DA PEÇA</th>
+                                <th class="p-4">ITEM / FAMÍLIA</th>
+                                <th class="p-4">FAMÍLIA</th>
+                                <th class="p-4">QTD. ATUAL</th>
+                                <th class="p-4">LOCALIZAÇÃO</th>
+                                <th class="p-4 text-center w-28">AÇÕES</th>
+                            </tr>
                         </thead>
                         <tbody id="almoxarifadoTbody"></tbody>
                     </table>
@@ -427,19 +457,11 @@
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
-                        <i class="fa-solid fa-link text-lg"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900">Configurar Conexão</h3>
-                        <p class="text-xs text-slate-500 font-medium">Insira a URL do Google Apps Script</p>
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center"><i class="fa-solid fa-link text-lg"></i></div>
+                    <div><h3 class="text-base font-bold text-slate-900">Configurar Conexão</h3><p class="text-xs text-slate-500 font-medium">Insira a URL do Google Apps Script</p></div>
                 </div>
                 <div class="space-y-4 mb-5">
-                    <div>
-                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">URL de Implantação</label>
-                        <input type="text" id="apiInputUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-mono">
-                    </div>
+                    <div><label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">URL de Implantação</label><input type="text" id="apiInputUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-mono"></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="toggleConfigModal(false)" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
@@ -453,13 +475,8 @@
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center gap-3 mb-5 border-b pb-4">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shadow-sm border border-rose-200">
-                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900">Abertura de Chamado</h3>
-                        <p class="text-[10px] text-slate-500 font-medium">Registro de Manutenção Corretiva (OS)</p>
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shadow-sm border border-rose-200"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
+                    <div><h3 class="text-base font-bold text-slate-900">Abertura de Chamado</h3><p class="text-[10px] text-slate-500 font-medium">Registro de Manutenção Corretiva (OS)</p></div>
                 </div>
                 <div class="space-y-4 mb-5">
                     <div>
@@ -485,9 +502,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="fecharModalChamado()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
-                    <button id="btnEnviarChamado" onclick="enviarChamado()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-paper-plane"></i> Enviar Alerta
-                    </button>
+                    <button id="btnEnviarChamado" onclick="enviarChamado()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all"><i class="fa-solid fa-paper-plane"></i> Enviar Alerta</button>
                 </div>
             </div>
         </div>
@@ -497,13 +512,8 @@
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-file-lines"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3>
-                        <p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p>
-                    </div>
+                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm"><i class="fa-solid fa-file-lines"></i></div>
+                    <div><h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3><p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p></div>
                 </div>
                 <button onclick="fecharDetalhesOS()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -515,11 +525,8 @@
                     </div>
                     <span class="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-1 rounded font-bold border border-emerald-200" id="detOsStatus"></span>
                 </div>
-                
                 <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 space-y-3">
-                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)
-                    </div>
+                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2"><i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)</div>
                     <div class="grid grid-cols-2 gap-2 text-[10px]">
                         <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataAbertura"></span></div>
                         <div><span class="block font-bold text-slate-400 uppercase">Relator</span><span class="font-semibold text-slate-700" id="detOsRelator"></span></div>
@@ -529,11 +536,8 @@
                         <p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p>
                     </div>
                 </div>
-
                 <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3">
-                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2">
-                        <i class="fa-solid fa-wrench"></i> Fechamento (Reparo)
-                    </div>
+                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2"><i class="fa-solid fa-wrench"></i> Fechamento (Reparo)</div>
                     <div class="grid grid-cols-2 gap-2 text-[10px]">
                         <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataFechamento"></span></div>
                         <div><span class="block font-bold text-slate-400 uppercase">Técnico</span><span class="font-semibold text-slate-700" id="detOsSolucionador"></span></div>
@@ -551,13 +555,8 @@
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900">Gerenciamento de Chamados</h3>
-                        <p class="text-[10px] text-rose-600 font-semibold">Ordens de Serviço (OS) Abertas</p>
-                    </div>
+                    <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm"><i class="fa-solid fa-triangle-exclamation"></i></div>
+                    <div><h3 class="text-sm font-bold text-slate-900">Gerenciamento de Chamados</h3><p class="text-[10px] text-rose-600 font-semibold">Ordens de Serviço (OS) Abertas</p></div>
                 </div>
                 <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -569,19 +568,11 @@
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center gap-3 mb-5 border-b pb-4">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200">
-                        <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3>
-                        <p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p>
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200"><i class="fa-solid fa-screwdriver-wrench text-lg"></i></div>
+                    <div><h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3><p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p></div>
                 </div>
                 <div class="space-y-4 mb-5">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label>
-                        <select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
-                    </div>
+                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label><select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select></div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Ação</label>
                         <select id="intervTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
@@ -590,20 +581,12 @@
                             <option value="Melhoria">Melhoria / Setup Específico</option>
                         </select>
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label>
-                        <textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label>
-                        <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
-                    </div>
+                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label><textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea></div>
+                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label><select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="fecharModalIntervencao()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
-                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-check"></i> Salvar Registro
-                    </button>
+                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all"><i class="fa-solid fa-check"></i> Salvar Registro</button>
                 </div>
             </div>
         </div>
@@ -613,13 +596,8 @@
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900" id="tituloResumoMaquina">Status da Máquina</h3>
-                        <p class="text-[10px] text-slate-500 font-medium" id="subtituloResumoMaquina">Histórico de Verificação dos Itens</p>
-                    </div>
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm"><i class="fa-solid fa-list-check"></i></div>
+                    <div><h3 class="text-sm font-bold text-slate-900" id="tituloResumoMaquina">Status da Máquina</h3><p class="text-[10px] text-slate-500 font-medium" id="subtituloResumoMaquina">Histórico de Verificação dos Itens</p></div>
                 </div>
                 <button onclick="fecharResumoMaquina()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -632,52 +610,32 @@
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
                     <button id="btnVoltarPreditiva" onclick="voltarPreditiva()" class="hidden text-slate-400 hover:text-slate-700 p-2 -ml-2 transition-colors"><i class="fa-solid fa-arrow-left text-lg"></i></button>
-                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm" id="iconContainerPreditiva">
-                        <i id="iconPreditivaModal" class="fa-solid fa-calendar-check"></i>
-                    </div>
-                    <div>
-                        <h3 id="preditivaModalTitle" class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3>
-                        <p id="preditivaModalDesc" class="text-[10px] text-slate-500 font-medium">Controle de Preventivas</p>
-                    </div>
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm" id="iconContainerPreditiva"><i id="iconPreditivaModal" class="fa-solid fa-calendar-check"></i></div>
+                    <div><h3 id="preditivaModalTitle" class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3><p id="preditivaModalDesc" class="text-[10px] text-slate-500 font-medium">Controle de Preventivas</p></div>
                 </div>
                 <button onclick="fecharPreditiva()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
-                
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
-                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-calendar-day"></i>
-                        </div>
-                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Amanhã</h4>
-                        <span class="bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountAmanha">0 itens</span>
+                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-day"></i></div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Amanhã</h4><span class="bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountAmanha">0 itens</span>
                     </button>
-                    
                     <button onclick="mostrarListaPreditiva('dias3')" class="nav-card bg-white border border-indigo-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-indigo-50/50">
-                        <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-calendar-days"></i>
-                        </div>
-                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 3 dias</h4>
-                        <span class="bg-indigo-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias3">0 itens</span>
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-days"></i></div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 3 dias</h4><span class="bg-indigo-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias3">0 itens</span>
                     </button>
-
                     <button onclick="mostrarListaPreditiva('dias7')" class="nav-card bg-white border border-purple-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-purple-50/50">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg">
-                            <i class="fa-solid fa-calendar-week"></i>
-                        </div>
-                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 7 dias</h4>
-                        <span class="bg-purple-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias7">0 itens</span>
+                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-week"></i></div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 7 dias</h4><span class="bg-purple-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias7">0 itens</span>
                     </button>
                 </div>
-
                 <div id="preditivaHojeMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden"></div>
-
                 <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
                 <div id="containerDias3" class="hidden"><div id="listaAlertasDias3"></div></div>
                 <div id="containerDias7" class="hidden"><div id="listaAlertasDias7"></div></div>
-
             </div>
         </div>
     </div>
@@ -694,9 +652,7 @@
                             <input type="text" id="novoItemNome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
                             <div class="relative">
                                 <input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="absolute inset-0 opacity-0 cursor-pointer w-10 h-10">
-                                <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all">
-                                    <i class="fa-solid fa-camera text-slate-500"></i>
-                                </button>
+                                <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all"><i class="fa-solid fa-camera text-slate-500"></i></button>
                             </div>
                         </div>
                     </div>
@@ -705,33 +661,16 @@
                             <img id="fotoPreviewImg" src="" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" class="h-10 w-10 object-cover rounded-lg border">
                             <span class="text-[10px] text-slate-500 font-medium">Foto anexada</span>
                         </div>
-                        <button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1">
-                            <i class="fa-solid fa-trash"></i> Remover
-                        </button>
+                        <button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1"><i class="fa-solid fa-trash"></i> Remover</button>
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label>
-                        <textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
+                    <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label><textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea></div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label><input type="text" id="novoItemCategoria" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div>
+                        <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label><input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label>
-                            <input type="text" id="novoItemCategoria" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label>
-                            <input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
-                        </div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label>
-                            <input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
-                        </div>
-                        <div>
-                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label>
-                            <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
-                        </div>
+                        <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label><input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div>
+                        <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label><input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></div>
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label>
@@ -752,35 +691,18 @@
             <div class="p-8 space-y-4">
                 <h3 class="text-lg font-bold text-slate-900 font-sans">Registrar Movimentação</h3>
                 <div class="space-y-3">
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label>
-                        <select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select>
-                    </div>
+                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label><select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select></div>
                     <div class="bg-slate-50 border border-slate-150 rounded-xl p-3 text-[10px] space-y-2 text-slate-600 font-sans">
                         <div><span class="block font-bold text-slate-400 uppercase">Descrição</span><span id="movItemDescText" class="text-slate-700 font-medium">-</span></div>
                         <div><span class="block font-bold text-slate-400 uppercase">Localização</span><span id="movItemLocalText" class="text-slate-700 font-medium">-</span></div>
-                        <div class="flex gap-2 pt-1 border-t">
-                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button>
-                        </div>
+                        <div class="flex gap-2 pt-1 border-t"><button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button></div>
                     </div>
                     <div class="grid grid-cols-2 gap-3 font-sans">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label>
-                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select>
-                        </div>
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label>
-                            <input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
-                        </div>
+                        <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label><select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select></div>
+                        <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label><input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div>
                     </div>
-                    <div class="font-sans">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
-                        <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
-                    </div>
-                    <div class="font-sans">
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label>
-                        <textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
-                    </div>
+                    <div class="font-sans"><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label><select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select></div>
+                    <div class="font-sans"><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label><textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea></div>
                 </div>
                 <div class="grid grid-cols-2 gap-3 pt-3 border-t font-sans">
                     <button onclick="fecharModalMovimentacao()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
@@ -793,9 +715,7 @@
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
-            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1">
-                <i class="fa-solid fa-xmark"></i> Fechar
-            </button>
+            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1"><i class="fa-solid fa-xmark"></i> Fechar</button>
         </div>
     </div>
 
@@ -822,29 +742,21 @@
         let selSubfamilia = '';
 
         window.onload = () => {
-            if (API_URL) {
-                document.getElementById('apiStatusAlert').classList.add('hidden');
-                baixarDadosDaPlanilha();
-            } else {
-                carregarChecklistMock();
-            }
-            gerarAlmoxarifadoMock();
-            gerarPOPsMock();
+            if (API_URL) { document.getElementById('apiStatusAlert').classList.add('hidden'); baixarDadosDaPlanilha(); } 
+            else { carregarChecklistMock(); }
+            gerarAlmoxarifadoMock(); gerarPOPsMock();
         };
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             if(!container) return;
             const toast = document.createElement('div');
-            
             let bgClass = "bg-emerald-600 text-white shadow-emerald-200";
             let icon = '<i class="fa-solid fa-circle-check"></i>';
             if (type === 'error') { bgClass = "bg-rose-600 text-white shadow-rose-200"; icon = '<i class="fa-solid fa-circle-xmark"></i>'; } 
             else if (type === 'info') { bgClass = "bg-[#0b132b] text-white shadow-slate-200"; icon = '<i class="fa-solid fa-microchip"></i>'; }
-            
             toast.className = `p-4 rounded-xl shadow-lg text-xs font-bold flex items-center gap-3 transition-all duration-300 transform translate-y-2 opacity-0 ${bgClass}`;
             toast.innerHTML = `${icon} <span>${message}</span>`;
-            
             container.appendChild(toast);
             setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 50);
             setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3500);
@@ -868,19 +780,12 @@
                 headerTitle.innerText = "Checklist de Manutenção"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
             } else {
                 btnVoltar.classList.remove('hidden');
-                if (novaTela === 'almoxarifado') {
-                    headerTitle.innerText = "Almoxarifado Técnico"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
-                } else if (novaTela === 'pops') {
-                    headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO";
-                } else if (novaTela === 'maquinas-selecao') {
-                    headerTitle.innerText = "Máquinas & Parâmetros"; headerSubtitle.innerText = "Grupo TBX · Seleção de Equipamento";
-                } else if (novaTela === 'forno-detalhes') {
-                    headerTitle.innerText = "HMI: Forno Contínuo de Recozimento"; headerSubtitle.innerText = "Grupo TBX · Controle de Atmosfera e Aquecimento";
-                } else if (novaTela === 'intervencoes') {
-                    headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta";
-                } else {
-                    headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas";
-                }
+                if (novaTela === 'almoxarifado') { headerTitle.innerText = "Almoxarifado Técnico"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets"; } 
+                else if (novaTela === 'pops') { headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO"; } 
+                else if (novaTela === 'maquinas-selecao') { headerTitle.innerText = "Máquinas & Parâmetros"; headerSubtitle.innerText = "Grupo TBX · Seleção de Equipamento"; } 
+                else if (novaTela === 'forno-detalhes') { headerTitle.innerText = "HMI: Forno Contínuo de Recozimento"; headerSubtitle.innerText = "Grupo TBX · Controle de Atmosfera e Aquecimento"; } 
+                else if (novaTela === 'intervencoes') { headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta"; } 
+                else { headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas"; }
             }
         }
 
@@ -891,7 +796,6 @@
             else alternarTela('home');
         }
 
-        // --- SISTEMA DE MÁQUINAS E PARÂMETROS ---
         function abrirModuloMaquinas() { 
             alternarTela('maquinas-selecao'); 
             document.getElementById('buscaMaquina').value = '';
@@ -903,7 +807,6 @@
             const container = document.getElementById('listaMaquinasParametros');
             const breadcrumb = document.getElementById('maquinasBreadcrumb');
             const btnVoltar = document.getElementById('btnVoltarNivelMaquinaContainer');
-            
             let html = '';
 
             if (nivel === 'familia') {
@@ -916,14 +819,9 @@
                 
                 familias.forEach(f => {
                     const count = maquinasData.filter(m => m.familia === f).length;
-                    html += `<button onclick="renderNivelMaquina('subfamilia', '${f}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-blue-50 transition-colors">
-                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3"><i class="fa-solid fa-layer-group text-lg"></i></div>
-                        <h3 class="font-bold text-slate-800 text-sm mb-1">${f}</h3>
-                        <p class="text-[10px] text-slate-500">${count} equipamento(s)</p>
-                    </button>`;
+                    html += `<button onclick="renderNivelMaquina('subfamilia', '${f}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-blue-50 transition-colors"><div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3"><i class="fa-solid fa-layer-group text-lg"></i></div><h3 class="font-bold text-slate-800 text-sm mb-1">${f}</h3><p class="text-[10px] text-slate-500">${count} equipamento(s)</p></button>`;
                 });
-            } 
-            else if (nivel === 'subfamilia') {
+            } else if (nivel === 'subfamilia') {
                 selFamilia = filtro;
                 breadcrumb.innerHTML = `<span class="text-slate-400">Família:</span> <span class="font-bold text-slate-700">${selFamilia}</span>`;
                 btnVoltar.classList.remove('hidden');
@@ -931,24 +829,15 @@
                 const maquinasDaFamilia = maquinasData.filter(m => m.familia === selFamilia);
                 const subfamilias = [...new Set(maquinasDaFamilia.map(m => m.subfamilia))].filter(Boolean).sort();
                 
-                if (subfamilias.length === 0) {
-                    renderNivelMaquina('maquinas', selFamilia);
-                    return;
-                }
+                if (subfamilias.length === 0) { renderNivelMaquina('maquinas', selFamilia); return; }
 
                 subfamilias.forEach(sub => {
                     const count = maquinasDaFamilia.filter(m => m.subfamilia === sub).length;
-                    html += `<button onclick="renderNivelMaquina('maquinas_sub', '${sub}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-indigo-50 transition-colors">
-                        <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mb-3"><i class="fa-solid fa-folder-tree text-lg"></i></div>
-                        <h3 class="font-bold text-slate-800 text-sm mb-1">${sub}</h3>
-                        <p class="text-[10px] text-slate-500">${count} equipamento(s)</p>
-                    </button>`;
+                    html += `<button onclick="renderNivelMaquina('maquinas_sub', '${sub}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-indigo-50 transition-colors"><div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mb-3"><i class="fa-solid fa-folder-tree text-lg"></i></div><h3 class="font-bold text-slate-800 text-sm mb-1">${sub}</h3><p class="text-[10px] text-slate-500">${count} equipamento(s)</p></button>`;
                 });
-                
                 const semSub = maquinasDaFamilia.filter(m => !m.subfamilia);
                 semSub.forEach(m => { html += gerarCardMaquina(m); });
-            }
-            else if (nivel === 'maquinas' || nivel === 'maquinas_sub') {
+            } else if (nivel === 'maquinas' || nivel === 'maquinas_sub') {
                 if (nivel === 'maquinas_sub') selSubfamilia = filtro;
                 breadcrumb.innerHTML = `<span class="text-slate-400">Família:</span> <span class="font-bold text-slate-700">${selFamilia}</span> ${selSubfamilia ? `<span class="text-slate-400 mx-1">></span> <span class="text-slate-400">Subfamília:</span> <span class="font-bold text-slate-700">${selSubfamilia}</span>` : ''}`;
                 btnVoltar.classList.remove('hidden');
@@ -956,19 +845,13 @@
                 const filtradas = maquinasData.filter(m => m.familia === selFamilia && (nivel === 'maquinas' || m.subfamilia === selSubfamilia));
                 filtradas.forEach(m => { html += gerarCardMaquina(m); });
             }
-
             container.innerHTML = html;
         }
 
         function gerarCardMaquina(m) {
             let isForno = normalizar(m.nome).includes('forno');
-            let icone = isForno ? 'fa-fire' : 'fa-microchip';
-            let cor = isForno ? 'text-orange-600 bg-orange-100' : 'text-slate-600 bg-slate-100';
-            return `<button onclick="selecionarMaquinaParametros('${m.nome}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-slate-50">
-                <div class="w-10 h-10 rounded-xl ${cor} flex items-center justify-center mb-3 shadow-sm"><i class="fa-solid ${icone} text-lg"></i></div>
-                <h3 class="font-bold text-slate-800 text-sm mb-1 line-clamp-2">${m.nome}</h3>
-                <p class="text-[10px] text-slate-500 mt-auto pt-2">Acessar painel (HMI)</p>
-            </button>`;
+            let icone = isForno ? 'fa-fire' : 'fa-microchip'; let cor = isForno ? 'text-orange-600 bg-orange-100' : 'text-slate-600 bg-slate-100';
+            return `<button onclick="selecionarMaquinaParametros('${m.nome}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-slate-50"><div class="w-10 h-10 rounded-xl ${cor} flex items-center justify-center mb-3 shadow-sm"><i class="fa-solid ${icone} text-lg"></i></div><h3 class="font-bold text-slate-800 text-sm mb-1 line-clamp-2">${m.nome}</h3><p class="text-[10px] text-slate-500 mt-auto pt-2">Acessar painel (HMI)</p></button>`;
         }
 
         function voltarNivelMaquina() {
@@ -979,111 +862,92 @@
         function buscarMaquina() {
             const termo = document.getElementById('buscaMaquina').value.toLowerCase();
             const container = document.getElementById('listaMaquinasParametros');
-            const breadcrumb = document.getElementById('maquinasBreadcrumb');
-            const btnVoltar = document.getElementById('btnVoltarNivelMaquinaContainer');
-
             if (!termo) { renderNivelMaquina('familia'); return; }
-
-            btnVoltar.classList.add('hidden');
-            breadcrumb.innerText = `Buscando por: "${termo}"`;
-            
+            document.getElementById('btnVoltarNivelMaquinaContainer').classList.add('hidden');
+            document.getElementById('maquinasBreadcrumb').innerText = `Buscando por: "${termo}"`;
             const filtradas = maquinasData.filter(m => m.nome.toLowerCase().includes(termo) || m.familia.toLowerCase().includes(termo) || m.subfamilia.toLowerCase().includes(termo));
-
-            if (filtradas.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center p-10 text-slate-400">Nenhum equipamento encontrado.</div>`;
-                return;
-            }
-
+            if (filtradas.length === 0) { container.innerHTML = `<div class="col-span-full text-center p-10 text-slate-400">Nenhum equipamento encontrado.</div>`; return; }
             container.innerHTML = filtradas.map(m => gerarCardMaquina(m)).join('');
         }
 
         function selecionarMaquinaParametros(maquina) {
             if (normalizar(maquina).includes('forno')) {
                 alternarTela('forno-detalhes');
-                calcularParametrosForno();
-            } else {
-                showToast(`Painel para "${maquina}" em desenvolvimento.`, "info");
-            }
+                mudarMaterialForno(); 
+            } else { showToast(`Painel para "${maquina}" em desenvolvimento.`, "info"); }
         }
 
-        // CÁLCULO FÍSICO DO FORNO DE RECOZIMENTO CONTÍNUO
+        function mudarMaterialForno() {
+            const material = document.getElementById('fornoMaterial').value;
+            if (material === "aco-304") {
+                document.getElementById('fornoR1').value = 1050; document.getElementById('fornoR2').value = 1080;
+                document.getElementById('fornoR3').value = 1080; document.getElementById('fornoR4').value = 1080;
+                document.getElementById('fornoR5').value = 1060; document.getElementById('fornoFrequencia').value = 32;
+                document.getElementById('fornoVazaoGas').value = 45; document.getElementById('fornoEspessura').value = 0.80;
+            } else if (material === "aco-201") {
+                document.getElementById('fornoR1').value = 1020; document.getElementById('fornoR2').value = 1060;
+                document.getElementById('fornoR3').value = 1060; document.getElementById('fornoR4').value = 1060;
+                document.getElementById('fornoR5').value = 1040; document.getElementById('fornoFrequencia').value = 35;
+                document.getElementById('fornoVazaoGas').value = 42; document.getElementById('fornoEspessura').value = 0.60;
+            } else if (material === "estabilizacao") {
+                document.getElementById('fornoR1').value = 1000; document.getElementById('fornoR2').value = 1000;
+                document.getElementById('fornoR3').value = 1000; document.getElementById('fornoR4').value = 1000;
+                document.getElementById('fornoR5').value = 1000; document.getElementById('fornoFrequencia').value = 50;
+                document.getElementById('fornoVazaoGas').value = 30; document.getElementById('fornoEspessura').value = 1.00;
+            }
+            calcularParametrosForno();
+        }
+
         function calcularParametrosForno() {
             const material = document.getElementById('fornoMaterial').value;
-            const espessura = parseFloat(document.getElementById('fornoEspessura').value); 
-            const freq = parseFloat(document.getElementById('fornoFrequencia').value); 
-            const compPecaCM = parseFloat(document.getElementById('fornoPecaComprimento').value) || 67; 
-            const espacamentoCM = parseFloat(document.getElementById('fornoEspacamento').value) || 2.5; 
+            const espessura = parseFloat(document.getElementById('fornoEspessura').value) || 0.8; 
+            const freq = parseFloat(document.getElementById('fornoFrequencia').value) || 32; 
+            const compPecaCM = parseFloat(document.getElementById('fornoPecaComprimento').value) || 70; 
+            const espacamentoCM = parseFloat(document.getElementById('fornoEspacamento').value) || 4; 
+            const vazaoGas = parseFloat(document.getElementById('fornoVazaoGas').value) || 45;
             const loteTotal = parseInt(document.getElementById('fornoLoteTotal').value) || 0;
             
-            document.getElementById('valEspessura').innerText = `${espessura.toFixed(1)} mm`; 
+            const r1 = parseInt(document.getElementById('fornoR1').value) || 0;
+            const r2 = parseInt(document.getElementById('fornoR2').value) || 0;
+            const r3 = parseInt(document.getElementById('fornoR3').value) || 0;
+            const r4 = parseInt(document.getElementById('fornoR4').value) || 0;
+            const r5 = parseInt(document.getElementById('fornoR5').value) || 0;
+            const tempMediaRecozimento = (r2 + r3 + r4) / 3;
+
+            document.getElementById('valEspessura').innerText = `${espessura.toFixed(2)} mm`; 
             document.getElementById('valFrequencia').innerText = `${freq.toFixed(1)} Hz`;
             
-            // Fator Exato Extraído da Planilha: 32 Hz = 0.015625 m/s = 0.9375 m/min
-            // Fator multiplicador de Hz para m/min = 0.9375 / 32 = 0.029296875
             const fatorVelocidade = 0.029296875;
-            const velocidadeMmin = freq * fatorVelocidade; // m/min
-            const velocidadeMs = velocidadeMmin / 60; // m/s
-            const velocidadeMh = velocidadeMmin * 60; // m/h
-            const comprimentoFornoM = 28.5; // Metros
+            const velocidadeMmin = freq * fatorVelocidade; 
+            const velocidadeMh = velocidadeMmin * 60; 
+            const comprimentoFornoM = 38.0; 
             
-            // Tempo de esteira (Ponta a Ponta)
             const tempoEsteiraMin = comprimentoFornoM / velocidadeMmin;
-            const tempoEsteiraSegundosTotais = Math.round(tempoEsteiraMin * 60);
-            const teMin = Math.floor(tempoEsteiraSegundosTotais / 60);
-            const teSeg = tempoEsteiraSegundosTotais % 60;
+            const tempoEsteiraSeg = Math.round(tempoEsteiraMin * 60);
+            const teMin = Math.floor(tempoEsteiraSeg / 60);
+            const teSeg = tempoEsteiraSeg % 60;
             const tempoEsteiraFormatado = `00:${String(teMin).padStart(2, '0')}:${String(teSeg).padStart(2, '0')}`;
             
-            // Espaço e Capacidade
             const espacoPorPecaM = (compPecaCM + espacamentoCM) / 100;
-            let capacidade = 0;
-            let produtividadeHora = 0;
-            let tempoCicloFormatado = "00:00:00";
-            let tempoCicloSegundosTotais = 0;
-            let tempoCicloMin = 0;
+            let capacidade = 0; let produtividadeHora = 0; let tempoCicloMin = 0; let tempoCicloFormatado = "00:00:00";
             
             if (espacoPorPecaM > 0) {
                 capacidade = Math.floor(comprimentoFornoM / espacoPorPecaM);
-                
-                // Tempo de Ciclo = Espaço da Peça / Velocidade (m/min)
                 tempoCicloMin = espacoPorPecaM / velocidadeMmin;
-                tempoCicloSegundosTotais = Math.round(tempoCicloMin * 60);
-                const tcMin = Math.floor(tempoCicloSegundosTotais / 60);
-                const tcSeg = tempoCicloSegundosTotais % 60;
-                tempoCicloFormatado = `00:${String(tcMin).padStart(2, '0')}:${String(tcSeg).padStart(2, '0')}`;
-                
-                // Peças/Hora
+                const tcSeg = Math.round(tempoCicloMin * 60);
+                tempoCicloFormatado = `00:${String(Math.floor(tcSeg/60)).padStart(2,'0')}:${String(tcSeg%60).padStart(2,'0')}`;
                 produtividadeHora = velocidadeMh / espacoPorPecaM;
             }
 
-            // Previsão de Lote (Igual Planilha Direita)
             let previsaoStr = "-";
             if (loteTotal > 0 && tempoCicloMin > 0) {
-                // Multiplica a qtd do lote pelo tempo que demora para sair cada peça
-                const tempoTotalLoteSegundos = Math.round(loteTotal * tempoCicloSegundosTotais);
-                const lh = Math.floor(tempoTotalLoteSegundos / 3600);
-                const lm = Math.floor((tempoTotalLoteSegundos % 3600) / 60);
-                const ls = tempoTotalLoteSegundos % 60;
-                const tempoEstimadoFormat = `${String(lh).padStart(2, '0')}:${String(lm).padStart(2, '0')}:${String(ls).padStart(2, '0')}`;
-
-                const agora = new Date();
-                agora.setSeconds(agora.getSeconds() + tempoTotalLoteSegundos);
-                const dataFim = agora.toLocaleDateString('pt-BR');
-                const horaFim = agora.toLocaleTimeString('pt-BR');
-
-                previsaoStr = `<span class="text-xs text-indigo-500 font-bold mb-1 block">Tempo Requerido: ${tempoEstimadoFormat}</span> ${dataFim} às ${horaFim}`;
+                const tempoTotalLoteSeg = Math.round(loteTotal * (tempoCicloMin * 60));
+                const lh = Math.floor(tempoTotalLoteSeg / 3600); const lm = Math.floor((tempoTotalLoteSeg % 3600) / 60);
+                const agora = new Date(); agora.setSeconds(agora.getSeconds() + tempoTotalLoteSeg);
+                previsaoStr = `<span class="text-xs text-indigo-500 font-bold mb-1 block">T. Req: ${String(lh).padStart(2,'0')}:${String(lm).padStart(2,'0')}:00</span> ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
             }
             document.getElementById('fornoPrevisaoLote').innerHTML = previsaoStr;
 
-            // Setpoints de Temperatura baseados no Material
-            let r1="1050°", r2="1080°", r3="1080°", r4="1080°", r5="1060°";
-            if(material === "aco-201") {
-                r1="1020°"; r2="1060°"; r3="1060°"; r4="1060°"; r5="1040°";
-            } else if (material === "estabilizacao") {
-                r1="1000°"; r2="1000°"; r3="1000°"; r4="1000°"; r5="1000°";
-            }
-            document.getElementById('setR1').innerText = r1; document.getElementById('setR2').innerText = r2; document.getElementById('setR3').innerText = r3; document.getElementById('setR4').innerText = r4; document.getElementById('setR5').innerText = r5;
-
-            // Assistente Térmico (IA de Encharque)
             let freqIdeal = 50 - ((espessura - 0.4) * (35 / 4.6)); 
             let freqMin = freqIdeal - 6; let freqMax = freqIdeal + 6;
             
@@ -1095,13 +959,52 @@
             } else {
                 avisoInteligente = `<span class="text-emerald-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-check"></i> Encharque Térmico Otimizado! Velocidade ideal.</span>`;
             }
-            
             if (material === "estabilizacao") {
                 avisoInteligente = `<span class="text-blue-600 text-[10px] font-bold flex items-center gap-1.5"><i class="fa-solid fa-spinner animate-spin"></i> Passando peças para estabilização de atmosfera interna.</span>`;
             }
             document.getElementById('alertaInteligenteFrequencia').innerHTML = avisoInteligente;
 
-            // Atualiza Interface KPIs
+            let painelEspecialistaHtml = "";
+            let temErro = false;
+
+            if (material === "estabilizacao") {
+                painelEspecialistaHtml += `<div class="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-spinner animate-spin text-blue-500 mt-0.5"></i><p class="text-xs text-blue-800 font-medium"><strong>Modo Estabilização:</strong> O forno está repassando peças (geralmente por 8 a 12h) para saturar a atmosfera interna e preparar as muflas. A temperatura é mantida em média a 1000°C.</p></div>`;
+            } else {
+                if (vazaoGas < 40) {
+                    painelEspecialistaHtml += `<div class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-wind text-rose-500 mt-0.5"></i><p class="text-xs text-rose-800 font-medium"><strong>Oxidação Crítica:</strong> Vazão de gás a ${vazaoGas} m³/H é muito fraca. O hidrogênio não terá pressão suficiente para varrer o forno e o oxigênio entrará pela zona de resfriamento. As cubas sairão pretas/azuladas.</p></div>`;
+                    temErro = true;
+                } else if (vazaoGas > 50) {
+                    painelEspecialistaHtml += `<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-money-bill-wave text-amber-500 mt-0.5"></i><p class="text-xs text-amber-800 font-medium"><strong>Desperdício de Amônia:</strong> Vazão a ${vazaoGas} m³/H é segura, mas muito alta. Acima de 45-50 m³/H não há ganho metalúrgico no inox, resultando apenas em custo extra de gás.</p></div>`;
+                } else {
+                    painelEspecialistaHtml += `<div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-shield-halved text-emerald-500 mt-0.5"></i><p class="text-xs text-emerald-800 font-medium"><strong>Atmosfera Perfeita:</strong> Pressão redutora entre 40-45 m³/H é ideal para consumir o oxigênio e garantir o brilho das cubas de inox.</p></div>`;
+                }
+
+                if (material === "aco-304") {
+                    if (tempMediaRecozimento < 1030) {
+                        painelEspecialistaHtml += `<div class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-temperature-arrow-down text-rose-500 mt-0.5"></i><p class="text-xs text-rose-800 font-medium"><strong>Recristalização Falha:</strong> Temperatura das zonas 2 a 4 muito baixas para Aço 304. Os grãos não vão se rearranjar e a chapa ficará dura, <strong>rasgando ou estourando no processo de estampagem</strong>.</p></div>`;
+                        temErro = true;
+                    } else if (tempMediaRecozimento > 1120) {
+                        painelEspecialistaHtml += `<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-temperature-arrow-up text-amber-500 mt-0.5"></i><p class="text-xs text-amber-800 font-medium"><strong>Superaquecimento:</strong> Temperaturas altas demais. A peça não vai estourar, mas pode causar "crescimento de grão excessivo" (Efeito casca de laranja) que afeta a qualidade visual pós-repuxo.</p></div>`;
+                    }
+                }
+
+                let freqIdealBase = 32;
+                let freqCalculada = freqIdealBase * (0.80 / espessura);
+                
+                if (freq > (freqCalculada + 5)) {
+                    painelEspecialistaHtml += `<div class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-stopwatch text-rose-500 mt-0.5"></i><p class="text-xs text-rose-800 font-medium"><strong>Velocidade Crítica:</strong> A esteira a ${freq} Hz é muito rápida para uma chapa de ${espessura}mm. O centro (miolo) da chapa não alcançará a temperatura de encharque e ficará rígido. (Ideal: ~${Math.round(freqCalculada)} Hz).</p></div>`;
+                    temErro = true;
+                } else if (freq < (freqCalculada - 5)) {
+                    painelEspecialistaHtml += `<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-snail text-amber-500 mt-0.5"></i><p class="text-xs text-amber-800 font-medium"><strong>Produção Lenta:</strong> O tempo de encharque será atingido, mas a esteira a ${freq} Hz está muito devagar. Isso causa gasto inútil de energia elétrica nas resistências. (Ideal: ~${Math.round(freqCalculada)} Hz).</p></div>`;
+                }
+
+                if (!temErro && painelEspecialistaHtml.indexOf('bg-rose') === -1) {
+                    painelEspecialistaHtml += `<div class="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-thumbs-up text-blue-600 mt-0.5"></i><p class="text-xs text-blue-800 font-medium"><strong>Setups Validados!</strong> Esta combinação de temperatura, velocidade (${freq}Hz) e gás garante que as peças de ${espessura}mm sairão macias para estampagem profunda sem oxidação.</p></div>`;
+                }
+            }
+
+            document.getElementById('painelEspecialista').innerHTML = painelEspecialistaHtml;
+
             document.getElementById('fornoVelocidade').innerText = velocidadeMmin.toFixed(2); 
             document.getElementById('fornoTempoEsteira').innerText = tempoEsteiraFormatado;
             document.getElementById('fornoTempoCiclo').innerText = tempoCicloFormatado;
@@ -1156,7 +1059,6 @@
             return opcoes;
         }
 
-        // --- SISTEMA DE CHAMADOS E INTERVENÇÕES ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
             let maquinasUnicas = maquinasData.length > 0 ? maquinasData.map(m => m.nome) : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Forno", "Guilhotina"]);
@@ -1380,7 +1282,6 @@
 
         function fecharDetalhesOS() { document.getElementById('detalhesOsModal').classList.add('hidden'); }
 
-        // --- SISTEMA DE ALERTAS PREDITIVOS ---
         function calcularAlertas() {
             let alertasDict = { vencidas: {}, hoje: {}, amanha: {}, dias3: {}, dias7: {} };
             const agora = new Date();
@@ -1584,7 +1485,6 @@
                 modalTitle.innerText = "Para Hoje"; modalDesc.innerText = "Selecione o setor para ver os checklists do dia.";
                 modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
                 
-                // Mapeia automaticamente os setores que possuem itens para hoje
                 const setoresHoje = [...new Set(alertas.hoje.map(a => a.setor))];
                 
                 if (setoresHoje.length > 0 && divMenuHoje) {
@@ -1618,16 +1518,6 @@
                 if(divMenuProgramacao) divMenuProgramacao.classList.remove('hidden');
             }
             document.getElementById('preditivaModal').classList.remove('hidden');
-        }
-
-        function irParaChecklist(setor, tipoOriginal) {
-            fecharPreditiva(); selecionarSetor(setor);
-            let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
-            if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
-            else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
-            else if (pId.includes('quinzen')) { pId = 'quinzenal'; pLabel = 'Quinzenal'; }
-            else if (pId.includes('mens')) { pId = 'mensal'; pLabel = 'Mensal'; }
-            selecionarPeriodo(pId, pLabel);
         }
 
         function mostrarListaHojeSetor(setor) {
@@ -1700,7 +1590,6 @@
 
         function fecharPreditiva() { document.getElementById('preditivaModal').classList.add('hidden'); }
 
-        // --- RESUMO / STATUS GERAL DA MÁQUINA ---
         function abrirResumoMaquina(maquina, setor, periodicidade) {
             const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maquina) && normalizar(s.setor) === normalizar(setor) && normalizar(s.periodicidade) === normalizar(periodicidade));
             const itensDaMaquina = originalDatabase.filter(i => normalizar(i.maquina) === normalizar(maquina) && normalizar(i.setor) === normalizar(setor) && normalizar(i.periodicidade) === normalizar(periodicidade));
@@ -1773,57 +1662,6 @@
         }
 
         function fecharResumoMaquina() { document.getElementById('resumoMaquinaModal').classList.add('hidden'); }
-
-        // --- NÚCLEO DA APLICAÇÃO ---
-        async function baixarDadosDaPlanilha() {
-            try {
-                const res = await fetch(`${API_URL}?action=carregarItens`);
-                if (!res.ok) throw new Error();
-                const resJson = await res.json();
-                
-                originalDatabase = resJson.itens || [];
-                checklistStatus = resJson.status || [];
-                equipesData = resJson.equipes || [];
-                chamadosData = resJson.chamados || []; 
-                intervencoesData = resJson.intervencoes || [];
-                maquinasData = resJson.maquinas || []; // NOVO
-                
-                renderSetorCards(); atualizarKPIs();
-            } catch (e) { 
-                showToast("Erro de rede. Modo Offline.", "error"); carregarChecklistMock();
-            }
-        }
-
-        function carregarChecklistMock() {
-            equipesData = [
-                { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
-                { setor: "Manutenção", membros: ["José", "Carlos"] }
-            ];
-            originalDatabase = [
-                { item: "Verificar Oleo Canola", maquina: "Forno de Recozimento Contínuo", setor: "Produção", periodicidade: "Diária", tempoReanalise: 2, obs: "" },
-                { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
-            ];
-            maquinasData = [
-                { familia: "Fornos e Aquecimento", subfamilia: "Recozimento", nome: "Forno de Recozimento Contínuo" },
-                { familia: "Robôs", subfamilia: "Prensa", nome: "Robô Prensa - ROB-PR001" },
-                { familia: "Robôs", subfamilia: "Prensa", nome: "Robô Prensa - ROB-PR002" },
-                { familia: "Robôs", subfamilia: "Solda", nome: "Robô Solda - ROB-SL001" },
-                { familia: "Corte", subfamilia: "Guilhotina", nome: "Guilhotina - GUI-001" }
-            ];
-            
-            const agora = new Date();
-            const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString();
-            const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
-            
-            checklistStatus = [
-                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", historico: [{data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção"}], vencido: false, itensStatus: { "Verificar Oleo Canola": [{ data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção" }] } }
-            ];
-            chamadosData = [
-                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
-            ];
-            intervencoesData = [];
-            renderSetorCards(); atualizarKPIs();
-        }
 
         function normalizar(texto) { return String(texto||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
         function matchPeriodicidade(iP, pId) { const n = normalizar(iP); if (pId==="diaria") return n.includes("diar")||n.includes("intrad")||n.includes("turno"); if (pId==="semanal") return n.includes("seman"); if (pId==="quinzenal") return n.includes("quinzen"); if (pId==="mensal") return n.includes("mens")||n.includes("mes"); return n===pId; }
@@ -2114,168 +1952,6 @@
             tableHtml += `</table>`;
             printArea.innerHTML = tableHtml;
             setTimeout(() => { window.print(); }, 200);
-        }
-
-        // --- ALMOXARIFADO E ETC ---
-        async function baixarAlmoxarifadoDaPlanilha() {
-            if (!API_URL) return;
-            try {
-                const res = await fetch(`${API_URL}?action=carregarAlmoxarifado`);
-                if (!res.ok) throw new Error();
-                const data = await res.json();
-                if (Array.isArray(data)) {
-                    almoxarifadoData = data.map(item => ({ id: item.id, nome: item.item, categoria: item.categoria, quantidade: item.quantidade, minimo: item.estoqueMinimo, unidade: item.unidade, local: item.localizacao, foto: item.imagem, descricao: item.descricao }));
-                    renderAlmoxarifadoLista();
-                }
-            } catch(e) {}
-        }
-
-        function renderAlmoxarifadoLista() {
-            const tbody = document.getElementById('almoxarifadoTbody'); if(!tbody) return;
-            const catFilter = document.getElementById('almoxCategoriaFilter').value;
-            const search = document.getElementById('almoxSearch').value.toLowerCase();
-            const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))].sort((a, b) => a.localeCompare(b));
-            const selectCat = document.getElementById('almoxCategoriaFilter');
-            selectCat.innerHTML = '<option value="">Todas as Famílias</option>' +  categorias.map(c => `<option value="${c}">${c}</option>`).join('');
-            selectCat.value = catFilter;
-            const filtrados = almoxarifadoData.filter(item => (catFilter === "" || item.categoria === catFilter) && ((item.nome||"").toLowerCase().includes(search) || (item.id||"").toLowerCase().includes(search) || (item.categoria||"").toLowerCase().includes(search)));
-            tbody.innerHTML = filtrados.map(item => {
-                const badgeEstoque = item.quantidade <= item.minimo ? `<span class="bg-red-50 text-red-600 border border-red-100 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>` : `<span class="bg-slate-50 text-slate-700 border border-slate-200 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>`;
-                const imgTag = item.foto && item.foto.trim() !== "" ? `<img src="${item.foto}" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" onclick="visualizarImagem('${item.foto}')" class="h-10 w-10 object-cover rounded-lg border border-slate-200 cursor-pointer shadow-sm">` : `<div class="h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400"><i class="fa-solid fa-camera"></i></div>`;
-                return `<tr class="border-b last:border-0 hover:bg-slate-50/25"><td class="p-4">${imgTag}</td><td class="p-4 font-mono text-xs text-slate-500 font-sans">${item.id}</td><td class="p-4"><span class="block font-bold text-slate-800 text-xs">${item.nome}</span>${item.descricao ? `<span class="block text-[10px] text-slate-400 italic font-medium mt-0.5">${item.descricao}</span>` : ""}</td><td class="p-4 text-xs text-slate-500">${item.categoria}</td><td class="p-4 text-xs font-sans">${badgeEstoque}</td><td class="p-4 text-xs text-slate-500">${item.local || "-"}</td><td class="p-4 font-sans text-center"><div class="flex gap-2 justify-center"><button onclick="abrirModalMovimentacao('${item.id}')" class="text-emerald-600 p-2 hover:bg-emerald-50 rounded-lg"><i class="fa-solid fa-arrows-rotate text-emerald-600"></i></button><button onclick="editarItemAlmox('${item.id}')" class="text-blue-600 p-2 hover:bg-blue-50 rounded-lg"><i class="fa-solid fa-pencil text-blue-600"></i></button></div></td></tr>`;
-            }).join('');
-        }
-
-        function adicionarLinhaLocalizacao(valor = "") {
-            const container = document.getElementById('localizacaoInputsContainer');
-            const div = document.createElement('div'); div.className = "flex gap-2";
-            div.innerHTML = `<input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:ring-blue-500 text-slate-850" value="${valor}"><button type="button" onclick="removerLinhaLocalizacao(this)" class="px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-400 hover:text-red-500 text-xs"><i class="fa-solid fa-xmark"></i></button>`;
-            container.appendChild(div);
-        }
-
-        function removerLinhaLocalizacao(botao) {
-            const c = document.getElementById('localizacaoInputsContainer');
-            if(c.children.length > 1) botao.closest('.flex').remove();
-            else botao.closest('.flex').querySelector('input').value = "";
-        }
-
-        function abrirModalCadastroItem() {
-            document.getElementById('editAlmoxIndex').value = ""; document.getElementById('novoItemNome').value = ""; document.getElementById('novoItemCategoria').value = ""; document.getElementById('novoItemQuantidade').value = "0"; document.getElementById('novoItemMinimo').value = "0"; document.getElementById('novoItemUnidade').value = "un"; document.getElementById('novoItemDescricao').value = "";
-            document.getElementById('localizacaoInputsContainer').innerHTML = ""; adicionarLinhaLocalizacao("");
-            removerFotoAnexada(); document.getElementById('cadastroItemModal').classList.remove('hidden');
-        }
-
-        function fecharModalCadastroItem() { document.getElementById('cadastroItemModal').classList.add('hidden'); }
-
-        function processarFotoItem(e) {
-            const file = e.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas'); let w = img.width, h = img.height;
-                    if (w > h) { if (w > 800) { h *= 800 / w; w = 800; } } else { if (h > 800) { w *= 800 / h; h = 800; } }
-                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    fotoAnexadaBase64 = canvas.toDataURL('image/jpeg', 0.8);
-                    const previewImg = document.getElementById('fotoPreviewImg');
-                    previewImg.src = fotoAnexadaBase64; previewImg.onerror = null; 
-                    document.getElementById('fotoPreviewContainer').classList.remove('hidden');
-                };
-                img.src = evt.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function removerFotoAnexada() { fotoAnexadaBase64 = ""; document.getElementById('fotoPreviewImg').src = ""; document.getElementById('fotoPreviewContainer').classList.add('hidden'); document.getElementById('novoItemImagem').value = ""; }
-
-        async function confirmarCadastroItem() {
-            const nome = document.getElementById('novoItemNome').value.trim(); const categoria = document.getElementById('novoItemCategoria').value.trim(); const quantidade = parseInt(document.getElementById('novoItemQuantidade').value) || 0; const minimo = parseInt(document.getElementById('novoItemMinimo').value) || 0; const unidade = document.getElementById('novoItemUnidade').value.trim() || "un"; const descricao = document.getElementById('novoItemDescricao').value.trim(); const editId = document.getElementById('editAlmoxIndex').value;
-            const enderecosInput = Array.from(document.querySelectorAll('.localizacao-endereco-inp')).map(i => i.value.trim()).filter(Boolean);
-            if (!nome || !categoria) { showToast("Nome e Família são obrigatórios.", "error"); return; }
-
-            let base64Clean = "", mimeType = "", isNovaImagem = false;
-            if (fotoAnexadaBase64 && fotoAnexadaBase64.startsWith("data:")) { base64Clean = fotoAnexadaBase64.split(",")[1]; mimeType = fotoAnexadaBase64.split(";")[0].split(":")[1]; isNovaImagem = true; }
-            const dadosObj = { id: editId || "", item: nome, categoria, unidade, quantidade, estoqueMinimo: minimo, enderecos: enderecosInput, descricao, imagemUrl: isNovaImagem ? "" : fotoAnexadaBase64, imagemBase64: base64Clean, mimeType: mimeType };
-
-            if (API_URL) {
-                showToast("Sincronizando...", "info");
-                try {
-                    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ tipo: editId ? "editarItemEstoque" : "cadastroItemEstoque", dados: dadosObj }) });
-                    showToast("Sincronizado!"); setTimeout(() => baixarAlmoxarifadoDaPlanilha(), 1500); 
-                } catch(err) { showToast("Salvo apenas localmente.", "error"); }
-            }
-
-            if (editId) {
-                const item = almoxarifadoData.find(i => i.id == editId);
-                if (item) { item.nome = nome; item.categoria = categoria; item.local = enderecosInput.join(" | "); item.quantidade = quantidade; item.minimo = minimo; item.unidade = unidade; item.descricao = descricao; if (isNovaImagem) item.foto = fotoAnexadaBase64; }
-            } else { almoxarifadoData.push({ id: "IT" + Date.now(), nome, categoria, local: enderecosInput.join(" | "), quantidade, minimo, unidade, descricao, foto: isNovaImagem ? fotoAnexadaBase64 : "" }); }
-            fecharModalCadastroItem(); renderAlmoxarifadoLista();
-        }
-
-        function editarItemAlmox(id) {
-            const item = almoxarifadoData.find(i => i.id == id); if (!item) return;
-            document.getElementById('editAlmoxIndex').value = id; document.getElementById('novoItemNome').value = item.nome; document.getElementById('novoItemCategoria').value = item.categoria; document.getElementById('novoItemQuantidade').value = item.quantidade; document.getElementById('novoItemMinimo').value = item.minimo; document.getElementById('novoItemUnidade').value = item.unidade; document.getElementById('novoItemDescricao').value = item.descricao || "";
-            document.getElementById('localizacaoInputsContainer').innerHTML = "";
-            const enderecos = item.local ? item.local.split("|").map(s => s.trim()) : [""];
-            enderecos.forEach(end => adicionarLinhaLocalizacao(end));
-
-            if (item.foto && item.foto.trim() !== "") {
-                fotoAnexadaBase64 = item.foto; const pImg = document.getElementById('fotoPreviewImg'); pImg.src = item.foto;
-                pImg.onerror = function() { this.onerror=null; this.outerHTML='<div class="h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border text-slate-400"><i class="fa-solid fa-image"></i></div>'; };
-                document.getElementById('fotoPreviewContainer').classList.remove('hidden');
-            } else { removerFotoAnexada(); }
-            document.getElementById('cadastroItemModal').classList.remove('hidden');
-        }
-
-        function abrirModalMovimentacao(preSelectedId = "") {
-            const select = document.getElementById('movItemSelect');
-            select.innerHTML = almoxarifadoData.map(i => `<option value="${i.id}">${i.nome} (${i.quantidade} ${i.unidade})</option>`).join('');
-            if (preSelectedId) select.value = preSelectedId;
-            document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes(true);
-            atualizarInfoItemMov(); document.getElementById('movimentacaoModal').classList.remove('hidden');
-        }
-
-        function fecharModalMovimentacao() { document.getElementById('movimentacaoModal').classList.add('hidden'); }
-        function atualizarInfoItemMov() {
-            const item = almoxarifadoData.find(i => i.id == document.getElementById('movItemSelect').value);
-            if (item) { document.getElementById('movItemDescText').innerText = item.descricao || "Sem descrição"; document.getElementById('movItemLocalText').innerText = item.local || "Sem endereço"; }
-        }
-
-        function visualizarImagemMov() {
-            const item = almoxarifadoData.find(i => i.id == document.getElementById('movItemSelect').value);
-            if (item && item.foto && item.foto.trim() !== "") visualizarImagem(item.foto); else showToast("Sem imagem.", "info");
-        }
-
-        function editarItemMov() { fecharModalMovimentacao(); editarItemAlmox(document.getElementById('movItemSelect').value); }
-
-        async function confirmarMovimentacao() {
-            const id = document.getElementById('movItemSelect').value; const tipo = document.getElementById('movTipo').value; const quantidade = parseInt(document.getElementById('movQuantidade').value) || 0; const responsavel = document.getElementById('movResponsavel').value.trim(); const motivo = document.getElementById('movMotivo').value.trim();
-            const item = almoxarifadoData.find(i => i.id == id); if (!item) return;
-            if (quantidade <= 0 || !responsavel) { showToast("Qtd e Responsável são obrigatórios.", "error"); return; }
-
-            let novaQuantidade = item.quantidade;
-            if (tipo === "Saída") { if (item.quantidade < quantidade) { showToast("Quantidade insuficiente.", "error"); return; } novaQuantidade -= quantidade; } else { novaQuantidade += quantidade; }
-
-            if (API_URL) {
-                showToast("Registrando...", "info");
-                try {
-                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "movimentacao", dados: { id: item.id, item: item.nome, tipo, quantidade, responsavel, motivo } }) });
-                    showToast("Registro efetuado!");
-                } catch(e) { showToast("Salvo localmente.", "error"); }
-            }
-            item.quantidade = novaQuantidade; renderAlmoxarifadoLista(); fecharModalMovimentacao();
-        }
-
-        function gerarPOPsMock() { popData = [ { id: 1, titulo: "LOTO", maquina: "Guilhotina - GUI-001", epis: "Luvas", ferramentas: "Cadeado", descricao: "Desligar energia." } ]; }
-        function renderPOPs() {
-            const container = document.getElementById('popsContainer'); const maqFilter = document.getElementById('popMaquinaFilter').value; const search = document.getElementById('popSearch').value.toLowerCase();
-            const filtrados = popData.filter(p => (maqFilter === "" || p.maquina === maqFilter) && (p.titulo.toLowerCase().includes(search) || p.descricao.toLowerCase().includes(search)));
-            container.innerHTML = filtrados.map(p => `<div class="bg-white rounded-xl border p-5 shadow-sm"><span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">${p.maquina}</span><h4 class="font-bold text-slate-800 text-sm mb-3">${p.titulo}</h4><div class="text-xs text-slate-600 whitespace-pre-line leading-relaxed">${p.descricao}</div></div>`).join('');
-        }
-        function popularFiltroMaquinas(selectId) {
-            const select = document.getElementById(selectId);
-            let maquinasUnicas = maquinasData.length > 0 ? maquinasData.map(m => m.nome) : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Forno", "Guilhotina"]);
-            select.innerHTML = '<option value="">Todas</option>' + maquinasUnicas.map(m => `<option value="${m}">${m}</option>`).join('');
         }
 
         function toggleConfigModal(show) { document.getElementById('configModal').classList.toggle('hidden', !show); if (show) document.getElementById('apiInputUrl').value = API_URL; }
