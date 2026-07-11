@@ -6,19 +6,13 @@
     <title>Manutenção, Processos & Parametrização 5.0 - Grupo TBX</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        
         .nav-card { transition: transform .15s ease, box-shadow .15s ease; }
         .nav-card:hover { transform: translateY(-3px); box-shadow: 0 12px 24px -8px rgba(15,23,42,.15); }
         .fade-in { animation: fadeIn .2s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px);} to { opacity: 1; transform: translateY(0);} }
-        
-        input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        input[type="number"] { -moz-appearance: textfield; }
-
         @media print {
             @page { size: landscape; margin: 8mm; }
             body { background: white !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
@@ -28,29 +22,23 @@
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col relative overflow-x-hidden text-slate-800">
-
     <div id="toastContainer" class="fixed top-5 left-5 right-5 sm:left-auto sm:right-5 z-[9999] flex flex-col gap-3 pointer-events-none sm:max-w-sm font-sans"></div>
-
     <header class="bg-[#0b132b] text-white shadow-md border-b border-slate-800 sticky top-0 z-40 no-print">
         <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <button id="btnVoltar" onclick="voltar()" class="hidden p-2 sm:p-2.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 transition-all text-slate-300 flex-shrink-0">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
-                
                 <button onclick="alternarTela('home')" class="bg-white px-2.5 py-1.5 sm:px-3.5 rounded-lg flex items-center justify-center gap-1.5 sm:gap-2 shadow-sm border border-slate-200 hover:bg-slate-100 transition-colors cursor-pointer flex-shrink-0">
                     <span class="text-[8px] sm:text-[9px] font-extrabold text-slate-400 tracking-[0.2em] sm:tracking-[0.25em] uppercase font-sans">GRUPO</span>
                     <div class="h-3 sm:h-4 w-[1px] sm:w-[1.5px] bg-[#e11d48]"></div>
                     <span class="text-[11px] sm:text-sm font-black text-[#0f172a] tracking-tight font-sans">TBX</span>
                 </button>
-
                 <div class="min-w-0 flex-1">
                     <h1 id="headerTitle" class="font-bold text-sm sm:text-lg tracking-tight text-white leading-tight truncate">Checklist de Manutenção</h1>
                     <p id="headerSubtitle" class="text-[9px] sm:text-xs text-slate-400 truncate">Grupo TBX · Sincronizado</p>
                 </div>
             </div>
-            
             <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
                 <button onclick="abrirModalChamado()" class="flex-1 sm:flex-none justify-center bg-rose-600 hover:bg-rose-700 text-white text-[11px] sm:text-xs font-bold py-2 px-3 rounded-lg transition-all shadow-sm flex items-center gap-1.5">
                     <i class="fa-solid fa-triangle-exclamation"></i> <span class="whitespace-nowrap">Abrir Chamado</span>
@@ -63,19 +51,15 @@
                     <button onclick="toggleConfigModal(true)" class="bg-slate-800 border border-slate-700 text-[11px] sm:text-xs py-2 px-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300 whitespace-nowrap">Configurar</button>
                 </div>
             </div>
-            
         </div>
     </header>
-
     <main id="mainContent" class="flex-grow max-w-7xl w-full mx-auto px-4 py-6 no-print">
-        
         <div id="apiStatusAlert" class="mb-6 p-4 rounded-xl border flex items-start sm:items-center justify-between text-xs bg-amber-50 border-amber-200 text-amber-800">
             <span class="flex items-start sm:items-center gap-2">
                 <i class="fa-solid fa-circle-exclamation text-amber-600 text-sm mt-0.5 sm:mt-0"></i>
                 <span class="flex-1">Sinalização de Rede: Conecte o URL do Google Apps Script para sincronizar dados. Usando modo local.</span>
             </span>
         </div>
-
         <div id="view-home" class="fade-in">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -111,7 +95,6 @@
                     </div>
                 </button>
             </div>
-
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <button onclick="abrirModuloChecklist()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-clipboard-check text-xl"></i></div>
@@ -133,220 +116,13 @@
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Procedimentos (POP)</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Guias de execução passo a passo de bloqueios de segurança e LOTO.</p>
                 </button>
-                <button onclick="abrirModuloMaquinas()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
-                    <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-gears text-xl"></i></div>
-                    <h2 class="font-bold text-slate-800 mb-1.5 text-base">Máquinas & Parâmetros</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Ajustes de processo, setup de fornos, gases e curvas de temperatura.</p>
+                <button onclick="abrirModuloForno()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-fire text-xl"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1.5 text-base">Curva do Forno</h2>
+                    <p class="text-xs text-slate-500 leading-relaxed">Parametrização detalhada das bancadas e simulação estática de resultados.</p>
                 </button>
             </div>
         </div>
-
-        <div id="view-maquinas-selecao" class="fade-in hidden">
-            <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <div>
-                    <h2 class="font-bold text-slate-800 text-base">Supervisão de Processos</h2>
-                    <p class="text-xs text-slate-500" id="maquinasBreadcrumb">Selecione uma Família de Equipamentos.</p>
-                </div>
-                <div class="w-full sm:w-72 relative">
-                    <i class="fa-solid fa-search absolute left-3 top-3.5 text-slate-400 text-sm"></i>
-                    <input type="text" id="buscaMaquina" oninput="buscarMaquina()" placeholder="Buscar máquina..." class="w-full bg-slate-50 border border-slate-200 rounded-xl pl-9 pr-3 py-2.5 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500 shadow-sm">
-                </div>
-            </div>
-            <div class="mb-4 hidden" id="btnVoltarNivelMaquinaContainer">
-                <button onclick="voltarNivelMaquina()" class="text-sm font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1.5"><i class="fa-solid fa-arrow-left"></i> Voltar Categoria</button>
-            </div>
-            <div id="listaMaquinasParametros" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6"></div>
-        </div>
-
-        <div id="view-forno-detalhes" class="fade-in hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                
-                <div class="lg:col-span-4 space-y-6">
-                    
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                        <div class="flex justify-between items-center border-b pb-3 border-slate-100">
-                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fa-solid fa-sliders text-orange-600"></i> Setup de Carga e Processo
-                            </h3>
-                        </div>
-                        <div class="space-y-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Modo e Perfil Operacional</label>
-                                <select id="fornoMaterial" onchange="mudarMaterialForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-800">
-                                    <option value="aco-304" selected>Produção: Aço Inox 304</option>
-                                    <option value="aco-201">Produção: Aço Inox 201</option>
-                                    <option value="aquecimento">Partida: Aquecimento e Purga</option>
-                                    <option value="ignicao">Partida: Ignição e Rampas</option>
-                                </select>
-                            </div>
-                            <div class="grid grid-cols-2 gap-3">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tam. Cuba (cm)</label>
-                                    <input type="number" id="fornoPecaComprimento" value="67" min="1" max="200" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800 text-center">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaço L/L (cm)</label>
-                                    <input type="number" id="fornoEspacamento" value="2.5" min="0" max="100" step="0.5" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-slate-800 text-center">
-                                </div>
-                            </div>
-                            <div class="pt-2 border-t border-slate-100">
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espessura da Chapa (mm)</label>
-                                <div class="flex items-center gap-3">
-                                    <input type="number" id="fornoEspessura" min="0.40" max="5.00" step="0.05" value="0.80" oninput="calcularParametrosForno()" class="w-24 bg-white border border-blue-300 rounded-lg p-2 text-sm focus:outline-none focus:border-blue-600 font-black text-blue-700 text-center shadow-inner">
-                                    <span class="text-[10px] text-slate-500 font-medium leading-tight">Altere em incrementos de 0.05 mm para ajuste fino de encharque.</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-md space-y-4 relative overflow-hidden">
-                        <div class="absolute -right-4 -top-4 opacity-5 text-6xl"><i class="fa-solid fa-flask"></i></div>
-                        <h3 class="text-sm font-bold text-white flex items-center gap-2 relative z-10 border-b border-slate-700 pb-2">
-                            <i class="fa-solid fa-wind text-cyan-400"></i> Quebrador de Amônia (H₂)
-                        </h3>
-                        <div class="grid grid-cols-2 gap-4 relative z-10">
-                            <div>
-                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Temp. Setada</span>
-                                <input type="number" id="fornoTempQuebra" value="820" min="0" max="1000" oninput="calcularParametrosForno()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-rose-400 focus:outline-none text-center font-bold shadow-inner">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Vazão (m³/H)</label>
-                                <input type="number" id="fornoVazaoGas" value="45" min="0" max="60" oninput="calcularParametrosForno()" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none text-center font-bold shadow-inner">
-                            </div>
-                        </div>
-                        <div class="pt-2 border-t border-slate-700 relative z-10">
-                            <div class="flex justify-between items-center mb-2">
-                                <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Bancada de Filtros</span>
-                                <span class="text-[9px] bg-slate-800 px-2 py-0.5 rounded font-bold text-slate-300 border border-slate-700"><i class="fa-solid fa-arrows-rotate"></i> Troca 168h</span>
-                            </div>
-                            <div class="flex gap-2">
-                                <button class="flex-1 bg-cyan-600 text-white text-[10px] font-bold py-2 rounded-lg shadow border border-cyan-500 flex justify-center items-center gap-1.5"><i class="fa-solid fa-check-circle"></i> Bancada A</button>
-                                <button class="flex-1 bg-slate-800 text-slate-400 text-[10px] font-bold py-2 rounded-lg shadow border border-slate-700 flex justify-center items-center gap-1.5"><i class="fa-solid fa-fire"></i> B (Purga 300°)</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-8 space-y-6">
-                    
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                        <div class="flex justify-between items-end border-b border-slate-100 pb-2">
-                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                                <i class="fa-solid fa-fire-flame-curved text-rose-600"></i> Diagrama de Zonas e Resistências
-                            </h3>
-                            <span class="text-[10px] font-bold text-slate-400 uppercase bg-slate-100 px-2 py-1 rounded">Extensão total: 28,5 Metros</span>
-                        </div>
-                        
-                        <div class="flex rounded-xl overflow-hidden h-[60px] shadow text-center font-bold text-[9px] text-white border border-slate-300">
-                            <div class="flex flex-col justify-center border-r border-slate-900 shadow-inner bg-slate-800" style="width: 7%;">
-                                <span>ENT</span><span class="text-[7px] text-slate-400 font-normal mt-0.5">2,0m</span>
-                            </div>
-                            <div class="flex flex-col justify-center border-r border-slate-900 bg-gradient-to-r from-amber-500 to-orange-500" style="width: 21%;">
-                                <span>PRÉ-AQ.</span><span class="text-[7px] text-orange-200 font-normal mt-0.5">6,0m</span>
-                            </div>
-                            <div class="flex flex-col justify-center border-r border-slate-900 bg-gradient-to-r from-rose-600 to-red-700 relative" style="width: 42%;">
-                                <span class="animate-pulse absolute top-1 left-0 right-0 text-[7px] text-white/70 tracking-widest">ZONA DE RECOZIMENTO</span>
-                                <span class="mt-2 text-[10px]">12,0 Metros</span>
-                            </div>
-                            <div class="flex flex-col justify-center border-r border-slate-900 bg-gradient-to-r from-cyan-600 to-blue-600" style="width: 23%;">
-                                <span>RESFRIAMENTO (H₂)</span><span class="text-[7px] text-blue-200 font-normal mt-0.5">6,5m</span>
-                            </div>
-                            <div class="flex flex-col justify-center shadow-inner bg-slate-800" style="width: 7%;">
-                                <span>SAI</span><span class="text-[7px] text-slate-400 font-normal mt-0.5">2,0m</span>
-                            </div>
-                        </div>
-
-                        <div class="grid grid-cols-5 gap-2 text-center">
-                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
-                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R1 (°C)</span>
-                                <input type="number" id="fornoR1" value="1050" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-lg sm:text-xl focus:outline-none">
-                            </div>
-                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
-                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R2 (°C)</span>
-                                <input type="number" id="fornoR2" value="1080" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-lg sm:text-xl focus:outline-none">
-                            </div>
-                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
-                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R3 (°C)</span>
-                                <input type="number" id="fornoR3" value="1080" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-lg sm:text-xl focus:outline-none">
-                            </div>
-                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
-                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R4 (°C)</span>
-                                <input type="number" id="fornoR4" value="1080" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-lg sm:text-xl focus:outline-none">
-                            </div>
-                            <div class="bg-rose-50 border border-rose-200 p-2 rounded-xl shadow-sm focus-within:border-rose-400 focus-within:ring-1 focus-within:ring-rose-400">
-                                <span class="block text-[9px] font-bold text-rose-500 mb-1">R5 (°C)</span>
-                                <input type="number" id="fornoR5" value="1060" oninput="calcularParametrosForno()" class="w-full text-center bg-transparent font-black text-rose-700 text-lg sm:text-xl focus:outline-none">
-                            </div>
-                        </div>
-
-                        <div class="mt-4 pt-4 border-t border-slate-100">
-                            <h4 class="text-xs font-bold text-slate-700 mb-3 flex items-center gap-1.5">
-                                <i class="fa-solid fa-user-tie text-blue-600"></i> Análise de Engenharia do Processo
-                            </h4>
-                            <div id="painelEspecialista" class="space-y-2">
-                                </div>
-                        </div>
-
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        
-                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-                            <div class="bg-orange-50 text-orange-900 text-xs font-bold uppercase tracking-wider p-3 text-center border-b border-orange-100">Inversor da Esteira</div>
-                            <div class="p-5 flex-1 flex flex-col justify-center space-y-4">
-                                <div class="flex justify-between items-center">
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">Frequência da Esteira</label>
-                                    <span class="text-orange-700 font-black text-xl" id="valFrequencia">32.0 Hz</span>
-                                </div>
-                                <input type="range" id="fornoFrequencia" min="5" max="60" step="0.5" value="32" oninput="calcularParametrosForno()" class="w-full h-3 bg-orange-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
-                                
-                                <div class="grid grid-cols-2 gap-3 mt-2">
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
-                                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Velocidade (m/min)</span>
-                                        <span class="block text-xl font-black text-blue-600 mt-0.5" id="fornoVelocidade">0,94</span>
-                                    </div>
-                                    <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 text-center">
-                                        <span class="block text-[9px] font-bold text-slate-400 uppercase">Tempo Est. (28.5m)</span>
-                                        <span class="block text-xl font-black text-blue-600 mt-0.5" id="fornoTempoEsteira">00:30:24</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col">
-                            <div class="bg-slate-800 text-white text-xs font-bold uppercase tracking-wider p-3 text-center">Desempenho e Lote</div>
-                            <div class="p-4 grid grid-cols-3 gap-2 border-b border-slate-100">
-                                <div class="text-center">
-                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasHora">80</span>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças/Hora</span>
-                                </div>
-                                <div class="text-center border-l border-r border-slate-100">
-                                    <span class="block text-xl font-black text-emerald-600" id="fornoPecasTurno">971</span>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Peças/12h</span>
-                                </div>
-                                <div class="text-center">
-                                    <span class="block text-xl font-black text-emerald-600" id="fornoTempoCiclo">00:00:44</span>
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase">Tempo Ciclo</span>
-                                </div>
-                            </div>
-                            <div class="p-4 bg-slate-50 flex-1 flex items-center gap-4">
-                                <div class="w-1/3">
-                                    <label class="block text-[9px] font-bold text-slate-500 uppercase mb-1">Total Lote</label>
-                                    <input type="number" id="fornoLoteTotal" value="1000" min="1" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm focus:outline-none focus:border-blue-500 font-black text-slate-800 text-center shadow-inner">
-                                </div>
-                                <div class="w-2/3">
-                                    <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Término Previsto</span>
-                                    <span class="block text-sm font-black text-indigo-700 leading-tight" id="fornoPrevisaoLote">-</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
         <div id="view-intervencoes" class="fade-in hidden">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div>
@@ -357,7 +133,6 @@
                     <i class="fa-solid fa-plus"></i> Registrar Intervenção
                 </button>
             </div>
-
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -375,22 +150,18 @@
                 </div>
             </div>
         </div>
-
         <div id="view-checklist-setor" class="fade-in hidden">
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">SELECIONE O SETOR</span>
             <div id="setorCards" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
         </div>
-
         <div id="view-checklist-periodo" class="fade-in hidden">
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4" id="periodoHeaderLabel"></span>
             <div id="periodoCards" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
         </div>
-
         <div id="view-checklist-itens" class="fade-in hidden">
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4" id="itensTopLabel"></span>
             <div id="checklistContainer" class="space-y-8"></div>
         </div>
-
         <div id="view-almoxarifado" class="fade-in hidden">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col lg:flex-row gap-4 items-center justify-between">
                 <div class="flex flex-col sm:flex-row gap-3 w-full lg:max-w-3xl">
@@ -408,7 +179,6 @@
                     </button>
                 </div>
             </div>
-
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
@@ -428,7 +198,6 @@
                 </div>
             </div>
         </div>
-
         <div id="view-pops" class="fade-in hidden">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div class="flex flex-1 gap-3 w-full sm:max-w-xl">
@@ -440,18 +209,148 @@
             </div>
             <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </div>
-
-    </main>
+        
+        <div id="view-forno" class="fade-in hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-orange-600"></i> Parâmetros do Processo
+                        </h3>
+                    </div>
+                    <div id="containerNormalParams" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Material da Peça</label>
+                            <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                                <option value="aco-304">Aço Inoxidável AISI 304</option>
+                                <option value="aco-201">Aço Inoxidável AISI 201</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tamanho (mm)</label>
+                                <input type="number" id="fornoPecaComprimento" value="150" min="10" max="2000" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaçamento (mm)</label>
+                                <input type="number" id="fornoEspacamento" value="50" min="0" max="1000" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                <span>Espessura da Chapa</span>
+                                <span class="text-blue-600 font-bold" id="valEspessura">0.50 mm</span>
+                            </label>
+                            <input type="range" id="fornoEspessura" min="0.30" max="3.00" step="0.05" value="0.50" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
+                        </div>
+                    </div>
+                    
+                    <hr class="border-slate-100">
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                <span>Frequência (Esteira)</span>
+                                <span class="text-orange-600 font-bold" id="valFrequencia">35.0 Hz</span>
+                            </label>
+                            <input type="range" id="fornoFrequencia" min="15" max="60" step="0.5" value="35" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                    <span>Gás (H2+N2)</span>
+                                    <span class="text-emerald-600 font-bold" id="valGas">43 m³/h</span>
+                                </label>
+                                <input type="range" id="fornoGas" min="10" max="60" step="1" value="43" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                    <span>Temp Média</span>
+                                    <span class="text-rose-600 font-bold" id="valTemp">1070 °C</span>
+                                </label>
+                                <input type="range" id="fornoTempMedia" min="800" max="1150" step="10" value="1070" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-600">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:col-span-8 space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-area text-blue-600"></i> Diagrama das Zonas Industriais (Total: 28,50 m)
+                        </h3>
+                        
+                        <div class="grid grid-cols-12 border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-[10px] text-white">
+                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1">
+                                <span class="uppercase tracking-wider text-[9px]">Entrada</span>
+                                <span class="text-[8px] font-medium text-slate-300 mt-1">~2,4 m</span>
+                            </div>
+                            <div class="col-span-3 bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1">
+                                <span class="uppercase tracking-wider text-[9px]">Pré-Aq.</span>
+                                <span class="text-[8px] font-medium text-amber-200 mt-1">~7,1 m</span>
+                            </div>
+                            <div class="col-span-2 bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1">
+                                <span class="animate-pulse uppercase tracking-wider text-[9px]">Recozimento</span>
+                                <span class="text-[8px] font-medium text-red-200 mt-1">~4,7 m</span>
+                            </div>
+                            <div class="col-span-5 bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1">
+                                <span class="uppercase tracking-wider text-[9px]">Resfriamento (H2 + N2)</span>
+                                <span class="text-[8px] font-medium text-blue-200 mt-1">~11,9 m</span>
+                            </div>
+                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center p-1">
+                                <span class="uppercase tracking-wider text-[9px]">Saída</span>
+                                <span class="text-[8px] font-medium text-slate-300 mt-1">~2,4 m</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border rounded-xl p-3 bg-slate-100">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-wider" id="labelSimulacaoConveyor">Simulação da Esteira</span>
+                            <div class="h-10 w-full bg-slate-200 rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center flex flex-col justify-center">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Velocidade Linear</span>
+                            <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoVelocidade">0,70 m/min</span>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center flex flex-col justify-center">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider" id="fornoMetricLabelCiclo">Tempo de Ciclo (Total)</span>
+                            <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoTempoCiclo">41 min</span>
+                        </div>
+                    </div>
+                    
+                    <div id="fornoFeedbackBox" class="bg-blue-50 border border-blue-200 text-blue-800 p-5 rounded-xl shadow-sm flex items-start gap-4 transition-all duration-300">
+                        <i id="fornoFeedbackIcon" class="fa-solid fa-award text-blue-600 mt-1 text-2xl"></i>
+                        <div>
+                            <h4 id="fornoFeedbackTitle" class="font-bold text-sm mb-1.5 uppercase tracking-wider">Parâmetros Validados (Padrão Ouro)</h4>
+                            <p id="fornoFeedbackText" class="text-xs leading-relaxed font-medium">Excelente! Esta configuração replica o teste físico validado no Aço 304. O hidrogênio está em nível ótimo para devorar o oxigênio, a velocidade garante o encharque perfeito nas bancadas e as cubas seguirão para estampagem sem risco de estourar.</p>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        </main>
 
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center gap-3 mb-4">
-                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center"><i class="fa-solid fa-link text-lg"></i></div>
-                    <div><h3 class="text-base font-bold text-slate-900">Configurar Conexão</h3><p class="text-xs text-slate-500 font-medium">Insira a URL do Google Apps Script</p></div>
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <i class="fa-solid fa-link text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Configurar Conexão</h3>
+                        <p class="text-xs text-slate-500 font-medium">Insira a URL do Google Apps Script</p>
+                    </div>
                 </div>
                 <div class="space-y-4 mb-5">
-                    <div><label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">URL de Implantação</label><input type="text" id="apiInputUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-mono"></div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">URL de Implantação</label>
+                        <input type="text" id="apiInputUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="toggleConfigModal(false)" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
@@ -460,16 +359,23 @@
             </div>
         </div>
     </div>
-
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center gap-3 mb-5 border-b pb-4">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shadow-sm border border-rose-200"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
-                    <div><h3 class="text-base font-bold text-slate-900">Abertura de Chamado</h3><p class="text-[10px] text-slate-500 font-medium">Registro de Manutenção Corretiva (OS)</p></div>
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shadow-sm border border-rose-200">
+                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Abertura de Chamado</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Registro de Manutenção Corretiva (OS)</p>
+                    </div>
                 </div>
                 <div class="space-y-4 mb-5">
-                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label><select id="chamadoMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select></div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label>
+                        <select id="chamadoMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
+                    </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Grau de Urgência</label>
                         <select id="chamadoUrgencia" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
@@ -478,73 +384,109 @@
                             <option value="Baixa">Baixa (Pode aguardar programação)</option>
                         </select>
                     </div>
-                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Defeito Apresentado / Sintoma</label><textarea id="chamadoDefeito" rows="3" placeholder="Ex: Mangueira do pistão vazando óleo..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea></div>
-                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Seu Nome (Relator)</label><select id="chamadoRelator" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select></div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Defeito Apresentado / Sintoma</label>
+                        <textarea id="chamadoDefeito" rows="3" placeholder="Ex: Mangueira do pistão vazando óleo..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Seu Nome (Relator)</label>
+                        <select id="chamadoRelator" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="fecharModalChamado()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
-                    <button id="btnEnviarChamado" onclick="enviarChamado()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all"><i class="fa-solid fa-paper-plane"></i> Enviar Alerta</button>
+                    <button id="btnEnviarChamado" onclick="enviarChamado()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar Alerta
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
     <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm"><i class="fa-solid fa-file-lines"></i></div>
-                    <div><h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3><p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p></div>
+                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3>
+                        <p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p>
+                    </div>
                 </div>
                 <button onclick="fecharDetalhesOS()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-6 overflow-y-auto space-y-5 bg-white">
                 <div class="flex justify-between items-start">
-                    <div><span class="block text-[10px] font-bold text-slate-400 uppercase">Máquina / Equipamento</span><span class="block font-bold text-slate-800 text-sm" id="detOsMaquina"></span></div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Máquina / Equipamento</span>
+                        <span class="block font-bold text-slate-800 text-sm" id="detOsMaquina"></span>
+                    </div>
                     <span class="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-1 rounded font-bold border border-emerald-200" id="detOsStatus"></span>
                 </div>
                 <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 space-y-3">
-                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2"><i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)</div>
+                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)
+                    </div>
                     <div class="grid grid-cols-2 gap-2 text-[10px]">
                         <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataAbertura"></span></div>
                         <div><span class="block font-bold text-slate-400 uppercase">Relator</span><span class="font-semibold text-slate-700" id="detOsRelator"></span></div>
                     </div>
-                    <div><span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Defeito Relatado</span><p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p></div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Defeito Relatado</span>
+                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p>
+                    </div>
                 </div>
                 <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3">
-                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2"><i class="fa-solid fa-wrench"></i> Fechamento (Reparo)</div>
+                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2">
+                        <i class="fa-solid fa-wrench"></i> Fechamento (Reparo)
+                    </div>
                     <div class="grid grid-cols-2 gap-2 text-[10px]">
                         <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataFechamento"></span></div>
                         <div><span class="block font-bold text-slate-400 uppercase">Técnico</span><span class="font-semibold text-slate-700" id="detOsSolucionador"></span></div>
                     </div>
-                    <div><span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Solução Aplicada</span><p class="text-xs text-slate-700 bg-white p-2 rounded border border-emerald-100 font-medium" id="detOsResolucao"></p></div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Solução Aplicada</span>
+                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-emerald-100 font-medium" id="detOsResolucao"></p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
     <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm"><i class="fa-solid fa-triangle-exclamation"></i></div>
-                    <div><h3 class="text-sm font-bold text-slate-900">Gerenciamento de Chamados</h3><p class="text-[10px] text-rose-600 font-semibold">Ordens de Serviço (OS) Abertas</p></div>
+                    <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Gerenciamento de Chamados</h3>
+                        <p class="text-[10px] text-rose-600 font-semibold">Ordens de Serviço (OS) Abertas</p>
+                    </div>
                 </div>
                 <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos"></div>
         </div>
     </div>
-
     <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center gap-3 mb-5 border-b pb-4">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200"><i class="fa-solid fa-screwdriver-wrench text-lg"></i></div>
-                    <div><h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3><p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p></div>
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200">
+                        <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p>
+                    </div>
                 </div>
                 <div class="space-y-4 mb-5">
-                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label><select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select></div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label>
+                        <select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
+                    </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Ação</label>
                         <select id="intervTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
@@ -553,53 +495,78 @@
                             <option value="Melhoria">Melhoria / Setup Específico</option>
                         </select>
                     </div>
-                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label><textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea></div>
-                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label><select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select></div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label>
+                        <textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label>
+                        <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="fecharModalIntervencao()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
-                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all"><i class="fa-solid fa-check"></i> Salvar Registro</button>
+                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-check"></i> Salvar Registro
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
     <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm"><i class="fa-solid fa-list-check"></i></div>
-                    <div><h3 class="text-sm font-bold text-slate-900" id="tituloResumoMaquina">Status da Máquina</h3><p class="text-[10px] text-slate-500 font-medium" id="subtituloResumoMaquina">Histórico de Verificação dos Itens</p></div>
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900" id="tituloResumoMaquina">Status da Máquina</h3>
+                        <p class="text-[10px] text-slate-500 font-medium" id="subtituloResumoMaquina">Histórico de Verificação dos Itens</p>
+                    </div>
                 </div>
                 <button onclick="fecharResumoMaquina()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-3 flex-grow bg-slate-50" id="listaResumoMaquina"></div>
         </div>
     </div>
-
     <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
                     <button id="btnVoltarPreditiva" onclick="voltarPreditiva()" class="hidden text-slate-400 hover:text-slate-700 p-2 -ml-2 transition-colors"><i class="fa-solid fa-arrow-left text-lg"></i></button>
-                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm" id="iconContainerPreditiva"><i id="iconPreditivaModal" class="fa-solid fa-calendar-check"></i></div>
-                    <div><h3 id="preditivaModalTitle" class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3><p id="preditivaModalDesc" class="text-[10px] text-slate-500 font-medium">Controle de Preventivas</p></div>
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm" id="iconContainerPreditiva">
+                        <i id="iconPreditivaModal" class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h3 id="preditivaModalTitle" class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3>
+                        <p id="preditivaModalDesc" class="text-[10px] text-slate-500 font-medium">Controle de Preventivas</p>
+                    </div>
                 </div>
                 <button onclick="fecharPreditiva()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
                 <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
                     <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
-                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-day"></i></div>
-                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Amanhã</h4><span class="bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountAmanha">0 itens</span>
+                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Amanhã</h4>
+                        <span class="bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountAmanha">0 itens</span>
                     </button>
                     <button onclick="mostrarListaPreditiva('dias3')" class="nav-card bg-white border border-indigo-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-indigo-50/50">
-                        <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-days"></i></div>
-                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 3 dias</h4><span class="bg-indigo-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias3">0 itens</span>
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 3 dias</h4>
+                        <span class="bg-indigo-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias3">0 itens</span>
                     </button>
                     <button onclick="mostrarListaPreditiva('dias7')" class="nav-card bg-white border border-purple-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-purple-50/50">
-                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-week"></i></div>
-                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 7 dias</h4><span class="bg-purple-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias7">0 itens</span>
+                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-week"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 7 dias</h4>
+                        <span class="bg-purple-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias7">0 itens</span>
                     </button>
                 </div>
                 <div id="preditivaHojeMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden"></div>
@@ -611,7 +578,6 @@
             </div>
         </div>
     </div>
-
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
@@ -624,7 +590,9 @@
                             <input type="text" id="novoItemNome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
                             <div class="relative">
                                 <input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="absolute inset-0 opacity-0 cursor-pointer w-10 h-10">
-                                <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all"><i class="fa-solid fa-camera text-slate-500"></i></button>
+                                <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all">
+                                    <i class="fa-solid fa-camera text-slate-500"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -633,16 +601,33 @@
                             <img id="fotoPreviewImg" src="" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" class="h-10 w-10 object-cover rounded-lg border">
                             <span class="text-[10px] text-slate-500 font-medium">Foto anexada</span>
                         </div>
-                        <button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1"><i class="fa-solid fa-trash"></i> Remover</button>
+                        <button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Remover
+                        </button>
                     </div>
-                    <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label><textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea></div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label><input type="text" id="novoItemCategoria" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div>
-                        <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label><input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label>
+                        <textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
-                        <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label><input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div>
-                        <div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label><input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label>
+                            <input type="text" id="novoItemCategoria" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label>
+                            <input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label>
+                            <input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label>
+                            <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
+                        </div>
                     </div>
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label>
@@ -657,24 +642,40 @@
             </div>
         </div>
     </div>
-
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
                 <h3 class="text-lg font-bold text-slate-900 font-sans">Registrar Movimentação</h3>
                 <div class="space-y-3">
-                    <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label><select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select></div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label>
+                        <select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select>
+                    </div>
                     <div class="bg-slate-50 border border-slate-150 rounded-xl p-3 text-[10px] space-y-2 text-slate-600 font-sans">
                         <div><span class="block font-bold text-slate-400 uppercase">Descrição</span><span id="movItemDescText" class="text-slate-700 font-medium">-</span></div>
                         <div><span class="block font-bold text-slate-400 uppercase">Localização</span><span id="movItemLocalText" class="text-slate-700 font-medium">-</span></div>
-                        <div class="flex gap-2 pt-1 border-t"><button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button></div>
+                        <div class="flex gap-2 pt-1 border-t">
+                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button>
+                        </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3 font-sans">
-                        <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label><select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select></div>
-                        <div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label><input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label>
+                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label>
+                            <input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
                     </div>
-                    <div class="font-sans"><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label><select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select></div>
-                    <div class="font-sans"><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label><textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea></div>
+                    <div class="font-sans">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
+                        <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
+                    </div>
+                    <div class="font-sans">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label>
+                        <textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
+                    </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3 pt-3 border-t font-sans">
                     <button onclick="fecharModalMovimentacao()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
@@ -683,14 +684,14 @@
             </div>
         </div>
     </div>
-
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
-            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1"><i class="fa-solid fa-xmark"></i> Fechar</button>
+            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1">
+                <i class="fa-solid fa-xmark"></i> Fechar
+            </button>
         </div>
     </div>
-
     <div id="printArea" class="hidden"></div>
 
     <script>
@@ -701,23 +702,22 @@
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
-        let maquinasData = []; 
-        
         let currentView = 'home';
         let selectedSetor = '';
         let selectedPeriodo = '';
         let API_URL = localStorage.getItem("checklist_google_api_url") || "";
         let currentModalMode = '';
         let currentPreditivaMenu = '';
-        let currentNivelMaquina = 'familia';
-        let selFamilia = '';
-        let selSubfamilia = '';
-        let fotoAnexadaBase64 = '';
 
         window.onload = () => {
-            if (API_URL) { document.getElementById('apiStatusAlert').classList.add('hidden'); baixarDadosDaPlanilha(); } 
-            else { carregarChecklistMock(); }
-            gerarAlmoxarifadoMock(); gerarPOPsMock();
+            if (API_URL) {
+                document.getElementById('apiStatusAlert').classList.add('hidden');
+                baixarDadosDaPlanilha();
+            } else {
+                carregarChecklistMock();
+            }
+            gerarAlmoxarifadoMock();
+            gerarPOPsMock();
         };
 
         function showToast(message, type = 'success') {
@@ -736,317 +736,52 @@
         }
 
         function alternarTela(novaTela) {
-            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'maquinas-selecao', 'forno-detalhes', 'intervencoes'];
+            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'forno', 'intervencoes'];
             telas.forEach(t => {
                 const el = document.getElementById(`view-${t}`);
                 if(el) el.classList.add('hidden');
             });
             document.getElementById(`view-${novaTela}`).classList.remove('hidden');
             currentView = novaTela;
-
             const btnVoltar = document.getElementById('btnVoltar');
             const headerTitle = document.getElementById('headerTitle');
             const headerSubtitle = document.getElementById('headerSubtitle');
-
+            
             if (novaTela === 'home') {
                 btnVoltar.classList.add('hidden');
                 headerTitle.innerText = "Checklist de Manutenção"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
             } else {
                 btnVoltar.classList.remove('hidden');
-                if (novaTela === 'almoxarifado') { headerTitle.innerText = "Almoxarifado Técnico"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets"; } 
-                else if (novaTela === 'pops') { headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO"; } 
-                else if (novaTela === 'maquinas-selecao') { headerTitle.innerText = "Máquinas & Parâmetros"; headerSubtitle.innerText = "Grupo TBX · Seleção de Equipamento"; } 
-                else if (novaTela === 'forno-detalhes') { headerTitle.innerText = "HMI: Forno Contínuo de Recozimento"; headerSubtitle.innerText = "Grupo TBX · Controle de Atmosfera e Aquecimento"; } 
-                else if (novaTela === 'intervencoes') { headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta"; } 
-                else { headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas"; }
+                if (novaTela === 'almoxarifado') {
+                    headerTitle.innerText = "Almoxarifado Técnico"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
+                } else if (novaTela === 'pops') {
+                    headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO";
+                } else if (novaTela === 'forno') {
+                    headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
+                } else if (novaTela === 'intervencoes') {
+                    headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta";
+                } else {
+                    headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas";
+                }
             }
         }
 
         function voltar() {
             if (currentView === 'checklist-itens') alternarTela('checklist-periodo');
             else if (currentView === 'checklist-periodo') alternarTela('checklist-setor');
-            else if (currentView === 'forno-detalhes') alternarTela('maquinas-selecao');
             else alternarTela('home');
-        }
-
-        function abrirModuloMaquinas() { 
-            alternarTela('maquinas-selecao'); 
-            document.getElementById('buscaMaquina').value = '';
-            renderNivelMaquina('familia');
-        }
-
-        function renderNivelMaquina(nivel, filtro = '') {
-            currentNivelMaquina = nivel;
-            const container = document.getElementById('listaMaquinasParametros');
-            const breadcrumb = document.getElementById('maquinasBreadcrumb');
-            const btnVoltar = document.getElementById('btnVoltarNivelMaquinaContainer');
-            let html = '';
-
-            if (nivel === 'familia') {
-                selFamilia = ''; selSubfamilia = '';
-                breadcrumb.innerText = "Famílias de Equipamentos";
-                btnVoltar.classList.add('hidden');
-                
-                const familias = [...new Set(maquinasData.map(m => m.familia))].sort();
-                if(familias.length === 0) html = `<div class="col-span-full text-center p-10 text-slate-400">Nenhuma máquina cadastrada na Planilha.</div>`;
-                
-                familias.forEach(f => {
-                    const count = maquinasData.filter(m => m.familia === f).length;
-                    html += `<button onclick="renderNivelMaquina('subfamilia', '${f}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-blue-50 transition-colors"><div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center mb-3"><i class="fa-solid fa-layer-group text-lg"></i></div><h3 class="font-bold text-slate-800 text-sm mb-1">${f}</h3><p class="text-[10px] text-slate-500">${count} equipamento(s)</p></button>`;
-                });
-            } else if (nivel === 'subfamilia') {
-                selFamilia = filtro;
-                breadcrumb.innerHTML = `<span class="text-slate-400">Família:</span> <span class="font-bold text-slate-700">${selFamilia}</span>`;
-                btnVoltar.classList.remove('hidden');
-                
-                const maquinasDaFamilia = maquinasData.filter(m => m.familia === selFamilia);
-                const subfamilias = [...new Set(maquinasDaFamilia.map(m => m.subfamilia))].filter(Boolean).sort();
-                
-                if (subfamilias.length === 0) { renderNivelMaquina('maquinas', selFamilia); return; }
-
-                subfamilias.forEach(sub => {
-                    const count = maquinasDaFamilia.filter(m => m.subfamilia === sub).length;
-                    html += `<button onclick="renderNivelMaquina('maquinas_sub', '${sub}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-indigo-50 transition-colors"><div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mb-3"><i class="fa-solid fa-folder-tree text-lg"></i></div><h3 class="font-bold text-slate-800 text-sm mb-1">${sub}</h3><p class="text-[10px] text-slate-500">${count} equipamento(s)</p></button>`;
-                });
-                const semSub = maquinasDaFamilia.filter(m => !m.subfamilia);
-                semSub.forEach(m => { html += gerarCardMaquina(m); });
-            } else if (nivel === 'maquinas' || nivel === 'maquinas_sub') {
-                if (nivel === 'maquinas_sub') selSubfamilia = filtro;
-                breadcrumb.innerHTML = `<span class="text-slate-400">Família:</span> <span class="font-bold text-slate-700">${selFamilia}</span> ${selSubfamilia ? `<span class="text-slate-400 mx-1">></span> <span class="text-slate-400">Subfamília:</span> <span class="font-bold text-slate-700">${selSubfamilia}</span>` : ''}`;
-                btnVoltar.classList.remove('hidden');
-                
-                const filtradas = maquinasData.filter(m => m.familia === selFamilia && (nivel === 'maquinas' || m.subfamilia === selSubfamilia));
-                filtradas.forEach(m => { html += gerarCardMaquina(m); });
-            }
-            container.innerHTML = html;
-        }
-
-        function gerarCardMaquina(m) {
-            let isForno = normalizar(m.nome).includes('forno');
-            let icone = isForno ? 'fa-fire' : 'fa-microchip'; let cor = isForno ? 'text-orange-600 bg-orange-100' : 'text-slate-600 bg-slate-100';
-            return `<button onclick="selecionarMaquinaParametros('${m.nome}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col items-start w-full hover:bg-slate-50"><div class="w-10 h-10 rounded-xl ${cor} flex items-center justify-center mb-3 shadow-sm"><i class="fa-solid ${icone} text-lg"></i></div><h3 class="font-bold text-slate-800 text-sm mb-1 line-clamp-2">${m.nome}</h3><p class="text-[10px] text-slate-500 mt-auto pt-2">Acessar painel (HMI)</p></button>`;
-        }
-
-        function voltarNivelMaquina() {
-            if (currentNivelMaquina === 'maquinas_sub') renderNivelMaquina('subfamilia', selFamilia);
-            else if (currentNivelMaquina === 'subfamilia' || currentNivelMaquina === 'maquinas') renderNivelMaquina('familia');
-        }
-
-        function buscarMaquina() {
-            const termo = document.getElementById('buscaMaquina').value.toLowerCase();
-            const container = document.getElementById('listaMaquinasParametros');
-            if (!termo) { renderNivelMaquina('familia'); return; }
-            document.getElementById('btnVoltarNivelMaquinaContainer').classList.add('hidden');
-            document.getElementById('maquinasBreadcrumb').innerText = `Buscando por: "${termo}"`;
-            const filtradas = maquinasData.filter(m => m.nome.toLowerCase().includes(termo) || m.familia.toLowerCase().includes(termo) || m.subfamilia.toLowerCase().includes(termo));
-            if (filtradas.length === 0) { container.innerHTML = `<div class="col-span-full text-center p-10 text-slate-400">Nenhum equipamento encontrado.</div>`; return; }
-            container.innerHTML = filtradas.map(m => gerarCardMaquina(m)).join('');
-        }
-
-        function selecionarMaquinaParametros(maquina) {
-            if (normalizar(maquina).includes('forno')) {
-                alternarTela('forno-detalhes');
-                mudarMaterialForno(); 
-            } else { showToast(`Painel para "${maquina}" em desenvolvimento.`, "info"); }
-        }
-
-        function mudarMaterialForno() {
-            const material = document.getElementById('fornoMaterial').value;
-            if (material === "aco-304") {
-                document.getElementById('fornoR1').value = 1050; 
-                document.getElementById('fornoR2').value = 1080;
-                document.getElementById('fornoR3').value = 1080; 
-                document.getElementById('fornoR4').value = 1080;
-                document.getElementById('fornoR5').value = 1060; 
-                document.getElementById('fornoFrequencia').value = 32;
-                document.getElementById('fornoVazaoGas').value = 45; 
-                document.getElementById('fornoEspessura').value = 0.80;
-                document.getElementById('fornoTempQuebra').value = 820;
-            } else if (material === "aco-201") {
-                document.getElementById('fornoR1').value = 1020; 
-                document.getElementById('fornoR2').value = 1060;
-                document.getElementById('fornoR3').value = 1060; 
-                document.getElementById('fornoR4').value = 1060;
-                document.getElementById('fornoR5').value = 1040; 
-                document.getElementById('fornoFrequencia').value = 35;
-                document.getElementById('fornoVazaoGas').value = 42; 
-                document.getElementById('fornoEspessura').value = 0.60;
-                document.getElementById('fornoTempQuebra').value = 820;
-            } else if (material === "aquecimento") {
-                document.getElementById('fornoR1').value = 100; 
-                document.getElementById('fornoR2').value = 100;
-                document.getElementById('fornoR3').value = 100; 
-                document.getElementById('fornoR4').value = 100;
-                document.getElementById('fornoR5').value = 100; 
-                document.getElementById('fornoFrequencia').value = 5;
-                document.getElementById('fornoVazaoGas').value = 0; 
-                document.getElementById('fornoEspessura').value = 1.00;
-                document.getElementById('fornoTempQuebra').value = 200;
-                showToast("Modo de Aquecimento Gradual Ativado.", "info");
-            } else if (material === "ignicao") {
-                document.getElementById('fornoR1').value = 800; 
-                document.getElementById('fornoR2').value = 800;
-                document.getElementById('fornoR3').value = 800; 
-                document.getElementById('fornoR4').value = 800;
-                document.getElementById('fornoR5').value = 800; 
-                document.getElementById('fornoFrequencia').value = 10;
-                document.getElementById('fornoVazaoGas').value = 20; 
-                document.getElementById('fornoEspessura').value = 1.00;
-                document.getElementById('fornoTempQuebra').value = 820;
-                showToast("Modo de Ignição e Transição de Gás Ativado.", "info");
-            }
-            calcularParametrosForno();
-        }
-
-        function calcularParametrosForno() {
-            const material = document.getElementById('fornoMaterial').value;
-            const espessura = parseFloat(document.getElementById('fornoEspessura').value) || 0.8; 
-            const freq = parseFloat(document.getElementById('fornoFrequencia').value) || 32; 
-            const compPecaCM = parseFloat(document.getElementById('fornoPecaComprimento').value) || 67; 
-            const espacamentoCM = parseFloat(document.getElementById('fornoEspacamento').value) || 2.5; 
-            const vazaoGas = parseFloat(document.getElementById('fornoVazaoGas').value) || 45;
-            const tempQuebra = parseFloat(document.getElementById('fornoTempQuebra').value) || 820;
-            const loteTotal = parseInt(document.getElementById('fornoLoteTotal').value) || 0;
-            
-            const r1 = parseInt(document.getElementById('fornoR1').value) || 0;
-            const r2 = parseInt(document.getElementById('fornoR2').value) || 0;
-            const r3 = parseInt(document.getElementById('fornoR3').value) || 0;
-            const r4 = parseInt(document.getElementById('fornoR4').value) || 0;
-            const r5 = parseInt(document.getElementById('fornoR5').value) || 0;
-            const tempMediaRecozimento = (r2 + r3 + r4) / 3;
-
-            // Fator matemático exato extraído da planilha: 32Hz = 0.9375 m/min em 28.5m de forno
-            const fatorVelocidade = 0.9375 / 32; // 0.029296875
-            const velocidadeMmin = freq * fatorVelocidade; 
-            const velocidadeMh = velocidadeMmin * 60; 
-            const comprimentoFornoM = 28.5; // Medida exata da esteira
-            
-            const tempoEsteiraMin = comprimentoFornoM / velocidadeMmin;
-            const tempoEsteiraSeg = Math.round(tempoEsteiraMin * 60);
-            const teMin = Math.floor(tempoEsteiraSeg / 60);
-            const teSeg = tempoEsteiraSeg % 60;
-            const tempoEsteiraFormatado = `00:${String(teMin).padStart(2, '0')}:${String(teSeg).padStart(2, '0')}`;
-            
-            const espacoPorPecaM = (compPecaCM + espacamentoCM) / 100;
-            let capacidade = 0; let produtividadeHora = 0; let tempoCicloMin = 0; let tempoCicloFormatado = "00:00:00";
-            
-            if (espacoPorPecaM > 0) {
-                capacidade = Math.floor(comprimentoFornoM / espacoPorPecaM);
-                tempoCicloMin = espacoPorPecaM / velocidadeMmin;
-                const tcSeg = Math.round(tempoCicloMin * 60);
-                const tcMin = Math.floor(tcSeg / 60);
-                const tcS = tcSeg % 60;
-                tempoCicloFormatado = `00:${String(tcMin).padStart(2, '0')}:${String(tcS).padStart(2, '0')}`;
-                produtividadeHora = velocidadeMh / espacoPorPecaM;
-            }
-
-            let previsaoStr = "-";
-            if (loteTotal > 0 && tempoCicloMin > 0 && material.includes("aco")) {
-                const tempoTotalLoteSeg = Math.round(loteTotal * (tempoCicloMin * 60));
-                const lh = Math.floor(tempoTotalLoteSeg / 3600); 
-                const lm = Math.floor((tempoTotalLoteSeg % 3600) / 60);
-                const agora = new Date(); agora.setSeconds(agora.getSeconds() + tempoTotalLoteSeg);
-                previsaoStr = `<span class="text-xs text-indigo-500 font-bold mb-1 block">T. Req: ${String(lh).padStart(2,'0')}h ${String(lm).padStart(2,'0')}m</span> ${agora.toLocaleDateString('pt-BR')} às ${agora.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}`;
-            }
-            document.getElementById('fornoPrevisaoLote').innerHTML = previsaoStr;
-
-            // Assistente Técnico IA de Processo
-            let painelEspecialistaHtml = "";
-            let temErro = false;
-
-            if (material === "aquecimento") {
-                painelEspecialistaHtml += `<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-temperature-arrow-up text-amber-500 mt-0.5"></i><p class="text-xs text-amber-800 font-medium"><strong>Aquecimento Ativo:</strong> Suba de 100 em 100°C. Aguarde de 30 a 90 min por patamar. Libere o próximo nível apenas quando o amperímetro trifásico de cada bancada registrar consumo menor que 45 Amperes.</p></div>`;
-                if (tempQuebra < (tempMediaRecozimento + 100)) {
-                    painelEspecialistaHtml += `<div class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-flask text-rose-500 mt-0.5"></i><p class="text-xs text-rose-800 font-medium"><strong>Erro de Sincronia:</strong> O Quebrador de Amônia deve estar sempre 100°C acima do forno durante a subida (Máx 820°C).</p></div>`;
-                }
-            } 
-            else if (material === "ignicao") {
-                painelEspecialistaHtml += `<div class="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-shield-halved text-blue-500 mt-0.5"></i><p class="text-xs text-blue-800 font-medium"><strong>Protocolo de Ignição:</strong> Forno em 800°C. Purgue a atmosfera com 150 kgf de N2. Desligue a Válv. 1 (N2) e abra a Válv. 9 (Amônia) em 20 m³/h. Posicione o acendedor a 2m da boca de entrada.</p></div>`;
-                if (vazaoGas < 20 || vazaoGas > 30) {
-                    painelEspecialistaHtml += `<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-wind text-amber-500 mt-0.5"></i><p class="text-xs text-amber-800 font-medium"><strong>Aviso:</strong> A ignição inicial requer 20 m³/h de H2. Aumente para 30 m³/h apenas ao subir a rampa para 900°C.</p></div>`;
-                }
-            } 
-            else {
-                // Modo Produção Aço 304 e 201
-                if (vazaoGas < 40) {
-                    painelEspecialistaHtml += `<div class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-wind text-rose-500 mt-0.5"></i><p class="text-xs text-rose-800 font-medium"><strong>Oxidação Crítica:</strong> Vazão de gás a ${vazaoGas} m³/h é fraca. O hidrogênio não terá pressão para varrer o forno e o oxigênio entrará pela zona de resfriamento. Cubas sairão pretas.</p></div>`;
-                    temErro = true;
-                } else if (vazaoGas > 50) {
-                    painelEspecialistaHtml += `<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-money-bill-wave text-amber-500 mt-0.5"></i><p class="text-xs text-amber-800 font-medium"><strong>Desperdício:</strong> Vazão a ${vazaoGas} m³/h é segura, mas alta. Acima de 50 m³/h não há ganho no inox, apenas custo de gás.</p></div>`;
-                } else {
-                    painelEspecialistaHtml += `<div class="p-3 bg-emerald-50 border border-emerald-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-shield-halved text-emerald-500 mt-0.5"></i><p class="text-xs text-emerald-800 font-medium"><strong>Atmosfera Ideal:</strong> Pressão redutora entre 40-45 m³/h garante o brilho do inox e exaustão do O2.</p></div>`;
-                }
-
-                if (material === "aco-304") {
-                    if (tempMediaRecozimento < 1030) {
-                        painelEspecialistaHtml += `<div class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-temperature-arrow-down text-rose-500 mt-0.5"></i><p class="text-xs text-rose-800 font-medium"><strong>Recristalização Falha:</strong> Zonas muito frias. A chapa ficará dura e <strong>vai estourar no repuxo da prensa</strong>.</p></div>`;
-                        temErro = true;
-                    } else if (tempMediaRecozimento > 1120) {
-                        painelEspecialistaHtml += `<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-temperature-arrow-up text-amber-500 mt-0.5"></i><p class="text-xs text-amber-800 font-medium"><strong>Superaquecimento:</strong> Risco de crescimento excessivo de grão (Casca de laranja) visual.</p></div>`;
-                    }
-                }
-
-                let freqIdealBase = 32;
-                let freqCalculada = freqIdealBase * (0.80 / espessura);
-                
-                if (freq > (freqCalculada + 5)) {
-                    painelEspecialistaHtml += `<div class="p-3 bg-rose-50 border border-rose-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-stopwatch text-rose-500 mt-0.5"></i><p class="text-xs text-rose-800 font-medium"><strong>Velocidade Crítica:</strong> A esteira a ${freq} Hz é muito rápida para ${espessura.toFixed(2)}mm. Ficará crua no miolo e rígida. (Ideal: ~${Math.round(freqCalculada)} Hz).</p></div>`;
-                    temErro = true;
-                } else if (freq < (freqCalculada - 5)) {
-                    painelEspecialistaHtml += `<div class="p-3 bg-amber-50 border border-amber-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-snail text-amber-500 mt-0.5"></i><p class="text-xs text-amber-800 font-medium"><strong>Produção Lenta:</strong> O encharque ocorrerá, mas a ${freq} Hz gasta energia à toa. (Ideal: ~${Math.round(freqCalculada)} Hz).</p></div>`;
-                }
-
-                if (!temErro && painelEspecialistaHtml.indexOf('bg-rose') === -1) {
-                    painelEspecialistaHtml += `<div class="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-start gap-3"><i class="fa-solid fa-thumbs-up text-blue-600 mt-0.5"></i><p class="text-xs text-blue-800 font-medium"><strong>Setups Validados!</strong> Temperatura, esteira e gás ideais para estampar a chapa ${espessura.toFixed(2)}mm sem quebras.</p></div>`;
-                }
-            }
-
-            document.getElementById('painelEspecialista').innerHTML = painelEspecialistaHtml;
-
-            // Atualiza Interface KPIs
-            document.getElementById('fornoVelocidade').innerText = velocidadeMmin.toFixed(2); 
-            document.getElementById('fornoTempoEsteira').innerText = tempoEsteiraFormatado;
-            document.getElementById('fornoTempoCiclo').innerText = tempoCicloFormatado;
-            document.getElementById('fornoCapacidade').innerText = capacidade;
-            document.getElementById('fornoPecasHora').innerText = produtividadeHora.toFixed(2);
-            document.getElementById('fornoPecasTurno').innerText = Math.round(produtividadeHora * 12);
-            document.getElementById('fornoPecasDia').innerText = Math.round(produtividadeHora * 24);
-
-            renderVisualEsteira(compPecaCM, espacamentoCM, capacidade);
-        }
-
-        function renderVisualEsteira(comprimento, espacamento, totalNoForno) {
-            const area = document.getElementById('conveyorVisualArea'); area.innerHTML = "";
-            const blocosParaDesenhar = Math.min(totalNoForno, 50); 
-            let propTotal = comprimento + espacamento;
-            let w = Math.max(10, (comprimento / propTotal) * 40); 
-            let m = Math.max(2, (espacamento / propTotal) * 40);
-
-            for (let i = 0; i < blocosParaDesenhar; i++) {
-                const peca = document.createElement('div'); 
-                peca.className = "h-7 bg-slate-700 rounded-sm shadow-sm flex items-center justify-center shrink-0 border-l-2 border-r-2 border-slate-900/50"; 
-                peca.style.width = `${w}px`; peca.style.marginRight = `${m}px`; 
-                if(w > 20) { peca.innerHTML = `<span class="text-[8px] text-white/50 font-bold rotate-90">AÇO</span>`; }
-                area.appendChild(peca);
-            }
-            if (totalNoForno > 50) {
-                const textExtra = document.createElement('div'); 
-                textExtra.className = "text-[10px] text-slate-400 font-bold shrink-0 ml-2 italic flex items-center"; 
-                textExtra.innerText = `+ ${totalNoForno - 50} peças...`; 
-                area.appendChild(textExtra);
-            }
         }
 
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
+        function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
         function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
 
         function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="Sem Equipe">Nenhum colaborador cadastrado</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
             let encontrouAlguem = false;
-            
             equipesData.forEach(eq => {
                 const setor = eq.setor;
                 const setNorm = normalizar(setor);
@@ -1063,31 +798,27 @@
             return opcoes;
         }
 
+        // --- SISTEMA DE CHAMADOS E INTERVENÇÕES ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
-            let maquinasUnicas = maquinasData.length > 0 ? maquinasData.map(m => m.nome) : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Forno", "Guilhotina"]);
-            select.innerHTML = maquinasUnicas.map(m => `<option value="${m}">${m}</option>`).join('');
+            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
+            select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
             if(maquinaPre) select.value = maquinaPre;
-
             document.getElementById('chamadoDefeito').value = defeitoPre;
             document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(false);
             document.getElementById('chamadoModal').classList.remove('hidden');
         }
-
         function fecharModalChamado() { document.getElementById('chamadoModal').classList.add('hidden'); }
-
+        
         async function enviarChamado() {
             const maquina = document.getElementById('chamadoMaquina').value;
             const urgencia = document.getElementById('chamadoUrgencia').value;
             const defeito = document.getElementById('chamadoDefeito').value.trim();
             const relator = document.getElementById('chamadoRelator').value.trim();
             const btn = document.getElementById('btnEnviarChamado');
-
             if (!defeito || !relator) { showToast("Preencha o defeito e selecione o relator.", "error"); return; }
-
             btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Registrando...`;
-
             if (API_URL) {
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "chamado", dados: { maquina, urgencia, defeito, relator } }) });
@@ -1096,7 +827,6 @@
             } else {
                 showToast("Modo Offline: OS simulada com sucesso.", "info");
             }
-
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
         }
 
@@ -1106,21 +836,19 @@
                 const maquina = linha.getAttribute("data-maquina");
                 const item = linha.getAttribute("data-item");
                 const obsValue = linha.querySelector(".obs-inp").value.trim();
-                abrirModalChamado(maquina, `Falha detectada: ${item}${obsValue ? ` | Orientação: ${obsValue}` : ""}`);
+                abrirModalChamado(maquina, `Falha detectada: ${item}${obsValue ? ` | Obs: ${obsValue}` : ""}`);
             }
         }
 
         function abrirGerenciamentoChamados() {
             const container = document.getElementById('listaChamadosAbertos');
             const abertos = chamadosData.filter(c => c.status !== "Fechado");
-
             if(abertos.length === 0) {
                 container.innerHTML = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhuma Ordem de Serviço (OS) em aberto. Tudo operante!</div>`;
             } else {
                 container.innerHTML = abertos.map(c => {
                     const dataAbertura = new Date(c.data).toLocaleDateString('pt-BR');
                     let urgenciaCor = c.urgencia === "Alta" ? "text-rose-600 bg-rose-100 border-rose-200" : (c.urgencia === "Baixa" ? "text-blue-600 bg-blue-100 border-blue-200" : "text-amber-600 bg-amber-100 border-amber-200");
-
                     return `
                         <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm relative" id="card-os-${c.id}">
                             <div class="flex justify-between items-start mb-3">
@@ -1145,19 +873,15 @@
             }
             document.getElementById('gerenciarChamadosModal').classList.remove('hidden');
         }
-
         function fecharGerenciamentoChamados() { document.getElementById('gerenciarChamadosModal').classList.add('hidden'); }
 
         async function fecharOS(idOS) {
             const resolucao = document.getElementById(`resolucao-os-${idOS}`).value.trim();
             const solucionador = document.getElementById(`solucionador-os-${idOS}`).value;
-            
             if (!resolucao || !solucionador) { showToast("Preencha a solução e o técnico responsável.", "error"); return; }
-
             const card = document.getElementById(`card-os-${idOS}`);
             const btn = document.getElementById(`btn-fechar-os-${idOS}`);
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; btn.disabled = true;
-
             if (API_URL) {
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "fecharChamado", dados: { id: idOS, resolucao: resolucao, solucionador: solucionador } }) });
@@ -1169,7 +893,6 @@
             } else {
                 showToast(`Modo Local: Ordem ${idOS} fechada.`);
             }
-
             const index = chamadosData.findIndex(c => c.id === idOS);
             if(index !== -1) {
                 chamadosData[index].status = "Fechado";
@@ -1177,21 +900,19 @@
                 chamadosData[index].resolucao = resolucao;
                 chamadosData[index].solucionador = solucionador;
             }
-            
             card.style.opacity = '0.5'; card.style.pointerEvents = 'none';
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
+        // --- SISTEMA DE INTERVENÇÕES INDIRETAS E OS FECHADAS ---
         function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
-            let maquinasUnicas = maquinasData.length > 0 ? maquinasData.map(m => m.nome) : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Forno", "Guilhotina"]);
-            select.innerHTML = maquinasUnicas.map(m => `<option value="${m}">${m}</option>`).join('');
-            
+            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
+            select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
             document.getElementById('intervDescricao').value = "";
             document.getElementById('intervResponsavel').innerHTML = gerarOptionsEquipes(true); 
             document.getElementById('intervencaoModal').classList.remove('hidden');
         }
-
         function fecharModalIntervencao() { document.getElementById('intervencaoModal').classList.add('hidden'); }
 
         async function enviarIntervencao() {
@@ -1200,14 +921,10 @@
             const descricao = document.getElementById('intervDescricao').value.trim();
             const responsavel = document.getElementById('intervResponsavel').value.trim();
             const btn = document.getElementById('btnEnviarIntervencao');
-
             if (!descricao || !responsavel) { showToast("Preencha a descrição e selecione o técnico.", "error"); return; }
-
             btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
-
             const novaIntervencao = { data: new Date().toISOString(), maquina, tipo, descricao, responsavel };
-
             if (API_URL) {
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "intervencao", dados: novaIntervencao }) });
@@ -1217,24 +934,20 @@
             } else {
                 showToast("Modo Offline: Registro simulado.", "info");
             }
-            
             intervencoesData.unshift(novaIntervencao);
             renderListaIntervencoes();
-            
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalIntervencao();
         }
 
         function renderListaIntervencoes() {
             const tbody = document.getElementById('intervencoesTbody');
             let combined = [];
-            
             intervencoesData.forEach(i => {
                 combined.push({
                     isOS: false, id: i.id, data: new Date(i.data), maquina: i.maquina, tipo: i.tipo,
                     descricao: i.descricao, responsavel: i.responsavel
                 });
             });
-            
             chamadosData.filter(c => c.status === "Fechado").forEach(c => {
                 combined.push({
                     isOS: true, id: c.id, data: c.dataFechamento ? new Date(c.dataFechamento) : new Date(c.data),
@@ -1242,25 +955,20 @@
                     defeito: c.defeito, relator: c.relator, responsavel: c.solucionador
                 });
             });
-            
             combined.sort((a, b) => b.data - a.data); 
-            
             if (combined.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhum histórico de manutenção registrado.</td></tr>`;
                 return;
             }
-            
             tbody.innerHTML = combined.map(i => {
                 const dataFormatada = i.data.toLocaleDateString('pt-BR') + ' às ' + i.data.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
                 let tipoBadge = `<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold border border-blue-100 text-[10px]">${i.tipo}</span>`;
                 if(i.tipo === "Manutenção Forçada") tipoBadge = `<span class="bg-rose-50 text-rose-600 px-2 py-1 rounded font-bold border border-rose-100 text-[10px]">${i.tipo}</span>`;
                 if(i.isOS) tipoBadge = `<span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-bold border border-emerald-100 text-[10px]"><i class="fa-solid fa-clipboard-check"></i> OS Concluída</span>`;
-                
                 let descHtml = `<span class="text-slate-600 italic">"${i.descricao}"</span>`;
                 if (i.isOS) {
                     descHtml = `<div class="flex items-center gap-2"><span class="text-slate-600 truncate max-w-[200px]" title="${i.descricao}">${i.descricao}</span><button onclick="abrirDetalhesOS('${i.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-2 py-1 rounded text-[9px] font-bold border border-slate-200 transition-colors flex items-center gap-1 shadow-sm"><i class="fa-regular fa-file-lines"></i> Ver OS</button></div>`;
                 }
-                
                 return `<tr class="hover:bg-slate-50/50 border-b border-slate-100 last:border-0"><td class="p-4 font-semibold text-slate-500 whitespace-nowrap">${dataFormatada}</td><td class="p-4 font-bold text-slate-800">${i.maquina}</td><td class="p-4">${tipoBadge}</td><td class="p-4">${descHtml}</td><td class="p-4 font-medium text-slate-700">${i.responsavel}</td></tr>`;
             }).join('');
         }
@@ -1268,29 +976,34 @@
         function abrirDetalhesOS(id) {
             const os = chamadosData.find(c => c.id === id);
             if(!os) return;
-
             document.getElementById('detOsId').innerText = os.id;
             document.getElementById('detOsStatus').innerText = os.status;
             document.getElementById('detOsMaquina').innerText = os.maquina;
-            
             document.getElementById('detOsDataAbertura').innerText = new Date(os.data).toLocaleDateString('pt-BR') + ' às ' + new Date(os.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
             document.getElementById('detOsRelator').innerText = os.relator;
             document.getElementById('detOsDefeito').innerText = os.defeito;
-
             document.getElementById('detOsDataFechamento').innerText = os.dataFechamento ? (new Date(os.dataFechamento).toLocaleDateString('pt-BR') + ' às ' + new Date(os.dataFechamento).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})) : '-';
             document.getElementById('detOsSolucionador').innerText = os.solucionador || '-';
             document.getElementById('detOsResolucao').innerText = os.resolucao || '-';
-
             document.getElementById('detalhesOsModal').classList.remove('hidden');
         }
-
         function fecharDetalhesOS() { document.getElementById('detalhesOsModal').classList.add('hidden'); }
+
+        // --- SISTEMA DE ALERTAS PREDITIVOS ---
+        function irParaChecklist(setor, tipoOriginal) {
+            fecharPreditiva(); selecionarSetor(setor);
+            let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
+            if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
+            else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
+            else if (pId.includes('quinzen')) { pId = 'quinzenal'; pLabel = 'Quinzenal'; }
+            else if (pId.includes('mens')) { pId = 'mensal'; pLabel = 'Mensal'; }
+            selecionarPeriodo(pId, pLabel);
+        }
 
         function calcularAlertas() {
             let alertasDict = { vencidas: {}, hoje: {}, amanha: {}, dias3: {}, dias7: {} };
             const agora = new Date();
             const hojeZero = new Date(agora.getFullYear(), agora.getMonth(), agora.getDate());
-            
             const agrupado = {};
             originalDatabase.forEach(item => {
                 const chave = item.maquina + "|" + normalizar(item.periodicidade);
@@ -1298,18 +1011,15 @@
                     agrupado[chave] = { maquina: item.maquina, setor: item.setor, periodicidade: item.periodicidade, tempoReanalise: item.tempoReanalise };
                 }
             });
-
             for (let chave in agrupado) {
                 const info = agrupado[chave];
                 const isDiario = normalizar(info.periodicidade).includes('diar') || normalizar(info.periodicidade).includes('intrad');
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(info.maquina) && normalizar(s.setor) === normalizar(info.setor) && normalizar(s.periodicidade) === normalizar(info.periodicidade));
-                
                 let dataProxFormatada = "Pendente";
                 let categoriaTarget = null;
                 let mensagem = "";
                 let historicoHoje = [];
                 let ultimoOperador = null;
-
                 const subItens = originalDatabase.filter(x => normalizar(x.maquina) === normalizar(info.maquina) && normalizar(x.setor) === normalizar(info.setor) && normalizar(x.periodicidade) === normalizar(info.periodicidade));
                 const subItensStatus = subItens.map(it => {
                     let statusStr = "Pendente";
@@ -1322,22 +1032,18 @@
                     }
                     return { nome: it.item, status: statusStr };
                 });
-
                 if (!statusAtivo || !statusAtivo.ultimoRegistro) {
                     categoriaTarget = isDiario ? 'hoje' : 'vencidas'; 
                     mensagem = "Pendente de execução";
                 } else {
                     const dataLog = new Date(statusAtivo.ultimoRegistro);
                     ultimoOperador = statusAtivo.operador;
-
                     if (isDiario) {
                         let tempoHoras = info.tempoReanalise ? parseFloat(info.tempoReanalise) : 2;
                         let dataProx = new Date(dataLog.getTime() + (tempoHoras * 60 * 60 * 1000));
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}) + ' às ' + dataProx.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-                        
                         if (dataProx <= agora) { categoriaTarget = 'vencidas'; mensagem = "Atrasada"; } 
                         else { categoriaTarget = 'hoje'; mensagem = "Revisão Realizada"; }
-                        
                         if (statusAtivo.historico) {
                             const strHoje = agora.toLocaleDateString('pt-BR');
                             let arrHoje = statusAtivo.historico.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === strHoje);
@@ -1348,15 +1054,12 @@
                             }
                             historicoHoje = unique;
                         }
-
                     } else {
                         let intervalo = diasParaPeriodicidade(info.periodicidade);
                         let dataProx = new Date(dataLog.getFullYear(), dataLog.getMonth(), dataLog.getDate() + intervalo); 
                         dataProxFormatada = dataProx.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit', year:'numeric'});
-
                         const diffTime = dataProx.getTime() - hojeZero.getTime();
                         const diffDias = Math.round(diffTime / (1000 * 60 * 60 * 24));
-
                         if (diffDias < 0) { categoriaTarget = 'vencidas'; mensagem = "Atrasada"; } 
                         else if (diffDias === 0) { categoriaTarget = 'hoje'; mensagem = "Vence Hoje"; } 
                         else if (diffDias === 1) { categoriaTarget = 'amanha'; mensagem = "Vence Amanhã"; } 
@@ -1364,7 +1067,6 @@
                         else if (diffDias > 3 && diffDias <= 7) { categoriaTarget = 'dias7'; mensagem = `Vence em ${diffDias} dia(s)`; }
                     }
                 }
-
                 if (categoriaTarget) {
                     alertasDict[categoriaTarget][chave] = { 
                         maquina: info.maquina, 
@@ -1379,7 +1081,6 @@
                     };
                 }
             }
-
             return { 
                 vencidas: Object.values(alertasDict.vencidas), 
                 hoje: Object.values(alertasDict.hoje), 
@@ -1394,16 +1095,12 @@
             const pendentes = alertas.hoje.length; 
             const programados = alertas.amanha.length + alertas.dias3.length + alertas.dias7.length;
             const atrasadas = alertas.vencidas.length;
-            
             document.getElementById('kpiPendentesHoje').innerText = pendentes;
             document.getElementById('kpiProximosDias').innerText = programados;
-            
             const badgeAtrasadas = document.getElementById('kpiAtrasadas');
             if(badgeAtrasadas) badgeAtrasadas.innerText = atrasadas;
-
             const osAbertas = chamadosData.filter(c => c.status !== "Fechado").length;
             document.getElementById('kpiChamadosAbertos').innerText = osAbertas;
-
             const badge = document.getElementById('badgeAlertas');
             if (osAbertas > 0) { badge.innerText = osAbertas; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
         }
@@ -1415,7 +1112,6 @@
                 if(a.proxima === "Pendente" || a.alerta.includes("Atrasada") || a.alerta.includes("Pendente") || a.alerta === "Vence Hoje") {
                     proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
                 }
-                
                 let detalhesH = "";
                 if (a.subItensStatus && a.subItensStatus.length > 0) {
                     detalhesH = `<div class="mt-3 text-[9px] text-slate-500 font-semibold border-t border-slate-100 pt-2 space-y-1">`;
@@ -1429,7 +1125,6 @@
                     });
                     detalhesH += `</div>`;
                 }
-
                 return `
                     <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
                         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -1460,7 +1155,6 @@
         function abrirPreditiva(alvo) {
             currentModalMode = alvo;
             const alertas = calcularAlertas();
-            
             const divMenuProgramacao = document.getElementById('preditivaProgramacaoMenu');
             const divMenuHoje = document.getElementById('preditivaHojeMenu');
             const modalTitle = document.getElementById('preditivaModalTitle');
@@ -1468,7 +1162,6 @@
             const modalIcon = document.getElementById('iconPreditivaModal');
             const iconContainer = document.getElementById('iconContainerPreditiva');
             const btnVoltar = document.getElementById('btnVoltarPreditiva');
-
             btnVoltar.classList.add('hidden'); 
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => {
                 const el = document.getElementById(id);
@@ -1476,21 +1169,17 @@
             });
             if(divMenuProgramacao) divMenuProgramacao.classList.add('hidden');
             if(divMenuHoje) divMenuHoje.classList.add('hidden');
-
             if (alvo === 'vencidas') {
                 currentPreditivaMenu = '';
                 modalTitle.innerText = "Em Atraso / Vencidas"; modalDesc.innerText = "Inspeções com prazos operacionais estourados.";
                 modalIcon.className = "fa-solid fa-circle-xmark"; iconContainer.className = "w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-sm";
                 document.getElementById('listaAlertasVencidas').innerHTML = renderListaAlertas(alertas.vencidas);
                 document.getElementById('containerVencidas').classList.remove('hidden');
-                
             } else if (alvo === 'hoje') {
                 currentPreditivaMenu = 'hoje';
                 modalTitle.innerText = "Para Hoje"; modalDesc.innerText = "Selecione o setor para ver os checklists do dia.";
                 modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
-                
                 const setoresHoje = [...new Set(alertas.hoje.map(a => a.setor))];
-                
                 if (setoresHoje.length > 0 && divMenuHoje) {
                     divMenuHoje.innerHTML = setoresHoje.map(setor => {
                         const count = alertas.hoje.filter(a => a.setor === setor).length;
@@ -1509,44 +1198,28 @@
                     document.getElementById('listaAlertasHoje').innerHTML = renderListaAlertas(alertas.hoje);
                     document.getElementById('containerHoje').classList.remove('hidden');
                 }
-
             } else if (alvo === 'programacao') {
                 currentPreditivaMenu = 'programacao';
                 modalTitle.innerText = "Programação"; modalDesc.innerText = "Selecione a janela de planejamento futuro.";
                 modalIcon.className = "fa-solid fa-calendar-days"; iconContainer.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm";
-                
                 document.getElementById('cardCountAmanha').innerText = `${alertas.amanha.length} item(ns)`;
                 document.getElementById('cardCountDias3').innerText = `${alertas.dias3.length} item(ns)`;
                 document.getElementById('cardCountDias7').innerText = `${alertas.dias7.length} item(ns)`;
-                
                 if(divMenuProgramacao) divMenuProgramacao.classList.remove('hidden');
             }
             document.getElementById('preditivaModal').classList.remove('hidden');
-        }
-
-        function irParaChecklist(setor, tipoOriginal) {
-            fecharPreditiva(); selecionarSetor(setor);
-            let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
-            if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
-            else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
-            else if (pId.includes('quinzen')) { pId = 'quinzenal'; pLabel = 'Quinzenal'; }
-            else if (pId.includes('mens')) { pId = 'mensal'; pLabel = 'Mensal'; }
-            selecionarPeriodo(pId, pLabel);
         }
 
         function mostrarListaHojeSetor(setor) {
             const divMenuHoje = document.getElementById('preditivaHojeMenu');
             if(divMenuHoje) divMenuHoje.classList.add('hidden');
             document.getElementById('btnVoltarPreditiva').classList.remove('hidden');
-            
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) el.classList.add('hidden');
             });
-
             const alertas = calcularAlertas();
             const alertasSetor = alertas.hoje.filter(a => a.setor === setor);
-
             document.getElementById('listaAlertasHoje').innerHTML = renderListaAlertas(alertasSetor);
             document.getElementById('containerHoje').classList.remove('hidden'); 
             document.getElementById('preditivaModalTitle').innerText = `Para Hoje: ${setor}`;
@@ -1557,14 +1230,11 @@
             const divMenuProg = document.getElementById('preditivaProgramacaoMenu');
             if(divMenuProg) divMenuProg.classList.add('hidden');
             document.getElementById('btnVoltarPreditiva').classList.remove('hidden');
-            
             ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => {
                 const el = document.getElementById(id);
                 if(el) el.classList.add('hidden');
             });
-
             const alertas = calcularAlertas();
-
             if (tipo === 'amanha') { 
                 document.getElementById('listaAlertasAmanha').innerHTML = renderListaAlertas(alertas.amanha);
                 document.getElementById('containerAmanha').classList.remove('hidden'); 
@@ -1588,7 +1258,6 @@
                 if(el) el.classList.add('hidden');
             });
             document.getElementById('btnVoltarPreditiva').classList.add('hidden'); 
-            
             if (currentPreditivaMenu === 'programacao') {
                 const divMenuProg = document.getElementById('preditivaProgramacaoMenu');
                 if(divMenuProg) divMenuProg.classList.remove('hidden');
@@ -1604,39 +1273,33 @@
 
         function fecharPreditiva() { document.getElementById('preditivaModal').classList.add('hidden'); }
 
+        // --- RESUMO / STATUS GERAL DA MÁQUINA ---
         function abrirResumoMaquina(maquina, setor, periodicidade) {
             const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maquina) && normalizar(s.setor) === normalizar(setor) && normalizar(s.periodicidade) === normalizar(periodicidade));
             const itensDaMaquina = originalDatabase.filter(i => normalizar(i.maquina) === normalizar(maquina) && normalizar(i.setor) === normalizar(setor) && normalizar(i.periodicidade) === normalizar(periodicidade));
-            
             const container = document.getElementById('listaResumoMaquina');
             document.getElementById('tituloResumoMaquina').innerText = `Status: ${maquina}`;
             document.getElementById('subtituloResumoMaquina').innerText = `Checklist ${periodicidade} · Setor ${setor}`;
-
             if(itensDaMaquina.length === 0) {
                 container.innerHTML = `<div class="text-center text-slate-400 py-4 text-sm">Sem itens para exibir.</div>`;
             } else {
                 container.innerHTML = itensDaMaquina.map(it => {
                     let badge = `<span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
                     let info = `<div class="text-[9px] text-slate-400 italic">Nunca verificado.</div>`;
-                    
                     if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[it.item] && statusAtivo.itensStatus[it.item].length > 0) {
                         const histArray = statusAtivo.itensStatus[it.item];
-
                         if(normalizar(periodicidade).includes('diar') || normalizar(periodicidade).includes('intrad')) {
                             const hojeStr = new Date().toLocaleDateString('pt-BR');
                             const regsHoje = histArray.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === hojeStr).slice(0, 10);
-
                             if (regsHoje.length > 0) {
                                 const ult = regsHoje[0];
                                 const horas = it.tempoReanalise ? parseFloat(it.tempoReanalise) : 2;
                                 let atrasado = new Date() > new Date(new Date(ult.data).getTime() + (horas * 60 * 60 * 1000));
-
                                 if (atrasado) {
                                     badge = `<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
                                 } else {
                                     badge = `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
                                 }
-
                                 info = `<div class="text-[9px] text-slate-500 font-semibold mt-1.5 space-y-0.5 border-l-2 border-blue-400 pl-2">
                                         <div class="text-blue-600 font-bold mb-1">Registros de Hoje (${regsHoje.length}/10):</div>
                                         ${regsHoje.map((h, idx) => `<div><span class="text-slate-400">${idx+1}º</span> Feito por <span class="text-slate-700">${h.operador}</span> às ${new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`).join('')}
@@ -1650,17 +1313,14 @@
                             const inter = diasParaPeriodicidade(periodicidade);
                             const dataProx = new Date(dateL.getFullYear(), dateL.getMonth(), dateL.getDate() + inter);
                             const hojeZero = new Date(); hojeZero.setHours(0,0,0,0);
-
                             if (dataProx < hojeZero) {
                                 badge = `<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
                             } else {
                                 badge = `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
                             }
-
                             info = `<div class="text-[10px] text-slate-500 font-medium mt-1">Realizado por <span class="font-bold text-slate-700">${ult.operador}</span> em ${dateL.toLocaleDateString('pt-BR')} às ${dateL.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`;
                         }
                     }
-
                     return `
                         <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                             <div class="space-y-1">
@@ -1674,17 +1334,57 @@
             }
             document.getElementById('resumoMaquinaModal').classList.remove('hidden');
         }
-
         function fecharResumoMaquina() { document.getElementById('resumoMaquinaModal').classList.add('hidden'); }
+
+        // --- NÚCLEO DA APLICAÇÃO ---
+        async function baixarDadosDaPlanilha() {
+            try {
+                const res = await fetch(`${API_URL}?action=carregarItens`);
+                if (!res.ok) throw new Error();
+                const resJson = await res.json();
+                originalDatabase = resJson.itens || [];
+                checklistStatus = resJson.status || [];
+                equipesData = resJson.equipes || [];
+                chamadosData = resJson.chamados || []; 
+                intervencoesData = resJson.intervencoes || [];
+                renderSetorCards(); atualizarKPIs();
+            } catch (e) { 
+                showToast("Erro de rede. Modo Offline.", "error"); carregarChecklistMock();
+            }
+        }
+
+        function carregarChecklistMock() {
+            equipesData = [
+                { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
+                { setor: "Manutenção", membros: ["José", "Carlos"] }
+            ];
+            originalDatabase = [
+                { item: "Verificar Oleo Canola", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", tempoReanalise: 2, obs: "" },
+                { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
+                { item: "Verificar Aperto Dos Parafusos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
+                { item: "Verificar folga nas Engrenagens", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" },
+                { item: "Verificar e completar Fluidos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", obs: "" }
+            ];
+            const agora = new Date();
+            const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString();
+            const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
+            checklistStatus = [
+                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", historico: [{data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção"}], vencido: false, itensStatus: { "Verificar Oleo Canola": [{ data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção" }] } }
+            ];
+            chamadosData = [
+                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
+            ];
+            intervencoesData = [];
+            renderSetorCards(); atualizarKPIs();
+        }
 
         function normalizar(texto) { return String(texto||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
         function matchPeriodicidade(iP, pId) { const n = normalizar(iP); if (pId==="diaria") return n.includes("diar")||n.includes("intrad")||n.includes("turno"); if (pId==="semanal") return n.includes("seman"); if (pId==="quinzenal") return n.includes("quinzen"); if (pId==="mensal") return n.includes("mens")||n.includes("mes"); return n===pId; }
         function diasParaPeriodicidade(p) { const c = normalizar(p); if (c.includes("diar")||c.includes("intrad")||c.includes("turno")) return 1; if (c.includes("seman")) return 7; if (c.includes("quinzen")) return 15; if (c.includes("mens")||c.includes("mes")) return 30; return 1; }
-
+        
         function renderSetorCards() {
             const container = document.getElementById('setorCards'); if(!container) return;
             const setores = [...new Set(originalDatabase.map(i => i.setor))];
-            
             container.innerHTML = setores.map(setor => {
                 const maquinasDoSetor = [...new Set(originalDatabase.filter(i => normalizar(i.setor) === normalizar(setor)).map(i => i.maquina))];
                 let pendentes = 0;
@@ -1693,7 +1393,6 @@
                     if (st.length === 0) pendentes++;
                     else if (st.some(s => s.vencido)) pendentes++;
                 });
-
                 const badge = pendentes > 0 ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold mt-3">${pendentes} pendente(s)</span>` : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold mt-3">Tudo conforme</span>`;
                 return `<button onclick="selecionarSetor('${setor}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between w-full"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center"><i class="fa-solid fa-industry text-base"></i></div><h3 class="font-extrabold text-slate-800 text-lg">${setor}</h3></div>${badge}</button>`;
             }).join('');
@@ -1703,19 +1402,15 @@
             selectedSetor = setor;
             document.getElementById('periodoHeaderLabel').innerText = `SETOR: ${setor.toUpperCase()} — SELECIONE A PERIODICIDADE`;
             const container = document.getElementById('periodoCards'); if(!container) return;
-            
             const map = [ { id: "diaria", label: "Diária/ Intradiária" }, { id: "semanal", label: "Semanal" }, { id: "quinzenal", label: "Quinzenal" }, { id: "mensal", label: "Mensal" } ];
             const filterSetor = normalizar(setor);
-
             const mapFiltrado = map.filter(p => {
                 return originalDatabase.some(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id));
             });
-
             if(mapFiltrado.length === 0) {
                 container.innerHTML = `<div class="col-span-2 text-center py-10 text-slate-400 font-medium">Nenhum checklist programado para este setor.</div>`;
                 return;
             }
-
             container.innerHTML = mapFiltrado.map(p => {
                 const maquinas = [...new Set(originalDatabase.filter(i => normalizar(i.setor) === filterSetor && matchPeriodicidade(i.periodicidade, p.id)).map(i => i.maquina))];
                 let atrasados = 0;
@@ -1733,61 +1428,48 @@
             selectedPeriodo = periodoId;
             document.getElementById('itensTopLabel').innerText = `${selectedSetor.toUpperCase()} · ${label.toUpperCase()}`;
             const container = document.getElementById("checklistContainer"); container.innerHTML = "";
-
             const filtrados = originalDatabase.filter(x => normalizar(x.setor) === normalizar(selectedSetor) && matchPeriodicidade(x.periodicidade, periodoId));
             if (filtrados.length === 0) {
                 container.innerHTML = `<div class="text-center py-12 text-slate-400 text-sm font-semibold">Nenhum item programado.</div>`;
                 alternarTela('checklist-itens'); return;
             }
-
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
             const optionsEquipesSelect = gerarOptionsEquipes(false);
-
             for (let maq in agrupado) {
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(selectedSetor) && matchPeriodicidade(s.periodicidade, periodoId));
                 let badgeHeader = ""; const isDiario = (periodoId === 'diaria');
-
                 if (!isDiario) {
                     if (statusAtivo && statusAtivo.ultimoRegistro) {
                         const dataUltima = new Date(statusAtivo.ultimoRegistro); const op = statusAtivo.operador || "Não Informado";
                         const dataProxima = new Date(dataUltima); dataProxima.setDate(dataUltima.getDate() + diasParaPeriodicidade(statusAtivo.periodicidade));
-                        
                         const vencidoStatus = (new Date() > dataProxima);
                         const colorClass = vencidoStatus ? 'bg-rose-600/20 text-rose-500 border border-rose-500/30' : 'bg-emerald-600/20 text-emerald-500 border border-emerald-500/30';
                         const dataStr = dataUltima.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
                         const horaStr = dataUltima.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
                         const pStr = dataProxima.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit', year: 'numeric'});
-
                         badgeHeader = `<div class="flex flex-col gap-1.5 items-end"><span class="bg-[#2e3e5c] text-slate-100 text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-clock-rotate-left"></i> Último: ${dataStr} às ${horaStr} por ${op}</span><span class="${colorClass} text-[11px] px-3 py-1 rounded-md font-bold flex items-center gap-1.5 shadow"><i class="fa-solid fa-calendar-day"></i> Próxima: ${pStr}</span></div>`;
                     } else {
                         badgeHeader = `<span class="bg-rose-100 text-rose-700 text-xs px-3.5 py-1.5 rounded-full font-bold border border-rose-200">Pendente de execução</span>`;
                     }
                 }
-
                 let html = `<div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6"><div class="bg-[#1e293b] text-white px-5 py-4 font-bold text-sm sm:text-base flex items-center justify-between"><div class="flex items-center gap-3"><span class="tracking-tight text-lg font-bold">${maq}</span><button onclick="abrirResumoMaquina('${maq}', '${selectedSetor}', '${periodoId}')" class="bg-blue-600 hover:bg-blue-500 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors shadow-sm ml-2"><i class="fa-solid fa-list-check"></i> Ver Status</button><button onclick="imprimirChecklistPapel('${maq}', '${periodoId}')" class="bg-slate-700 hover:bg-slate-600 text-[11px] py-1.5 px-3 rounded-lg flex items-center gap-1.5 transition-colors"><i class="fa-solid fa-print"></i> Imprimir</button></div>${badgeHeader}</div><div class="overflow-x-auto"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-50 text-[10px] text-slate-400 uppercase"><tr><th class="p-4 w-[45%]">ITEM</th><th class="p-4 w-44">OPERADOR</th><th class="p-4 w-32">STATUS</th><th class="p-4">ORIENTAÇÃO</th><th class="p-4 text-center w-28">AÇÃO</th></tr></thead><tbody class="divide-y divide-slate-100 bg-white">`;
-                
                 agrupado[maq].forEach((item) => {
                     const badgeObs = item.obs ? `<div class="text-[10px] text-slate-500 mt-1 leading-tight"><strong class="text-blue-600"><i class="fa-solid fa-circle-info"></i> Orientação:</strong> ${item.obs}</div>` : '';
                     let metaHistorico = `<div class="text-[9px] text-slate-400 font-medium mt-1"><i class="fa-solid fa-triangle-exclamation text-amber-500"></i> Sem registros locais</div>`;
                     let textoProxima = "Aguardando";
                     let isAtrasado = true;
-
                     if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[item.item] && statusAtivo.itensStatus[item.item].length > 0) {
                         const histArray = statusAtivo.itensStatus[item.item];
-                        
                         if (isDiario) {
                             const hojeStr = new Date().toLocaleDateString('pt-BR');
                             const regsHoje = histArray.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === hojeStr).slice(0, 10);
-                            
                             if (regsHoje.length > 0) {
                                 const ult = regsHoje[0];
                                 metaHistorico = `<div class="text-[9px] text-slate-500 font-semibold mt-1.5 space-y-0.5 border-l-2 border-blue-400 pl-2"><div class="text-blue-600 font-bold mb-1">Registros de Hoje (${regsHoje.length}/10):</div>${regsHoje.map((h, idx) => `<div><span class="text-slate-400">${idx+1}º</span> Feito por <span class="text-slate-700">${h.operador}</span> às ${new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`).join('')}</div>`;
-                                
                                 let horas = item.tempoReanalise ? parseFloat(item.tempoReanalise) : 2; 
                                 let dateProx = new Date(new Date(ult.data).getTime() + (horas * 60 * 60 * 1000));
                                 textoProxima = dateProx.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'});
-                                
                                 if(new Date() > dateProx) {
                                     textoProxima = `<span class="text-rose-600">Atrasado</span>`;
                                     isAtrasado = true;
@@ -1802,11 +1484,9 @@
                             const ult = histArray[0];
                             const dateItem = new Date(ult.data);
                             metaHistorico = `<div class="text-[9px] text-slate-400 font-semibold mt-1"><i class="fa-solid fa-user-check text-slate-300"></i> Último: <span class="text-slate-600 font-bold">${ult.operador}</span> em ${dateItem.toLocaleDateString('pt-BR')} às ${dateItem.toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</div>`;
-                            
                             let intervalo = diasParaPeriodicidade(periodoId);
                             let dataProx = new Date(dateItem.getFullYear(), dateItem.getMonth(), dateItem.getDate() + intervalo); 
                             const hojeZero = new Date(); hojeZero.setHours(0,0,0,0);
-                            
                             if(dataProx >= hojeZero) {
                                 isAtrasado = false;
                             } else {
@@ -1814,14 +1494,11 @@
                             }
                         }
                     }
-
                     const headerBotaoInfo = isDiario ? `<div class="text-[9px] font-bold text-slate-500 mb-1.5 flex items-center justify-center gap-1"><i class="fa-solid fa-clock text-amber-500"></i> Próx: ${textoProxima}</div>` : '';
-
                     let botaoAcaoHtml = `<button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors"><i class="fa-solid fa-paper-plane text-[10px]"></i> Registrar</button>`;
                     if (!isAtrasado) {
                         botaoAcaoHtml = `<button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-200 text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors"><i class="fa-solid fa-check text-[10px]"></i> Verificado</button>`;
                     }
-
                     html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><select class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:ring-blue-500">${optionsEquipesSelect}</select></td><td class="p-4 align-middle"><select onchange="verificarStatusChamado(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle">${headerBotaoInfo}${botaoAcaoHtml}</td></tr>`;
                 });
                 html += `</tbody></table></div></div>`;
@@ -1835,10 +1512,8 @@
             const inputOperador = linha.querySelector(".operador-inp");
             const operadorValue = inputOperador.value.trim();
             if (!operadorValue) { showToast("Selecione seu nome na lista (Operador).", "error"); inputOperador.focus(); return; }
-
             botao.disabled = true;
             botao.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-[10px]"></i>`;
-
             const payload = {
                 tipo: "checklist",
                 dados: [{
@@ -1852,27 +1527,21 @@
                     proximaRevisao: ""
                 }]
             };
-
             try {
                 if (API_URL) await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
                 showToast(`Gravado: ${payload.dados[0].item}`);
                 botao.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i> Verificado`;
                 botao.className = "btn-registrar w-full bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-colors";
                 linha.querySelector(".obs-inp").value = "";
-                
                 const dataISO = new Date().toISOString();
                 const statusIndex = checklistStatus.findIndex(s => normalizar(s.maquina) === normalizar(payload.dados[0].maquina) && normalizar(s.setor) === normalizar(selectedSetor) && normalizar(s.periodicidade) === normalizar(selectedPeriodo));
-                
                 const novaEntry = { data: dataISO, operador: operadorValue };
-
                 if (statusIndex !== -1) {
                     checklistStatus[statusIndex].ultimoRegistro = dataISO;
                     checklistStatus[statusIndex].operador = operadorValue;
                     checklistStatus[statusIndex].vencido = false;
-                    
                     if (!checklistStatus[statusIndex].historico) checklistStatus[statusIndex].historico = [];
                     checklistStatus[statusIndex].historico.unshift(novaEntry);
-
                     if (!checklistStatus[statusIndex].itensStatus) checklistStatus[statusIndex].itensStatus = {};
                     if (!checklistStatus[statusIndex].itensStatus[payload.dados[0].item]) checklistStatus[statusIndex].itensStatus[payload.dados[0].item] = [];
                     checklistStatus[statusIndex].itensStatus[payload.dados[0].item].unshift(novaEntry);
@@ -1880,7 +1549,6 @@
                     const n = {}; n[payload.dados[0].item] = [novaEntry];
                     checklistStatus.push({ maquina: payload.dados[0].maquina, setor: selectedSetor, periodicidade: payload.dados[0].periodicidade, ultimoRegistro: dataISO, operador: operadorValue, vencido: false, historico: [novaEntry], itensStatus: n });
                 }
-                
                 setTimeout(() => {
                     selecionarPeriodo(selectedPeriodo, selectedPeriodo === "diaria" ? "Diária/ Intradiária" : selectedPeriodo.toUpperCase());
                     atualizarKPIs();
@@ -1897,34 +1565,34 @@
             const printArea = document.getElementById('printArea');
             const pId = periodo ? normalizar(periodo) : normalizar(selectedPeriodo);
             const sId = normalizar(selectedSetor); 
-            
             const filtrados = originalDatabase.filter(x => 
                 normalizar(x.maquina) === normalizar(maquina) && 
                 matchPeriodicidade(x.periodicidade, pId) && 
                 normalizar(x.setor) === sId
             );
-
-            if(filtrados.length === 0) { showToast("Não foi possível gerar a impressão (sem itens).", "error"); return; }
-
+            if(filtrados.length === 0) {
+                showToast("Não foi possível gerar a impressão (sem itens).", "error");
+                return;
+            }
             const periodicidadeStr = filtrados[0].periodicidade.toUpperCase();
-            
-            let numCols = 7; let stepDays = 1; let labelTopo = "DIAS DA SEMANA";
-
+            let numCols = 7;
+            let stepDays = 1;
+            let labelTopo = "DIAS DA SEMANA";
             if (pId !== 'diaria') {
-                numCols = 4; stepDays = diasParaPeriodicidade(pId);
+                numCols = 4;
+                stepDays = diasParaPeriodicidade(pId);
                 if (pId === 'semanal') labelTopo = "PRÓXIMAS SEMANAS";
                 else if (pId === 'quinzenal') labelTopo = "PRÓXIMAS QUINZENAS";
                 else if (pId === 'mensal') labelTopo = "PRÓXIMOS MESES";
                 else labelTopo = "PRÓXIMAS DATAS";
             }
-
             const dates = Array.from({length: numCols}, (_, i) => {
-                const d = new Date(); d.setDate(d.getDate() + (i * stepDays));
+                const d = new Date();
+                d.setDate(d.getDate() + (i * stepDays));
                 return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
             });
-
-            const colWidth = 82 / numCols; const colspanValue = numCols;
-
+            const colWidth = 82 / numCols; 
+            const colspanValue = numCols;
             let tableHtml = `
             <style>
                 .t-print { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 10px; color: #000; }
@@ -1932,10 +1600,12 @@
                 .t-dark { background-color: #0b132b !important; color: #ffffff !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 .t-light { font-weight: bold; background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
                 .c-box { display: inline-block; width: 10px; height: 10px; border: 1px solid #000; margin-right: 4px; vertical-align: middle; background-color: #fff; }
-                .item-block { page-break-inside: avoid; break-inside: avoid; } 
-                @media print { @page { size: landscape; margin: 8mm; } body { -webkit-print-color-adjust: exact; print-color-adjust: exact; } }
+                .item-block { page-break-inside: avoid; break-inside: avoid; }
+                @media print {
+                    @page { size: landscape; margin: 8mm; }
+                    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+                }
             </style>
-            
             <div style="font-size: 10px; margin-bottom: 15px; font-family: Arial; display: flex; justify-content: space-between; align-items: flex-start;">
                 <div style="line-height: 1.5; text-align: left;">
                     <div style="font-size: 14px; font-weight: bold; color: #0f172a; margin-bottom: 2px;">DOCUMENTO: CHECKLIST MANUTENÇÃO / PRODUÇÃO</div>
@@ -1948,24 +1618,286 @@
                     <div style="font-size: 16px; font-weight: bold; text-transform: uppercase; color: #0f172a;">${maquina}</div>
                 </div>
             </div>
-            
             <table class="t-print">
-                <thead><tr><td class="t-dark" style="width: 18%;">${labelTopo}</td>${dates.map(d => `<td class="t-light" style="text-align: center; width: ${colWidth}%; font-size: 11px;">${d}</td>`).join('')}</tr></thead>`;
-
+                <thead>
+                    <tr>
+                        <td class="t-dark" style="width: 18%;">${labelTopo}</td>
+                        ${dates.map(d => `<td class="t-light" style="text-align: center; width: ${colWidth}%; font-size: 11px;">${d}</td>`).join('')}
+                    </tr>
+                </thead>
+            `;
             filtrados.forEach(item => {
                 let obsText = item.obs ? item.obs : "";
                 tableHtml += `
                 <tbody class="item-block">
-                    <tr><td class="t-light" style="font-size: 11px; text-transform: uppercase;">ITEM</td><td colspan="${colspanValue}" style="font-size: 11px; font-weight: bold;">${item.item}</td></tr>
-                    <tr><td class="t-light">Operador / Manutentor</td>${dates.map(() => `<td></td>`).join('')}</tr>
-                    <tr><td class="t-light">Status</td>${dates.map(() => `<td style="text-align: center; padding: 8px 2px;"><div style="margin-bottom: 6px;"><span class="c-box"></span> OK</div><div><span class="c-box"></span> Problema</div></td>`).join('')}</tr>
-                    <tr style="border-bottom: 2px solid #000;"><td class="t-light" style="vertical-align: middle; padding: 4px 6px;">Orientação</td><td colspan="${colspanValue}" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155; height: 38px;">${obsText}</td></tr>
-                    <tr style="border: none !important;"><td colspan="${colspanValue + 1}" style="height: 15px; border: none !important; background: white !important;"></td></tr>
-                </tbody>`;
+                    <tr>
+                        <td class="t-light" style="font-size: 11px; text-transform: uppercase;">ITEM</td>
+                        <td colspan="${colspanValue}" style="font-size: 11px; font-weight: bold;">
+                            ${item.item}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="t-light">Operador / Manutentor</td>
+                        ${dates.map(() => `<td></td>`).join('')}
+                    </tr>
+                    <tr>
+                        <td class="t-light">Status</td>
+                        ${dates.map(() => `
+                            <td style="text-align: center; padding: 8px 2px;">
+                                <div style="margin-bottom: 6px;"><span class="c-box"></span> OK</div>
+                                <div><span class="c-box"></span> Problema</div>
+                            </td>
+                        `).join('')}
+                    </tr>
+                    <tr style="border-bottom: 2px solid #000;">
+                        <td class="t-light" style="vertical-align: middle; padding: 4px 6px;">
+                            Orientação
+                        </td>
+                        <td colspan="${colspanValue}" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155; height: 38px;">
+                            ${obsText}
+                        </td>
+                    </tr>
+                    <tr style="border: none !important;">
+                        <td colspan="${colspanValue + 1}" style="height: 15px; border: none !important; background: white !important;"></td>
+                    </tr>
+                </tbody>
+                `;
             });
             tableHtml += `</table>`;
             printArea.innerHTML = tableHtml;
             setTimeout(() => { window.print(); }, 200);
+        }
+
+        async function baixarAlmoxarifadoDaPlanilha() {
+            if (!API_URL) return;
+            try {
+                const res = await fetch(`${API_URL}?action=carregarAlmoxarifado`);
+                if (!res.ok) throw new Error();
+                const data = await res.json();
+                if (Array.isArray(data)) {
+                    almoxarifadoData = data.map(item => ({ id: item.id, nome: item.item, categoria: item.categoria, quantidade: item.quantidade, minimo: item.estoqueMinimo, unidade: item.unidade, local: item.localizacao, foto: item.imagem, descricao: item.descricao }));
+                    renderAlmoxarifadoLista();
+                }
+            } catch(e) {}
+        }
+
+        function renderAlmoxarifadoLista() {
+            const tbody = document.getElementById('almoxarifadoTbody'); if(!tbody) return;
+            const catFilter = document.getElementById('almoxCategoriaFilter').value;
+            const search = document.getElementById('almoxSearch').value.toLowerCase();
+            const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))].sort((a, b) => a.localeCompare(b));
+            const selectCat = document.getElementById('almoxCategoriaFilter');
+            selectCat.innerHTML = '<option value="">Todas as Famílias</option>' +  categorias.map(c => `<option value="${c}">${c}</option>`).join('');
+            selectCat.value = catFilter;
+            const filtrados = almoxarifadoData.filter(item => (catFilter === "" || item.categoria === catFilter) && ((item.nome||"").toLowerCase().includes(search) || (item.id||"").toLowerCase().includes(search) || (item.categoria||"").toLowerCase().includes(search)));
+            tbody.innerHTML = filtrados.map(item => {
+                const badgeEstoque = item.quantidade <= item.minimo ? `<span class="bg-red-50 text-red-600 border border-red-100 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>` : `<span class="bg-slate-50 text-slate-700 border border-slate-200 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>`;
+                const imgTag = item.foto && item.foto.trim() !== "" ? `<img src="${item.foto}" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" onclick="visualizarImagem('${item.foto}')" class="h-10 w-10 object-cover rounded-lg border border-slate-200 cursor-pointer shadow-sm">` : `<div class="h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400"><i class="fa-solid fa-camera"></i></div>`;
+                return `<tr class="border-b last:border-0 hover:bg-slate-50/25"><td class="p-4">${imgTag}</td><td class="p-4 font-mono text-xs text-slate-500 font-sans">${item.id}</td><td class="p-4"><span class="block font-bold text-slate-800 text-xs">${item.nome}</span>${item.descricao ? `<span class="block text-[10px] text-slate-400 italic font-medium mt-0.5">${item.descricao}</span>` : ""}</td><td class="p-4 text-xs text-slate-500">${item.categoria}</td><td class="p-4 text-xs font-sans">${badgeEstoque}</td><td class="p-4 text-xs text-slate-500">${item.local || "-"}</td><td class="p-4 font-sans text-center"><div class="flex gap-2 justify-center"><button onclick="abrirModalMovimentacao('${item.id}')" class="text-emerald-600 p-2 hover:bg-emerald-50 rounded-lg"><i class="fa-solid fa-arrows-rotate text-emerald-600"></i></button><button onclick="editarItemAlmox('${item.id}')" class="text-blue-600 p-2 hover:bg-blue-50 rounded-lg"><i class="fa-solid fa-pencil text-blue-600"></i></button></div></td></tr>`;
+            }).join('');
+        }
+
+        function adicionarLinhaLocalizacao(valor = "") {
+            const container = document.getElementById('localizacaoInputsContainer');
+            const div = document.createElement('div'); div.className = "flex gap-2";
+            div.innerHTML = `<input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:ring-blue-500 text-slate-850" value="${valor}"><button type="button" onclick="removerLinhaLocalizacao(this)" class="px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-400 hover:text-red-500 text-xs"><i class="fa-solid fa-xmark"></i></button>`;
+            container.appendChild(div);
+        }
+
+        function removerLinhaLocalizacao(botao) {
+            const c = document.getElementById('localizacaoInputsContainer');
+            if(c.children.length > 1) botao.closest('.flex').remove();
+            else botao.closest('.flex').querySelector('input').value = "";
+        }
+
+        function abrirModalCadastroItem() {
+            document.getElementById('editAlmoxIndex').value = ""; document.getElementById('novoItemNome').value = ""; document.getElementById('novoItemCategoria').value = ""; document.getElementById('novoItemQuantidade').value = "0"; document.getElementById('novoItemMinimo').value = "0"; document.getElementById('novoItemUnidade').value = "un"; document.getElementById('novoItemDescricao').value = "";
+            document.getElementById('localizacaoInputsContainer').innerHTML = ""; adicionarLinhaLocalizacao("");
+            removerFotoAnexada(); document.getElementById('cadastroItemModal').classList.remove('hidden');
+        }
+
+        function fecharModalCadastroItem() { document.getElementById('cadastroItemModal').classList.add('hidden'); }
+
+        function processarFotoItem(e) {
+            const file = e.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas'); let w = img.width, h = img.height;
+                    if (w > h) { if (w > 800) { h *= 800 / w; w = 800; } } else { if (h > 800) { w *= 800 / h; h = 800; } }
+                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+                    fotoAnexadaBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                    const previewImg = document.getElementById('fotoPreviewImg');
+                    previewImg.src = fotoAnexadaBase64; previewImg.onerror = null; 
+                    document.getElementById('fotoPreviewContainer').classList.remove('hidden');
+                };
+                img.src = evt.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function removerFotoAnexada() { fotoAnexadaBase64 = ""; document.getElementById('fotoPreviewImg').src = ""; document.getElementById('fotoPreviewContainer').classList.add('hidden'); document.getElementById('novoItemImagem').value = ""; }
+
+        async function confirmarCadastroItem() {
+            const nome = document.getElementById('novoItemNome').value.trim(); const categoria = document.getElementById('novoItemCategoria').value.trim(); const quantidade = parseInt(document.getElementById('novoItemQuantidade').value) || 0; const minimo = parseInt(document.getElementById('novoItemMinimo').value) || 0; const unidade = document.getElementById('novoItemUnidade').value.trim() || "un"; const descricao = document.getElementById('novoItemDescricao').value.trim(); const editId = document.getElementById('editAlmoxIndex').value;
+            const enderecosInput = Array.from(document.querySelectorAll('.localizacao-endereco-inp')).map(i => i.value.trim()).filter(Boolean);
+            if (!nome || !categoria) { showToast("Nome e Família são obrigatórios.", "error"); return; }
+            let base64Clean = "", mimeType = "", isNovaImagem = false;
+            if (fotoAnexadaBase64 && fotoAnexadaBase64.startsWith("data:")) { base64Clean = fotoAnexadaBase64.split(",")[1]; mimeType = fotoAnexadaBase64.split(";")[0].split(":")[1]; isNovaImagem = true; }
+            const dadosObj = { id: editId || "", item: nome, categoria, unidade, quantidade, estoqueMinimo: minimo, enderecos: enderecosInput, descricao, imagemUrl: isNovaImagem ? "" : fotoAnexadaBase64, imagemBase64: base64Clean, mimeType: mimeType };
+            if (API_URL) {
+                showToast("Sincronizando...", "info");
+                try {
+                    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ tipo: editId ? "editarItemEstoque" : "cadastroItemEstoque", dados: dadosObj }) });
+                    showToast("Sincronizado!"); setTimeout(() => baixarAlmoxarifadoDaPlanilha(), 1500); 
+                } catch(err) { showToast("Salvo apenas localmente.", "error"); }
+            }
+            if (editId) {
+                const item = almoxarifadoData.find(i => i.id == editId);
+                if (item) { item.nome = nome; item.categoria = categoria; item.local = enderecosInput.join(" | "); item.quantidade = quantidade; item.minimo = minimo; item.unidade = unidade; item.descricao = descricao; if (isNovaImagem) item.foto = fotoAnexadaBase64; }
+            } else { almoxarifadoData.push({ id: "IT" + Date.now(), nome, categoria, local: enderecosInput.join(" | "), quantidade, minimo, unidade, descricao, foto: isNovaImagem ? fotoAnexadaBase64 : "" }); }
+            fecharModalCadastroItem(); renderAlmoxarifadoLista();
+        }
+
+        function editarItemAlmox(id) {
+            const item = almoxarifadoData.find(i => i.id == id); if (!item) return;
+            document.getElementById('editAlmoxIndex').value = id; document.getElementById('novoItemNome').value = item.nome; document.getElementById('novoItemCategoria').value = item.categoria; document.getElementById('novoItemQuantidade').value = item.quantidade; document.getElementById('novoItemMinimo').value = item.minimo; document.getElementById('novoItemUnidade').value = item.unidade; document.getElementById('novoItemDescricao').value = item.descricao || "";
+            document.getElementById('localizacaoInputsContainer').innerHTML = "";
+            const enderecos = item.local ? item.local.split("|").map(s => s.trim()) : [""];
+            enderecos.forEach(end => adicionarLinhaLocalizacao(end));
+            if (item.foto && item.foto.trim() !== "") {
+                fotoAnexadaBase64 = item.foto; const pImg = document.getElementById('fotoPreviewImg'); pImg.src = item.foto;
+                pImg.onerror = function() { this.onerror=null; this.outerHTML='<div class="h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border text-slate-400"><i class="fa-solid fa-image"></i></div>'; };
+                document.getElementById('fotoPreviewContainer').classList.remove('hidden');
+            } else { removerFotoAnexada(); }
+            document.getElementById('cadastroItemModal').classList.remove('hidden');
+        }
+
+        function abrirModalMovimentacao(preSelectedId = "") {
+            const select = document.getElementById('movItemSelect');
+            select.innerHTML = almoxarifadoData.map(i => `<option value="${i.id}">${i.nome} (${i.quantidade} ${i.unidade})</option>`).join('');
+            if (preSelectedId) select.value = preSelectedId;
+            document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes(true);
+            atualizarInfoItemMov(); document.getElementById('movimentacaoModal').classList.remove('hidden');
+        }
+
+        function fecharModalMovimentacao() { document.getElementById('movimentacaoModal').classList.add('hidden'); }
+
+        function atualizarInfoItemMov() {
+            const item = almoxarifadoData.find(i => i.id == document.getElementById('movItemSelect').value);
+            if (item) { document.getElementById('movItemDescText').innerText = item.descricao || "Sem descrição"; document.getElementById('movItemLocalText').innerText = item.local || "Sem endereço"; }
+        }
+
+        function visualizarImagemMov() {
+            const item = almoxarifadoData.find(i => i.id == document.getElementById('movItemSelect').value);
+            if (item && item.foto && item.foto.trim() !== "") visualizarImagem(item.foto); else showToast("Sem imagem.", "info");
+        }
+
+        function editarItemMov() { fecharModalMovimentacao(); editarItemAlmox(document.getElementById('movItemSelect').value); }
+
+        async function confirmarMovimentacao() {
+            const id = document.getElementById('movItemSelect').value; const tipo = document.getElementById('movTipo').value; const quantidade = parseInt(document.getElementById('movQuantidade').value) || 0; const responsavel = document.getElementById('movResponsavel').value.trim(); const motivo = document.getElementById('movMotivo').value.trim();
+            const item = almoxarifadoData.find(i => i.id == id); if (!item) return;
+            if (quantidade <= 0 || !responsavel) { showToast("Qtd e Responsável são obrigatórios.", "error"); return; }
+            let novaQuantidade = item.quantidade;
+            if (tipo === "Saída") { if (item.quantidade < quantidade) { showToast("Quantidade insuficiente.", "error"); return; } novaQuantidade -= quantidade; } else { novaQuantidade += quantidade; }
+            if (API_URL) {
+                showToast("Registrando...", "info");
+                try {
+                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "movimentacao", dados: { id: item.id, item: item.nome, tipo, quantidade, responsavel, motivo } }) });
+                    showToast("Registro efetuado!");
+                } catch(e) { showToast("Salvo localmente.", "error"); }
+            }
+            item.quantidade = novaQuantidade; renderAlmoxarifadoLista(); fecharModalMovimentacao();
+        }
+
+        function gerarAlmoxarifadoMock() { almoxarifadoData = [ { id: "IT1", nome: "Sensor Ótico", categoria: "Sensores", quantidade: 5, minimo: 2, unidade: "un", local: "Prat. 1", foto: "", descricao: "" } ]; }
+        function gerarPOPsMock() { popData = [ { id: 1, titulo: "LOTO", maquina: "Guilhotina - GUI-001", epis: "Luvas", ferramentas: "Cadeado", descricao: "Desligar energia." } ]; }
+
+        function renderPOPs() {
+            const container = document.getElementById('popsContainer'); const maqFilter = document.getElementById('popMaquinaFilter').value; const search = document.getElementById('popSearch').value.toLowerCase();
+            const filtrados = popData.filter(p => (maqFilter === "" || p.maquina === maqFilter) && (p.titulo.toLowerCase().includes(search) || p.descricao.toLowerCase().includes(search)));
+            container.innerHTML = filtrados.map(p => `<div class="bg-white rounded-xl border p-5 shadow-sm"><span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">${p.maquina}</span><h4 class="font-bold text-slate-800 text-sm mb-3">${p.titulo}</h4><div class="text-xs text-slate-600 whitespace-pre-line leading-relaxed">${p.descricao}</div></div>`).join('');
+        }
+
+        function popularFiltroMaquinas(selectId) {
+            const select = document.getElementById(selectId);
+            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Guilhotina"];
+            select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+        }
+
+        // --- SISTEMA ATUALIZADO DO FORNO ---
+        function calcularParametrosForno() {
+            const espessura = parseFloat(document.getElementById('fornoEspessura').value); 
+            const freq = parseFloat(document.getElementById('fornoFrequencia').value); 
+            const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value); 
+            const espacamento = parseFloat(document.getElementById('fornoEspacamento').value); 
+            
+            const gas = parseFloat(document.getElementById('fornoGas').value);
+            const temp = parseFloat(document.getElementById('fornoTempMedia').value);
+            const material = document.getElementById('fornoMaterial').value;
+            
+            document.getElementById('valEspessura').innerText = espessura.toFixed(2) + ' mm'; 
+            document.getElementById('valFrequencia').innerText = freq.toFixed(1) + ' Hz';
+            document.getElementById('valGas').innerText = gas + ' m³/h';
+            document.getElementById('valTemp').innerText = temp + ' °C';
+            
+            const velocidadeEsteira = freq * 0.02;
+            const tempoTotalCiclo = 28.50 / velocidadeEsteira; 
+            
+            document.getElementById('containerNormalParams').classList.remove('hidden'); 
+            renderVisualEsteira(compPeca, espacamento);
+            
+            document.getElementById('fornoVelocidade').innerText = velocidadeEsteira.toFixed(2) + ' m/min'; 
+            document.getElementById('fornoTempoCiclo').innerText = Math.round(tempoTotalCiclo) + ' min';
+            
+            const fbBox = document.getElementById('fornoFeedbackBox');
+            const fbIcon = document.getElementById('fornoFeedbackIcon');
+            const fbTitle = document.getElementById('fornoFeedbackTitle');
+            const fbText = document.getElementById('fornoFeedbackText');
+            
+            fbBox.className = "p-5 rounded-xl shadow-sm flex items-start gap-4 transition-all duration-300 border ";
+            
+            if (gas < 30) {
+                fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
+                fbIcon.className = "fa-solid fa-cloud-showers-heavy text-rose-600 mt-1 text-2xl";
+                fbTitle.innerText = "Risco Crítico de Oxidação (Cubas Pretas)";
+                fbText.innerText = "A vazão de " + gas + " m³/h é muito baixa. A zona de resfriamento exige que a atmosfera rica em Hidrogênio seja superior ao Oxigênio externo para devorá-lo antes que toque na cuba quente. Sem isso, a chapa oxidará gravemente e ficará preta na saída.";
+            } else if (temp > 1100 && material === 'aco-304') {
+                fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
+                fbIcon.className = "fa-solid fa-fire text-rose-600 mt-1 text-2xl";
+                fbTitle.innerText = "Excesso de Temperatura (Limite Máx: 1100°C)";
+                fbText.innerText = "A temperatura programada de " + temp + "°C rompe o limite operacional recomendado para as cubas. Este nível causará fragilidade estrutural, queima dos óleos residuais com incrustação ou até o derretimento fino das bordas da peça.";
+            } else if (temp < 1030) {
+                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
+                fbIcon.className = "fa-solid fa-temperature-arrow-down text-amber-600 mt-1 text-2xl";
+                fbTitle.innerText = "Recozimento Incompleto (Risco de Estourar na Prensa)";
+                fbText.innerText = "Com apenas " + temp + "°C, o aço inoxidável não atinge plenamente a zona de recristalização térmica. A cuba sairá rígida (encruada) e possui um alto risco de rachar ou estourar quando for puxada no estampo.";
+            } else if (freq > 45) {
+                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
+                fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-2xl";
+                fbTitle.innerText = "Tempo de Encharque Reduzido";
+                fbText.innerText = "A esteira está girando muito rápido (" + freq.toFixed(1) + " Hz). O tempo de " + Math.round(tempoTotalCiclo) + " minutos é muito curto para a chapa absorver o calor das resistências, resultando em tensões não aliviadas que vão comprometer a estampagem profunda.";
+            } else if (material === 'aco-304' && temp >= 1050 && temp <= 1090 && freq >= 30 && freq <= 40 && gas >= 40) {
+                fbBox.className += "bg-blue-50 border-blue-200 text-blue-900";
+                fbIcon.className = "fa-solid fa-award text-blue-600 mt-1 text-2xl";
+                fbTitle.innerText = "Parâmetros Validados (Padrão Ouro)";
+                fbText.innerText = "Excelente configuração! Este arranjo replica o teste físico validado na planta. O hidrogênio (H2+N2) é suficiente para combater a oxidação, a velocidade da malha garante encharque pleno e as cubas seguirão prontas e flexíveis para a estampagem. ZERO estouros garantidos.";
+            } else {
+                fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
+                fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-2xl";
+                fbTitle.innerText = "Operação Dentro dos Limites Estáveis";
+                fbText.innerText = "Os parâmetros atuais estão matematicamente seguros para rodar o forno. Acompanhe a porta de saída visualmente durante a primeira hora de produção para garantir que as reações do gás estão limpando perfeitamente a superfície do material.";
+            }
+        }
+
+        function renderVisualEsteira(comprimento, espacamento) {
+            const area = document.getElementById('conveyorVisualArea'); area.innerHTML = "";
+            const w = Math.min(100, Math.max(15, comprimento * 0.15)); const m = Math.min(60, Math.max(4, espacamento * 0.15));
+            for (let i = 0; i < 15; i++) {
+                const peca = document.createElement('div'); peca.className = "h-6 bg-slate-400 rounded border border-slate-500 shadow flex items-center justify-center text-[8px] text-white font-bold shrink-0"; peca.style.width = w + 'px'; peca.style.marginRight = m + 'px'; peca.innerText = "AÇO"; area.appendChild(peca);
+            }
         }
 
         function toggleConfigModal(show) { document.getElementById('configModal').classList.toggle('hidden', !show); if (show) document.getElementById('apiInputUrl').value = API_URL; }
