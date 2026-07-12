@@ -119,7 +119,7 @@
                 <button onclick="abrirModuloForno()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-fire text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Curva do Forno</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Parametrização detalhada das bancadas e simulação estática de resultados.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Parametrização do Recozimento, simulação de produção e estática de bancadas.</p>
                 </button>
             </div>
         </div>
@@ -212,120 +212,168 @@
         
         <div id="view-forno" class="fade-in hidden">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <div class="lg:col-span-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-sliders text-orange-600"></i> Parâmetros do Processo
-                        </h3>
-                    </div>
-                    <div id="containerNormalParams" class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Material da Peça</label>
-                            <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
-                                <option value="aco-304">Aço Inoxidável AISI 304</option>
-                                <option value="aco-201">Aço Inoxidável AISI 201</option>
-                            </select>
+                
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-sliders text-orange-600"></i> Setups da Peça / Esteira
+                            </h3>
                         </div>
-                        <div class="grid grid-cols-2 gap-3">
+                        <div class="space-y-4">
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tamanho (mm)</label>
-                                <input type="number" id="fornoPecaComprimento" value="150" min="10" max="2000" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Material da Peça</label>
+                                <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                                    <option value="aco-304">Aço Inoxidável AISI 304</option>
+                                    <option value="aco-201">Aço Inoxidável AISI 201</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tamanho (mm)</label>
+                                    <input type="number" id="fornoPecaComprimento" value="670" min="10" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaçamento (mm)</label>
+                                    <input type="number" id="fornoEspacamento" value="25" min="0" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
+                                </div>
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Espaçamento (mm)</label>
-                                <input type="number" id="fornoEspacamento" value="50" min="0" max="1000" oninput="calcularParametrosForno()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
-                            </div>
-                        </div>
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
-                                <span>Espessura da Chapa</span>
-                                <span class="text-blue-600 font-bold" id="valEspessura">0.50 mm</span>
-                            </label>
-                            <input type="range" id="fornoEspessura" min="0.30" max="3.00" step="0.05" value="0.50" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
-                        </div>
-                    </div>
-                    
-                    <hr class="border-slate-100">
-                    
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
-                                <span>Frequência (Esteira)</span>
-                                <span class="text-orange-600 font-bold" id="valFrequencia">35.0 Hz</span>
-                            </label>
-                            <input type="range" id="fornoFrequencia" min="15" max="60" step="0.5" value="35" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-orange-600">
-                        </div>
-                        
-                        <div class="grid grid-cols-2 gap-3">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
-                                    <span>Gás (H2+N2)</span>
-                                    <span class="text-emerald-600 font-bold" id="valGas">43 m³/h</span>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
+                                    <span>Espessura da Chapa</span>
+                                    <span class="text-blue-600 font-bold" id="valEspessura">0.50 mm</span>
                                 </label>
-                                <input type="range" id="fornoGas" min="10" max="60" step="1" value="43" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-600">
+                                <input type="range" id="fornoEspessura" min="0.30" max="3.00" step="0.05" value="0.50" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-600">
                             </div>
                             <div>
-                                <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider flex justify-between">
-                                    <span>Temp Média</span>
-                                    <span class="text-rose-600 font-bold" id="valTemp">1070 °C</span>
-                                </label>
-                                <input type="range" id="fornoTempMedia" min="800" max="1150" step="10" value="1070" oninput="calcularParametrosForno()" class="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-600">
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Frequência (Hz)</label>
+                                <input type="number" id="fornoFrequencia" value="32" min="10" max="60" step="0.5" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-orange-600">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-temperature-full text-rose-600"></i> Parâmetros Atmosféricos
+                            </h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Gás (m³/h) - Atmosfera Protetora</label>
+                                <span class="block text-[9px] text-slate-400 italic mb-2">Amônia (NH₃) Quebrada → 75% H₂ e 25% N₂</span>
+                                <input type="number" id="fornoGas" value="43" min="0" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-emerald-600">
+                            </div>
+                            
+                            <div>
+                                <div class="flex items-center justify-between mb-2">
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Resistências (°C)</label>
+                                    <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">Média: <span id="valTempMedia" class="text-rose-600">1070 °C</span></span>
+                                </div>
+                                <div class="grid grid-cols-5 gap-2">
+                                    <div>
+                                        <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B1</span>
+                                        <input type="number" id="fornoB1" value="1060" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B2</span>
+                                        <input type="number" id="fornoB2" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B3</span>
+                                        <input type="number" id="fornoB3" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B4</span>
+                                        <input type="number" id="fornoB4" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                    </div>
+                                    <div>
+                                        <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B5</span>
+                                        <input type="number" id="fornoB5" value="1060" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="lg:col-span-8 space-y-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-chart-area text-blue-600"></i> Diagrama das Zonas Industriais (Total: 28,50 m)
+                            <i class="fa-solid fa-layer-group text-blue-600"></i> Diagrama de Encharque e Simulação (Total: 28,50 m)
                         </h3>
                         
-                        <div class="grid grid-cols-12 border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-[10px] text-white">
-                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1">
-                                <span class="uppercase tracking-wider text-[9px]">Entrada</span>
-                                <span class="text-[8px] font-medium text-slate-300 mt-1">~2,4 m</span>
+                        <div class="flex border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-white">
+                            <div class="bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 5.26%;">
+                                <span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Ent</span>
+                                <span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span>
                             </div>
-                            <div class="col-span-3 bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1">
-                                <span class="uppercase tracking-wider text-[9px]">Pré-Aq.</span>
-                                <span class="text-[8px] font-medium text-amber-200 mt-1">~7,1 m</span>
+                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 22.81%;">
+                                <span class="uppercase text-[9px] tracking-wider">Pré-Aq.</span>
+                                <span class="text-[8px] font-medium text-amber-200 mt-1">6,5m</span>
                             </div>
-                            <div class="col-span-2 bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1">
-                                <span class="animate-pulse uppercase tracking-wider text-[9px]">Recozimento</span>
-                                <span class="text-[8px] font-medium text-red-200 mt-1">~4,7 m</span>
+                            <div class="bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 15.79%;">
+                                <span class="animate-pulse uppercase text-[9px] tracking-wider">Recoz.</span>
+                                <span class="text-[8px] font-medium text-red-200 mt-1">4,5m</span>
                             </div>
-                            <div class="col-span-5 bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1">
-                                <span class="uppercase tracking-wider text-[9px]">Resfriamento (H2 + N2)</span>
-                                <span class="text-[8px] font-medium text-blue-200 mt-1">~11,9 m</span>
+                            <div class="bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 50.88%;">
+                                <span class="uppercase text-[9px] tracking-wider">Resfriamento (H₂ + N₂)</span>
+                                <span class="text-[8px] font-medium text-blue-200 mt-1">14,5m</span>
                             </div>
-                            <div class="col-span-1 bg-slate-800 flex flex-col justify-center p-1">
-                                <span class="uppercase tracking-wider text-[9px]">Saída</span>
-                                <span class="text-[8px] font-medium text-slate-300 mt-1">~2,4 m</span>
+                            <div class="bg-slate-800 flex flex-col justify-center p-1" style="width: 5.26%;">
+                                <span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Sai</span>
+                                <span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span>
                             </div>
                         </div>
                         
                         <div class="border rounded-xl p-3 bg-slate-100">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase mb-2 tracking-wider" id="labelSimulacaoConveyor">Simulação da Esteira</span>
-                            <div class="h-10 w-full bg-slate-200 rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Simulação da Esteira na Capacidade Máxima</span>
+                                <span id="labelQtdPecasEsteira" class="text-[9px] font-bold text-slate-500 bg-white px-2 py-0.5 border rounded">0 peças simultâneas</span>
+                            </div>
+                            <div class="h-10 w-full bg-[#cbd5e1] rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center flex flex-col justify-center">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Velocidade Linear</span>
-                            <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoVelocidade">0,70 m/min</span>
-                        </div>
-                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm text-center flex flex-col justify-center">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider" id="fornoMetricLabelCiclo">Tempo de Ciclo (Total)</span>
-                            <span class="block text-2xl font-bold text-blue-600 mt-1" id="fornoTempoCiclo">41 min</span>
+                    <div class="bg-[#0b132b] rounded-2xl shadow-md border border-slate-800 p-1">
+                        <div class="bg-slate-50 rounded-[14px] p-5">
+                            <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2 flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line"></i> Projeção de Produtividade
+                            </h3>
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Velocidade Atual</span>
+                                    <span class="block text-base font-black text-blue-600" id="fornoVelocidade">0.00 m/h</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Tempo de Esteira</span>
+                                    <span class="block text-sm font-black text-slate-700" id="fornoTempoTotal">00:00:00</span>
+                                </div>
+                                <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Tempo de Ciclo (Peça)</span>
+                                    <span class="block text-sm font-black text-slate-700" id="fornoTempoCiclo">00:00:00</span>
+                                </div>
+                                <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 shadow-sm flex flex-col justify-center text-center">
+                                    <span class="block text-[9px] font-bold text-blue-500 uppercase mb-1">Peças Hora</span>
+                                    <span class="block text-base font-black text-blue-700" id="fornoPecasHora">0</span>
+                                </div>
+                                <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 shadow-sm flex flex-col justify-center text-center">
+                                    <span class="block text-[9px] font-bold text-emerald-600 uppercase mb-1">Peças Turno (12H)</span>
+                                    <span class="block text-base font-black text-emerald-700" id="fornoPecasTurno">0</span>
+                                </div>
+                                <div class="bg-[#0b132b] p-3 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-center text-center">
+                                    <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Peças Dia (24H)</span>
+                                    <span class="block text-base font-black text-white" id="fornoPecasDia">0</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     
                     <div id="fornoFeedbackBox" class="bg-blue-50 border border-blue-200 text-blue-800 p-5 rounded-xl shadow-sm flex items-start gap-4 transition-all duration-300">
                         <i id="fornoFeedbackIcon" class="fa-solid fa-award text-blue-600 mt-1 text-2xl"></i>
                         <div>
-                            <h4 id="fornoFeedbackTitle" class="font-bold text-sm mb-1.5 uppercase tracking-wider">Parâmetros Validados (Padrão Ouro)</h4>
-                            <p id="fornoFeedbackText" class="text-xs leading-relaxed font-medium">Excelente! Esta configuração replica o teste físico validado no Aço 304. O hidrogênio está em nível ótimo para devorar o oxigênio, a velocidade garante o encharque perfeito nas bancadas e as cubas seguirão para estampagem sem risco de estourar.</p>
+                            <h4 id="fornoFeedbackTitle" class="font-bold text-sm mb-1.5 uppercase tracking-wider">Aguardando Parâmetros</h4>
+                            <p id="fornoFeedbackText" class="text-xs leading-relaxed font-medium">Insira os dados de produção para visualizar as restrições mecânicas e químicas do recozimento.</p>
                         </div>
                     </div>
                     
@@ -718,6 +766,9 @@
             }
             gerarAlmoxarifadoMock();
             gerarPOPsMock();
+            if(document.getElementById('view-forno') && !document.getElementById('view-forno').classList.contains('hidden')){
+                calcularParametrosForno();
+            }
         };
 
         function showToast(message, type = 'success') {
@@ -758,6 +809,7 @@
                     headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO";
                 } else if (novaTela === 'forno') {
                     headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
+                    setTimeout(calcularParametrosForno, 50);
                 } else if (novaTela === 'intervencoes') {
                     headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta";
                 } else {
@@ -775,7 +827,7 @@
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
-        function abrirModuloForno() { alternarTela('forno'); calcularParametrosForno(); }
+        function abrirModuloForno() { alternarTela('forno'); }
         function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
 
         function gerarOptionsEquipes(apenasManutencao = false) {
@@ -1827,31 +1879,67 @@
             select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
         }
 
-        // --- SISTEMA ATUALIZADO DO FORNO ---
+        // --- SISTEMA ATUALIZADO DO FORNO (PRODUÇÃO E PARÂMETROS) ---
+        function formatarTempo(totalSegundos) {
+            const h = Math.floor(totalSegundos / 3600);
+            const m = Math.floor((totalSegundos % 3600) / 60);
+            const s = Math.round(totalSegundos % 60);
+            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
         function calcularParametrosForno() {
+            // Inputs Gerais
             const espessura = parseFloat(document.getElementById('fornoEspessura').value); 
-            const freq = parseFloat(document.getElementById('fornoFrequencia').value); 
-            const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value); 
-            const espacamento = parseFloat(document.getElementById('fornoEspacamento').value); 
-            
-            const gas = parseFloat(document.getElementById('fornoGas').value);
-            const temp = parseFloat(document.getElementById('fornoTempMedia').value);
+            const freq = parseFloat(document.getElementById('fornoFrequencia').value) || 0; 
+            const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value) || 0; 
+            const espacamento = parseFloat(document.getElementById('fornoEspacamento').value) || 0; 
+            const gas = parseFloat(document.getElementById('fornoGas').value) || 0;
             const material = document.getElementById('fornoMaterial').value;
             
+            // Bancadas de Temperatura
+            const b1 = parseFloat(document.getElementById('fornoB1').value) || 0;
+            const b2 = parseFloat(document.getElementById('fornoB2').value) || 0;
+            const b3 = parseFloat(document.getElementById('fornoB3').value) || 0;
+            const b4 = parseFloat(document.getElementById('fornoB4').value) || 0;
+            const b5 = parseFloat(document.getElementById('fornoB5').value) || 0;
+            
+            const tempMedia = (b1 + b2 + b3 + b4 + b5) / 5;
+            
+            // Atualiza UI de Valores
             document.getElementById('valEspessura').innerText = espessura.toFixed(2) + ' mm'; 
-            document.getElementById('valFrequencia').innerText = freq.toFixed(1) + ' Hz';
-            document.getElementById('valGas').innerText = gas + ' m³/h';
-            document.getElementById('valTemp').innerText = temp + ' °C';
+            document.getElementById('valTempMedia').innerText = Math.round(tempMedia) + ' °C';
             
-            const velocidadeEsteira = freq * 0.02;
-            const tempoTotalCiclo = 28.50 / velocidadeEsteira; 
+            // FÓRMULAS DE ENGENHARIA (Baseadas no Excel: 32Hz = 1m a cada 64s -> 0.015625 m/s)
+            // v_m_s = (Frequencia / 32) * (1 / 64)
+            const v_m_s = (freq / 32) * (1 / 64);
+            const v_m_min = v_m_s * 60;
+            const v_m_h = v_m_min * 60; // Velocidade M/H
             
-            document.getElementById('containerNormalParams').classList.remove('hidden'); 
-            renderVisualEsteira(compPeca, espacamento);
+            // Comprimento de ciclo por peça (Peça + Espaço) em metros
+            const compTotalPeca = (compPeca + espacamento) / 1000;
             
-            document.getElementById('fornoVelocidade').innerText = velocidadeEsteira.toFixed(2) + ' m/min'; 
-            document.getElementById('fornoTempoCiclo').innerText = Math.round(tempoTotalCiclo) + ' min';
+            // Tempos
+            const tempoEsteiraSegundos = 28.5 / v_m_s; // Tempo total na esteira
+            const tempoCicloSegundos = compTotalPeca / v_m_s; // Tempo entre cada peça
             
+            // Produtividade
+            const pecasHora = tempoCicloSegundos > 0 ? (3600 / tempoCicloSegundos) : 0;
+            const pecasTurno = pecasHora * 12;
+            const pecasDia = pecasHora * 24;
+            
+            // Atualizando Grid de Produção
+            document.getElementById('fornoVelocidade').innerText = v_m_h.toFixed(2) + ' m/h'; 
+            document.getElementById('fornoTempoTotal').innerText = isFinite(tempoEsteiraSegundos) ? formatarTempo(tempoEsteiraSegundos) : "00:00:00";
+            document.getElementById('fornoTempoCiclo').innerText = isFinite(tempoCicloSegundos) ? formatarTempo(tempoCicloSegundos) : "00:00:00";
+            
+            document.getElementById('fornoPecasHora').innerText = Math.floor(pecasHora);
+            document.getElementById('fornoPecasTurno').innerText = Math.floor(pecasTurno);
+            document.getElementById('fornoPecasDia').innerText = Math.floor(pecasDia);
+            
+            // Atualizando a Simulação Visual Dinâmica
+            renderVisualEsteira(compPeca, espacamento, compTotalPeca);
+            
+            // LÓGICA DO FEEDBACK DINÂMICO
             const fbBox = document.getElementById('fornoFeedbackBox');
             const fbIcon = document.getElementById('fornoFeedbackIcon');
             const fbTitle = document.getElementById('fornoFeedbackTitle');
@@ -1863,40 +1951,62 @@
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
                 fbIcon.className = "fa-solid fa-cloud-showers-heavy text-rose-600 mt-1 text-2xl";
                 fbTitle.innerText = "Risco Crítico de Oxidação (Cubas Pretas)";
-                fbText.innerText = "A vazão de " + gas + " m³/h é muito baixa. A zona de resfriamento exige que a atmosfera rica em Hidrogênio seja superior ao Oxigênio externo para devorá-lo antes que toque na cuba quente. Sem isso, a chapa oxidará gravemente e ficará preta na saída.";
-            } else if (temp > 1100 && material === 'aco-304') {
+                fbText.innerText = `A vazão total de ${gas} m³/h de NH₃ dissociada gera apenas ~${Math.round(gas*0.75)} m³/h de Hidrogênio. Este volume não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e queimar (oxidar) severamente as peças.`;
+            } else if (tempMedia > 1100 && material === 'aco-304') {
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
                 fbIcon.className = "fa-solid fa-fire text-rose-600 mt-1 text-2xl";
                 fbTitle.innerText = "Excesso de Temperatura (Limite Máx: 1100°C)";
-                fbText.innerText = "A temperatura programada de " + temp + "°C rompe o limite operacional recomendado para as cubas. Este nível causará fragilidade estrutural, queima dos óleos residuais com incrustação ou até o derretimento fino das bordas da peça.";
-            } else if (temp < 1030) {
+                fbText.innerText = `A temperatura média programada de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado para as cubas. Este nível causará queima dos óleos residuais gerando incrustação, fragilidade de grão ou derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.`;
+            } else if (tempMedia < 1030) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-temperature-arrow-down text-amber-600 mt-1 text-2xl";
                 fbTitle.innerText = "Recozimento Incompleto (Risco de Estourar na Prensa)";
-                fbText.innerText = "Com apenas " + temp + "°C, o aço inoxidável não atinge plenamente a zona de recristalização térmica. A cuba sairá rígida (encruada) e possui um alto risco de rachar ou estourar quando for puxada no estampo.";
+                fbText.innerText = `Com média de apenas ${Math.round(tempMedia)}°C, o inox 304 não atinge plenamente a zona de recristalização austenítica. A cuba sairá rígida (encruada) e possui um alto risco de rachar ou estourar no estampo.`;
             } else if (freq > 45) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-2xl";
-                fbTitle.innerText = "Tempo de Encharque Reduzido";
-                fbText.innerText = "A esteira está girando muito rápido (" + freq.toFixed(1) + " Hz). O tempo de " + Math.round(tempoTotalCiclo) + " minutos é muito curto para a chapa absorver o calor das resistências, resultando em tensões não aliviadas que vão comprometer a estampagem profunda.";
-            } else if (material === 'aco-304' && temp >= 1050 && temp <= 1090 && freq >= 30 && freq <= 40 && gas >= 40) {
+                fbTitle.innerText = "Alerta: Tempo de Encharque Reduzido";
+                fbText.innerText = `A esteira está girando muito rápido (${freq.toFixed(1)} Hz). O tempo total de permanência de ${formatarTempo(tempoEsteiraSegundos)} é muito curto para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor nas zonas de recozimento. Risco de tensão não aliviada.`;
+            } else if (material === 'aco-304' && tempMedia >= 1050 && tempMedia <= 1090 && freq >= 28 && freq <= 40 && gas >= 40) {
                 fbBox.className += "bg-blue-50 border-blue-200 text-blue-900";
                 fbIcon.className = "fa-solid fa-award text-blue-600 mt-1 text-2xl";
                 fbTitle.innerText = "Parâmetros Validados (Padrão Ouro)";
-                fbText.innerText = "Excelente configuração! Este arranjo replica o teste físico validado na planta. O hidrogênio (H2+N2) é suficiente para combater a oxidação, a velocidade da malha garante encharque pleno e as cubas seguirão prontas e flexíveis para a estampagem. ZERO estouros garantidos.";
+                fbText.innerText = `Setup PERFEITO! A produção estimada de ${Math.floor(pecasTurno)} peças/turno será processada com encharque térmico ideal (${formatarTempo(tempoEsteiraSegundos)}) e H₂ suficiente. As cubas sairão totalmente brilhantes, recristalizadas, prontas e flexíveis para a estampagem profunda.`;
             } else {
                 fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
                 fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-2xl";
                 fbTitle.innerText = "Operação Dentro dos Limites Estáveis";
-                fbText.innerText = "Os parâmetros atuais estão matematicamente seguros para rodar o forno. Acompanhe a porta de saída visualmente durante a primeira hora de produção para garantir que as reações do gás estão limpando perfeitamente a superfície do material.";
+                fbText.innerText = `As curvas de temperatura média e o fluxo de amônia estão matematicamente seguros. Acompanhe a porta de saída visualmente durante a primeira hora de produção para garantir a equalização do brilho.`;
             }
         }
 
-        function renderVisualEsteira(comprimento, espacamento) {
-            const area = document.getElementById('conveyorVisualArea'); area.innerHTML = "";
-            const w = Math.min(100, Math.max(15, comprimento * 0.15)); const m = Math.min(60, Math.max(4, espacamento * 0.15));
-            for (let i = 0; i < 15; i++) {
-                const peca = document.createElement('div'); peca.className = "h-6 bg-slate-400 rounded border border-slate-500 shadow flex items-center justify-center text-[8px] text-white font-bold shrink-0"; peca.style.width = w + 'px'; peca.style.marginRight = m + 'px'; peca.innerText = "AÇO"; area.appendChild(peca);
+        function renderVisualEsteira(compPeca, espacamento, compTotalPecaM) {
+            const area = document.getElementById('conveyorVisualArea'); 
+            area.innerHTML = "";
+            const label = document.getElementById('labelQtdPecasEsteira');
+            
+            if(compTotalPecaM <= 0) {
+                label.innerText = "0 peças simultâneas";
+                return;
+            }
+            
+            // Capacidade do Forno (Quantas peças de comprimento "compTotalPecaM" cabem em 28.5m)
+            const numPecas = Math.floor(28.5 / compTotalPecaM);
+            label.innerText = `${numPecas} peças simultâneas no forno`;
+            
+            // Para não quebrar o navegador caso coloque tamanhos de 1mm
+            const limitRender = Math.min(numPecas, 300);
+            
+            const pctLarguraPeca = ((compPeca/1000) / 28.5) * 100;
+            const pctMargem = ((espacamento/1000) / 28.5) * 100;
+            
+            for (let i = 0; i < limitRender; i++) {
+                const peca = document.createElement('div'); 
+                peca.className = "h-6 bg-slate-500 rounded-sm border border-slate-600 shadow-sm flex items-center justify-center text-[7px] text-white font-bold shrink-0 overflow-hidden"; 
+                peca.style.width = `${pctLarguraPeca}%`; 
+                peca.style.marginRight = `${pctMargem}%`; 
+                if (pctLarguraPeca > 2) peca.innerText = "AÇO";
+                area.appendChild(peca);
             }
         }
 
