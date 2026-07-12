@@ -114,7 +114,7 @@
                 <button onclick="abrirModuloPOPs()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-book-open text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Procedimentos (POP)</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Guias de execução passo a passo de bloqueios de segurança e LOTO.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Guias de execução, documentos do Google Docs e LOTO.</p>
                 </button>
                 
                 <button onclick="abrirModuloParametrizacao()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
@@ -206,10 +206,11 @@
                     <select id="popMaquinaFilter" onchange="renderPOPs()" class="bg-white border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-blue-500 shadow-sm w-48">
                         <option value="">Todas as Máquinas</option>
                     </select>
-                    <input type="text" id="popSearch" oninput="renderPOPs()" placeholder="Buscar instruções de operação..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 shadow-sm">
+                    <input type="text" id="popSearch" oninput="renderPOPs()" placeholder="Buscar procedimentos..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 shadow-sm">
                 </div>
             </div>
-            <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+            <!-- Atualizado para grid -->
+            <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
         
         <div id="view-parametrizacao" class="fade-in hidden">
@@ -224,7 +225,8 @@
             </div>
             
             <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+                <!-- Preenchido dinamicamente via JS -->
+            </div>
         </div>
 
         <div id="view-forno" class="fade-in hidden">
@@ -814,7 +816,6 @@
                 carregarChecklistMock();
             }
             gerarAlmoxarifadoMock();
-            gerarPOPsMock();
         };
 
         function showToast(message, type = 'success') {
@@ -875,7 +876,14 @@
 
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
-        function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
+        
+        function abrirModuloPOPs() { 
+            alternarTela('pops'); 
+            const select = document.getElementById('popMaquinaFilter');
+            let maquinasComPop = [...new Set(popData.map(p => p.maquina))].sort();
+            select.innerHTML = '<option value="">Todas as Máquinas</option>' + maquinasComPop.map(m => `<option value="${m}">${m}</option>`).join('');
+            renderPOPs(); 
+        }
         
         function abrirModuloParametrizacao() { 
             alternarTela('parametrizacao'); 
@@ -912,7 +920,6 @@
             }).join('');
         }
 
-        // --- SISTEMA INTELIGENTE DE FILTRAGEM DE EQUIPES POR SETOR ---
         function gerarOptionsEquipes(setorAlvo = "") {
             if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
@@ -923,10 +930,6 @@
                 const eqSetorNorm = normalizar(eq.setor);
                 let podeAdicionar = false;
 
-                // Regra de Negócio:
-                // Se o setor destino for manutenção -> Mostra só manutenção
-                // Se o setor destino for produção -> Mostra produção + manutenção
-                // Caso contrário (vazio, ou setor geral) -> Mostra todos.
                 if (setorNorm.includes('manutencao')) {
                     if (eqSetorNorm.includes('manutencao')) podeAdicionar = true;
                 } else if (setorNorm.includes('producao')) {
@@ -956,7 +959,7 @@
             select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
             if(maquinaPre) select.value = maquinaPre;
             document.getElementById('chamadoDefeito').value = defeitoPre;
-            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(''); // Chamados permite qualquer um
+            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(''); 
             document.getElementById('chamadoModal').classList.remove('hidden');
         }
         function fecharModalChamado() { document.getElementById('chamadoModal').classList.add('hidden'); }
@@ -981,15 +984,13 @@
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
         }
 
-        // --- VALIDAÇÃO INTELIGENTE DO STATUS DO CHECKLIST ---
         function verificarStatusChamado(selectElement) {
             const linha = selectElement.closest(".row-check");
             const inputOperador = linha.querySelector(".operador-inp");
             
-            // Trava: Exige operador antes do Status
             if (!inputOperador.value.trim()) {
                 showToast("Selecione o operador antes de marcar o status.", "error");
-                selectElement.value = ""; // Reseta para o "Status..." vazio
+                selectElement.value = ""; 
                 inputOperador.focus();
                 return;
             }
@@ -998,7 +999,6 @@
                 const maquina = linha.getAttribute("data-maquina");
                 const item = linha.getAttribute("data-item");
                 const obsValue = linha.querySelector(".obs-inp").value.trim();
-                // Já abre o modal de chamado pré-preenchido
                 abrirModalChamado(maquina, `Falha no checklist - Item: '${item}'${obsValue ? ` | Obs: ${obsValue}` : ""}`);
             }
         }
@@ -1436,7 +1436,6 @@
 
         function fecharPreditiva() { document.getElementById('preditivaModal').classList.add('hidden'); }
 
-        // --- RESUMO / STATUS GERAL DA MÁQUINA (ATUALIZADO COM OS PROBLEMAS) ---
         function abrirResumoMaquina(maquina, setor, periodicidade) {
             const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maquina) && normalizar(s.setor) === normalizar(setor) && normalizar(s.periodicidade) === normalizar(periodicidade));
             const itensDaMaquina = originalDatabase.filter(i => normalizar(i.maquina) === normalizar(maquina) && normalizar(i.setor) === normalizar(setor) && normalizar(i.periodicidade) === normalizar(periodicidade));
@@ -1521,6 +1520,8 @@
                 chamadosData = resJson.chamados || []; 
                 intervencoesData = resJson.intervencoes || [];
                 maquinasParametrizaveisData = resJson.maquinasParam || []; 
+                popData = resJson.pops || []; // Recebe os POPs dinâmicos da planilha
+                
                 renderSetorCards(); atualizarKPIs();
             } catch (e) { 
                 showToast("Erro de rede. Modo Offline.", "error"); carregarChecklistMock();
@@ -1554,6 +1555,13 @@
             ];
             intervencoesData = [];
             maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; 
+            
+            // Mock dos POPs para funcionar offline
+            popData = [
+                { maquina: "Guilhotina - GUI-001", titulo: "Procedimento de LOTO", descricao: "Passo a passo para bloqueio de energias perigosas antes da manutenção.", link: "https://docs.google.com/" },
+                { maquina: "Robô Prensa", titulo: "Troca de Garra", descricao: "Instruções seguras para a substituição de garras pneumáticas.", link: "https://docs.google.com/" }
+            ];
+            
             renderSetorCards(); atualizarKPIs();
         }
 
@@ -1614,7 +1622,7 @@
             }
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
-            const optionsEquipesSelect = gerarOptionsEquipes(selectedSetor); // Aplica a lógica inteligente
+            const optionsEquipesSelect = gerarOptionsEquipes(selectedSetor); 
             
             for (let maq in agrupado) {
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(selectedSetor) && matchPeriodicidade(s.periodicidade, periodoId));
@@ -1679,7 +1687,6 @@
                     if (!isAtrasado) {
                         botaoAcaoHtml = `<button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-200 text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors"><i class="fa-solid fa-check text-[10px]"></i> Verificado</button>`;
                     }
-                    // Adicionado o disabled na option default de status
                     html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><select class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:ring-blue-500">${optionsEquipesSelect}</select></td><td class="p-4 align-middle"><select onchange="verificarStatusChamado(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="" disabled selected>Status...</option><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle">${headerBotaoInfo}${botaoAcaoHtml}</td></tr>`;
                 });
                 html += `</tbody></table></div></div>`;
@@ -1728,7 +1735,7 @@
                 
                 const dataISO = new Date().toISOString();
                 const statusIndex = checklistStatus.findIndex(s => normalizar(s.maquina) === normalizar(payload.dados[0].maquina) && normalizar(s.setor) === normalizar(selectedSetor) && normalizar(s.periodicidade) === normalizar(selectedPeriodo));
-                const novaEntry = { data: dataISO, operador: operadorValue, status: statusValue, obs: obsValue }; // Agora injeta no front
+                const novaEntry = { data: dataISO, operador: operadorValue, status: statusValue, obs: obsValue };
                 
                 if (statusIndex !== -1) {
                     checklistStatus[statusIndex].ultimoRegistro = dataISO;
@@ -2006,19 +2013,37 @@
             item.quantidade = novaQuantidade; renderAlmoxarifadoLista(); fecharModalMovimentacao();
         }
 
-        function gerarAlmoxarifadoMock() { almoxarifadoData = [ { id: "IT1", nome: "Sensor Ótico", categoria: "Sensores", quantidade: 5, minimo: 2, unidade: "un", local: "Prat. 1", foto: "", descricao: "" } ]; }
-        function gerarPOPsMock() { popData = [ { id: 1, titulo: "LOTO", maquina: "Guilhotina - GUI-001", epis: "Luvas", ferramentas: "Cadeado", descricao: "Desligar energia." } ]; }
-
+        // --- SISTEMA INTELIGENTE DE RENDERIZAÇÃO DE POPS ---
         function renderPOPs() {
-            const container = document.getElementById('popsContainer'); const maqFilter = document.getElementById('popMaquinaFilter').value; const search = document.getElementById('popSearch').value.toLowerCase();
-            const filtrados = popData.filter(p => (maqFilter === "" || p.maquina === maqFilter) && (p.titulo.toLowerCase().includes(search) || p.descricao.toLowerCase().includes(search)));
-            container.innerHTML = filtrados.map(p => `<div class="bg-white rounded-xl border p-5 shadow-sm"><span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">${p.maquina}</span><h4 class="font-bold text-slate-800 text-sm mb-3">${p.titulo}</h4><div class="text-xs text-slate-600 whitespace-pre-line leading-relaxed">${p.descricao}</div></div>`).join('');
-        }
+            const container = document.getElementById('popsContainer'); 
+            const maqFilter = document.getElementById('popMaquinaFilter').value; 
+            const search = document.getElementById('popSearch').value.toLowerCase();
+            
+            const filtrados = popData.filter(p => 
+                (maqFilter === "" || p.maquina === maqFilter) && 
+                (p.titulo.toLowerCase().includes(search) || p.descricao.toLowerCase().includes(search))
+            );
+            
+            if (filtrados.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10 font-medium">Nenhum POP encontrado. Verifique se a aba "POPs" está preenchida na planilha.</div>`;
+                return;
+            }
 
-        function popularFiltroMaquinas(selectId) {
-            const select = document.getElementById(selectId);
-            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa", "Guilhotina"];
-            select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            container.innerHTML = filtrados.map(p => `
+                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+                    <div>
+                        <div class="flex justify-between items-start mb-3">
+                            <span class="bg-amber-100 text-amber-700 text-[9px] font-bold px-2.5 py-1 rounded uppercase tracking-wider">${p.maquina}</span>
+                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100"><i class="fa-solid fa-file-word"></i></div>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-2 leading-tight">${p.titulo}</h4>
+                        <p class="text-[11px] text-slate-500 leading-relaxed mb-4 line-clamp-3">${p.descricao || 'Sem descrição.'}</p>
+                    </div>
+                    <a href="${p.link}" target="_blank" class="w-full bg-[#0b132b] hover:bg-slate-800 text-white text-[11px] font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Documento
+                    </a>
+                </div>
+            `).join('');
         }
 
         // --- SISTEMA ATUALIZADO DO FORNO ---
