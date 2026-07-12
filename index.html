@@ -116,6 +116,7 @@
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Procedimentos (POP)</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Guias de execução passo a passo de bloqueios de segurança e LOTO.</p>
                 </button>
+                
                 <button onclick="abrirModuloParametrizacao()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-sliders text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Parametrização de Máquinas</h2>
@@ -123,6 +124,7 @@
                 </button>
             </div>
         </div>
+        
         <div id="view-intervencoes" class="fade-in hidden">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div>
@@ -214,17 +216,21 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
                     <h2 class="font-bold text-slate-800 text-lg">Central de Parametrização</h2>
-                    <p class="text-xs text-slate-500 mt-1">Selecione o equipamento abaixo para ajustar seus parâmetros de processo e simular produção. <br><span class="italic text-[10px] text-slate-400">(Novas máquinas podem ser adicionadas marcando "Sim" na coluna H da planilha aba Maquinas).</span></p>
+                    <p class="text-xs text-slate-500 mt-1">Selecione o equipamento abaixo para ajustar seus parâmetros de processo e simular produção. <br><span class="italic text-[10px] text-slate-400">(Novas máquinas podem ser adicionadas marcando "Sim" na coluna H da planilha).</span></p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-sm shrink-0">
                     <i class="fa-solid fa-sliders text-xl"></i>
                 </div>
             </div>
-            <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+            
+            <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
         </div>
 
         <div id="view-forno" class="fade-in hidden">
+            
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                     <div class="flex justify-between items-center border-b pb-3 border-slate-100">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -259,6 +265,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                     <div class="flex justify-between items-center border-b pb-3 border-slate-100">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -271,23 +278,41 @@
                             <span class="block text-[9px] text-slate-400 italic mb-2">Amônia (NH₃) Quebrada → 75% H₂ e 25% N₂</span>
                             <input type="number" id="fornoGas" value="43" min="0" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-emerald-600">
                         </div>
+                        
                         <div>
                             <div class="flex items-center justify-between mb-2">
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Resistências (°C)</label>
                                 <span class="text-[10px] font-bold bg-slate-100 px-2 py-1 rounded text-slate-600">Média: <span id="valTempMedia" class="text-rose-600">1070 °C</span></span>
                             </div>
                             <div class="grid grid-cols-5 gap-2">
-                                <div><span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B1</span><input type="number" id="fornoB1" value="1060" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold"></div>
-                                <div><span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B2</span><input type="number" id="fornoB2" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold"></div>
-                                <div><span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B3</span><input type="number" id="fornoB3" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold"></div>
-                                <div><span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B4</span><input type="number" id="fornoB4" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold"></div>
-                                <div><span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B5</span><input type="number" id="fornoB5" value="1060" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold"></div>
+                                <div>
+                                    <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B1</span>
+                                    <input type="number" id="fornoB1" value="1060" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                </div>
+                                <div>
+                                    <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B2</span>
+                                    <input type="number" id="fornoB2" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                </div>
+                                <div>
+                                    <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B3</span>
+                                    <input type="number" id="fornoB3" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                </div>
+                                <div>
+                                    <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B4</span>
+                                    <input type="number" id="fornoB4" value="1080" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                </div>
+                                <div>
+                                    <span class="block text-[9px] text-center text-slate-500 font-bold mb-1">B5</span>
+                                    <input type="number" id="fornoB5" value="1060" oninput="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-md p-1.5 text-xs text-center focus:outline-none focus:border-blue-500 font-semibold">
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+                
             <div class="space-y-6">
+                
                 <div id="fornoFeedbackBox" class="bg-blue-50 border border-blue-200 text-blue-800 p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300">
                     <i id="fornoFeedbackIcon" class="fa-solid fa-award text-blue-600 mt-1 text-3xl"></i>
                     <div>
@@ -295,68 +320,474 @@
                         <p id="fornoFeedbackText" class="text-sm leading-relaxed font-medium">Insira os dados de produção para visualizar as restrições mecânicas e químicas do recozimento.</p>
                     </div>
                 </div>
+                
                 <div class="bg-[#0b132b] rounded-2xl shadow-md border border-slate-800 p-1">
                     <div class="bg-slate-50 rounded-[14px] p-5">
-                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2 flex items-center gap-2"><i class="fa-solid fa-chart-line"></i> Projeção de Produtividade</h3>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b pb-2 flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line"></i> Projeção de Produtividade
+                        </h3>
                         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center"><span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Velocidade Atual</span><span class="block text-base font-black text-blue-600" id="fornoVelocidade">0.00 m/h</span></div>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center"><span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Tempo de Esteira</span><span class="block text-sm font-black text-slate-700" id="fornoTempoTotal">00:00:00</span></div>
-                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center"><span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Tempo de Ciclo (Peça)</span><span class="block text-sm font-black text-slate-700" id="fornoTempoCiclo">00:00:00</span></div>
-                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 shadow-sm flex flex-col justify-center text-center"><span class="block text-[9px] font-bold text-blue-500 uppercase mb-1">Peças Hora</span><span class="block text-base font-black text-blue-700" id="fornoPecasHora">0</span></div>
-                            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 shadow-sm flex flex-col justify-center text-center"><span class="block text-[9px] font-bold text-emerald-600 uppercase mb-1">Peças Turno (12H)</span><span class="block text-base font-black text-emerald-700" id="fornoPecasTurno">0</span></div>
-                            <div class="bg-[#0b132b] p-3 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-center text-center"><span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Peças Dia (24H)</span><span class="block text-base font-black text-white" id="fornoPecasDia">0</span></div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Velocidade Atual</span>
+                                <span class="block text-base font-black text-blue-600" id="fornoVelocidade">0.00 m/h</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Tempo de Esteira</span>
+                                <span class="block text-sm font-black text-slate-700" id="fornoTempoTotal">00:00:00</span>
+                            </div>
+                            <div class="bg-white p-3 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-center text-center">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Tempo de Ciclo (Peça)</span>
+                                <span class="block text-sm font-black text-slate-700" id="fornoTempoCiclo">00:00:00</span>
+                            </div>
+                            <div class="bg-blue-50 p-3 rounded-xl border border-blue-200 shadow-sm flex flex-col justify-center text-center">
+                                <span class="block text-[9px] font-bold text-blue-500 uppercase mb-1">Peças Hora</span>
+                                <span class="block text-base font-black text-blue-700" id="fornoPecasHora">0</span>
+                            </div>
+                            <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 shadow-sm flex flex-col justify-center text-center">
+                                <span class="block text-[9px] font-bold text-emerald-600 uppercase mb-1">Peças Turno (12H)</span>
+                                <span class="block text-base font-black text-emerald-700" id="fornoPecasTurno">0</span>
+                            </div>
+                            <div class="bg-[#0b132b] p-3 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-center text-center">
+                                <span class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Peças Dia (24H)</span>
+                                <span class="block text-base font-black text-white" id="fornoPecasDia">0</span>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-2"><i class="fa-solid fa-layer-group text-blue-600"></i> Diagrama de Encharque e Simulação (Total: 28,50 m)</h3>
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        <i class="fa-solid fa-layer-group text-blue-600"></i> Diagrama de Encharque e Simulação (Total: 28,50 m)
+                    </h3>
+                    
                     <div class="flex border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-white">
-                        <div class="bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 5.26%;"><span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Ent</span><span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span></div>
-                        <div class="bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 22.81%;"><span class="uppercase text-[9px] tracking-wider">Pré-Aq.</span><span class="text-[8px] font-medium text-amber-200 mt-1">6,5m</span></div>
-                        <div class="bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 15.79%;"><span class="animate-pulse uppercase text-[9px] tracking-wider">Recoz.</span><span class="text-[8px] font-medium text-red-200 mt-1">4,5m</span></div>
-                        <div class="bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 50.88%;"><span class="uppercase text-[9px] tracking-wider">Resfriamento (H₂ + N₂)</span><span class="text-[8px] font-medium text-blue-200 mt-1">14,5m</span></div>
-                        <div class="bg-slate-800 flex flex-col justify-center p-1" style="width: 5.26%;"><span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Sai</span><span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span></div>
+                        <div class="bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 5.26%;">
+                            <span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Ent</span>
+                            <span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span>
+                        </div>
+                        <div class="bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 22.81%;">
+                            <span class="uppercase text-[9px] tracking-wider">Pré-Aq.</span>
+                            <span class="text-[8px] font-medium text-amber-200 mt-1">6,5m</span>
+                        </div>
+                        <div class="bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 15.79%;">
+                            <span class="animate-pulse uppercase text-[9px] tracking-wider">Recoz.</span>
+                            <span class="text-[8px] font-medium text-red-200 mt-1">4,5m</span>
+                        </div>
+                        <div class="bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 50.88%;">
+                            <span class="uppercase text-[9px] tracking-wider">Resfriamento (H₂ + N₂)</span>
+                            <span class="text-[8px] font-medium text-blue-200 mt-1">14,5m</span>
+                        </div>
+                        <div class="bg-slate-800 flex flex-col justify-center p-1" style="width: 5.26%;">
+                            <span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Sai</span>
+                            <span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span>
+                        </div>
                     </div>
+                    
                     <div class="border rounded-xl p-3 bg-slate-100">
-                        <div class="flex justify-between items-end mb-2"><span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Simulação da Esteira na Capacidade Máxima</span><span id="labelQtdPecasEsteira" class="text-[9px] font-bold text-slate-500 bg-white px-2 py-0.5 border rounded">0 peças simultâneas</span></div>
+                        <div class="flex justify-between items-end mb-2">
+                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Simulação da Esteira na Capacidade Máxima</span>
+                            <span id="labelQtdPecasEsteira" class="text-[9px] font-bold text-slate-500 bg-white px-2 py-0.5 border rounded">0 peças simultâneas</span>
+                        </div>
                         <div class="h-10 w-full bg-[#cbd5e1] rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
                     </div>
                 </div>
+
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-200 pb-2"><i class="fa-solid fa-flask text-indigo-600"></i> Físico-Química do Recozimento & Atmosfera</h3>
+                    <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
+                        <i class="fa-solid fa-flask text-indigo-600"></i> Físico-Química do Recozimento & Atmosfera
+                    </h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="space-y-3">
                             <h4 class="text-xs font-bold text-slate-700 uppercase">1. Ação dos Gases (Amônia Quebrada)</h4>
-                            <p class="text-[11px] text-slate-600 leading-relaxed text-justify">O Quebrador dissocia a Amônia (NH₃) em uma mistura exata de <strong>75% Hidrogênio (H₂) e 25% Nitrogênio (N₂)</strong>.<br><br><strong class="text-indigo-600">Hidrogênio (H₂):</strong> É o <em>agente redutor</em>. Ele reage ativamente para "roubar" e neutralizar o oxigênio que tenta oxidar a chapa quente. Quanto maior o volume de H₂, mais limpa e brilhante a cuba sairá.<br><br><strong class="text-blue-600">Nitrogênio (N₂):</strong> É o <em>gás inerte/varredura</em>. Ele não reage quimicamente, mas cria o volume e a <strong>pressão positiva</strong> necessária dentro da mufla para "empurrar" o ar da fábrica para fora.</p>
+                            <p class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                                O Quebrador dissocia a Amônia (NH₃) em uma mistura exata de <strong>75% Hidrogênio (H₂) e 25% Nitrogênio (N₂)</strong>.<br><br>
+                                <strong class="text-indigo-600">Hidrogênio (H₂):</strong> É o <em>agente redutor</em>. Ele reage ativamente para "roubar" e neutralizar o oxigênio que tenta oxidar a chapa quente. Quanto maior o volume de H₂, mais limpa e brilhante a cuba sairá.<br><br>
+                                <strong class="text-blue-600">Nitrogênio (N₂):</strong> É o <em>gás inerte/varredura</em>. Ele não reage quimicamente, mas cria o volume e a <strong>pressão positiva</strong> necessária dentro da mufla para "empurrar" o ar da fábrica para fora.
+                            </p>
                         </div>
                         <div class="space-y-3">
                             <h4 class="text-xs font-bold text-slate-700 uppercase">2. Aço 304 vs Série 200 (J1-J5)</h4>
-                            <p class="text-[11px] text-slate-600 leading-relaxed text-justify">O <strong>Aço 304</strong> possui alta carga de <strong>Níquel (8 a 10.5%)</strong>, um material nobre altamente resistente à oxidação térmica. <br><br>Já a <strong>Série 200 (J1, J4, J5)</strong> substitui o Níquel por <strong>Manganês (8.5 a 11.5%)</strong>. O Manganês é reativo e oxida com facilidade impressionante. Por isso, a série 200 exige controles atmosféricos mais rígidos e é mais propensa a sair "amarelada" ou "carepada" se a vazão de gás oscilar minimamente.</p>
+                            <p class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                                O <strong>Aço 304</strong> possui alta carga de <strong>Níquel (8 a 10.5%)</strong>, um material nobre altamente resistente à oxidação térmica. <br><br>Já a <strong>Série 200 (J1, J4, J5)</strong> substitui o Níquel por <strong>Manganês (8.5 a 11.5%)</strong>. O Manganês é reativo e oxida com facilidade impressionante. Por isso, a série 200 exige controles atmosféricos mais rígidos e é mais propensa a sair "amarelada" ou "carepada" se a vazão de gás oscilar minimamente.
+                            </p>
                         </div>
                         <div class="space-y-3">
                             <h4 class="text-xs font-bold text-slate-700 uppercase">3. Tempo de Estabilização (Físico)</h4>
-                            <p class="text-[11px] text-slate-600 leading-relaxed text-justify">Ligar o forno não significa que a atmosfera está pronta. Na prática operacional, o refratário interno é uma esponja de umidade e ar. Para a atmosfera expulsar todo o O₂, secar a umidade dos poros dos tijolos e estabilizar o ponto de orvalho (dew point) do H₂, o processo exige de <strong>6 a 8 horas contínuas</strong> repassando peças de sacrifício, até que o brilho saia impecável.</p>
+                            <p class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                                Ligar o forno não significa que a atmosfera está pronta. Na prática operacional, o refratário interno é uma esponja de umidade e ar. Para a atmosfera expulsar todo o O₂, secar a umidade dos poros dos tijolos e estabilizar o ponto de orvalho (dew point) do H₂, o processo exige de <strong>6 a 8 horas contínuas</strong> repassando peças de sacrifício, até que o brilho saia impecável.
+                            </p>
                         </div>
                         <div class="space-y-3">
                             <h4 class="text-xs font-bold text-slate-700 uppercase">4. Prevenção de Oxidação na Saída</h4>
-                            <p class="text-[11px] text-slate-600 leading-relaxed text-justify">Se a cuba sair manchada ou preta, a falha principal não é a temperatura, mas a <strong>intrusão de oxigênio</strong>. A oxidação ocorre pelo contato direto do material quente com o ar da fábrica. <br><br><strong>Regra de Ouro:</strong> Garanta que a <span class="font-bold text-rose-600">cortina de tiras térmicas na saída</span> feche imediatamente após a passagem de cada peça. Isso bloqueia o retrocesso de ar atmosférico para a zona de resfriamento.</p>
+                            <p class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                                Se a cuba sair manchada ou preta, a falha principal não é a temperatura, mas a <strong>intrusão de oxigênio</strong>. A oxidação ocorre pelo contato direto do material quente com o ar da fábrica. <br><br><strong>Regra de Ouro:</strong> Garanta que a <span class="font-bold text-rose-600">cortina de tiras térmicas na saída</span> feche imediatamente após a passagem de cada peça. Isso bloqueia o retrocesso de ar atmosférico para a zona de resfriamento.
+                            </p>
                         </div>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+        </main>
+
+    <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                        <i class="fa-solid fa-link text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Configurar Conexão</h3>
+                        <p class="text-xs text-slate-500 font-medium">Insira a URL do Google Apps Script</p>
+                    </div>
+                </div>
+                <div class="space-y-4 mb-5">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">URL de Implantação</label>
+                        <input type="text" id="apiInputUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-mono">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="toggleConfigModal(false)" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button onclick="salvarConfigUrl()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar Conexão</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-5 border-b pb-4">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shadow-sm border border-rose-200">
+                        <i class="fa-solid fa-triangle-exclamation text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Abertura de Chamado</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Registro de Manutenção Corretiva (OS)</p>
+                    </div>
+                </div>
+                <div class="space-y-4 mb-5">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label>
+                        <select id="chamadoMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Grau de Urgência</label>
+                        <select id="chamadoUrgencia" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="Alta">Alta (Máquina Parada / Emergência)</option>
+                            <option value="Média" selected>Média (Requer atenção breve)</option>
+                            <option value="Baixa">Baixa (Pode aguardar programação)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Defeito Apresentado / Sintoma</label>
+                        <textarea id="chamadoDefeito" rows="3" placeholder="Ex: Mangueira do pistão vazando óleo..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Seu Nome (Relator)</label>
+                        <select id="chamadoRelator" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="fecharModalChamado()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button id="btnEnviarChamado" onclick="enviarChamado()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-paper-plane"></i> Enviar Alerta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-file-lines"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3>
+                        <p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p>
+                    </div>
+                </div>
+                <button onclick="fecharDetalhesOS()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-5 bg-white">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Máquina / Equipamento</span>
+                        <span class="block font-bold text-slate-800 text-sm" id="detOsMaquina"></span>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-1 rounded font-bold border border-emerald-200" id="detOsStatus"></span>
+                </div>
+                <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 space-y-3">
+                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataAbertura"></span></div>
+                        <div><span class="block font-bold text-slate-400 uppercase">Relator</span><span class="font-semibold text-slate-700" id="detOsRelator"></span></div>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Defeito Relatado</span>
+                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p>
+                    </div>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3">
+                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2">
+                        <i class="fa-solid fa-wrench"></i> Fechamento (Reparo)
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataFechamento"></span></div>
+                        <div><span class="block font-bold text-slate-400 uppercase">Técnico</span><span class="font-semibold text-slate-700" id="detOsSolucionador"></span></div>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Solução Aplicada</span>
+                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-emerald-100 font-medium" id="detOsResolucao"></p>
                     </div>
                 </div>
             </div>
         </div>
-    </main>
-
-    <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print"><div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden"><div class="p-6"><div class="flex items-center gap-3 mb-4"><div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center"><i class="fa-solid fa-link text-lg"></i></div><div><h3 class="text-base font-bold text-slate-900">Configurar Conexão</h3><p class="text-xs text-slate-500 font-medium">Insira a URL do Google Apps Script</p></div></div><div class="space-y-4 mb-5"><div><label class="block text-xs font-bold text-slate-400 uppercase mb-1.5 tracking-wider">URL de Implantação</label><input type="text" id="apiInputUrl" placeholder="https://script.google.com/macros/s/.../exec" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-mono"></div></div><div class="grid grid-cols-2 gap-3"><button onclick="toggleConfigModal(false)" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button><button onclick="salvarConfigUrl()" class="w-full py-2.5 bg-slate-900 hover:bg-slate-800 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar Conexão</button></div></div></div></div>
-    <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print"><div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden"><div class="p-6"><div class="flex items-center gap-3 mb-5 border-b pb-4"><div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shadow-sm border border-rose-200"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div><div><h3 class="text-base font-bold text-slate-900">Abertura de Chamado</h3><p class="text-[10px] text-slate-500 font-medium">Registro de Manutenção Corretiva (OS)</p></div></div><div class="space-y-4 mb-5"><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label><select id="chamadoMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select></div><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Grau de Urgência</label><select id="chamadoUrgencia" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"><option value="Alta">Alta (Máquina Parada / Emergência)</option><option value="Média" selected>Média (Requer atenção breve)</option><option value="Baixa">Baixa (Pode aguardar programação)</option></select></div><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Defeito Apresentado / Sintoma</label><textarea id="chamadoDefeito" rows="3" placeholder="Ex: Mangueira do pistão vazando óleo..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea></div><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Seu Nome (Relator)</label><select id="chamadoRelator" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select></div></div><div class="grid grid-cols-2 gap-3"><button onclick="fecharModalChamado()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button><button id="btnEnviarChamado" onclick="enviarChamado()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all"><i class="fa-solid fa-paper-plane"></i> Enviar Alerta</button></div></div></div></div>
-    <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print"><div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]"><div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm"><i class="fa-solid fa-file-lines"></i></div><div><h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3><p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p></div></div><button onclick="fecharDetalhesOS()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button></div><div class="p-6 overflow-y-auto space-y-5 bg-white"><div class="flex justify-between items-start"><div><span class="block text-[10px] font-bold text-slate-400 uppercase">Máquina / Equipamento</span><span class="block font-bold text-slate-800 text-sm" id="detOsMaquina"></span></div><span class="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-1 rounded font-bold border border-emerald-200" id="detOsStatus"></span></div><div class="bg-rose-50 border border-rose-100 rounded-xl p-4 space-y-3"><div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2"><i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)</div><div class="grid grid-cols-2 gap-2 text-[10px]"><div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataAbertura"></span></div><div><span class="block font-bold text-slate-400 uppercase">Relator</span><span class="font-semibold text-slate-700" id="detOsRelator"></span></div></div><div><span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Defeito Relatado</span><p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p></div></div><div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3"><div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2"><i class="fa-solid fa-wrench"></i> Fechamento (Reparo)</div><div class="grid grid-cols-2 gap-2 text-[10px]"><div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataFechamento"></span></div><div><span class="block font-bold text-slate-400 uppercase">Técnico</span><span class="font-semibold text-slate-700" id="detOsSolucionador"></span></div></div><div><span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Solução Aplicada</span><p class="text-xs text-slate-700 bg-white p-2 rounded border border-emerald-100 font-medium" id="detOsResolucao"></p></div></div></div></div></div>
-    <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print"><div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col"><div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm"><i class="fa-solid fa-triangle-exclamation"></i></div><div><h3 class="text-sm font-bold text-slate-900">Gerenciamento de Chamados</h3><p class="text-[10px] text-rose-600 font-semibold">Ordens de Serviço (OS) Abertas</p></div></div><button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button></div><div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos"></div></div></div>
-    <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print"><div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden"><div class="p-6"><div class="flex items-center gap-3 mb-5 border-b pb-4"><div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200"><i class="fa-solid fa-screwdriver-wrench text-lg"></i></div><div><h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3><p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p></div></div><div class="space-y-4 mb-5"><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label><select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select></div><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Ação</label><select id="intervTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"><option value="Modificação">Modificação de Projeto/Estrutura</option><option value="Manutenção Forçada">Manutenção Corretiva Forçada</option><option value="Melhoria">Melhoria / Setup Específico</option></select></div><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label><textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea></div><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label><select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select></div></div><div class="grid grid-cols-2 gap-3"><button onclick="fecharModalIntervencao()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button><button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all"><i class="fa-solid fa-check"></i> Salvar Registro</button></div></div></div></div>
-    <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print"><div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col"><div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50"><div class="flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm"><i class="fa-solid fa-list-check"></i></div><div><h3 class="text-sm font-bold text-slate-900" id="tituloResumoMaquina">Status da Máquina</h3><p class="text-[10px] text-slate-500 font-medium" id="subtituloResumoMaquina">Histórico de Verificação dos Itens</p></div></div><button onclick="fecharResumoMaquina()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button></div><div class="p-5 overflow-y-auto space-y-3 flex-grow bg-slate-50" id="listaResumoMaquina"></div></div></div>
-    <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print"><div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col"><div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50"><div class="flex items-center gap-3"><button id="btnVoltarPreditiva" onclick="voltarPreditiva()" class="hidden text-slate-400 hover:text-slate-700 p-2 -ml-2 transition-colors"><i class="fa-solid fa-arrow-left text-lg"></i></button><div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm" id="iconContainerPreditiva"><i id="iconPreditivaModal" class="fa-solid fa-calendar-check"></i></div><div><h3 id="preditivaModalTitle" class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3><p id="preditivaModalDesc" class="text-[10px] text-slate-500 font-medium">Controle de Preventivas</p></div></div><button onclick="fecharPreditiva()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button></div><div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody"><div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden"><button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50"><div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-day"></i></div><h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Amanhã</h4><span class="bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountAmanha">0 itens</span></button><button onclick="mostrarListaPreditiva('dias3')" class="nav-card bg-white border border-indigo-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-indigo-50/50"><div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-days"></i></div><h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 3 dias</h4><span class="bg-indigo-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias3">0 itens</span></button><button onclick="mostrarListaPreditiva('dias7')" class="nav-card bg-white border border-purple-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-purple-50/50"><div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calendar-week"></i></div><h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 7 dias</h4><span class="bg-purple-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias7">0 itens</span></button></div><div id="preditivaHojeMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden"></div><div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div><div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div><div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div><div id="containerDias3" class="hidden"><div id="listaAlertasDias3"></div></div><div id="containerDias7" class="hidden"><div id="listaAlertasDias7"></div></div></div></div></div>
-    <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print"><div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100"><div class="p-8 space-y-6"><h3 id="almoxModalTitle" class="text-xl font-bold text-slate-900">Cadastrar Novo Item</h3><input type="hidden" id="editAlmoxIndex"><div class="space-y-4 font-sans text-slate-600"><div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label><div class="flex gap-2 items-center"><input type="text" id="novoItemNome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"><div class="relative"><input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="absolute inset-0 opacity-0 cursor-pointer w-10 h-10"><button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all"><i class="fa-solid fa-camera text-slate-500"></i></button></div></div></div><div id="fotoPreviewContainer" class="hidden relative border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-2 flex items-center justify-between"><div class="flex items-center gap-3"><img id="fotoPreviewImg" src="" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" class="h-10 w-10 object-cover rounded-lg border"><span class="text-[10px] text-slate-500 font-medium">Foto anexada</span></div><button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1"><i class="fa-solid fa-trash"></i> Remover</button></div><div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label><textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea></div><div class="grid grid-cols-2 gap-4"><div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label><input type="text" id="novoItemCategoria" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div><div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label><input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></div></div><div class="grid grid-cols-2 gap-4"><div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label><input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div><div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label><input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></div></div><div><label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label><div id="localizacaoInputsContainer" class="space-y-2"></div><button type="button" onclick="adicionarLinhaLocalizacao()" class="text-[10px] text-blue-600 font-bold mt-2 flex items-center gap-1 hover:text-blue-700"><i class="fa-solid fa-plus"></i> Endereço</button></div></div><div class="grid grid-cols-2 gap-3 pt-3 border-t"><button onclick="fecharModalCadastroItem()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button><button onclick="confirmarCadastroItem()" class="w-full py-3 bg-[#0b132b] hover:bg-slate-850 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar</button></div></div></div></div>
-    <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print"><div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100"><div class="p-8 space-y-4"><h3 class="text-lg font-bold text-slate-900 font-sans">Registrar Movimentação</h3><div class="space-y-3"><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label><select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select></div><div class="bg-slate-50 border border-slate-150 rounded-xl p-3 text-[10px] space-y-2 text-slate-600 font-sans"><div><span class="block font-bold text-slate-400 uppercase">Descrição</span><span id="movItemDescText" class="text-slate-700 font-medium">-</span></div><div><span class="block font-bold text-slate-400 uppercase">Localização</span><span id="movItemLocalText" class="text-slate-700 font-medium">-</span></div><div class="flex gap-2 pt-1 border-t"><button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button></div></div><div class="grid grid-cols-2 gap-3 font-sans"><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label><select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select></div><div><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label><input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800"></div></div><div class="font-sans"><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label><select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select></div><div class="font-sans"><label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label><textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea></div></div><div class="grid grid-cols-2 gap-3 pt-3 border-t font-sans"><button onclick="fecharModalMovimentacao()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button><button onclick="confirmarMovimentacao()" class="w-full py-3 bg-[#047857] hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">Confirmar</button></div></div></div></div>
-    <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()"><div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()"><img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white"><button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1"><i class="fa-solid fa-xmark"></i> Fechar</button></div></div>
+    </div>
+    <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900">Gerenciamento de Chamados</h3>
+                        <p class="text-[10px] text-rose-600 font-semibold">Ordens de Serviço (OS) Abertas</p>
+                    </div>
+                </div>
+                <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos"></div>
+        </div>
+    </div>
+    <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
+            <div class="p-6">
+                <div class="flex items-center gap-3 mb-5 border-b pb-4">
+                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200">
+                        <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p>
+                    </div>
+                </div>
+                <div class="space-y-4 mb-5">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Máquina / Equipamento</label>
+                        <select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Ação</label>
+                        <select id="intervTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <option value="Modificação">Modificação de Projeto/Estrutura</option>
+                            <option value="Manutenção Forçada">Manutenção Corretiva Forçada</option>
+                            <option value="Melhoria">Melhoria / Setup Específico</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label>
+                        <textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label>
+                        <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="fecharModalIntervencao()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-check"></i> Salvar Registro
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-list-check"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-sm font-bold text-slate-900" id="tituloResumoMaquina">Status da Máquina</h3>
+                        <p class="text-[10px] text-slate-500 font-medium" id="subtituloResumoMaquina">Histórico de Verificação dos Itens</p>
+                    </div>
+                </div>
+                <button onclick="fecharResumoMaquina()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-5 overflow-y-auto space-y-3 flex-grow bg-slate-50" id="listaResumoMaquina"></div>
+        </div>
+    </div>
+    <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <button id="btnVoltarPreditiva" onclick="voltarPreditiva()" class="hidden text-slate-400 hover:text-slate-700 p-2 -ml-2 transition-colors"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+                    <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm" id="iconContainerPreditiva">
+                        <i id="iconPreditivaModal" class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div>
+                        <h3 id="preditivaModalTitle" class="text-sm font-bold text-slate-900">Agenda de Manutenção</h3>
+                        <p id="preditivaModalDesc" class="text-[10px] text-slate-500 font-medium">Controle de Preventivas</p>
+                    </div>
+                </div>
+                <button onclick="fecharPreditiva()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            <div class="p-5 overflow-y-auto space-y-6 flex-grow bg-slate-50" id="preditivaModalBody">
+                <div id="preditivaProgramacaoMenu" class="grid grid-cols-1 sm:grid-cols-3 gap-4 hidden">
+                    <button onclick="mostrarListaPreditiva('amanha')" class="nav-card bg-white border border-blue-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-blue-50/50">
+                        <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-day"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Amanhã</h4>
+                        <span class="bg-blue-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountAmanha">0 itens</span>
+                    </button>
+                    <button onclick="mostrarListaPreditiva('dias3')" class="nav-card bg-white border border-indigo-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-indigo-50/50">
+                        <div class="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-days"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 3 dias</h4>
+                        <span class="bg-indigo-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias3">0 itens</span>
+                    </button>
+                    <button onclick="mostrarListaPreditiva('dias7')" class="nav-card bg-white border border-purple-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-purple-50/50">
+                        <div class="w-10 h-10 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center text-lg">
+                            <i class="fa-solid fa-calendar-week"></i>
+                        </div>
+                        <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">Até 7 dias</h4>
+                        <span class="bg-purple-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold" id="cardCountDias7">0 itens</span>
+                    </button>
+                </div>
+                <div id="preditivaHojeMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden"></div>
+                <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
+                <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
+                <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
+                <div id="containerDias3" class="hidden"><div id="listaAlertasDias3"></div></div>
+                <div id="containerDias7" class="hidden"><div id="listaAlertasDias7"></div></div>
+            </div>
+        </div>
+    </div>
+    <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
+        <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
+            <div class="p-8 space-y-6">
+                <h3 id="almoxModalTitle" class="text-xl font-bold text-slate-900">Cadastrar Novo Item</h3>
+                <input type="hidden" id="editAlmoxIndex">
+                <div class="space-y-4 font-sans text-slate-600">
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label>
+                        <div class="flex gap-2 items-center">
+                            <input type="text" id="novoItemNome" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                            <div class="relative">
+                                <input type="file" id="novoItemImagem" accept="image/*" onchange="processarFotoItem(event)" class="absolute inset-0 opacity-0 cursor-pointer w-10 h-10">
+                                <button class="w-10 h-10 bg-slate-100 border border-slate-200 rounded-xl text-slate-500 flex items-center justify-center hover:bg-slate-200 transition-all">
+                                    <i class="fa-solid fa-camera text-slate-500"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="fotoPreviewContainer" class="hidden relative border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-2 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <img id="fotoPreviewImg" src="" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" class="h-10 w-10 object-cover rounded-lg border">
+                            <span class="text-[10px] text-slate-500 font-medium">Foto anexada</span>
+                        </div>
+                        <button onclick="removerFotoAnexada()" class="p-1 hover:bg-red-50 text-red-600 rounded-lg transition-all text-xs flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Remover
+                        </button>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label>
+                        <textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label>
+                            <input type="text" id="novoItemCategoria" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Unidade</label>
+                            <input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label>
+                            <input type="number" id="novoItemQuantidade" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Estoque Mínimo</label>
+                            <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label>
+                        <div id="localizacaoInputsContainer" class="space-y-2"></div>
+                        <button type="button" onclick="adicionarLinhaLocalizacao()" class="text-[10px] text-blue-600 font-bold mt-2 flex items-center gap-1 hover:text-blue-700"><i class="fa-solid fa-plus"></i> Endereço</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-3 border-t">
+                    <button onclick="fecharModalCadastroItem()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button onclick="confirmarCadastroItem()" class="w-full py-3 bg-[#0b132b] hover:bg-slate-850 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
+        <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
+            <div class="p-8 space-y-4">
+                <h3 class="text-lg font-bold text-slate-900 font-sans">Registrar Movimentação</h3>
+                <div class="space-y-3">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label>
+                        <select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-150 rounded-xl p-3 text-[10px] space-y-2 text-slate-600 font-sans">
+                        <div><span class="block font-bold text-slate-400 uppercase">Descrição</span><span id="movItemDescText" class="text-slate-700 font-medium">-</span></div>
+                        <div><span class="block font-bold text-slate-400 uppercase">Localização</span><span id="movItemLocalText" class="text-slate-700 font-medium">-</span></div>
+                        <div class="flex gap-2 pt-1 border-t">
+                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-3 font-sans">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label>
+                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label>
+                            <input type="number" id="movQuantidade" value="0" min="1" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 text-slate-800">
+                        </div>
+                    </div>
+                    <div class="font-sans">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Requisitante (Apenas Manutenção)</label>
+                        <select id="movResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-semibold"></select>
+                    </div>
+                    <div class="font-sans">
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Motivo / OBS</label>
+                        <textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3 pt-3 border-t font-sans">
+                    <button onclick="fecharModalMovimentacao()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                    <button onclick="confirmarMovimentacao()" class="w-full py-3 bg-[#047857] hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
+        <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
+            <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
+            <button onclick="fecharModalImagem()" class="bg-white/10 hover:bg-white/20 text-white text-xs font-bold py-2 px-5 rounded-full transition-all flex items-center gap-1">
+                <i class="fa-solid fa-xmark"></i> Fechar
+            </button>
+        </div>
+    </div>
     <div id="printArea" class="hidden"></div>
 
     <script>
@@ -373,8 +804,6 @@
         let API_URL = localStorage.getItem("checklist_google_api_url") || "";
         let currentModalMode = '';
         let currentPreditivaMenu = '';
-        
-        window.maquinasParametrizaveisData = []; // <--- Variável que recebe as maquinas dinâmicas
 
         window.onload = () => {
             if (API_URL) {
@@ -457,16 +886,14 @@
 
         function renderParametrizacaoCards() {
             const container = document.getElementById('parametrizacaoCards');
-            let maquinas = window.maquinasParametrizaveisData;
             
-            // Fallback caso não tenha nada na planilha ou esteja offline
-            if (!maquinas || maquinas.length === 0) {
-                maquinas = [
-                    { id: "forno", nome: "Forno de Recozimento Contínuo", desc: "Simulação de encharque térmico, cálculo de ciclo de produção e dimensionamento de gás.", icone: "fa-fire", cor: "text-orange-600", bg: "bg-orange-100", action: "abrirModuloForno()" }
-                ];
-            }
+            // Aqui estamos simulando o que no futuro virá da planilha (Aba Máquinas, Coluna H = "Sim").
+            // Como orientado, no momento só fixamos o Forno.
+            const maquinasParametrizaveis = [
+                { id: "forno", nome: "Forno de Recozimento Contínuo", desc: "Simulação de encharque térmico, cálculo de ciclo de produção e dimensionamento de gás.", icone: "fa-fire", cor: "text-orange-600", bg: "bg-orange-100", action: "abrirModuloForno()" }
+            ];
             
-            container.innerHTML = maquinas.map(m => `
+            container.innerHTML = maquinasParametrizaveis.map(m => `
                 <button onclick="${m.action}" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center gap-4 w-full">
                     <div class="w-12 h-12 rounded-xl ${m.bg} ${m.cor} flex items-center justify-center text-xl shrink-0">
                         <i class="fa-solid ${m.icone}"></i>
@@ -1045,10 +1472,6 @@
                 equipesData = resJson.equipes || [];
                 chamadosData = resJson.chamados || []; 
                 intervencoesData = resJson.intervencoes || [];
-                
-                // NOVA INTEGRAÇÃO: Carregando máquinas da aba Maquinas
-                window.maquinasParametrizaveisData = resJson.maquinasParametrizaveis || [];
-                
                 renderSetorCards(); atualizarKPIs();
             } catch (e) { 
                 showToast("Erro de rede. Modo Offline.", "error"); carregarChecklistMock();
@@ -1529,6 +1952,7 @@
             select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
         }
 
+        // --- SISTEMA ATUALIZADO DO FORNO ---
         function formatarTempo(totalSegundos) {
             if (!isFinite(totalSegundos) || totalSegundos < 0) return "00:00:00";
             const h = Math.floor(totalSegundos / 3600);
