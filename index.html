@@ -1879,7 +1879,7 @@
             select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
         }
 
-        // --- SISTEMA ATUALIZADO DO FORNO (PRODUÇÃO E PARÂMETROS) ---
+        // --- SISTEMA ATUALIZADO DO FORNO (PRODUÇÃO E PARÂMETROS DINÂMICOS) ---
         function formatarTempo(totalSegundos) {
             const h = Math.floor(totalSegundos / 3600);
             const m = Math.floor((totalSegundos % 3600) / 60);
@@ -1909,20 +1909,15 @@
             document.getElementById('valEspessura').innerText = espessura.toFixed(2) + ' mm'; 
             document.getElementById('valTempMedia').innerText = Math.round(tempMedia) + ' °C';
             
-            // FÓRMULAS DE ENGENHARIA (Baseadas no Excel: 32Hz = 1m a cada 64s -> 0.015625 m/s)
-            // v_m_s = (Frequencia / 32) * (1 / 64)
+            // FÓRMULAS DE ENGENHARIA (Baseadas no Excel)
             const v_m_s = (freq / 32) * (1 / 64);
             const v_m_min = v_m_s * 60;
             const v_m_h = v_m_min * 60; // Velocidade M/H
             
-            // Comprimento de ciclo por peça (Peça + Espaço) em metros
             const compTotalPeca = (compPeca + espacamento) / 1000;
+            const tempoEsteiraSegundos = 28.5 / v_m_s; 
+            const tempoCicloSegundos = compTotalPeca / v_m_s; 
             
-            // Tempos
-            const tempoEsteiraSegundos = 28.5 / v_m_s; // Tempo total na esteira
-            const tempoCicloSegundos = compTotalPeca / v_m_s; // Tempo entre cada peça
-            
-            // Produtividade
             const pecasHora = tempoCicloSegundos > 0 ? (3600 / tempoCicloSegundos) : 0;
             const pecasTurno = pecasHora * 12;
             const pecasDia = pecasHora * 24;
@@ -1931,19 +1926,28 @@
             document.getElementById('fornoVelocidade').innerText = v_m_h.toFixed(2) + ' m/h'; 
             document.getElementById('fornoTempoTotal').innerText = isFinite(tempoEsteiraSegundos) ? formatarTempo(tempoEsteiraSegundos) : "00:00:00";
             document.getElementById('fornoTempoCiclo').innerText = isFinite(tempoCicloSegundos) ? formatarTempo(tempoCicloSegundos) : "00:00:00";
-            
             document.getElementById('fornoPecasHora').innerText = Math.floor(pecasHora);
             document.getElementById('fornoPecasTurno').innerText = Math.floor(pecasTurno);
             document.getElementById('fornoPecasDia').innerText = Math.floor(pecasDia);
             
-            // Atualizando a Simulação Visual Dinâmica
+            // Atualizando a Simulação Visual
             renderVisualEsteira(compPeca, espacamento, compTotalPeca);
             
-            // LÓGICA DO FEEDBACK DINÂMICO
+            // LÓGICA DO FEEDBACK DINÂMICO E SUGESTÕES DE PARÂMETROS
             const fbBox = document.getElementById('fornoFeedbackBox');
             const fbIcon = document.getElementById('fornoFeedbackIcon');
             const fbTitle = document.getElementById('fornoFeedbackTitle');
             const fbText = document.getElementById('fornoFeedbackText');
+            
+            // Determinação do Material Selecionado e Range Ideal
+            const nomeMaterial = material === 'aco-304' ? 'Inox 304' : 'Inox 201';
+            const tempIdealMin = material === 'aco-304' ? 1050 : 1040;
+            const tempIdealMax = material === 'aco-304' ? 1090 : 1080;
+            const freqIdealMin = 30;
+            const freqIdealMax = 40;
+            const gasIdeal = 40;
+
+            const sugestaoHtm = `<br><br><span class="block mt-2 pt-2 border-t border-opacity-20 border-current"><strong>💡 Sugestão para ${nomeMaterial}:</strong> Recomendamos utilizar Gás a partir de <strong>${gasIdeal} m³/h</strong>, Frequência entre <strong>${freqIdealMin} e ${freqIdealMax} Hz</strong>, e Temperatura Média entre <strong>${tempIdealMin}°C e ${tempIdealMax}°C</strong>.</span>`;
             
             fbBox.className = "p-5 rounded-xl shadow-sm flex items-start gap-4 transition-all duration-300 border ";
             
@@ -1951,32 +1955,32 @@
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
                 fbIcon.className = "fa-solid fa-cloud-showers-heavy text-rose-600 mt-1 text-2xl";
                 fbTitle.innerText = "Risco Crítico de Oxidação (Cubas Pretas)";
-                fbText.innerText = `A vazão total de ${gas} m³/h de NH₃ dissociada gera apenas ~${Math.round(gas*0.75)} m³/h de Hidrogênio. Este volume não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e queimar (oxidar) severamente as peças.`;
-            } else if (tempMedia > 1100 && material === 'aco-304') {
+                fbText.innerHTML = `A vazão total de ${gas} m³/h de NH₃ dissociada gera apenas ~${Math.round(gas*0.75)} m³/h de Hidrogênio. Este volume não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e queimar (oxidar) severamente as peças.` + sugestaoHtm;
+            } else if (tempMedia > 1100) {
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
                 fbIcon.className = "fa-solid fa-fire text-rose-600 mt-1 text-2xl";
                 fbTitle.innerText = "Excesso de Temperatura (Limite Máx: 1100°C)";
-                fbText.innerText = `A temperatura média programada de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado para as cubas. Este nível causará queima dos óleos residuais gerando incrustação, fragilidade de grão ou derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.`;
-            } else if (tempMedia < 1030) {
+                fbText.innerHTML = `A temperatura média programada de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado para as cubas. Este nível causará queima dos óleos residuais gerando incrustação, fragilidade de grão ou derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.` + sugestaoHtm;
+            } else if (tempMedia < (tempIdealMin - 20)) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-temperature-arrow-down text-amber-600 mt-1 text-2xl";
                 fbTitle.innerText = "Recozimento Incompleto (Risco de Estourar na Prensa)";
-                fbText.innerText = `Com média de apenas ${Math.round(tempMedia)}°C, o inox 304 não atinge plenamente a zona de recristalização austenítica. A cuba sairá rígida (encruada) e possui um alto risco de rachar ou estourar no estampo.`;
+                fbText.innerHTML = `Com média de apenas ${Math.round(tempMedia)}°C, o <strong>${nomeMaterial}</strong> não atinge plenamente a zona de recristalização austenítica. A cuba sairá rígida (encruada) e possui um alto risco de rachar ou estourar no estampo.` + sugestaoHtm;
             } else if (freq > 45) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-2xl";
                 fbTitle.innerText = "Alerta: Tempo de Encharque Reduzido";
-                fbText.innerText = `A esteira está girando muito rápido (${freq.toFixed(1)} Hz). O tempo total de permanência de ${formatarTempo(tempoEsteiraSegundos)} é muito curto para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor nas zonas de recozimento. Risco de tensão não aliviada.`;
-            } else if (material === 'aco-304' && tempMedia >= 1050 && tempMedia <= 1090 && freq >= 28 && freq <= 40 && gas >= 40) {
+                fbText.innerHTML = `A esteira está girando muito rápido (${freq.toFixed(1)} Hz). O tempo total de permanência de ${formatarTempo(tempoEsteiraSegundos)} é muito curto para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor nas zonas de recozimento. Risco de tensão não aliviada.` + sugestaoHtm;
+            } else if (tempMedia >= tempIdealMin && tempMedia <= tempIdealMax && freq >= freqIdealMin && freq <= freqIdealMax && gas >= gasIdeal) {
                 fbBox.className += "bg-blue-50 border-blue-200 text-blue-900";
                 fbIcon.className = "fa-solid fa-award text-blue-600 mt-1 text-2xl";
                 fbTitle.innerText = "Parâmetros Validados (Padrão Ouro)";
-                fbText.innerText = `Setup PERFEITO! A produção estimada de ${Math.floor(pecasTurno)} peças/turno será processada com encharque térmico ideal (${formatarTempo(tempoEsteiraSegundos)}) e H₂ suficiente. As cubas sairão totalmente brilhantes, recristalizadas, prontas e flexíveis para a estampagem profunda.`;
+                fbText.innerHTML = `Setup PERFEITO para <strong>${nomeMaterial}</strong>! A produção estimada de ${Math.floor(pecasTurno)} peças/turno será processada com encharque térmico ideal (${formatarTempo(tempoEsteiraSegundos)}) e H₂ suficiente. As cubas sairão totalmente brilhantes, recristalizadas, prontas e flexíveis para a estampagem profunda.`;
             } else {
                 fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
                 fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-2xl";
                 fbTitle.innerText = "Operação Dentro dos Limites Estáveis";
-                fbText.innerText = `As curvas de temperatura média e o fluxo de amônia estão matematicamente seguros. Acompanhe a porta de saída visualmente durante a primeira hora de produção para garantir a equalização do brilho.`;
+                fbText.innerHTML = `As curvas de temperatura média e o fluxo de gás estão matematicamente seguros para o <strong>${nomeMaterial}</strong>, mas podem ser otimizados se houver instabilidade no processo de estampagem. Acompanhe a porta de saída visualmente para garantir o brilho.` + sugestaoHtm;
             }
         }
 
@@ -1990,11 +1994,9 @@
                 return;
             }
             
-            // Capacidade do Forno (Quantas peças de comprimento "compTotalPecaM" cabem em 28.5m)
             const numPecas = Math.floor(28.5 / compTotalPecaM);
             label.innerText = `${numPecas} peças simultâneas no forno`;
             
-            // Para não quebrar o navegador caso coloque tamanhos de 1mm
             const limitRender = Math.min(numPecas, 300);
             
             const pctLarguraPeca = ((compPeca/1000) / 28.5) * 100;
