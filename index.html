@@ -216,7 +216,7 @@
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
                     <h2 class="font-bold text-slate-800 text-lg">Central de Parametrização</h2>
-                    <p class="text-xs text-slate-500 mt-1">Selecione o equipamento abaixo para ajustar seus parâmetros de processo e simular produção. <br><span class="italic text-[10px] text-slate-400">(Novas máquinas podem ser adicionadas marcando "Sim" na coluna H da planilha).</span></p>
+                    <p class="text-xs text-slate-500 mt-1">Selecione o equipamento abaixo para ajustar seus parâmetros de processo e simular produção. <br><span class="italic text-[10px] text-slate-400">(As máquinas abaixo são aquelas marcadas com "Sim" na coluna H da aba Máquinas).</span></p>
                 </div>
                 <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-sm shrink-0">
                     <i class="fa-solid fa-sliders text-xl"></i>
@@ -224,7 +224,8 @@
             </div>
             
             <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+                <!-- Preenchido dinamicamente via JS -->
+            </div>
         </div>
 
         <div id="view-forno" class="fade-in hidden">
@@ -798,6 +799,7 @@
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
+        let maquinasParametrizaveisData = []; // <--- Nova Variável Global
         let currentView = 'home';
         let selectedSetor = '';
         let selectedPeriodo = '';
@@ -887,23 +889,37 @@
         function renderParametrizacaoCards() {
             const container = document.getElementById('parametrizacaoCards');
             
-            // Aqui estamos simulando o que no futuro virá da planilha (Aba Máquinas, Coluna H = "Sim").
-            // Como orientado, no momento só fixamos o Forno.
-            const maquinasParametrizaveis = [
-                { id: "forno", nome: "Forno de Recozimento Contínuo", desc: "Simulação de encharque térmico, cálculo de ciclo de produção e dimensionamento de gás.", icone: "fa-fire", cor: "text-orange-600", bg: "bg-orange-100", action: "abrirModuloForno()" }
-            ];
+            // Se não vier nada marcado como "Sim" na coluna H
+            if (maquinasParametrizaveisData.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10 font-medium">Nenhuma máquina habilitada para parametrização (Coluna H = Sim).</div>`;
+                return;
+            }
             
-            container.innerHTML = maquinasParametrizaveis.map(m => `
-                <button onclick="${m.action}" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center gap-4 w-full">
-                    <div class="w-12 h-12 rounded-xl ${m.bg} ${m.cor} flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid ${m.icone}"></i>
+            container.innerHTML = maquinasParametrizaveisData.map(m => {
+                // Inteligência para reconhecer se é o Forno ou uma máquina nova
+                const isForno = normalizar(m.nome).includes('forno');
+                
+                // Define visual e comportamento dinamicamente
+                const icone = isForno ? "fa-fire" : "fa-microchip";
+                const corText = isForno ? "text-orange-600" : "text-blue-600";
+                const corBg = isForno ? "bg-orange-100" : "bg-blue-100";
+                const desc = isForno ? "Simulação de encharque térmico, cálculo de ciclo e dimensionamento de gás." : "Ajuste de parâmetros e simulação de processo.";
+                
+                // Se for o Forno, abre a aba do forno. Se não, exibe o aviso "em desenvolvimento"
+                const action = isForno ? "abrirModuloForno()" : `showToast('Módulo de parametrização para ${m.nome} em desenvolvimento.', 'info')`;
+                
+                return `
+                <button onclick="${action}" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center gap-4 w-full">
+                    <div class="w-12 h-12 rounded-xl ${corBg} ${corText} flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid ${icone}"></i>
                     </div>
                     <div>
                         <h3 class="font-extrabold text-slate-800 text-sm mb-1">${m.nome}</h3>
-                        <span class="block text-[10px] text-slate-500 leading-relaxed">${m.desc}</span>
+                        <span class="block text-[10px] text-slate-500 leading-relaxed">${desc}</span>
                     </div>
                 </button>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function gerarOptionsEquipes(apenasManutencao = false) {
@@ -1472,6 +1488,7 @@
                 equipesData = resJson.equipes || [];
                 chamadosData = resJson.chamados || []; 
                 intervencoesData = resJson.intervencoes || [];
+                maquinasParametrizaveisData = resJson.maquinasParam || []; // <--- RECEBE OS DADOS AQUI
                 renderSetorCards(); atualizarKPIs();
             } catch (e) { 
                 showToast("Erro de rede. Modo Offline.", "error"); carregarChecklistMock();
@@ -1500,6 +1517,7 @@
                 { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
             ];
             intervencoesData = [];
+            maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; // Mock
             renderSetorCards(); atualizarKPIs();
         }
 
@@ -1976,8 +1994,6 @@
             const b5 = parseFloat(document.getElementById('fornoB5').value) || 0;
             const tempMedia = (b1 + b2 + b3 + b4 + b5) / 5;
             
-            // Removido para não quebrar a execução por falta do elemento no HTML
-            // document.getElementById('valEspessura').innerText = espessura.toFixed(2) + ' mm'; 
             document.getElementById('valTempMedia').innerText = Math.round(tempMedia) + ' °C';
             
             const v_m_s = freq > 0 ? (freq / 32) * (1 / 64) : 0;
