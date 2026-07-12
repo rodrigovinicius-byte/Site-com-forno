@@ -208,8 +208,10 @@
                     </select>
                     <input type="text" id="popSearch" oninput="renderPOPs()" placeholder="Buscar procedimentos..." class="w-full bg-white border border-slate-200 rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 shadow-sm">
                 </div>
+                <button onclick="abrirGeradorPOP()" class="w-full sm:w-auto bg-[#0b132b] hover:bg-slate-800 text-white text-sm font-bold py-2.5 px-5 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm shrink-0">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> Criar POP
+                </button>
             </div>
-            <!-- Atualizado para grid -->
             <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
         
@@ -225,8 +227,7 @@
             </div>
             
             <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Preenchido dinamicamente via JS -->
-            </div>
+                </div>
         </div>
 
         <div id="view-forno" class="fade-in hidden">
@@ -457,6 +458,49 @@
             </div>
         </div>
     </div>
+    
+    <div id="geradorPopModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-lg w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-5 border-b border-slate-100 flex items-center gap-3 bg-slate-50">
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles text-lg"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">Gerador Automático de POP</h3>
+                    <p class="text-[10px] text-slate-500 font-medium">Criação direta no Google Docs</p>
+                </div>
+            </div>
+            <div class="p-6 overflow-y-auto space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">Máquina</label>
+                    <select id="popGenMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:ring-blue-500"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">Título da Operação</label>
+                    <input type="text" id="popGenTitulo" placeholder="Ex: Limpeza do Filtro Central" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:ring-blue-500">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">Objetivo / Resumo</label>
+                    <textarea id="popGenDesc" rows="2" placeholder="Qual o propósito deste procedimento?" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:ring-blue-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">EPIs e Avisos de Segurança</label>
+                    <textarea id="popGenSeguranca" rows="2" placeholder="Ex: Usar luva anticorte, bloquear válvula geral..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:ring-blue-500 resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5">Passo a Passo (Pule uma linha para cada passo)</label>
+                    <textarea id="popGenPassos" rows="5" placeholder="1. Desligue a máquina...&#10;2. Abra a tampa lateral...&#10;3. Remova a peça..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:ring-blue-500 resize-none"></textarea>
+                </div>
+            </div>
+            <div class="p-5 border-t border-slate-100 bg-white grid grid-cols-2 gap-3">
+                <button onclick="fecharGeradorPOP()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
+                <button id="btnGerarPOP" onclick="enviarGeradorPOP()" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs shadow-md transition-all flex items-center justify-center gap-1.5">
+                    <i class="fa-solid fa-file-word"></i> Gerar Documento
+                </button>
+            </div>
+        </div>
+    </div>
+
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -892,6 +936,70 @@
         
         function abrirModuloForno() { alternarTela('forno'); }
         function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
+
+        function abrirGeradorPOP() {
+            const select = document.getElementById('popGenMaquina');
+            let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
+            select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            
+            document.getElementById('popGenTitulo').value = "";
+            document.getElementById('popGenDesc').value = "";
+            document.getElementById('popGenSeguranca').value = "";
+            document.getElementById('popGenPassos').value = "";
+            
+            document.getElementById('geradorPopModal').classList.remove('hidden');
+        }
+
+        function fecharGeradorPOP() { 
+            document.getElementById('geradorPopModal').classList.add('hidden'); 
+        }
+
+        async function enviarGeradorPOP() {
+            const maquina = document.getElementById('popGenMaquina').value;
+            const titulo = document.getElementById('popGenTitulo').value.trim();
+            const descricao = document.getElementById('popGenDesc').value.trim();
+            const seguranca = document.getElementById('popGenSeguranca').value.trim();
+            const passos = document.getElementById('popGenPassos').value.trim();
+            const btn = document.getElementById('btnGerarPOP');
+
+            if (!titulo || !passos) {
+                showToast("Preencha o título e os passos.", "error");
+                return;
+            }
+
+            btn.disabled = true; 
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Criando Google Doc...`;
+
+            const payload = {
+                maquina: maquina,
+                titulo: titulo,
+                descricao: descricao,
+                seguranca: seguranca,
+                passos: passos
+            };
+
+            if (API_URL) {
+                try {
+                    showToast("Enviando informações para o Google...", "info");
+                    await fetch(API_URL, { 
+                        method: "POST", 
+                        mode: "no-cors", 
+                        body: JSON.stringify({ tipo: "gerarPOP", dados: payload }) 
+                    });
+                    
+                    showToast("Documento gerado com sucesso!");
+                    setTimeout(() => baixarDadosDaPlanilha(), 2000);
+                } catch(e) { 
+                    showToast("Erro ao comunicar com a planilha.", "error"); 
+                }
+            } else {
+                showToast("Modo Offline. Documento não gerado.", "info");
+            }
+
+            btn.disabled = false; 
+            btn.innerHTML = `<i class="fa-solid fa-file-word"></i> Gerar Documento`;
+            fecharGeradorPOP();
+        }
 
         function renderParametrizacaoCards() {
             const container = document.getElementById('parametrizacaoCards');
@@ -1520,7 +1628,7 @@
                 chamadosData = resJson.chamados || []; 
                 intervencoesData = resJson.intervencoes || [];
                 maquinasParametrizaveisData = resJson.maquinasParam || []; 
-                popData = resJson.pops || []; // Recebe os POPs dinâmicos da planilha
+                popData = resJson.pops || []; 
                 
                 renderSetorCards(); atualizarKPIs();
             } catch (e) { 
@@ -1556,7 +1664,6 @@
             intervencoesData = [];
             maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; 
             
-            // Mock dos POPs para funcionar offline
             popData = [
                 { maquina: "Guilhotina - GUI-001", titulo: "Procedimento de LOTO", descricao: "Passo a passo para bloqueio de energias perigosas antes da manutenção.", link: "https://docs.google.com/" },
                 { maquina: "Robô Prensa", titulo: "Troca de Garra", descricao: "Instruções seguras para a substituição de garras pneumáticas.", link: "https://docs.google.com/" }
@@ -2011,176 +2118,6 @@
                 } catch(e) { showToast("Salvo localmente.", "error"); }
             }
             item.quantidade = novaQuantidade; renderAlmoxarifadoLista(); fecharModalMovimentacao();
-        }
-
-        // --- SISTEMA INTELIGENTE DE RENDERIZAÇÃO DE POPS ---
-        function renderPOPs() {
-            const container = document.getElementById('popsContainer'); 
-            const maqFilter = document.getElementById('popMaquinaFilter').value; 
-            const search = document.getElementById('popSearch').value.toLowerCase();
-            
-            const filtrados = popData.filter(p => 
-                (maqFilter === "" || p.maquina === maqFilter) && 
-                (p.titulo.toLowerCase().includes(search) || p.descricao.toLowerCase().includes(search))
-            );
-            
-            if (filtrados.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10 font-medium">Nenhum POP encontrado. Verifique se a aba "POPs" está preenchida na planilha.</div>`;
-                return;
-            }
-
-            container.innerHTML = filtrados.map(p => `
-                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="bg-amber-100 text-amber-700 text-[9px] font-bold px-2.5 py-1 rounded uppercase tracking-wider">${p.maquina}</span>
-                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100"><i class="fa-solid fa-file-word"></i></div>
-                        </div>
-                        <h4 class="font-bold text-slate-800 text-sm mb-2 leading-tight">${p.titulo}</h4>
-                        <p class="text-[11px] text-slate-500 leading-relaxed mb-4 line-clamp-3">${p.descricao || 'Sem descrição.'}</p>
-                    </div>
-                    <a href="${p.link}" target="_blank" class="w-full bg-[#0b132b] hover:bg-slate-800 text-white text-[11px] font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Documento
-                    </a>
-                </div>
-            `).join('');
-        }
-
-        // --- SISTEMA ATUALIZADO DO FORNO ---
-        function formatarTempo(totalSegundos) {
-            if (!isFinite(totalSegundos) || totalSegundos < 0) return "00:00:00";
-            const h = Math.floor(totalSegundos / 3600);
-            const m = Math.floor((totalSegundos % 3600) / 60);
-            const s = Math.round(totalSegundos % 60);
-            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        function calcularParametrosForno() {
-            const espessura = parseFloat(document.getElementById('fornoEspessura').value) || 0.50; 
-            const freq = parseFloat(document.getElementById('fornoFrequencia').value) || 0; 
-            const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value) || 0; 
-            const espacamento = parseFloat(document.getElementById('fornoEspacamento').value) || 0; 
-            const gas = parseFloat(document.getElementById('fornoGas').value) || 0;
-            const material = document.getElementById('fornoMaterial').value;
-            
-            const b1 = parseFloat(document.getElementById('fornoB1').value) || 0;
-            const b2 = parseFloat(document.getElementById('fornoB2').value) || 0;
-            const b3 = parseFloat(document.getElementById('fornoB3').value) || 0;
-            const b4 = parseFloat(document.getElementById('fornoB4').value) || 0;
-            const b5 = parseFloat(document.getElementById('fornoB5').value) || 0;
-            const tempMedia = (b1 + b2 + b3 + b4 + b5) / 5;
-            
-            document.getElementById('valTempMedia').innerText = Math.round(tempMedia) + ' °C';
-            
-            const v_m_s = freq > 0 ? (freq / 32) * (1 / 64) : 0;
-            const v_m_min = v_m_s * 60;
-            const v_m_h = v_m_min * 60; 
-            
-            const compTotalPeca = (compPeca + espacamento) / 1000;
-            const tempoEsteiraSegundos = v_m_s > 0 ? 28.5 / v_m_s : 0; 
-            const tempoCicloSegundos = v_m_s > 0 ? compTotalPeca / v_m_s : 0; 
-            
-            const pecasHora = tempoCicloSegundos > 0 ? (3600 / tempoCicloSegundos) : 0;
-            const pecasTurno = pecasHora * 12;
-            const pecasDia = pecasHora * 24;
-            
-            document.getElementById('fornoVelocidade').innerText = v_m_h.toFixed(2) + ' m/h'; 
-            document.getElementById('fornoTempoTotal').innerText = formatarTempo(tempoEsteiraSegundos);
-            document.getElementById('fornoTempoCiclo').innerText = formatarTempo(tempoCicloSegundos);
-            document.getElementById('fornoPecasHora').innerText = Math.floor(pecasHora);
-            document.getElementById('fornoPecasTurno').innerText = Math.floor(pecasTurno);
-            document.getElementById('fornoPecasDia').innerText = Math.floor(pecasDia);
-            
-            renderVisualEsteira(compPeca, espacamento, compTotalPeca);
-            
-            const fbBox = document.getElementById('fornoFeedbackBox');
-            const fbIcon = document.getElementById('fornoFeedbackIcon');
-            const fbTitle = document.getElementById('fornoFeedbackTitle');
-            const fbText = document.getElementById('fornoFeedbackText');
-            
-            const nomeMaterial = material === 'aco-304' ? 'Inox 304' : 'Inox Série 200 (J1-J5)';
-            
-            const fatorEspessura = espessura / 0.50;
-            let freqIdealMax = Math.round(40 / fatorEspessura);
-            let freqIdealMin = Math.round(30 / fatorEspessura);
-            
-            if (freqIdealMax > 60) freqIdealMax = 60;
-            if (freqIdealMin < 10) freqIdealMin = 10;
-
-            let tempBaseMin = material === 'aco-304' ? 1050 : 1040;
-            if (espessura >= 1.00) tempBaseMin += 10;
-            if (espessura >= 2.00) tempBaseMin += 15;
-            const tempIdealMax = tempBaseMin + 40;
-
-            const gasIdeal = material === 'aco-304' ? 40 : 45;
-
-            const sugestaoHtm = `<br><br><span class="block mt-2 pt-3 border-t border-blue-200/50"><strong>💡 Sugestão para chapa de ${espessura.toFixed(2)} mm (${nomeMaterial}):</strong> Recomendamos utilizar Gás a partir de <strong>${gasIdeal} m³/h</strong>, Frequência entre <strong>${freqIdealMin} e ${freqIdealMax} Hz</strong>, e Temperatura Média entre <strong>${tempBaseMin}°C e ${tempIdealMax}°C</strong>.</span>`;
-            
-            fbBox.className = "p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300 border ";
-            
-            if (gas < 30) {
-                fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
-                fbIcon.className = "fa-solid fa-cloud-showers-heavy text-rose-600 mt-1 text-3xl";
-                fbTitle.innerText = "Risco Crítico de Oxidação (Cubas Pretas)";
-                fbText.innerHTML = `A vazão de ${gas} m³/h não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e oxidar severamente as peças.` + sugestaoHtm;
-            } else if (tempMedia > 1100) {
-                fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
-                fbIcon.className = "fa-solid fa-fire text-rose-600 mt-1 text-3xl";
-                fbTitle.innerText = "Excesso de Temperatura (Limite Máx: 1100°C)";
-                fbText.innerHTML = `A temperatura de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado. Risco de fragilidade e derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.` + sugestaoHtm;
-            } else if (tempMedia < (tempBaseMin - 15)) {
-                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-temperature-arrow-down text-amber-600 mt-1 text-3xl";
-                fbTitle.innerText = "Recozimento Incompleto (Risco de Estourar na Prensa)";
-                fbText.innerHTML = `Com média de ${Math.round(tempMedia)}°C, a chapa de ${espessura.toFixed(2)}mm (${nomeMaterial}) sairá encruada e com alto risco de rachar no estampo.` + sugestaoHtm;
-            } else if (freq > (freqIdealMax + 2)) {
-                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-3xl";
-                fbTitle.innerText = "Alerta: Tempo de Encharque Reduzido";
-                fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz gera um tempo de permanência muito curto (${formatarTempo(tempoEsteiraSegundos)}) para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor.` + sugestaoHtm;
-            } else if (freq < (freqIdealMin - 5) && freq > 0) {
-                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-gauge-simple text-amber-600 mt-1 text-3xl";
-                fbTitle.innerText = "Alerta: Velocidade Lenta Demais";
-                fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz gera um encharque excessivo para a chapa de ${espessura.toFixed(2)}mm, reduzindo drasticamente a produtividade e causando granulação do metal.` + sugestaoHtm;
-            } else if (tempMedia >= tempBaseMin && tempMedia <= tempIdealMax && freq >= freqIdealMin && freq <= freqIdealMax && gas >= gasIdeal) {
-                fbBox.className += "bg-blue-50 border-blue-200 text-blue-900";
-                fbIcon.className = "fa-solid fa-award text-blue-600 mt-1 text-3xl";
-                fbTitle.innerText = "Parâmetros Validados (Padrão Ouro)";
-                fbText.innerHTML = `Setup PERFEITO para <strong>${nomeMaterial}</strong> (${espessura.toFixed(2)}mm)! O encharque (${formatarTempo(tempoEsteiraSegundos)}) e o fluxo de H₂ estão ideais. As cubas sairão recristalizadas, flexíveis e brilhantes.`;
-            } else {
-                fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
-                fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-3xl";
-                fbTitle.innerText = "Operação Dentro dos Limites Estáveis";
-                fbText.innerHTML = `As curvas de temperatura e fluxo de gás estão matematicamente seguros para o <strong>${nomeMaterial}</strong>, mas podem ser otimizados visando máxima eficiência mecânica.` + sugestaoHtm;
-            }
-        }
-
-        function renderVisualEsteira(compPeca, espacamento, compTotalPecaM) {
-            const area = document.getElementById('conveyorVisualArea'); 
-            area.innerHTML = "";
-            const label = document.getElementById('labelQtdPecasEsteira');
-            
-            if(compTotalPecaM <= 0) {
-                label.innerText = "0 peças simultâneas";
-                return;
-            }
-            
-            const numPecas = Math.floor(28.5 / compTotalPecaM);
-            label.innerText = `${numPecas} peças simultâneas no forno`;
-            
-            const limitRender = Math.min(numPecas, 300);
-            const pctLarguraPeca = ((compPeca/1000) / 28.5) * 100;
-            const pctMargem = ((espacamento/1000) / 28.5) * 100;
-            
-            for (let i = 0; i < limitRender; i++) {
-                const peca = document.createElement('div'); 
-                peca.className = "h-6 bg-slate-500 rounded-sm border border-slate-600 shadow-sm flex items-center justify-center text-[7px] text-white font-bold shrink-0 overflow-hidden"; 
-                peca.style.width = `${pctLarguraPeca}%`; 
-                peca.style.marginRight = `${pctMargem}%`; 
-                if (pctLarguraPeca > 2) peca.innerText = "AÇO";
-                area.appendChild(peca);
-            }
         }
 
         function toggleConfigModal(show) { document.getElementById('configModal').classList.toggle('hidden', !show); if (show) document.getElementById('apiInputUrl').value = API_URL; }
