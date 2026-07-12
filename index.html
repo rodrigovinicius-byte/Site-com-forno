@@ -224,8 +224,7 @@
             </div>
             
             <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Preenchido dinamicamente via JS -->
-            </div>
+                </div>
         </div>
 
         <div id="view-forno" class="fade-in hidden">
@@ -799,7 +798,7 @@
         let almoxarifadoData = [];
         let popData = [];
         let equipesData = [];
-        let maquinasParametrizaveisData = []; // <--- Nova Variável Global
+        let maquinasParametrizaveisData = [];
         let currentView = 'home';
         let selectedSetor = '';
         let selectedPeriodo = '';
@@ -888,26 +887,17 @@
 
         function renderParametrizacaoCards() {
             const container = document.getElementById('parametrizacaoCards');
-            
-            // Se não vier nada marcado como "Sim" na coluna H
             if (maquinasParametrizaveisData.length === 0) {
                 container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10 font-medium">Nenhuma máquina habilitada para parametrização (Coluna H = Sim).</div>`;
                 return;
             }
-            
             container.innerHTML = maquinasParametrizaveisData.map(m => {
-                // Inteligência para reconhecer se é o Forno ou uma máquina nova
                 const isForno = normalizar(m.nome).includes('forno');
-                
-                // Define visual e comportamento dinamicamente
                 const icone = isForno ? "fa-fire" : "fa-microchip";
                 const corText = isForno ? "text-orange-600" : "text-blue-600";
                 const corBg = isForno ? "bg-orange-100" : "bg-blue-100";
                 const desc = isForno ? "Simulação de encharque térmico, cálculo de ciclo e dimensionamento de gás." : "Ajuste de parâmetros e simulação de processo.";
-                
-                // Se for o Forno, abre a aba do forno. Se não, exibe o aviso "em desenvolvimento"
                 const action = isForno ? "abrirModuloForno()" : `showToast('Módulo de parametrização para ${m.nome} em desenvolvimento.', 'info')`;
-                
                 return `
                 <button onclick="${action}" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center gap-4 w-full">
                     <div class="w-12 h-12 rounded-xl ${corBg} ${corText} flex items-center justify-center text-xl shrink-0">
@@ -922,22 +912,40 @@
             }).join('');
         }
 
-        function gerarOptionsEquipes(apenasManutencao = false) {
-            if (!equipesData || equipesData.length === 0) return `<option value="Sem Equipe">Nenhum colaborador cadastrado</option>`;
+        // --- SISTEMA INTELIGENTE DE FILTRAGEM DE EQUIPES POR SETOR ---
+        function gerarOptionsEquipes(setorAlvo = "") {
+            if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador</option>`;
             let opcoes = `<option value="">Selecione o Nome...</option>`;
+            let setorNorm = normalizar(setorAlvo);
             let encontrouAlguem = false;
+
             equipesData.forEach(eq => {
-                const setor = eq.setor;
-                const setNorm = normalizar(setor);
-                if (apenasManutencao && !setNorm.includes('manutencao') && !setNorm.includes('manutenção')) return;
-                eq.membros.forEach(m => {
-                    const nomeCompleto = `${m} - ${setor}`;
-                    opcoes += `<option value="${nomeCompleto}">${nomeCompleto}</option>`;
-                    encontrouAlguem = true;
-                });
+                const eqSetorNorm = normalizar(eq.setor);
+                let podeAdicionar = false;
+
+                // Regra de Negócio:
+                // Se o setor destino for manutenção -> Mostra só manutenção
+                // Se o setor destino for produção -> Mostra produção + manutenção
+                // Caso contrário (vazio, ou setor geral) -> Mostra todos.
+                if (setorNorm.includes('manutencao')) {
+                    if (eqSetorNorm.includes('manutencao')) podeAdicionar = true;
+                } else if (setorNorm.includes('producao')) {
+                    if (eqSetorNorm.includes('producao') || eqSetorNorm.includes('manutencao')) podeAdicionar = true;
+                } else {
+                    podeAdicionar = true;
+                }
+
+                if (podeAdicionar) {
+                    eq.membros.forEach(m => {
+                        const nomeCompleto = `${m} - ${eq.setor}`;
+                        opcoes += `<option value="${nomeCompleto}">${nomeCompleto}</option>`;
+                        encontrouAlguem = true;
+                    });
+                }
             });
-            if (apenasManutencao && !encontrouAlguem) {
-                return `<option value="">Cadastre equipe de Manutenção na aba 'Equipes'</option><option value="Sistema - Fallback">Modo de Emergência</option>`;
+
+            if (!encontrouAlguem) {
+                return `<option value="">Sem equipe configurada para este setor</option><option value="Sistema - Fallback">Modo de Emergência</option>`;
             }
             return opcoes;
         }
@@ -948,7 +956,7 @@
             select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
             if(maquinaPre) select.value = maquinaPre;
             document.getElementById('chamadoDefeito').value = defeitoPre;
-            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(false);
+            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(''); // Chamados permite qualquer um
             document.getElementById('chamadoModal').classList.remove('hidden');
         }
         function fecharModalChamado() { document.getElementById('chamadoModal').classList.add('hidden'); }
@@ -973,13 +981,25 @@
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
         }
 
+        // --- VALIDAÇÃO INTELIGENTE DO STATUS DO CHECKLIST ---
         function verificarStatusChamado(selectElement) {
+            const linha = selectElement.closest(".row-check");
+            const inputOperador = linha.querySelector(".operador-inp");
+            
+            // Trava: Exige operador antes do Status
+            if (!inputOperador.value.trim()) {
+                showToast("Selecione o operador antes de marcar o status.", "error");
+                selectElement.value = ""; // Reseta para o "Status..." vazio
+                inputOperador.focus();
+                return;
+            }
+
             if (selectElement.value === "Problema") {
-                const linha = selectElement.closest(".row-check");
                 const maquina = linha.getAttribute("data-maquina");
                 const item = linha.getAttribute("data-item");
                 const obsValue = linha.querySelector(".obs-inp").value.trim();
-                abrirModalChamado(maquina, `Falha detectada: ${item}${obsValue ? ` | Obs: ${obsValue}` : ""}`);
+                // Já abre o modal de chamado pré-preenchido
+                abrirModalChamado(maquina, `Falha no checklist - Item: '${item}'${obsValue ? ` | Obs: ${obsValue}` : ""}`);
             }
         }
 
@@ -1005,7 +1025,7 @@
                                 <div class="flex flex-col sm:flex-row items-end gap-3">
                                     <div class="w-full">
                                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico Responsável</label>
-                                        <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold">${gerarOptionsEquipes(true)}</select>
+                                        <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
                                     </div>
                                     <button id="btn-fechar-os-${c.id}" onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Dar Baixa</button>
                                 </div>
@@ -1047,13 +1067,12 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
-        // --- SISTEMA DE INTERVENÇÕES INDIRETAS E OS FECHADAS ---
         function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
             select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
             document.getElementById('intervDescricao').value = "";
-            document.getElementById('intervResponsavel').innerHTML = gerarOptionsEquipes(true); 
+            document.getElementById('intervResponsavel').innerHTML = gerarOptionsEquipes('manutencao'); 
             document.getElementById('intervencaoModal').classList.remove('hidden');
         }
         function fecharModalIntervencao() { document.getElementById('intervencaoModal').classList.add('hidden'); }
@@ -1170,7 +1189,8 @@
                         const dateL = new Date(ultLog.data);
                         const dStr = dateL.toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
                         const hStr = dateL.toLocaleTimeString('pt-BR', {hour: '2-digit', minute: '2-digit'});
-                        statusStr = `por ${ultLog.operador} em ${dStr} às ${hStr}`;
+                        let flagProblema = ultLog.status === "Problema" ? " <span class='text-rose-600 font-bold'>(Problema)</span>" : "";
+                        statusStr = `por ${ultLog.operador} em ${dStr} às ${hStr}${flagProblema}`;
                     }
                     return { nome: it.item, status: statusStr };
                 });
@@ -1259,9 +1279,10 @@
                     detalhesH = `<div class="mt-3 text-[9px] text-slate-500 font-semibold border-t border-slate-100 pt-2 space-y-1">`;
                     a.subItensStatus.forEach(si => {
                         let isPendente = si.status === "Pendente";
+                        let isProb = si.status.includes("Problema");
                         let iconSi = isPendente 
                             ? `<i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1.5"></i>`
-                            : `<i class="fa-solid fa-user-check text-slate-300 mr-1.5"></i>`;
+                            : (isProb ? `<i class="fa-solid fa-circle-xmark text-rose-500 mr-1.5"></i>` : `<i class="fa-solid fa-user-check text-slate-300 mr-1.5"></i>`);
                         let textCor = isPendente ? "text-rose-600 font-bold" : "text-slate-600 font-medium";
                         detalhesH += `<div class="flex items-start gap-0.5">${iconSi}<div><span class="text-slate-800 font-bold">${si.nome}:</span> <span class="${textCor}">${isPendente ? 'Pendente' : 'Último registro ' + si.status}</span></div></div>`;
                     });
@@ -1415,36 +1436,44 @@
 
         function fecharPreditiva() { document.getElementById('preditivaModal').classList.add('hidden'); }
 
-        // --- RESUMO / STATUS GERAL DA MÁQUINA ---
+        // --- RESUMO / STATUS GERAL DA MÁQUINA (ATUALIZADO COM OS PROBLEMAS) ---
         function abrirResumoMaquina(maquina, setor, periodicidade) {
             const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maquina) && normalizar(s.setor) === normalizar(setor) && normalizar(s.periodicidade) === normalizar(periodicidade));
             const itensDaMaquina = originalDatabase.filter(i => normalizar(i.maquina) === normalizar(maquina) && normalizar(i.setor) === normalizar(setor) && normalizar(i.periodicidade) === normalizar(periodicidade));
             const container = document.getElementById('listaResumoMaquina');
             document.getElementById('tituloResumoMaquina').innerText = `Status: ${maquina}`;
             document.getElementById('subtituloResumoMaquina').innerText = `Checklist ${periodicidade} · Setor ${setor}`;
+            
             if(itensDaMaquina.length === 0) {
                 container.innerHTML = `<div class="text-center text-slate-400 py-4 text-sm">Sem itens para exibir.</div>`;
             } else {
                 container.innerHTML = itensDaMaquina.map(it => {
                     let badge = `<span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
                     let info = `<div class="text-[9px] text-slate-400 italic">Nunca verificado.</div>`;
+                    
                     if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[it.item] && statusAtivo.itensStatus[it.item].length > 0) {
                         const histArray = statusAtivo.itensStatus[it.item];
                         if(normalizar(periodicidade).includes('diar') || normalizar(periodicidade).includes('intrad')) {
                             const hojeStr = new Date().toLocaleDateString('pt-BR');
                             const regsHoje = histArray.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === hojeStr).slice(0, 10);
+                            
                             if (regsHoje.length > 0) {
                                 const ult = regsHoje[0];
                                 const horas = it.tempoReanalise ? parseFloat(it.tempoReanalise) : 2;
                                 let atrasado = new Date() > new Date(new Date(ult.data).getTime() + (horas * 60 * 60 * 1000));
+                                
                                 if (atrasado) {
                                     badge = `<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
                                 } else {
                                     badge = `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
                                 }
+                                
                                 info = `<div class="text-[9px] text-slate-500 font-semibold mt-1.5 space-y-0.5 border-l-2 border-blue-400 pl-2">
                                         <div class="text-blue-600 font-bold mb-1">Registros de Hoje (${regsHoje.length}/10):</div>
-                                        ${regsHoje.map((h, idx) => `<div><span class="text-slate-400">${idx+1}º</span> Feito por <span class="text-slate-700">${h.operador}</span> às ${new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`).join('')}
+                                        ${regsHoje.map((h, idx) => {
+                                            let textProb = h.status === "Problema" ? `<span class="text-rose-600 font-bold ml-1 bg-rose-50 px-1 rounded border border-rose-100"><i class="fa-solid fa-circle-xmark"></i> Problema: ${h.obs || "Registrado e encaminhado"}</span>` : `<span class="text-emerald-600 font-bold ml-1"><i class="fa-solid fa-check"></i> OK</span>`;
+                                            return `<div><span class="text-slate-400">${idx+1}º</span> Feito por <span class="text-slate-700">${h.operador}</span> às ${new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})} ${textProb}</div>`;
+                                        }).join('')}
                                        </div>`;
                             } else {
                                 info = `<div class="text-[9px] text-slate-400 font-medium mt-1"><i class="fa-solid fa-clock text-amber-500"></i> Nenhum registro hoje</div>`;
@@ -1455,12 +1484,15 @@
                             const inter = diasParaPeriodicidade(periodicidade);
                             const dataProx = new Date(dateL.getFullYear(), dateL.getMonth(), dateL.getDate() + inter);
                             const hojeZero = new Date(); hojeZero.setHours(0,0,0,0);
+                            
                             if (dataProx < hojeZero) {
                                 badge = `<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
                             } else {
                                 badge = `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
                             }
-                            info = `<div class="text-[10px] text-slate-500 font-medium mt-1">Realizado por <span class="font-bold text-slate-700">${ult.operador}</span> em ${dateL.toLocaleDateString('pt-BR')} às ${dateL.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>`;
+                            
+                            let textProb = ult.status === "Problema" ? `<br><span class="text-rose-600 font-bold mt-1 inline-block bg-rose-50 px-1.5 py-0.5 rounded border border-rose-100"><i class="fa-solid fa-circle-xmark"></i> Problema: ${ult.obs || "Falha identificada e encaminhada."}</span>` : ``;
+                            info = `<div class="text-[10px] text-slate-500 font-medium mt-1">Realizado por <span class="font-bold text-slate-700">${ult.operador}</span> em ${dateL.toLocaleDateString('pt-BR')} às ${dateL.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}${textProb}</div>`;
                         }
                     }
                     return `
@@ -1488,7 +1520,7 @@
                 equipesData = resJson.equipes || [];
                 chamadosData = resJson.chamados || []; 
                 intervencoesData = resJson.intervencoes || [];
-                maquinasParametrizaveisData = resJson.maquinasParam || []; // <--- RECEBE OS DADOS AQUI
+                maquinasParametrizaveisData = resJson.maquinasParam || []; 
                 renderSetorCards(); atualizarKPIs();
             } catch (e) { 
                 showToast("Erro de rede. Modo Offline.", "error"); carregarChecklistMock();
@@ -1510,14 +1542,18 @@
             const agora = new Date();
             const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString();
             const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
+            
             checklistStatus = [
-                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", historico: [{data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção"}], vencido: false, itensStatus: { "Verificar Oleo Canola": [{ data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção" }] } }
+                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", vencido: false,
+                  historico: [{data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", status: "Problema", obs: "Correia desfiando na lateral direita."}],
+                  itensStatus: { "Verificar Oleo Canola": [{ data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", status: "Problema", obs: "Correia desfiando na lateral direita." }] } 
+                }
             ];
             chamadosData = [
                 { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
             ];
             intervencoesData = [];
-            maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; // Mock
+            maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; 
             renderSetorCards(); atualizarKPIs();
         }
 
@@ -1578,7 +1614,8 @@
             }
             const agrupado = {};
             filtrados.forEach(d => { if(!agrupado[d.maquina]) agrupado[d.maquina] = []; agrupado[d.maquina].push(d); });
-            const optionsEquipesSelect = gerarOptionsEquipes(false);
+            const optionsEquipesSelect = gerarOptionsEquipes(selectedSetor); // Aplica a lógica inteligente
+            
             for (let maq in agrupado) {
                 const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(selectedSetor) && matchPeriodicidade(s.periodicidade, periodoId));
                 let badgeHeader = ""; const isDiario = (periodoId === 'diaria');
@@ -1642,7 +1679,8 @@
                     if (!isAtrasado) {
                         botaoAcaoHtml = `<button onclick="registrarItemIndividual(this)" class="btn-registrar w-full bg-emerald-100 hover:bg-emerald-200 text-emerald-700 border border-emerald-200 text-xs font-bold py-1.5 px-3 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-colors"><i class="fa-solid fa-check text-[10px]"></i> Verificado</button>`;
                     }
-                    html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><select class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:ring-blue-500">${optionsEquipesSelect}</select></td><td class="p-4 align-middle"><select onchange="verificarStatusChamado(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle">${headerBotaoInfo}${botaoAcaoHtml}</td></tr>`;
+                    // Adicionado o disabled na option default de status
+                    html += `<tr class="row-check hover:bg-slate-50/40" data-maquina="${maq}" data-item="${item.item}" data-periodicidade="${item.periodicidade}"><td class="p-4 align-middle"><span class="block font-bold text-slate-800 text-xs">${item.item}</span>${badgeObs}${metaHistorico}</td><td class="p-4 align-middle"><select class="operador-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-semibold focus:ring-blue-500">${optionsEquipesSelect}</select></td><td class="p-4 align-middle"><select onchange="verificarStatusChamado(this)" class="status-sel w-full border border-slate-200 bg-white rounded-lg px-2.5 py-1.5 text-xs font-bold text-slate-700"><option value="" disabled selected>Status...</option><option value="OK">OK</option><option value="Problema">Problema</option></select></td><td class="p-4 align-middle"><input type="text" class="obs-inp w-full bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs" placeholder="Descreva problemas..."></td><td class="p-4 text-center align-middle">${headerBotaoInfo}${botaoAcaoHtml}</td></tr>`;
                 });
                 html += `</tbody></table></div></div>`;
                 container.innerHTML += html;
@@ -1652,11 +1690,19 @@
 
         async function registrarItemIndividual(botao) {
             const linha = botao.closest(".row-check");
+            
             const inputOperador = linha.querySelector(".operador-inp");
             const operadorValue = inputOperador.value.trim();
             if (!operadorValue) { showToast("Selecione seu nome na lista (Operador).", "error"); inputOperador.focus(); return; }
+            
+            const statusValue = linha.querySelector(".status-sel").value;
+            if (!statusValue) { showToast("Selecione o status do checklist (OK ou Problema).", "error"); return; }
+            
+            const obsValue = linha.querySelector(".obs-inp").value.trim();
+
             botao.disabled = true;
             botao.innerHTML = `<i class="fa-solid fa-spinner animate-spin text-[10px]"></i>`;
+            
             const payload = {
                 tipo: "checklist",
                 dados: [{
@@ -1664,21 +1710,26 @@
                     item: linha.getAttribute("data-item"),
                     setor: selectedSetor,
                     periodicidade: linha.getAttribute("data-periodicidade"),
-                    status: linha.querySelector(".status-sel").value,
+                    status: statusValue,
                     operador: operadorValue,
-                    obs: linha.querySelector(".obs-inp").value.trim(),
+                    obs: obsValue,
                     proximaRevisao: ""
                 }]
             };
+            
             try {
                 if (API_URL) await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
                 showToast(`Gravado: ${payload.dados[0].item}`);
                 botao.innerHTML = `<i class="fa-solid fa-check text-[10px]"></i> Verificado`;
                 botao.className = "btn-registrar w-full bg-emerald-100 text-emerald-700 border border-emerald-200 text-xs font-bold py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 transition-colors";
+                
                 linha.querySelector(".obs-inp").value = "";
+                linha.querySelector(".status-sel").value = ""; 
+                
                 const dataISO = new Date().toISOString();
                 const statusIndex = checklistStatus.findIndex(s => normalizar(s.maquina) === normalizar(payload.dados[0].maquina) && normalizar(s.setor) === normalizar(selectedSetor) && normalizar(s.periodicidade) === normalizar(selectedPeriodo));
-                const novaEntry = { data: dataISO, operador: operadorValue };
+                const novaEntry = { data: dataISO, operador: operadorValue, status: statusValue, obs: obsValue }; // Agora injeta no front
+                
                 if (statusIndex !== -1) {
                     checklistStatus[statusIndex].ultimoRegistro = dataISO;
                     checklistStatus[statusIndex].operador = operadorValue;
@@ -1921,7 +1972,7 @@
             const select = document.getElementById('movItemSelect');
             select.innerHTML = almoxarifadoData.map(i => `<option value="${i.id}">${i.nome} (${i.quantidade} ${i.unidade})</option>`).join('');
             if (preSelectedId) select.value = preSelectedId;
-            document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes(true);
+            document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes('manutencao');
             atualizarInfoItemMov(); document.getElementById('movimentacaoModal').classList.remove('hidden');
         }
 
