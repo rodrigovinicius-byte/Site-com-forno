@@ -225,7 +225,7 @@
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Material da Peça</label>
                                 <select id="fornoMaterial" onchange="calcularParametrosForno()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium">
                                     <option value="aco-304">Aço Inoxidável AISI 304</option>
-                                    <option value="aco-201">Aço Inoxidável AISI 201</option>
+                                    <option value="aco-201">Aço Inox Série 200 (J1, J4, J5)</option>
                                 </select>
                             </div>
                             <div class="grid grid-cols-2 gap-3">
@@ -298,40 +298,12 @@
                 </div>
                 
                 <div class="lg:col-span-8 space-y-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-layer-group text-blue-600"></i> Diagrama de Encharque e Simulação (Total: 28,50 m)
-                        </h3>
-                        
-                        <div class="flex border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-white">
-                            <div class="bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 5.26%;">
-                                <span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Ent</span>
-                                <span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span>
-                            </div>
-                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 22.81%;">
-                                <span class="uppercase text-[9px] tracking-wider">Pré-Aq.</span>
-                                <span class="text-[8px] font-medium text-amber-200 mt-1">6,5m</span>
-                            </div>
-                            <div class="bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 15.79%;">
-                                <span class="animate-pulse uppercase text-[9px] tracking-wider">Recoz.</span>
-                                <span class="text-[8px] font-medium text-red-200 mt-1">4,5m</span>
-                            </div>
-                            <div class="bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 50.88%;">
-                                <span class="uppercase text-[9px] tracking-wider">Resfriamento (H₂ + N₂)</span>
-                                <span class="text-[8px] font-medium text-blue-200 mt-1">14,5m</span>
-                            </div>
-                            <div class="bg-slate-800 flex flex-col justify-center p-1" style="width: 5.26%;">
-                                <span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Sai</span>
-                                <span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span>
-                            </div>
-                        </div>
-                        
-                        <div class="border rounded-xl p-3 bg-slate-100">
-                            <div class="flex justify-between items-end mb-2">
-                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Simulação da Esteira na Capacidade Máxima</span>
-                                <span id="labelQtdPecasEsteira" class="text-[9px] font-bold text-slate-500 bg-white px-2 py-0.5 border rounded">0 peças simultâneas</span>
-                            </div>
-                            <div class="h-10 w-full bg-[#cbd5e1] rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
+                    
+                    <div id="fornoFeedbackBox" class="bg-blue-50 border border-blue-200 text-blue-800 p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300">
+                        <i id="fornoFeedbackIcon" class="fa-solid fa-award text-blue-600 mt-1 text-3xl"></i>
+                        <div>
+                            <h4 id="fornoFeedbackTitle" class="font-bold text-base mb-1.5 uppercase tracking-wider">Aguardando Parâmetros</h4>
+                            <p id="fornoFeedbackText" class="text-sm leading-relaxed font-medium">Insira os dados de produção para visualizar as restrições mecânicas e químicas do recozimento.</p>
                         </div>
                     </div>
                     
@@ -368,12 +340,74 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div id="fornoFeedbackBox" class="bg-blue-50 border border-blue-200 text-blue-800 p-5 rounded-xl shadow-sm flex items-start gap-4 transition-all duration-300">
-                        <i id="fornoFeedbackIcon" class="fa-solid fa-award text-blue-600 mt-1 text-2xl"></i>
-                        <div>
-                            <h4 id="fornoFeedbackTitle" class="font-bold text-sm mb-1.5 uppercase tracking-wider">Aguardando Parâmetros</h4>
-                            <p id="fornoFeedbackText" class="text-xs leading-relaxed font-medium">Insira os dados de produção para visualizar as restrições mecânicas e químicas do recozimento.</p>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-layer-group text-blue-600"></i> Diagrama de Encharque e Simulação (Total: 28,50 m)
+                        </h3>
+                        
+                        <div class="flex border border-slate-300 rounded-xl overflow-hidden h-24 shadow-md text-center font-bold text-white">
+                            <div class="bg-slate-800 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 5.26%;">
+                                <span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Ent</span>
+                                <span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span>
+                            </div>
+                            <div class="bg-gradient-to-r from-amber-500 to-orange-500 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 22.81%;">
+                                <span class="uppercase text-[9px] tracking-wider">Pré-Aq.</span>
+                                <span class="text-[8px] font-medium text-amber-200 mt-1">6,5m</span>
+                            </div>
+                            <div class="bg-gradient-to-r from-red-600 to-red-700 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 15.79%;">
+                                <span class="animate-pulse uppercase text-[9px] tracking-wider">Recoz.</span>
+                                <span class="text-[8px] font-medium text-red-200 mt-1">4,5m</span>
+                            </div>
+                            <div class="bg-gradient-to-r from-cyan-600 to-blue-600 flex flex-col justify-center border-r border-slate-900 p-1" style="width: 50.88%;">
+                                <span class="uppercase text-[9px] tracking-wider">Resfriamento (H₂ + N₂)</span>
+                                <span class="text-[8px] font-medium text-blue-200 mt-1">14,5m</span>
+                            </div>
+                            <div class="bg-slate-800 flex flex-col justify-center p-1" style="width: 5.26%;">
+                                <span class="uppercase text-[8px] sm:text-[9px] tracking-tight">Sai</span>
+                                <span class="text-[7px] font-medium text-slate-300 mt-1">1,5m</span>
+                            </div>
+                        </div>
+                        
+                        <div class="border rounded-xl p-3 bg-slate-100">
+                            <div class="flex justify-between items-end mb-2">
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">Simulação da Esteira na Capacidade Máxima</span>
+                                <span id="labelQtdPecasEsteira" class="text-[9px] font-bold text-slate-500 bg-white px-2 py-0.5 border rounded">0 peças simultâneas</span>
+                            </div>
+                            <div class="h-10 w-full bg-[#cbd5e1] rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
+                            <i class="fa-solid fa-flask text-indigo-600"></i> Físico-Química do Recozimento & Atmosfera
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-slate-700 uppercase">1. Ação dos Gases (Amônia Quebrada)</h4>
+                                <p class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                                    <strong class="text-indigo-600">Hidrogênio (H₂):</strong> É o agente redutor. Sua função principal é "roubar" o oxigênio da superfície da chapa quente e devorar qualquer oxigênio atmosférico que tente entrar. Quanto maior a vazão de H₂, mais clara e brilhante a cuba sairá.<br><br>
+                                    <strong class="text-blue-600">Nitrogênio (N₂):</strong> É o gás de varredura. Sendo inerte (não reage), ele garante pressão positiva dentro da mufla para "empurrar" o oxigênio para fora da porta de saída.
+                                </p>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-slate-700 uppercase">2. Aço 304 vs Série 200 (J1-J5)</h4>
+                                <p class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                                    O <strong>Aço 304</strong> possui alta carga de <strong>Níquel (8 a 10.5%)</strong>, um material nobre altamente resistente à oxidação térmica. <br>Já a <strong>Série 200 (J1, J4, J5)</strong> substitui o Níquel por <strong>Manganês (8.5 a 11.5%)</strong>. O Manganês oxida com facilidade impressionante. Por isso, a série 200 exige controles atmosféricos mais rígidos e é mais propensa a sair "amarelada" ou "carepada" se a vazão de gás oscilar.
+                                </p>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-slate-700 uppercase">3. Tempo de Estabilização</h4>
+                                <p class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                                    Para ligar a produção ou transitar parâmetros (especialmente para a crítica série 200), o forno exige estabilização. O tempo médio para a atmosfera expulsar todo o O₂ e estabilizar o ponto de orvalho (dew point) do H₂ é de <strong>45 a 60 minutos</strong> (tempo de 1 ciclo completo) passando peças de sacrifício.
+                                </p>
+                            </div>
+                            <div class="space-y-3">
+                                <h4 class="text-xs font-bold text-slate-700 uppercase">4. Prevenção de Oxidação na Saída</h4>
+                                <p class="text-[11px] text-slate-600 leading-relaxed text-justify">
+                                    Se a cuba sair manchada/preta, a falha principal não é a temperatura, mas a <strong>intrusão de oxigênio</strong>. A oxidação ocorre pelo calor do material em contato direto com o ar da fábrica. <strong>Regra de ouro:</strong> Garanta que a <span class="font-bold text-rose-600">cortina de tiras térmicas na saída esteja encostada e abaixada</span> após a passagem de cada peça para bloquear o retrocesso de ar atmosférico.
+                                </p>
+                            </div>
                         </div>
                     </div>
                     
@@ -850,7 +884,6 @@
             return opcoes;
         }
 
-        // --- SISTEMA DE CHAMADOS E INTERVENÇÕES ---
         function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
             const select = document.getElementById('chamadoMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -1879,7 +1912,7 @@
             select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
         }
 
-        // --- SISTEMA ATUALIZADO DO FORNO (PRODUÇÃO E PARÂMETROS DINÂMICOS) ---
+        // --- SISTEMA ATUALIZADO DO FORNO (PRODUÇÃO E PARÂMETROS DINÂMICOS COM ESPESSURA) ---
         function formatarTempo(totalSegundos) {
             const h = Math.floor(totalSegundos / 3600);
             const m = Math.floor((totalSegundos % 3600) / 60);
@@ -1912,7 +1945,7 @@
             // FÓRMULAS DE ENGENHARIA (Baseadas no Excel)
             const v_m_s = (freq / 32) * (1 / 64);
             const v_m_min = v_m_s * 60;
-            const v_m_h = v_m_min * 60; // Velocidade M/H
+            const v_m_h = v_m_min * 60; 
             
             const compTotalPeca = (compPeca + espacamento) / 1000;
             const tempoEsteiraSegundos = 28.5 / v_m_s; 
@@ -1939,48 +1972,67 @@
             const fbTitle = document.getElementById('fornoFeedbackTitle');
             const fbText = document.getElementById('fornoFeedbackText');
             
-            // Determinação do Material Selecionado e Range Ideal
-            const nomeMaterial = material === 'aco-304' ? 'Inox 304' : 'Inox 201';
-            const tempIdealMin = material === 'aco-304' ? 1050 : 1040;
-            const tempIdealMax = material === 'aco-304' ? 1090 : 1080;
-            const freqIdealMin = 30;
-            const freqIdealMax = 40;
-            const gasIdeal = 40;
-
-            const sugestaoHtm = `<br><br><span class="block mt-2 pt-2 border-t border-opacity-20 border-current"><strong>💡 Sugestão para ${nomeMaterial}:</strong> Recomendamos utilizar Gás a partir de <strong>${gasIdeal} m³/h</strong>, Frequência entre <strong>${freqIdealMin} e ${freqIdealMax} Hz</strong>, e Temperatura Média entre <strong>${tempIdealMin}°C e ${tempIdealMax}°C</strong>.</span>`;
+            // Determinação do Material Selecionado
+            const nomeMaterial = material === 'aco-304' ? 'Inox 304' : 'Inox 201 (Série J)';
             
-            fbBox.className = "p-5 rounded-xl shadow-sm flex items-start gap-4 transition-all duration-300 border ";
+            // CÁLCULO DINÂMICO DOS IDEAIS BASEADO NA ESPESSURA
+            // Exemplo: 0.50mm = fator 1 (freq ideal 30 a 40). 1.00mm = fator 2 (freq ideal 15 a 20).
+            const fatorEspessura = espessura / 0.50;
+            let freqIdealMax = Math.round(40 / fatorEspessura);
+            let freqIdealMin = Math.round(30 / fatorEspessura);
+            
+            // Garantindo limites físicos da máquina
+            if (freqIdealMax > 60) freqIdealMax = 60;
+            if (freqIdealMin < 10) freqIdealMin = 10;
+
+            // A temperatura ideal também precisa subir ligeiramente se a chapa for mais grossa
+            let tempBaseMin = material === 'aco-304' ? 1050 : 1040;
+            if (espessura >= 1.00) tempBaseMin += 10;
+            if (espessura >= 2.00) tempBaseMin += 15;
+            const tempIdealMax = tempBaseMin + 40;
+
+            // Série 200 precisa de mais estabilidade de gás devido ao Manganês
+            const gasIdeal = material === 'aco-304' ? 40 : 45;
+
+            const sugestaoHtm = `<br><br><span class="block mt-2 pt-3 border-t border-blue-200/50"><strong>💡 Sugestão para chapa de ${espessura.toFixed(2)} mm (${nomeMaterial}):</strong> Recomendamos utilizar Gás a partir de <strong>${gasIdeal} m³/h</strong>, Frequência entre <strong>${freqIdealMin} e ${freqIdealMax} Hz</strong>, e Temperatura Média entre <strong>${tempBaseMin}°C e ${tempIdealMax}°C</strong>.</span>`;
+            
+            fbBox.className = "p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300 border ";
             
             if (gas < 30) {
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
-                fbIcon.className = "fa-solid fa-cloud-showers-heavy text-rose-600 mt-1 text-2xl";
+                fbIcon.className = "fa-solid fa-cloud-showers-heavy text-rose-600 mt-1 text-3xl";
                 fbTitle.innerText = "Risco Crítico de Oxidação (Cubas Pretas)";
-                fbText.innerHTML = `A vazão total de ${gas} m³/h de NH₃ dissociada gera apenas ~${Math.round(gas*0.75)} m³/h de Hidrogênio. Este volume não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e queimar (oxidar) severamente as peças.` + sugestaoHtm;
+                fbText.innerHTML = `A vazão total de ${gas} m³/h de NH₃ dissociada gera apenas ~${Math.round(gas*0.75)} m³/h de Hidrogênio. Este volume não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e oxidar severamente as peças.` + sugestaoHtm;
             } else if (tempMedia > 1100) {
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
-                fbIcon.className = "fa-solid fa-fire text-rose-600 mt-1 text-2xl";
+                fbIcon.className = "fa-solid fa-fire text-rose-600 mt-1 text-3xl";
                 fbTitle.innerText = "Excesso de Temperatura (Limite Máx: 1100°C)";
-                fbText.innerHTML = `A temperatura média programada de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado para as cubas. Este nível causará queima dos óleos residuais gerando incrustação, fragilidade de grão ou derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.` + sugestaoHtm;
-            } else if (tempMedia < (tempIdealMin - 20)) {
+                fbText.innerHTML = `A temperatura média programada de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado. Este nível causará queima dos óleos residuais gerando incrustação, fragilidade de grão ou derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.` + sugestaoHtm;
+            } else if (tempMedia < (tempBaseMin - 15)) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-temperature-arrow-down text-amber-600 mt-1 text-2xl";
+                fbIcon.className = "fa-solid fa-temperature-arrow-down text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Recozimento Incompleto (Risco de Estourar na Prensa)";
-                fbText.innerHTML = `Com média de apenas ${Math.round(tempMedia)}°C, o <strong>${nomeMaterial}</strong> não atinge plenamente a zona de recristalização austenítica. A cuba sairá rígida (encruada) e possui um alto risco de rachar ou estourar no estampo.` + sugestaoHtm;
-            } else if (freq > 45) {
+                fbText.innerHTML = `Com média de apenas ${Math.round(tempMedia)}°C para a espessura de ${espessura.toFixed(2)}mm, o <strong>${nomeMaterial}</strong> não atinge plenamente a zona de recristalização austenítica. A cuba sairá rígida (encruada) e possui um alto risco de rachar no estampo.` + sugestaoHtm;
+            } else if (freq > (freqIdealMax + 2)) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-2xl";
+                fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Alerta: Tempo de Encharque Reduzido";
-                fbText.innerHTML = `A esteira está girando muito rápido (${freq.toFixed(1)} Hz). O tempo total de permanência de ${formatarTempo(tempoEsteiraSegundos)} é muito curto para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor nas zonas de recozimento. Risco de tensão não aliviada.` + sugestaoHtm;
-            } else if (tempMedia >= tempIdealMin && tempMedia <= tempIdealMax && freq >= freqIdealMin && freq <= freqIdealMax && gas >= gasIdeal) {
+                fbText.innerHTML = `A esteira está girando muito rápido (${freq.toFixed(1)} Hz). O tempo total de permanência de ${formatarTempo(tempoEsteiraSegundos)} é muito curto para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor. Risco de tensão não aliviada.` + sugestaoHtm;
+            } else if (freq < (freqIdealMin - 5)) {
+                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
+                fbIcon.className = "fa-solid fa-gauge-simple text-amber-600 mt-1 text-3xl";
+                fbTitle.innerText = "Alerta: Velocidade Lenta Demais";
+                fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz está gerando um tempo de encharque excessivo (${formatarTempo(tempoEsteiraSegundos)}) para uma chapa de ${espessura.toFixed(2)}mm. Isso reduz drasticamente a produtividade (${Math.floor(pecasTurno)} peças/turno) e pode causar granulação excessiva no metal.` + sugestaoHtm;
+            } else if (tempMedia >= tempBaseMin && tempMedia <= tempIdealMax && freq >= freqIdealMin && freq <= freqIdealMax && gas >= gasIdeal) {
                 fbBox.className += "bg-blue-50 border-blue-200 text-blue-900";
-                fbIcon.className = "fa-solid fa-award text-blue-600 mt-1 text-2xl";
+                fbIcon.className = "fa-solid fa-award text-blue-600 mt-1 text-3xl";
                 fbTitle.innerText = "Parâmetros Validados (Padrão Ouro)";
-                fbText.innerHTML = `Setup PERFEITO para <strong>${nomeMaterial}</strong>! A produção estimada de ${Math.floor(pecasTurno)} peças/turno será processada com encharque térmico ideal (${formatarTempo(tempoEsteiraSegundos)}) e H₂ suficiente. As cubas sairão totalmente brilhantes, recristalizadas, prontas e flexíveis para a estampagem profunda.`;
+                fbText.innerHTML = `Setup PERFEITO para <strong>${nomeMaterial}</strong> (${espessura.toFixed(2)}mm)! A produção estimada de ${Math.floor(pecasTurno)} peças/turno será processada com encharque térmico ideal (${formatarTempo(tempoEsteiraSegundos)}) e H₂ perfeitamente dimensionado. As cubas sairão totalmente brilhantes e prontas para a estampagem profunda.`;
             } else {
                 fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
-                fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-2xl";
+                fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-3xl";
                 fbTitle.innerText = "Operação Dentro dos Limites Estáveis";
-                fbText.innerHTML = `As curvas de temperatura média e o fluxo de gás estão matematicamente seguros para o <strong>${nomeMaterial}</strong>, mas podem ser otimizados se houver instabilidade no processo de estampagem. Acompanhe a porta de saída visualmente para garantir o brilho.` + sugestaoHtm;
+                fbText.innerHTML = `As curvas de temperatura e fluxo de gás estão matematicamente seguros para o <strong>${nomeMaterial}</strong>, mas podem ser otimizados visando máxima eficiência mecânica.` + sugestaoHtm;
             }
         }
 
