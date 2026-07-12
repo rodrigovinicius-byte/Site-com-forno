@@ -116,13 +116,15 @@
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Procedimentos (POP)</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Guias de execução passo a passo de bloqueios de segurança e LOTO.</p>
                 </button>
-                <button onclick="abrirModuloForno()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
-                    <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-fire text-xl"></i></div>
-                    <h2 class="font-bold text-slate-800 mb-1.5 text-base">Curva do Forno</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Parametrização do Recozimento, simulação de produção e estática de bancadas.</p>
+                
+                <button onclick="abrirModuloParametrizacao()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-sliders text-xl"></i></div>
+                    <h2 class="font-bold text-slate-800 mb-1.5 text-base">Parametrização de Máquinas</h2>
+                    <p class="text-xs text-slate-500 leading-relaxed">Central de calculadoras, simulação de produção e parametrizações validadas.</p>
                 </button>
             </div>
         </div>
+        
         <div id="view-intervencoes" class="fade-in hidden">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div>
@@ -210,6 +212,21 @@
             <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </div>
         
+        <div id="view-parametrizacao" class="fade-in hidden">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <h2 class="font-bold text-slate-800 text-lg">Central de Parametrização</h2>
+                    <p class="text-xs text-slate-500 mt-1">Selecione o equipamento abaixo para ajustar seus parâmetros de processo e simular produção. <br><span class="italic text-[10px] text-slate-400">(Novas máquinas podem ser adicionadas marcando "Sim" na coluna H da planilha).</span></p>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center shadow-sm shrink-0">
+                    <i class="fa-solid fa-sliders text-xl"></i>
+                </div>
+            </div>
+            
+            <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                </div>
+        </div>
+
         <div id="view-forno" class="fade-in hidden">
             
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
@@ -797,9 +814,6 @@
             }
             gerarAlmoxarifadoMock();
             gerarPOPsMock();
-            if(document.getElementById('view-forno') && !document.getElementById('view-forno').classList.contains('hidden')){
-                calcularParametrosForno();
-            }
         };
 
         function showToast(message, type = 'success') {
@@ -818,7 +832,7 @@
         }
 
         function alternarTela(novaTela) {
-            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'forno', 'intervencoes'];
+            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'parametrizacao', 'forno', 'intervencoes'];
             telas.forEach(t => {
                 const el = document.getElementById(`view-${t}`);
                 if(el) el.classList.add('hidden');
@@ -838,6 +852,8 @@
                     headerTitle.innerText = "Almoxarifado Técnico"; headerSubtitle.innerText = "Grupo TBX · Sincronizado com Google Sheets";
                 } else if (novaTela === 'pops') {
                     headerTitle.innerText = "Procedimentos de Operação (POP)"; headerSubtitle.innerText = "Grupo TBX · Segurança e Práticas LOTO";
+                } else if (novaTela === 'parametrizacao') {
+                    headerTitle.innerText = "Parametrização de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Simulação de Produção e Setups";
                 } else if (novaTela === 'forno') {
                     headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
                     setTimeout(calcularParametrosForno, 50);
@@ -852,14 +868,43 @@
         function voltar() {
             if (currentView === 'checklist-itens') alternarTela('checklist-periodo');
             else if (currentView === 'checklist-periodo') alternarTela('checklist-setor');
+            else if (currentView === 'forno') alternarTela('parametrizacao');
             else alternarTela('home');
         }
 
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         function abrirModuloPOPs() { alternarTela('pops'); popularFiltroMaquinas('popMaquinaFilter'); renderPOPs(); }
+        
+        function abrirModuloParametrizacao() { 
+            alternarTela('parametrizacao'); 
+            renderParametrizacaoCards();
+        }
+        
         function abrirModuloForno() { alternarTela('forno'); }
         function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
+
+        function renderParametrizacaoCards() {
+            const container = document.getElementById('parametrizacaoCards');
+            
+            // Aqui estamos simulando o que no futuro virá da planilha (Aba Máquinas, Coluna H = "Sim").
+            // Como orientado, no momento só fixamos o Forno.
+            const maquinasParametrizaveis = [
+                { id: "forno", nome: "Forno de Recozimento Contínuo", desc: "Simulação de encharque térmico, cálculo de ciclo de produção e dimensionamento de gás.", icone: "fa-fire", cor: "text-orange-600", bg: "bg-orange-100", action: "abrirModuloForno()" }
+            ];
+            
+            container.innerHTML = maquinasParametrizaveis.map(m => `
+                <button onclick="${m.action}" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center gap-4 w-full">
+                    <div class="w-12 h-12 rounded-xl ${m.bg} ${m.cor} flex items-center justify-center text-xl shrink-0">
+                        <i class="fa-solid ${m.icone}"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-slate-800 text-sm mb-1">${m.nome}</h3>
+                        <span class="block text-[10px] text-slate-500 leading-relaxed">${m.desc}</span>
+                    </div>
+                </button>
+            `).join('');
+        }
 
         function gerarOptionsEquipes(apenasManutencao = false) {
             if (!equipesData || equipesData.length === 0) return `<option value="Sem Equipe">Nenhum colaborador cadastrado</option>`;
@@ -986,6 +1031,7 @@
             atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
         }
 
+        // --- SISTEMA DE INTERVENÇÕES INDIRETAS E OS FECHADAS ---
         function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
             let maquinas = originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"];
@@ -1906,8 +1952,9 @@
             select.innerHTML = '<option value="">Todas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
         }
 
-        // --- SISTEMA ATUALIZADO DO FORNO (PRODUÇÃO E PARÂMETROS DINÂMICOS COM ESPESSURA INPUT) ---
+        // --- SISTEMA ATUALIZADO DO FORNO ---
         function formatarTempo(totalSegundos) {
+            if (!isFinite(totalSegundos) || totalSegundos < 0) return "00:00:00";
             const h = Math.floor(totalSegundos / 3600);
             const m = Math.floor((totalSegundos % 3600) / 60);
             const s = Math.round(totalSegundos % 60);
@@ -1915,7 +1962,6 @@
         }
 
         function calcularParametrosForno() {
-            // Inputs Gerais
             const espessura = parseFloat(document.getElementById('fornoEspessura').value) || 0.50; 
             const freq = parseFloat(document.getElementById('fornoFrequencia').value) || 0; 
             const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value) || 0; 
@@ -1923,52 +1969,44 @@
             const gas = parseFloat(document.getElementById('fornoGas').value) || 0;
             const material = document.getElementById('fornoMaterial').value;
             
-            // Bancadas de Temperatura
             const b1 = parseFloat(document.getElementById('fornoB1').value) || 0;
             const b2 = parseFloat(document.getElementById('fornoB2').value) || 0;
             const b3 = parseFloat(document.getElementById('fornoB3').value) || 0;
             const b4 = parseFloat(document.getElementById('fornoB4').value) || 0;
             const b5 = parseFloat(document.getElementById('fornoB5').value) || 0;
-            
             const tempMedia = (b1 + b2 + b3 + b4 + b5) / 5;
             
-            // Atualiza UI de Valores Textuais Fixos
+            document.getElementById('valEspessura').innerText = espessura.toFixed(2) + ' mm'; 
             document.getElementById('valTempMedia').innerText = Math.round(tempMedia) + ' °C';
             
-            // FÓRMULAS DE ENGENHARIA (Baseadas no Excel)
-            const v_m_s = (freq / 32) * (1 / 64);
+            const v_m_s = freq > 0 ? (freq / 32) * (1 / 64) : 0;
             const v_m_min = v_m_s * 60;
             const v_m_h = v_m_min * 60; 
             
             const compTotalPeca = (compPeca + espacamento) / 1000;
-            const tempoEsteiraSegundos = 28.5 / v_m_s; 
-            const tempoCicloSegundos = compTotalPeca / v_m_s; 
+            const tempoEsteiraSegundos = v_m_s > 0 ? 28.5 / v_m_s : 0; 
+            const tempoCicloSegundos = v_m_s > 0 ? compTotalPeca / v_m_s : 0; 
             
             const pecasHora = tempoCicloSegundos > 0 ? (3600 / tempoCicloSegundos) : 0;
             const pecasTurno = pecasHora * 12;
             const pecasDia = pecasHora * 24;
             
-            // Atualizando Grid de Produção
             document.getElementById('fornoVelocidade').innerText = v_m_h.toFixed(2) + ' m/h'; 
-            document.getElementById('fornoTempoTotal').innerText = isFinite(tempoEsteiraSegundos) ? formatarTempo(tempoEsteiraSegundos) : "00:00:00";
-            document.getElementById('fornoTempoCiclo').innerText = isFinite(tempoCicloSegundos) ? formatarTempo(tempoCicloSegundos) : "00:00:00";
+            document.getElementById('fornoTempoTotal').innerText = formatarTempo(tempoEsteiraSegundos);
+            document.getElementById('fornoTempoCiclo').innerText = formatarTempo(tempoCicloSegundos);
             document.getElementById('fornoPecasHora').innerText = Math.floor(pecasHora);
             document.getElementById('fornoPecasTurno').innerText = Math.floor(pecasTurno);
             document.getElementById('fornoPecasDia').innerText = Math.floor(pecasDia);
             
-            // Atualizando a Simulação Visual
             renderVisualEsteira(compPeca, espacamento, compTotalPeca);
             
-            // LÓGICA DO FEEDBACK DINÂMICO E SUGESTÕES DE PARÂMETROS
             const fbBox = document.getElementById('fornoFeedbackBox');
             const fbIcon = document.getElementById('fornoFeedbackIcon');
             const fbTitle = document.getElementById('fornoFeedbackTitle');
             const fbText = document.getElementById('fornoFeedbackText');
             
-            // Determinação do Material Selecionado
             const nomeMaterial = material === 'aco-304' ? 'Inox 304' : 'Inox Série 200 (J1-J5)';
             
-            // CÁLCULO DINÂMICO DOS IDEAIS BASEADO NA ESPESSURA
             const fatorEspessura = espessura / 0.50;
             let freqIdealMax = Math.round(40 / fatorEspessura);
             let freqIdealMin = Math.round(30 / fatorEspessura);
@@ -1991,32 +2029,32 @@
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
                 fbIcon.className = "fa-solid fa-cloud-showers-heavy text-rose-600 mt-1 text-3xl";
                 fbTitle.innerText = "Risco Crítico de Oxidação (Cubas Pretas)";
-                fbText.innerHTML = `A vazão total de ${gas} m³/h de NH₃ dissociada gera apenas ~${Math.round(gas*0.75)} m³/h de Hidrogênio. Este volume não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e oxidar severamente as peças.` + sugestaoHtm;
+                fbText.innerHTML = `A vazão de ${gas} m³/h não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e oxidar severamente as peças.` + sugestaoHtm;
             } else if (tempMedia > 1100) {
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
                 fbIcon.className = "fa-solid fa-fire text-rose-600 mt-1 text-3xl";
                 fbTitle.innerText = "Excesso de Temperatura (Limite Máx: 1100°C)";
-                fbText.innerHTML = `A temperatura média programada de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado. Este nível causará queima dos óleos residuais gerando incrustação, fragilidade de grão ou derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.` + sugestaoHtm;
+                fbText.innerHTML = `A temperatura de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado. Risco de fragilidade e derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.` + sugestaoHtm;
             } else if (tempMedia < (tempBaseMin - 15)) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-temperature-arrow-down text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Recozimento Incompleto (Risco de Estourar na Prensa)";
-                fbText.innerHTML = `Com média de apenas ${Math.round(tempMedia)}°C para a espessura de ${espessura.toFixed(2)}mm, o <strong>${nomeMaterial}</strong> não atinge plenamente a zona de recristalização austenítica. A cuba sairá rígida (encruada) e possui um alto risco de rachar no estampo.` + sugestaoHtm;
+                fbText.innerHTML = `Com média de ${Math.round(tempMedia)}°C, a chapa de ${espessura.toFixed(2)}mm (${nomeMaterial}) sairá encruada e com alto risco de rachar no estampo.` + sugestaoHtm;
             } else if (freq > (freqIdealMax + 2)) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Alerta: Tempo de Encharque Reduzido";
-                fbText.innerHTML = `A esteira está girando muito rápido (${freq.toFixed(1)} Hz). O tempo total de permanência de ${formatarTempo(tempoEsteiraSegundos)} é muito curto para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor. Risco de tensão não aliviada.` + sugestaoHtm;
-            } else if (freq < (freqIdealMin - 5)) {
+                fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz gera um tempo de permanência muito curto (${formatarTempo(tempoEsteiraSegundos)}) para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor.` + sugestaoHtm;
+            } else if (freq < (freqIdealMin - 5) && freq > 0) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-gauge-simple text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Alerta: Velocidade Lenta Demais";
-                fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz está gerando um tempo de encharque excessivo (${formatarTempo(tempoEsteiraSegundos)}) para uma chapa de ${espessura.toFixed(2)}mm. Isso reduz drasticamente a produtividade (${Math.floor(pecasTurno)} peças/turno) e pode causar granulação excessiva no metal.` + sugestaoHtm;
+                fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz gera um encharque excessivo para a chapa de ${espessura.toFixed(2)}mm, reduzindo drasticamente a produtividade e causando granulação do metal.` + sugestaoHtm;
             } else if (tempMedia >= tempBaseMin && tempMedia <= tempIdealMax && freq >= freqIdealMin && freq <= freqIdealMax && gas >= gasIdeal) {
                 fbBox.className += "bg-blue-50 border-blue-200 text-blue-900";
                 fbIcon.className = "fa-solid fa-award text-blue-600 mt-1 text-3xl";
                 fbTitle.innerText = "Parâmetros Validados (Padrão Ouro)";
-                fbText.innerHTML = `Setup PERFEITO para <strong>${nomeMaterial}</strong> (${espessura.toFixed(2)}mm)! A produção estimada de ${Math.floor(pecasTurno)} peças/turno será processada com encharque térmico ideal (${formatarTempo(tempoEsteiraSegundos)}) e H₂ perfeitamente dimensionado. As cubas sairão totalmente brilhantes e prontas para a estampagem profunda.`;
+                fbText.innerHTML = `Setup PERFEITO para <strong>${nomeMaterial}</strong> (${espessura.toFixed(2)}mm)! O encharque (${formatarTempo(tempoEsteiraSegundos)}) e o fluxo de H₂ estão ideais. As cubas sairão recristalizadas, flexíveis e brilhantes.`;
             } else {
                 fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
                 fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-3xl";
@@ -2039,7 +2077,6 @@
             label.innerText = `${numPecas} peças simultâneas no forno`;
             
             const limitRender = Math.min(numPecas, 300);
-            
             const pctLarguraPeca = ((compPeca/1000) / 28.5) * 100;
             const pctMargem = ((espacamento/1000) / 28.5) * 100;
             
