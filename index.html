@@ -1976,7 +1976,8 @@
             const b5 = parseFloat(document.getElementById('fornoB5').value) || 0;
             const tempMedia = (b1 + b2 + b3 + b4 + b5) / 5;
             
-            document.getElementById('valEspessura').innerText = espessura.toFixed(2) + ' mm'; 
+            // Removido para não quebrar a execução por falta do elemento no HTML
+            // document.getElementById('valEspessura').innerText = espessura.toFixed(2) + ' mm'; 
             document.getElementById('valTempMedia').innerText = Math.round(tempMedia) + ' °C';
             
             const v_m_s = freq > 0 ? (freq / 32) * (1 / 64) : 0;
