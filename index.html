@@ -137,7 +137,7 @@
                 <button onclick="abrirModuloIntervencoes()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Intervenções & Melhorias</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Registro direto de manutenções internas planejadas e modificações em equipamentos.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Registro de chamados, manutenções corretivas e modificações em equipamentos.</p>
                 </button>
                 <button onclick="abrirModuloPOPs()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-book-open text-xl"></i></div>
@@ -160,8 +160,8 @@
         <div id="view-intervencoes" class="fade-in hidden">
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div>
-                    <h2 class="font-bold text-slate-800 text-base">Histórico de Intervenções Diretas</h2>
-                    <p class="text-xs text-slate-500">Log de modificações e manutenções internas planejadas.</p>
+                    <h2 class="font-bold text-slate-800 text-base">Histórico de Corretivas e Intervenções</h2>
+                    <p class="text-xs text-slate-500">Log de modificações, manutenções internas planejadas e chamados de produção.</p>
                 </div>
                 <button onclick="abrirModalNovaIntervencao()" class="bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm w-full sm:w-auto justify-center">
                     <i class="fa-solid fa-plus"></i> Abrir Intervenção
@@ -172,12 +172,12 @@
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-400 border-b border-slate-150 tracking-wider">
                             <tr>
-                                <th class="p-4 w-24">ID</th>
+                                <th class="p-4 w-28">ID / TIPO</th>
                                 <th class="p-4 w-32">DATA ABERTURA</th>
                                 <th class="p-4 w-48">MÁQUINA</th>
-                                <th class="p-4 w-32">STATUS</th>
+                                <th class="p-4 w-28">STATUS</th>
                                 <th class="p-4">DESCRIÇÃO / RESOLUÇÃO</th>
-                                <th class="p-4 w-40">TÉCNICO</th>
+                                <th class="p-4 w-44">TÉCNICO / FECHAMENTO</th>
                             </tr>
                         </thead>
                         <tbody id="intervencoesTbody" class="divide-y divide-slate-100 text-xs"></tbody>
@@ -185,6 +185,7 @@
                 </div>
             </div>
         </div>
+
         <div id="view-checklist-setor" class="fade-in hidden">
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4">SELECIONE O SETOR</span>
             <div id="setorCards" class="grid grid-cols-1 sm:grid-cols-2 gap-6"></div>
@@ -559,57 +560,6 @@
             </div>
         </div>
     </div>
-    <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
-            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-file-lines"></i>
-                    </div>
-                    <div>
-                        <h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3>
-                        <p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p>
-                    </div>
-                </div>
-                <button onclick="fecharDetalhesOS()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div class="p-6 overflow-y-auto space-y-5 bg-white">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Máquina / Equipamento</span>
-                        <span class="block font-bold text-slate-800 text-sm" id="detOsMaquina"></span>
-                    </div>
-                    <span class="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-1 rounded font-bold border border-emerald-200" id="detOsStatus"></span>
-                </div>
-                <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 space-y-3">
-                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-[10px]">
-                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataAbertura"></span></div>
-                        <div><span class="block font-bold text-slate-400 uppercase">Relator</span><span class="font-semibold text-slate-700" id="detOsRelator"></span></div>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Defeito Relatado</span>
-                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p>
-                    </div>
-                </div>
-                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3">
-                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2">
-                        <i class="fa-solid fa-wrench"></i> Fechamento (Reparo)
-                    </div>
-                    <div class="grid grid-cols-2 gap-2 text-[10px]">
-                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataFechamento"></span></div>
-                        <div><span class="block font-bold text-slate-400 uppercase">Técnico</span><span class="font-semibold text-slate-700" id="detOsSolucionador"></span></div>
-                    </div>
-                    <div>
-                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Solução Aplicada</span>
-                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-emerald-100 font-medium" id="detOsResolucao"></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     
     <div id="gerenciarPendenciasModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
@@ -627,15 +577,13 @@
             </div>
             <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-100">
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
-                    <div class="bg-white border-2 border-rose-200 rounded-xl p-3 flex items-center justify-between shadow-sm">
-                        <span class="font-bold text-rose-700 text-sm flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Chamados</span>
-                        <span id="contadorChamadosAbertos" class="bg-rose-100 text-rose-800 font-black px-3 py-1 rounded-lg text-sm">0</span>
-                    </div>
-                    <div class="bg-white border-2 border-orange-200 rounded-xl p-3 flex items-center justify-between shadow-sm">
-                        <span class="font-bold text-orange-600 text-sm flex items-center gap-2"><i class="fa-solid fa-screwdriver-wrench"></i> Intervenções</span>
-                        <span id="contadorIntervencoesAbertas" class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-lg text-sm">0</span>
-                    </div>
+                <div class="flex gap-2 mb-2 border-b border-slate-200 pb-2">
+                    <button id="tabChamados" onclick="mudarAbaPendencias('chamados')" class="flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Chamados (<span id="contadorChamadosAbertos">0</span>)
+                    </button>
+                    <button id="tabIntervencoes" onclick="mudarAbaPendencias('intervencoes')" class="flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-screwdriver-wrench"></i> Intervenções (<span id="contadorIntervencoesAbertas">0</span>)
+                    </button>
                 </div>
 
                 <div id="listaPendenciasMista" class="space-y-4"></div>
@@ -887,6 +835,7 @@
         let API_URL = localStorage.getItem("checklist_google_api_url") || "";
         let currentModalMode = '';
         let currentPreditivaMenu = '';
+        let abaPendenciasAtual = 'chamados'; // Aba padrão no painel de pendências
 
         // --- SISTEMA DE RELATÓRIOS E DASHBOARDS ---
         let chartOS = null;
@@ -984,7 +933,7 @@
                     headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
                     setTimeout(calcularParametrosForno, 50);
                 } else if (novaTela === 'intervencoes') {
-                    headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta";
+                    headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva e Planejada";
                 } else if (novaTela === 'relatorios') {
                     
                 } else {
@@ -1201,6 +1150,7 @@
             } else {
                 chamadosData.unshift({ id: novoId, data: dataAbertura, maquina, urgencia, defeito, relator, status: "Aberto" });
                 showToast("Modo Offline: OS simulada com sucesso.", "info");
+                atualizarContadoresPendencias();
                 atualizarKPIs();
             }
             btn.disabled = false; 
@@ -1227,83 +1177,117 @@
             }
         }
 
+        // --- NOVO SISTEMA DE ABAS NO MODAL DE PENDÊNCIAS ---
+        
+        function mudarAbaPendencias(aba) {
+            abaPendenciasAtual = aba;
+            const tabChamados = document.getElementById('tabChamados');
+            const tabIntervencoes = document.getElementById('tabIntervencoes');
+
+            if (aba === 'chamados') {
+                tabChamados.className = "flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2";
+                tabIntervencoes.className = "flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2";
+            } else {
+                tabIntervencoes.className = "flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-orange-100 text-orange-700 border border-orange-200 shadow-sm flex items-center justify-center gap-2";
+                tabChamados.className = "flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2";
+            }
+            renderizarListaPendenciasMista();
+        }
+
         function abrirGerenciamentoPendencias() {
-            const container = document.getElementById('listaPendenciasMista');
+            document.getElementById('gerenciarPendenciasModal').classList.remove('hidden');
+            atualizarContadoresPendencias();
+            mudarAbaPendencias(abaPendenciasAtual);
+        }
+
+        function atualizarContadoresPendencias() {
             const abertosOS = chamadosData.filter(c => c.status !== "Fechado");
             const abertosINT = intervencoesData.filter(i => i.status !== "Fechado");
             
             document.getElementById('contadorChamadosAbertos').innerText = abertosOS.length;
             document.getElementById('contadorIntervencoesAbertas').innerText = abertosINT.length;
+        }
 
+        function renderizarListaPendenciasMista() {
+            const container = document.getElementById('listaPendenciasMista');
             let htmlCompleto = '';
 
-            abertosOS.forEach(c => {
-                const dataAbertura = new Date(c.data).toLocaleDateString('pt-BR');
-                let urgenciaCor = c.urgencia === "Alta" ? "text-rose-600 bg-rose-100 border-rose-200" : (c.urgencia === "Baixa" ? "text-blue-600 bg-blue-100 border-blue-200" : "text-amber-600 bg-amber-100 border-amber-200");
-                htmlCompleto += `
-                    <div class="bg-white border-l-4 border-l-rose-500 border-t border-b border-r border-slate-200 rounded-xl p-5 shadow-sm relative mb-4" id="card-pendencia-${c.id}">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <span class="block text-[10px] font-bold text-rose-500 uppercase tracking-wider">🔴 CHAMADO EXTERNO · ${c.id} · ABERTO EM ${dataAbertura}</span>
-                                <h4 class="font-bold text-slate-800 text-sm mt-0.5">${c.maquina}</h4>
-                            </div>
-                            <span class="text-[9px] border px-2 py-0.5 rounded font-bold uppercase ${urgenciaCor}">${c.urgencia}</span>
-                        </div>
-                        <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3">
-                            <i class="fa-solid fa-quote-left text-slate-300 mr-1"></i> ${c.defeito}
-                            <span class="block text-[9px] text-slate-400 font-semibold mt-2">Relatado por: ${c.relator}</span>
-                        </p>
-                        <div class="mt-4 pt-4 border-t border-slate-200">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ação de Reparo / Solução Aplicada</label>
-                            <textarea id="resolucao-os-${c.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-rose-400 mb-3 resize-none" placeholder="Descreva o que foi feito para resolver..."></textarea>
-                            <div class="flex flex-col sm:flex-row items-end gap-3">
-                                <div class="w-full">
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico que Fechou</label>
-                                    <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-rose-400 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
+            if (abaPendenciasAtual === 'chamados') {
+                const abertosOS = chamadosData.filter(c => c.status !== "Fechado");
+                
+                if (abertosOS.length === 0) {
+                    htmlCompleto = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhum chamado pendente. Ótimo trabalho!</div>`;
+                } else {
+                    abertosOS.forEach(c => {
+                        const dataAbertura = new Date(c.data).toLocaleDateString('pt-BR');
+                        let urgenciaCor = c.urgencia === "Alta" ? "text-rose-600 bg-rose-100 border-rose-200" : (c.urgencia === "Baixa" ? "text-blue-600 bg-blue-100 border-blue-200" : "text-amber-600 bg-amber-100 border-amber-200");
+                        htmlCompleto += `
+                            <div class="bg-white border-l-4 border-l-rose-500 border-t border-b border-r border-slate-200 rounded-xl p-5 shadow-sm relative mb-4" id="card-pendencia-${c.id}">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div>
+                                        <span class="block text-[10px] font-bold text-rose-500 uppercase tracking-wider">🔴 CHAMADO EXTERNO · ${c.id} · ABERTO EM ${dataAbertura}</span>
+                                        <h4 class="font-bold text-slate-800 text-sm mt-0.5">${c.maquina}</h4>
+                                    </div>
+                                    <span class="text-[9px] border px-2 py-0.5 rounded font-bold uppercase ${urgenciaCor}">${c.urgencia}</span>
                                 </div>
-                                <button onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Dar Baixa (OS)</button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            abertosINT.forEach(i => {
-                const dataAbertura = new Date(i.data).toLocaleDateString('pt-BR');
-                htmlCompleto += `
-                    <div class="bg-white border-l-4 border-l-orange-500 border-t border-b border-r border-slate-200 rounded-xl p-5 shadow-sm relative mb-4" id="card-pendencia-${i.id}">
-                        <div class="flex justify-between items-start mb-3">
-                            <div>
-                                <span class="block text-[10px] font-bold text-orange-500 uppercase tracking-wider">🟠 INTERVENÇÃO INTERNA · ${i.id} · ABERTA EM ${dataAbertura}</span>
-                                <h4 class="font-bold text-slate-800 text-sm mt-0.5">${i.maquina}</h4>
-                            </div>
-                            <span class="text-[9px] border border-orange-200 bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold uppercase">${i.tipo}</span>
-                        </div>
-                        <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3">
-                            <i class="fa-solid fa-clipboard-list text-slate-300 mr-1"></i> ${i.descricao}
-                            <span class="block text-[9px] text-slate-400 font-semibold mt-2">Criado por: ${i.responsavel}</span>
-                        </p>
-                        <div class="mt-4 pt-4 border-t border-slate-200">
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">O que foi realizado no Fechamento?</label>
-                            <textarea id="resolucao-int-${i.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-orange-400 mb-3 resize-none" placeholder="Log final da intervenção..."></textarea>
-                            <div class="flex flex-col sm:flex-row items-end gap-3">
-                                <div class="w-full">
-                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico que Executou</label>
-                                    <select id="solucionador-int-${i.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-orange-400 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
+                                <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3">
+                                    <i class="fa-solid fa-quote-left text-slate-300 mr-1"></i> ${c.defeito}
+                                    <span class="block text-[9px] text-slate-400 font-semibold mt-2">Relatado por: ${c.relator}</span>
+                                </p>
+                                <div class="mt-4 pt-4 border-t border-slate-200">
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ação de Reparo / Solução Aplicada</label>
+                                    <textarea id="resolucao-os-${c.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-rose-400 mb-3 resize-none" placeholder="Descreva o que foi feito para resolver..."></textarea>
+                                    <div class="flex flex-col sm:flex-row items-end gap-3">
+                                        <div class="w-full">
+                                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico que Fechou</label>
+                                            <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-rose-400 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
+                                        </div>
+                                        <button onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Dar Baixa (OS)</button>
+                                    </div>
                                 </div>
-                                <button onclick="fecharIntervencao('${i.id}')" class="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Finalizar Interv.</button>
                             </div>
-                        </div>
-                    </div>
-                `;
-            });
-
-            if(abertosOS.length === 0 && abertosINT.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhuma pendência na fila. Ótimo trabalho!</div>`;
-            } else {
-                container.innerHTML = htmlCompleto;
+                        `;
+                    });
+                }
+            } else if (abaPendenciasAtual === 'intervencoes') {
+                const abertosINT = intervencoesData.filter(i => i.status !== "Fechado");
+                
+                if (abertosINT.length === 0) {
+                    htmlCompleto = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhuma intervenção na fila.</div>`;
+                } else {
+                    abertosINT.forEach(i => {
+                        const dataAbertura = new Date(i.data).toLocaleDateString('pt-BR');
+                        htmlCompleto += `
+                            <div class="bg-white border-l-4 border-l-orange-500 border-t border-b border-r border-slate-200 rounded-xl p-5 shadow-sm relative mb-4" id="card-pendencia-${i.id}">
+                                <div class="flex justify-between items-start mb-3">
+                                    <div>
+                                        <span class="block text-[10px] font-bold text-orange-500 uppercase tracking-wider">🟠 INTERVENÇÃO INTERNA · ${i.id} · ABERTA EM ${dataAbertura}</span>
+                                        <h4 class="font-bold text-slate-800 text-sm mt-0.5">${i.maquina}</h4>
+                                    </div>
+                                    <span class="text-[9px] border border-orange-200 bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold uppercase">${i.tipo}</span>
+                                </div>
+                                <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3">
+                                    <i class="fa-solid fa-clipboard-list text-slate-300 mr-1"></i> ${i.descricao}
+                                    <span class="block text-[9px] text-slate-400 font-semibold mt-2">Criado por: ${i.responsavel}</span>
+                                </p>
+                                <div class="mt-4 pt-4 border-t border-slate-200">
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">O que foi realizado no Fechamento?</label>
+                                    <textarea id="resolucao-int-${i.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-orange-400 mb-3 resize-none" placeholder="Log final da intervenção..."></textarea>
+                                    <div class="flex flex-col sm:flex-row items-end gap-3">
+                                        <div class="w-full">
+                                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico que Executou</label>
+                                            <select id="solucionador-int-${i.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-orange-400 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
+                                        </div>
+                                        <button onclick="fecharIntervencao('${i.id}')" class="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Finalizar Interv.</button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
             }
-            document.getElementById('gerenciarPendenciasModal').classList.remove('hidden');
+
+            container.innerHTML = htmlCompleto;
         }
         
         function fecharGerenciamentoPendencias() { document.getElementById('gerenciarPendenciasModal').classList.add('hidden'); }
@@ -1354,9 +1338,10 @@
                 chamadosData[index].solucionador = solucionador;
             }
             
+            atualizarContadoresPendencias();
             atualizarKPIs(); 
             renderListaIntervencoes(); 
-            abrirGerenciamentoPendencias(); 
+            renderizarListaPendenciasMista(); 
         }
 
         async function fecharIntervencao(idInt) {
@@ -1393,6 +1378,8 @@
                     btn.disabled = false; 
                     return;
                 }
+            } else {
+                showToast(`Modo Local: Intervenção ${idInt} finalizada.`);
             }
 
             const index = intervencoesData.findIndex(i => i.id === idInt);
@@ -1403,9 +1390,10 @@
                 intervencoesData[index].solucionador = solucionador;
             }
             
+            atualizarContadoresPendencias();
             atualizarKPIs(); 
             renderListaIntervencoes(); 
-            abrirGerenciamentoPendencias(); 
+            renderizarListaPendenciasMista(); 
         }
 
         function abrirModalNovaIntervencao() {
@@ -1424,6 +1412,7 @@
             const descricao = document.getElementById('intervDescricao').value.trim();
             const responsavel = document.getElementById('intervResponsavel').value.trim();
             const btn = document.getElementById('btnEnviarIntervencao');
+            
             if (!descricao || !responsavel) { showToast("Preencha a descrição e selecione o técnico.", "error"); return; }
             btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
@@ -1449,29 +1438,54 @@
             }
             intervencoesData.unshift(novaIntervencao);
             renderListaIntervencoes();
+            atualizarContadoresPendencias();
             atualizarKPIs();
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalIntervencao();
         }
 
+        // --- SISTEMA MISTO NA TABELA HISTÓRICO ---
         function renderListaIntervencoes() {
             const tbody = document.getElementById('intervencoesTbody');
-            let ordenados = [...intervencoesData].sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            // Juntar os chamados e intervenções
+            let misto = [...intervencoesData, ...chamadosData];
+            let ordenados = misto.sort((a, b) => new Date(b.data) - new Date(a.data));
             
             if (ordenados.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Nenhum histórico de intervenção registrado.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Nenhum histórico registrado.</td></tr>`;
                 return;
             }
+
             tbody.innerHTML = ordenados.map(i => {
+                const isOS = i.id.startsWith("OS");
                 const dataFormatada = new Date(i.data).toLocaleDateString('pt-BR') + ' às ' + new Date(i.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-                let badgeStatus = i.status === "Aberto" ? `<span class="bg-orange-100 text-orange-700 font-bold px-2 py-1 rounded text-[9px]"><i class="fa-solid fa-clock"></i> Pendente</span>` : `<span class="bg-emerald-100 text-emerald-700 font-bold px-2 py-1 rounded text-[9px]"><i class="fa-solid fa-check"></i> Fechado</span>`;
-                let textResolucao = i.status === "Aberto" ? `<span class="italic text-slate-400">Aguardando fechamento...<br>Demanda original: ${i.descricao}</span>` : `<span class="text-slate-700 font-medium">${i.resolucao}</span><br><span class="text-[9px] text-slate-400">Demanda original: ${i.descricao}</span>`;
-                let responsavelText = i.status === "Aberto" ? `Aberto por:<br><span class="font-semibold text-slate-600">${i.responsavel}</span>` : `Executado por:<br><span class="font-bold text-slate-800">${i.solucionador}</span>`;
+                
+                const corBadge = isOS ? "rose" : "orange";
+                const icone = isOS ? "fa-triangle-exclamation" : "fa-screwdriver-wrench";
+                const tituloTipo = isOS ? `OS - Urgência: ${i.urgencia}` : i.tipo;
+                const relatorStr = isOS ? i.relator : i.responsavel;
+                const descricaoStr = isOS ? i.defeito : i.descricao;
+
+                let badgeStatus = i.status === "Aberto" ? `<span class="bg-${corBadge}-100 text-${corBadge}-700 font-bold px-2 py-1 rounded text-[9px]"><i class="fa-solid fa-clock"></i> Pendente</span>` : `<span class="bg-emerald-100 text-emerald-700 font-bold px-2 py-1 rounded text-[9px]"><i class="fa-solid fa-check"></i> Fechado</span>`;
+                
+                let dataFechamentoStr = i.dataFechamento ? (new Date(i.dataFechamento).toLocaleDateString('pt-BR') + ' às ' + new Date(i.dataFechamento).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})) : '';
+
+                let textResolucao = i.status === "Aberto" 
+                    ? `<span class="italic text-slate-400">Aguardando fechamento...<br>Demanda original: ${descricaoStr}</span>` 
+                    : `<span class="text-slate-700 font-medium">${i.resolucao}</span><br><span class="text-[9px] text-slate-400">Demanda original: ${descricaoStr}</span>`;
+                
+                let responsavelText = i.status === "Aberto" 
+                    ? `Aberto por:<br><span class="font-semibold text-slate-600">${relatorStr}</span>` 
+                    : `Resolvido por:<br><span class="font-bold text-slate-800">${i.solucionador}</span><br><span class="text-[9px] text-slate-500 font-medium bg-slate-100 px-1 py-0.5 rounded mt-1 inline-block">Em: ${dataFechamentoStr}</span>`;
+
+                // Tailwind workaround para injetar classes dinâmicas sem ser expurgado
+                const textColorClass = isOS ? "text-rose-600" : "text-orange-600";
 
                 return `
                 <tr class="hover:bg-slate-50/50 border-b border-slate-100 last:border-0">
-                    <td class="p-4 font-bold text-orange-600 text-xs">${i.id}</td>
+                    <td class="p-4 font-bold ${textColorClass} text-xs"><i class="fa-solid ${icone}"></i> ${i.id}</td>
                     <td class="p-4 font-semibold text-slate-500 whitespace-nowrap">${dataFormatada}</td>
-                    <td class="p-4 font-bold text-slate-800"><span class="block">${i.maquina}</span><span class="text-[9px] text-slate-400 uppercase tracking-wider">${i.tipo}</span></td>
+                    <td class="p-4 font-bold text-slate-800"><span class="block">${i.maquina}</span><span class="text-[9px] text-slate-400 uppercase tracking-wider">${tituloTipo}</span></td>
                     <td class="p-4">${badgeStatus}</td>
                     <td class="p-4 text-xs">${textResolucao}</td>
                     <td class="p-4 text-[10px] text-slate-500 leading-tight">${responsavelText}</td>
@@ -1910,7 +1924,7 @@
             ];
             
             intervencoesData = [
-                { id: "INT-1", data: ontem, maquina: "Guilhotina - GUI-001", tipo: "Preventiva de TI", descricao: "Apertar os prisioneiros do motor principal.", responsavel: "José - Manutenção", status: "Aberto", resolucao: "", dataFechamento: "", solucionador: "" }
+                { id: "INT-1", data: ontem, maquina: "Guilhotina - GUI-001", tipo: "Preventiva de TI", descricao: "Apertar os prisioneiros do motor principal.", responsavel: "José - Manutenção", status: "Fechado", resolucao: "Prisioneiros reapertados e com trava química", dataFechamento: new Date().toISOString(), solucionador: "Carlos - Manutenção" }
             ];
             
             maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; 
