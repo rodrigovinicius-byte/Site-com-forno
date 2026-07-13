@@ -137,7 +137,7 @@
                 <button onclick="abrirModuloIntervencoes()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Intervenções & Melhorias</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Registro de chamados, manutenções corretivas e modificações em equipamentos.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Registro direto de manutenções internas, corretivas e modificações.</p>
                 </button>
                 <button onclick="abrirModuloPOPs()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-book-open text-xl"></i></div>
@@ -257,8 +257,7 @@
                 </div>
             </div>
             
-            <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+            <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
         <div id="view-forno" class="fade-in hidden">
@@ -1117,8 +1116,10 @@
             const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Registrando...`;
             
+            // Garantir ID sequencial limpo
             const maxId = chamadosData.reduce((max, item) => {
-                const num = parseInt(item.id.replace('OS-', '')) || 0;
+                let num = parseInt(item.id.replace('OS-', '')) || 0;
+                if (num > 1000000) num = 0; // Previne IDs gerados via Timestamp antigamente de quebrarem a sequência
                 return num > max ? num : max;
             }, 0);
             const novoId = `OS-${maxId + 1}`;
@@ -1417,8 +1418,10 @@
             btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
             
+            // Garantir ID sequencial limpo
             const maxId = intervencoesData.reduce((max, item) => {
-                const num = parseInt(item.id.replace('INT-', '')) || 0;
+                let num = parseInt(item.id.replace('INT-', '')) || 0;
+                if (num > 1000000) num = 0; // Previne IDs gerados via Timestamp antigamente de quebrarem a sequência
                 return num > max ? num : max;
             }, 0);
             const novoId = `INT-${maxId + 1}`;
@@ -1472,11 +1475,11 @@
 
                 let textResolucao = i.status === "Aberto" 
                     ? `<span class="italic text-slate-400">Aguardando fechamento...<br>Demanda original: ${descricaoStr}</span>` 
-                    : `<span class="text-slate-700 font-medium">${i.resolucao}</span><br><span class="text-[9px] text-slate-400">Demanda original: ${descricaoStr}</span>`;
+                    : `<span class="text-slate-700 font-medium">${i.resolucao || ''}</span><br><span class="text-[9px] text-slate-400">Demanda original: ${descricaoStr}</span>`;
                 
                 let responsavelText = i.status === "Aberto" 
                     ? `Aberto por:<br><span class="font-semibold text-slate-600">${relatorStr}</span>` 
-                    : `Resolvido por:<br><span class="font-bold text-slate-800">${i.solucionador}</span><br><span class="text-[9px] text-slate-500 font-medium bg-slate-100 px-1 py-0.5 rounded mt-1 inline-block">Em: ${dataFechamentoStr}</span>`;
+                    : `Resolvido por:<br><span class="font-bold text-slate-800">${i.solucionador || ''}</span><br><span class="text-[9px] text-slate-500 font-medium bg-slate-100 px-1 py-0.5 rounded mt-1 inline-block">Em: ${dataFechamentoStr}</span>`;
 
                 // Tailwind workaround para injetar classes dinâmicas sem ser expurgado
                 const textColorClass = isOS ? "text-rose-600" : "text-orange-600";
