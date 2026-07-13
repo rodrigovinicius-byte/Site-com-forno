@@ -1161,8 +1161,11 @@
             const defeito = document.getElementById('chamadoDefeito').value.trim();
             const relator = document.getElementById('chamadoRelator').value.trim();
             const btn = document.getElementById('btnEnviarChamado');
+            
             if (!defeito || !relator) { showToast("Preencha o defeito e selecione o relator.", "error"); return; }
-            btn.disabled = true; const textoBtn = btn.innerHTML;
+            
+            btn.disabled = true; 
+            const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Registrando...`;
             
             const maxId = chamadosData.reduce((max, item) => {
@@ -1170,18 +1173,39 @@
                 return num > max ? num : max;
             }, 0);
             const novoId = `OS-${maxId + 1}`;
+            const dataAbertura = new Date().toISOString();
 
             if (API_URL) {
                 try {
-                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "chamado", dados: { maquina, urgencia, defeito, relator } }) });
-                    showToast("OS criada com sucesso!"); setTimeout(() => baixarDadosDaPlanilha(), 1500); 
-                } catch(e) { showToast("Falha na rede. Tente novamente.", "error"); }
+                    await fetch(API_URL, { 
+                        method: "POST", 
+                        mode: "no-cors", 
+                        body: JSON.stringify({ 
+                            tipo: "chamado", 
+                            dados: { 
+                                id: novoId, 
+                                data: dataAbertura, 
+                                maquina, 
+                                urgencia, 
+                                defeito, 
+                                relator, 
+                                status: "Aberto" 
+                            } 
+                        }) 
+                    });
+                    showToast("OS criada com sucesso!"); 
+                    setTimeout(() => baixarDadosDaPlanilha(), 1500); 
+                } catch(e) { 
+                    showToast("Falha na rede. Tente novamente.", "error"); 
+                }
             } else {
-                chamadosData.unshift({ id: novoId, data: new Date().toISOString(), maquina, urgencia, defeito, relator, status: "Aberto" });
+                chamadosData.unshift({ id: novoId, data: dataAbertura, maquina, urgencia, defeito, relator, status: "Aberto" });
                 showToast("Modo Offline: OS simulada com sucesso.", "info");
                 atualizarKPIs();
             }
-            btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
+            btn.disabled = false; 
+            btn.innerHTML = textoBtn; 
+            fecharModalChamado();
         }
 
         function verificarStatusChamado(selectElement) {
@@ -1287,18 +1311,36 @@
         async function fecharOS(idOS) {
             const resolucao = document.getElementById(`resolucao-os-${idOS}`).value.trim();
             const solucionador = document.getElementById(`solucionador-os-${idOS}`).value;
+            
             if (!resolucao || !solucionador) { showToast("Preencha a solução e o técnico responsável.", "error"); return; }
             
             const btn = document.querySelector(`button[onclick="fecharOS('${idOS}')"]`);
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; 
+            btn.disabled = true;
+
+            const dataFechamento = new Date().toISOString();
 
             if (API_URL) {
                 try {
-                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "fecharChamado", dados: { id: idOS, resolucao: resolucao, solucionador: solucionador } }) });
+                    await fetch(API_URL, { 
+                        method: "POST", 
+                        mode: "no-cors", 
+                        body: JSON.stringify({ 
+                            tipo: "fecharChamado", 
+                            dados: { 
+                                id: idOS, 
+                                resolucao: resolucao, 
+                                solucionador: solucionador,
+                                dataFechamento: dataFechamento
+                            } 
+                        }) 
+                    });
                     showToast(`Ordem ${idOS} fechada!`);
                 } catch(e) {
                     showToast("Falha ao sincronizar baixa.", "error");
-                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Dar Baixa (OS)`; btn.disabled = false; return;
+                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Dar Baixa (OS)`; 
+                    btn.disabled = false; 
+                    return;
                 }
             } else {
                 showToast(`Modo Local: Ordem ${idOS} fechada.`);
@@ -1307,41 +1349,63 @@
             const index = chamadosData.findIndex(c => c.id === idOS);
             if(index !== -1) {
                 chamadosData[index].status = "Fechado";
-                chamadosData[index].dataFechamento = new Date().toISOString();
+                chamadosData[index].dataFechamento = dataFechamento;
                 chamadosData[index].resolucao = resolucao;
                 chamadosData[index].solucionador = solucionador;
             }
             
-            atualizarKPIs(); renderListaIntervencoes(); abrirGerenciamentoPendencias(); 
+            atualizarKPIs(); 
+            renderListaIntervencoes(); 
+            abrirGerenciamentoPendencias(); 
         }
 
         async function fecharIntervencao(idInt) {
             const resolucao = document.getElementById(`resolucao-int-${idInt}`).value.trim();
             const solucionador = document.getElementById(`solucionador-int-${idInt}`).value;
+            
             if (!resolucao || !solucionador) { showToast("Preencha o log de fechamento e o técnico responsável.", "error"); return; }
             
             const btn = document.querySelector(`button[onclick="fecharIntervencao('${idInt}')"]`);
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; btn.disabled = true;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; 
+            btn.disabled = true;
+
+            const dataFechamento = new Date().toISOString();
 
             if (API_URL) {
                 try {
-                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "fecharIntervencao", dados: { id: idInt, resolucao: resolucao, solucionador: solucionador } }) });
+                    await fetch(API_URL, { 
+                        method: "POST", 
+                        mode: "no-cors", 
+                        body: JSON.stringify({ 
+                            tipo: "fecharIntervencao", 
+                            dados: { 
+                                id: idInt, 
+                                resolucao: resolucao, 
+                                solucionador: solucionador,
+                                dataFechamento: dataFechamento
+                            } 
+                        }) 
+                    });
                     showToast(`Intervenção ${idInt} finalizada!`);
                 } catch(e) {
                     showToast("Falha ao sincronizar baixa.", "error");
-                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Finalizar Interv.`; btn.disabled = false; return;
+                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Finalizar Interv.`; 
+                    btn.disabled = false; 
+                    return;
                 }
             }
 
             const index = intervencoesData.findIndex(i => i.id === idInt);
             if(index !== -1) {
                 intervencoesData[index].status = "Fechado";
-                intervencoesData[index].dataFechamento = new Date().toISOString();
+                intervencoesData[index].dataFechamento = dataFechamento;
                 intervencoesData[index].resolucao = resolucao;
                 intervencoesData[index].solucionador = solucionador;
             }
             
-            atualizarKPIs(); renderListaIntervencoes(); abrirGerenciamentoPendencias(); 
+            atualizarKPIs(); 
+            renderListaIntervencoes(); 
+            abrirGerenciamentoPendencias(); 
         }
 
         function abrirModalNovaIntervencao() {
