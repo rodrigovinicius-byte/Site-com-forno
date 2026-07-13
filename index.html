@@ -16,12 +16,30 @@
         @media print {
             @page { size: landscape; margin: 8mm; }
             body { background: white !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-            .no-print, header, nav, footer, button, .modal, #apiStatusAlert, #toastContainer, #mainContent { display: none !important; }
+            .no-print, header, nav, footer, button, .modal, #apiStatusAlert, #toastContainer, #mainContent, #loginScreen { display: none !important; }
             #printArea { display: block !important; position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 0; }
         }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col relative overflow-x-hidden text-slate-800">
+    
+    <!-- TELA DE LOGIN (BLOQUEIO SIMPLES) -->
+    <div id="loginScreen" class="fixed inset-0 z-[99999] bg-[#0b132b] flex flex-col items-center justify-center p-4 transition-opacity duration-300">
+        <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl overflow-hidden p-8 flex flex-col items-center text-center border border-slate-200">
+            <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-3xl mb-5 shadow-sm border border-rose-100">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="font-black text-2xl text-slate-800 tracking-tight mb-1">Acesso Restrito</h2>
+            <p class="text-xs text-slate-500 mb-6 font-medium">Insira a senha de acesso para utilizar o sistema operacional do Grupo TBX.</p>
+            
+            <input type="password" id="inputSenha" placeholder="Digite a senha..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 font-bold text-center tracking-widest mb-4">
+            
+            <button onclick="validarSenha()" class="w-full py-3 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-sm shadow-md transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-arrow-right-to-bracket"></i> Liberar Sistema
+            </button>
+        </div>
+    </div>
+
     <div id="toastContainer" class="fixed top-5 left-5 right-5 sm:left-auto sm:right-5 z-[9999] flex flex-col gap-3 pointer-events-none sm:max-w-sm font-sans"></div>
     <header class="bg-[#0b132b] text-white shadow-md border-b border-slate-800 sticky top-0 z-40 no-print">
         <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
@@ -224,7 +242,8 @@
             </div>
             
             <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                </div>
+                <!-- Preenchido dinamicamente via JS -->
+            </div>
         </div>
 
         <div id="view-forno" class="fade-in hidden">
@@ -428,7 +447,7 @@
                 
             </div>
         </div>
-        </main>
+    </main>
 
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
@@ -791,6 +810,9 @@
     <div id="printArea" class="hidden"></div>
 
     <script>
+        // --- SENHA DE ACESSO AQUI ---
+        const SENHA_ACESSO = "TBX2026";
+
         let originalDatabase = [];
         let checklistStatus = [];
         let chamadosData = []; 
@@ -808,14 +830,54 @@
         let currentPreditivaMenu = '';
 
         window.onload = () => {
+            verificarAutenticacao();
+        };
+
+        // --- FUNÇÕES DE SEGURANÇA BÁSICA ---
+        function verificarAutenticacao() {
+            const auth = localStorage.getItem("app_tbx_auth");
+            const loginScreen = document.getElementById("loginScreen");
+            
+            if (auth === "true") {
+                loginScreen.classList.add("hidden");
+                document.body.style.overflow = "auto";
+                iniciarSistema();
+            } else {
+                loginScreen.classList.remove("hidden");
+                document.body.style.overflow = "hidden";
+                document.getElementById("inputSenha").addEventListener("keypress", function(event) {
+                    if (event.key === "Enter") validarSenha();
+                });
+            }
+        }
+
+        function validarSenha() {
+            const input = document.getElementById("inputSenha").value;
+            if (input === SENHA_ACESSO) {
+                localStorage.setItem("app_tbx_auth", "true");
+                document.getElementById("loginScreen").classList.add("opacity-0");
+                setTimeout(() => {
+                    document.getElementById("loginScreen").classList.add("hidden");
+                    document.body.style.overflow = "auto";
+                    showToast("Acesso liberado!", "success");
+                    iniciarSistema();
+                }, 300);
+            } else {
+                showToast("Senha incorreta!", "error");
+                document.getElementById("inputSenha").value = "";
+                document.getElementById("inputSenha").focus();
+            }
+        }
+
+        function iniciarSistema() {
             if (API_URL) {
                 document.getElementById('apiStatusAlert').classList.add('hidden');
                 baixarDadosDaPlanilha();
             } else {
                 carregarChecklistMock();
             }
-            gerarAlmoxarifadoMock();
-        };
+            if(typeof gerarAlmoxarifadoMock === 'function') gerarAlmoxarifadoMock();
+        }
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
@@ -1520,7 +1582,7 @@
                 intervencoesData = resJson.intervencoes || [];
                 maquinasParametrizaveisData = resJson.maquinasParam || []; 
                 popData = resJson.pops || []; 
-                listaTodasMaquinas = resJson.maquinasLista || []; // ADICIONADO AQUI
+                listaTodasMaquinas = resJson.maquinasLista || [];
                 
                 renderSetorCards(); atualizarKPIs();
             } catch (e) { 
@@ -1533,7 +1595,7 @@
                 { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
                 { setor: "Manutenção", membros: ["José", "Carlos"] }
             ];
-            listaTodasMaquinas = ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001", "Forno de Recozimento Contínuo"]; // ADICIONADO AQUI PARA MODO OFFLINE
+            listaTodasMaquinas = ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001", "Forno de Recozimento Contínuo"];
             originalDatabase = [
                 { item: "Verificar Oleo Canola", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", tempoReanalise: 2, orientacao: "Lubrificar lateral direita" },
                 { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", orientacao: "" },
@@ -1557,7 +1619,6 @@
             intervencoesData = [];
             maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; 
             
-            // Mock dos POPs para funcionar offline
             popData = [
                 { maquina: "Guilhotina - GUI-001", titulo: "Procedimento de LOTO", descricao: "Passo a passo para bloqueio de energias perigosas antes da manutenção.", link: "https://docs.google.com/" },
                 { maquina: "Robô Prensa", titulo: "Troca de Garra", descricao: "Instruções seguras para a substituição de garras pneumáticas.", link: "https://docs.google.com/" }
