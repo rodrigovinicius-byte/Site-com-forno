@@ -2258,5 +2258,15 @@
         function visualizarImagem(base64) { document.getElementById('enlargedImg').src = base64; document.getElementById('viewImageModal').classList.remove('hidden'); }
         function fecharModalImagem() { document.getElementById('viewImageModal').classList.add('hidden'); }
     </script>
+    <!-- Ativador do Service Worker para o PWA -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('Service worker registrado com sucesso!', reg))
+                    .catch(err => console.log('Erro ao registrar o Service Worker:', err));
+            });
+        }
+    </script>
 </body>
 </html>
