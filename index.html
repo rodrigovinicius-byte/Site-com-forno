@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manutenção, Processos & Parametrização 5.0 - Grupo TBX</title>
     
-    <!-- Configurações do PWA (App de Celular) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b132b">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -16,7 +15,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- BIBLIOTECA DE GRÁFICOS -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <style>
@@ -36,7 +34,6 @@
 </head>
 <body class="bg-slate-50 min-h-screen flex flex-col relative overflow-x-hidden text-slate-800">
     
-    <!-- TELA DE LOGIN (BLOQUEIO SIMPLES) -->
     <div id="loginScreen" class="fixed inset-0 z-[99999] bg-[#0b132b] flex flex-col items-center justify-center p-4 transition-opacity duration-300">
         <div class="bg-white rounded-3xl max-w-sm w-full shadow-2xl overflow-hidden p-8 flex flex-col items-center text-center border border-slate-200">
             <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center text-3xl mb-5 shadow-sm border border-rose-100">
@@ -75,7 +72,7 @@
                     <i class="fa-solid fa-triangle-exclamation"></i> <span class="whitespace-nowrap">Abrir Chamado</span>
                 </button>
                 <div class="flex items-center gap-2 flex-shrink-0">
-                    <button onclick="abrirGerenciamentoChamados()" class="relative bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs py-2 px-3 rounded-lg transition-all shadow-sm">
+                    <button onclick="abrirGerenciamentoPendencias()" class="relative bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs py-2 px-3 rounded-lg transition-all shadow-sm">
                         <i class="fa-solid fa-bell text-sm"></i>
                         <span id="badgeAlertas" class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden border-2 border-[#0b132b]">0</span>
                     </button>
@@ -93,12 +90,12 @@
         </div>
         <div id="view-home" class="fade-in">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <button onclick="abrirGerenciamentoChamados()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
+                <button onclick="abrirGerenciamentoPendencias()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-rose-600 text-white rounded-xl"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                     <div>
-                        <span class="block text-[9px] font-bold text-rose-500 uppercase tracking-wider">Corretivas</span>
-                        <span class="block text-xl font-black text-slate-800" id="kpiChamadosAbertos">0</span>
-                        <span class="block text-[10px] text-rose-700 font-medium mt-0.5">Chamados Abertos</span>
+                        <span class="block text-[9px] font-bold text-rose-500 uppercase tracking-wider">Pendências</span>
+                        <span class="block text-xl font-black text-slate-800" id="kpiPendencias">0</span>
+                        <span class="block text-[10px] text-rose-700 font-medium mt-0.5">Chamados & Intervenções</span>
                     </div>
                 </button>
                 <button onclick="abrirPreditiva('vencidas')" class="nav-card text-left bg-red-50 border border-red-200 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full hover:bg-red-100/50 transition-colors">
@@ -138,9 +135,9 @@
                     <p class="text-xs text-slate-500 leading-relaxed">Controle detalhado de quantidades, localizações e movimentação de peças.</p>
                 </button>
                 <button onclick="abrirModuloIntervencoes()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
-                    <div class="w-11 h-11 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
+                    <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Intervenções & Melhorias</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed">Registro direto de corretivas forçadas e modificações em equipamentos.</p>
+                    <p class="text-xs text-slate-500 leading-relaxed">Registro direto de manutenções internas planejadas e modificações em equipamentos.</p>
                 </button>
                 <button onclick="abrirModuloPOPs()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-book-open text-xl"></i></div>
@@ -148,11 +145,10 @@
                     <p class="text-xs text-slate-500 leading-relaxed">Guias de execução, documentos do Google Docs e LOTO.</p>
                 </button>
                 <button onclick="abrirModuloParametrizacao()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
-                    <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-sliders text-xl"></i></div>
+                    <div class="w-11 h-11 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-sliders text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Parametrização de Máquinas</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Central de calculadoras, simulação de produção e parametrizações validadas.</p>
                 </button>
-                <!-- NOVO BOTÃO: RELATÓRIOS -->
                 <button onclick="abrirModuloRelatorios()" class="nav-card text-left bg-gradient-to-br from-slate-800 to-[#0b132b] border border-slate-900 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-white/10 text-white flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-chart-pie text-xl"></i></div>
                     <h2 class="font-bold text-white mb-1.5 text-base">Painel de Relatórios</h2>
@@ -165,10 +161,10 @@
             <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div>
                     <h2 class="font-bold text-slate-800 text-base">Histórico de Intervenções Diretas</h2>
-                    <p class="text-xs text-slate-500">Log de modificações e manutenções forçadas (sem OS prévia).</p>
+                    <p class="text-xs text-slate-500">Log de modificações e manutenções internas planejadas.</p>
                 </div>
-                <button onclick="abrirModalNovaIntervencao()" class="bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm w-full sm:w-auto justify-center">
-                    <i class="fa-solid fa-plus"></i> Registrar Intervenção
+                <button onclick="abrirModalNovaIntervencao()" class="bg-orange-600 hover:bg-orange-700 text-white text-sm font-bold py-2.5 px-5 rounded-xl flex items-center gap-2 transition-all shadow-sm w-full sm:w-auto justify-center">
+                    <i class="fa-solid fa-plus"></i> Abrir Intervenção
                 </button>
             </div>
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
@@ -176,11 +172,12 @@
                     <table class="w-full text-left border-collapse">
                         <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-400 border-b border-slate-150 tracking-wider">
                             <tr>
-                                <th class="p-4 w-32">DATA / HORA</th>
+                                <th class="p-4 w-24">ID</th>
+                                <th class="p-4 w-32">DATA ABERTURA</th>
                                 <th class="p-4 w-48">MÁQUINA</th>
-                                <th class="p-4 w-32">TIPO</th>
-                                <th class="p-4">DESCRIÇÃO DO QUE FOI FEITO</th>
-                                <th class="p-4 w-40">RESPONSÁVEL</th>
+                                <th class="p-4 w-32">STATUS</th>
+                                <th class="p-4">DESCRIÇÃO / RESOLUÇÃO</th>
+                                <th class="p-4 w-40">TÉCNICO</th>
                             </tr>
                         </thead>
                         <tbody id="intervencoesTbody" class="divide-y divide-slate-100 text-xs"></tbody>
@@ -260,8 +257,7 @@
             </div>
             
             <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Preenchido dinamicamente via JS -->
-            </div>
+                </div>
         </div>
 
         <div id="view-forno" class="fade-in hidden">
@@ -464,7 +460,6 @@
             </div>
         </div>
 
-        <!-- TELA DE RELATÓRIOS (DASHBOARD) -->
         <div id="view-relatorios" class="fade-in hidden">
             <div class="flex items-center justify-between mb-6">
                 <div>
@@ -477,7 +472,6 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <!-- Gráfico 1: Volume de OS -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Volume de Ordens de Serviço (OS)</h3>
                     <div class="relative h-64 w-full">
@@ -485,7 +479,6 @@
                     </div>
                 </div>
 
-                <!-- Gráfico 2: Status dos Checklists Diários -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Adesão de Checklists (Geral)</h3>
                     <div class="relative h-64 w-full flex items-center justify-center">
@@ -522,6 +515,7 @@
             </div>
         </div>
     </div>
+    
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -616,33 +610,49 @@
             </div>
         </div>
     </div>
-    <div id="gerenciarChamadosModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
+    
+    <div id="gerenciarPendenciasModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-rose-50">
+            <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-xl bg-rose-600 text-white flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-list-check"></i>
                     </div>
                     <div>
-                        <h3 class="text-sm font-bold text-slate-900">Gerenciamento de Chamados</h3>
-                        <p class="text-[10px] text-rose-600 font-semibold">Ordens de Serviço (OS) Abertas</p>
+                        <h3 class="text-base font-bold text-slate-900">Quadro de Pendências</h3>
+                        <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Manutenção Reativa e Preventiva</p>
                     </div>
                 </div>
-                <button onclick="fecharGerenciamentoChamados()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharGerenciamentoPendencias()" class="text-slate-400 hover:text-slate-700 p-2 bg-slate-100 rounded-lg"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaChamadosAbertos"></div>
+            <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-100">
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-2">
+                    <div class="bg-white border-2 border-rose-200 rounded-xl p-3 flex items-center justify-between shadow-sm">
+                        <span class="font-bold text-rose-700 text-sm flex items-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> Chamados</span>
+                        <span id="contadorChamadosAbertos" class="bg-rose-100 text-rose-800 font-black px-3 py-1 rounded-lg text-sm">0</span>
+                    </div>
+                    <div class="bg-white border-2 border-orange-200 rounded-xl p-3 flex items-center justify-between shadow-sm">
+                        <span class="font-bold text-orange-600 text-sm flex items-center gap-2"><i class="fa-solid fa-screwdriver-wrench"></i> Intervenções</span>
+                        <span id="contadorIntervencoesAbertas" class="bg-orange-100 text-orange-800 font-black px-3 py-1 rounded-lg text-sm">0</span>
+                    </div>
+                </div>
+
+                <div id="listaPendenciasMista" class="space-y-4"></div>
+            </div>
         </div>
     </div>
+    
     <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
                 <div class="flex items-center gap-3 mb-5 border-b pb-4">
-                    <div class="w-10 h-10 rounded-xl bg-rose-100 text-rose-700 flex items-center justify-center shadow-sm border border-rose-200">
+                    <div class="w-10 h-10 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center shadow-sm border border-orange-200">
                         <i class="fa-solid fa-screwdriver-wrench text-lg"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-slate-900">Registrar Intervenção</h3>
-                        <p class="text-[10px] text-slate-500 font-medium">Modificação ou Manutenção Forçada (S/ OS)</p>
+                        <h3 class="text-base font-bold text-slate-900">Abrir Intervenção</h3>
+                        <p class="text-[10px] text-slate-500 font-medium">Registro interno da equipe de manutenção</p>
                     </div>
                 </div>
                 <div class="space-y-4 mb-5">
@@ -651,26 +661,27 @@
                         <select id="intervMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500"></select>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de Ação</label>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Categoria da Intervenção</label>
                         <select id="intervTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold text-slate-700 focus:outline-none focus:ring-1 focus:ring-blue-500">
-                            <option value="Modificação">Modificação de Projeto/Estrutura</option>
-                            <option value="Manutenção Forçada">Manutenção Corretiva Forçada</option>
+                            <option value="Preventiva de TI">Preventiva / Rotina</option>
+                            <option value="Modificação">Modificação Estrutural</option>
                             <option value="Melhoria">Melhoria / Setup Específico</option>
+                            <option value="Manutenção Forçada">Corretiva Forçada (Sem Chamado)</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">O que foi realizado?</label>
-                        <textarea id="intervDescricao" rows="3" placeholder="Ex: Trocado rolamento principal por um modelo ZZ..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Descrição / O que precisa ser feito?</label>
+                        <textarea id="intervDescricao" rows="3" placeholder="Ex: Substituição preventiva do óleo hidráulico..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
                     </div>
                     <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Técnico Responsável</label>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Criado Por (Técnico)</label>
                         <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
                     <button onclick="fecharModalIntervencao()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
-                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
-                        <i class="fa-solid fa-check"></i> Salvar Registro
+                    <button id="btnEnviarIntervencao" onclick="enviarIntervencao()" class="w-full py-2.5 bg-orange-600 hover:bg-orange-700 text-white font-bold rounded-xl text-xs shadow flex items-center justify-center gap-1.5 transition-all">
+                        <i class="fa-solid fa-plus"></i> Abrir Pendência
                     </button>
                 </div>
             </div>
@@ -975,7 +986,7 @@
                 } else if (novaTela === 'intervencoes') {
                     headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta";
                 } else if (novaTela === 'relatorios') {
-                    // Mantém os nomes setados na função abrirModuloRelatorios
+                    
                 } else {
                     headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas";
                 }
@@ -995,13 +1006,10 @@
             const headerSubtitle = document.getElementById('headerSubtitle');
             headerTitle.innerText = "Painel Gerencial (Dashboard)"; 
             headerSubtitle.innerText = "Grupo TBX · Relatórios de Manutenção";
-            
-            // Dá um pequeno atraso para a tela aparecer antes de desenhar o gráfico (animação fluida)
             setTimeout(() => { renderizarGraficos(); }, 150);
         }
 
         function renderizarGraficos() {
-            // 1. DADOS DO GRÁFICO DE OS (Corretivas)
             const osAbertas = chamadosData.filter(c => c.status !== "Fechado").length;
             const osFechadas = chamadosData.filter(c => c.status === "Fechado").length;
 
@@ -1028,7 +1036,6 @@
                 }
             });
 
-            // 2. DADOS DO GRÁFICO DE CHECKLISTS (Preventivas)
             const alertas = calcularAlertas();
             const emDia = alertas.hoje.length + alertas.amanha.length + alertas.dias3.length + alertas.dias7.length;
             const emAtraso = alertas.vencidas.length;
@@ -1157,13 +1164,22 @@
             if (!defeito || !relator) { showToast("Preencha o defeito e selecione o relator.", "error"); return; }
             btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Registrando...`;
+            
+            const maxId = chamadosData.reduce((max, item) => {
+                const num = parseInt(item.id.replace('OS-', '')) || 0;
+                return num > max ? num : max;
+            }, 0);
+            const novoId = `OS-${maxId + 1}`;
+
             if (API_URL) {
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "chamado", dados: { maquina, urgencia, defeito, relator } }) });
                     showToast("OS criada com sucesso!"); setTimeout(() => baixarDadosDaPlanilha(), 1500); 
                 } catch(e) { showToast("Falha na rede. Tente novamente.", "error"); }
             } else {
+                chamadosData.unshift({ id: novoId, data: new Date().toISOString(), maquina, urgencia, defeito, relator, status: "Aberto" });
                 showToast("Modo Offline: OS simulada com sucesso.", "info");
+                atualizarKPIs();
             }
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalChamado();
         }
@@ -1187,59 +1203,107 @@
             }
         }
 
-        function abrirGerenciamentoChamados() {
-            const container = document.getElementById('listaChamadosAbertos');
-            const abertos = chamadosData.filter(c => c.status !== "Fechado");
-            if(abertos.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhuma Ordem de Serviço (OS) em aberto. Tudo operante!</div>`;
-            } else {
-                container.innerHTML = abertos.map(c => {
-                    const dataAbertura = new Date(c.data).toLocaleDateString('pt-BR');
-                    let urgenciaCor = c.urgencia === "Alta" ? "text-rose-600 bg-rose-100 border-rose-200" : (c.urgencia === "Baixa" ? "text-blue-600 bg-blue-100 border-blue-200" : "text-amber-600 bg-amber-100 border-amber-200");
-                    return `
-                        <div class="bg-white border border-slate-200 rounded-xl p-5 shadow-sm relative" id="card-os-${c.id}">
-                            <div class="flex justify-between items-start mb-3">
-                                <div><span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">${c.id} · Aberto em ${dataAbertura}</span><h4 class="font-bold text-slate-800 text-sm mt-0.5">${c.maquina}</h4></div>
-                                <span class="text-[9px] border px-2 py-0.5 rounded font-bold uppercase ${urgenciaCor}">${c.urgencia}</span>
+        function abrirGerenciamentoPendencias() {
+            const container = document.getElementById('listaPendenciasMista');
+            const abertosOS = chamadosData.filter(c => c.status !== "Fechado");
+            const abertosINT = intervencoesData.filter(i => i.status !== "Fechado");
+            
+            document.getElementById('contadorChamadosAbertos').innerText = abertosOS.length;
+            document.getElementById('contadorIntervencoesAbertas').innerText = abertosINT.length;
+
+            let htmlCompleto = '';
+
+            abertosOS.forEach(c => {
+                const dataAbertura = new Date(c.data).toLocaleDateString('pt-BR');
+                let urgenciaCor = c.urgencia === "Alta" ? "text-rose-600 bg-rose-100 border-rose-200" : (c.urgencia === "Baixa" ? "text-blue-600 bg-blue-100 border-blue-200" : "text-amber-600 bg-amber-100 border-amber-200");
+                htmlCompleto += `
+                    <div class="bg-white border-l-4 border-l-rose-500 border-t border-b border-r border-slate-200 rounded-xl p-5 shadow-sm relative mb-4" id="card-pendencia-${c.id}">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <span class="block text-[10px] font-bold text-rose-500 uppercase tracking-wider">🔴 CHAMADO EXTERNO · ${c.id} · ABERTO EM ${dataAbertura}</span>
+                                <h4 class="font-bold text-slate-800 text-sm mt-0.5">${c.maquina}</h4>
                             </div>
-                            <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3"><i class="fa-solid fa-quote-left text-slate-300 mr-1"></i> ${c.defeito}<span class="block text-[9px] text-slate-400 font-semibold mt-2">Relatado por: ${c.relator}</span></p>
-                            <div class="mt-4 pt-4 border-t border-slate-200">
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ação de Reparo / Solução Aplicada</label>
-                                <textarea id="resolucao-os-${c.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 mb-3 resize-none" placeholder="Descreva o que foi feito..."></textarea>
-                                <div class="flex flex-col sm:flex-row items-end gap-3">
-                                    <div class="w-full">
-                                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico Responsável</label>
-                                        <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
-                                    </div>
-                                    <button id="btn-fechar-os-${c.id}" onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Dar Baixa</button>
+                            <span class="text-[9px] border px-2 py-0.5 rounded font-bold uppercase ${urgenciaCor}">${c.urgencia}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3">
+                            <i class="fa-solid fa-quote-left text-slate-300 mr-1"></i> ${c.defeito}
+                            <span class="block text-[9px] text-slate-400 font-semibold mt-2">Relatado por: ${c.relator}</span>
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-slate-200">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Ação de Reparo / Solução Aplicada</label>
+                            <textarea id="resolucao-os-${c.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-rose-400 mb-3 resize-none" placeholder="Descreva o que foi feito para resolver..."></textarea>
+                            <div class="flex flex-col sm:flex-row items-end gap-3">
+                                <div class="w-full">
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico que Fechou</label>
+                                    <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-rose-400 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
                                 </div>
+                                <button onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Dar Baixa (OS)</button>
                             </div>
                         </div>
-                    `;
-                }).join('');
+                    </div>
+                `;
+            });
+
+            abertosINT.forEach(i => {
+                const dataAbertura = new Date(i.data).toLocaleDateString('pt-BR');
+                htmlCompleto += `
+                    <div class="bg-white border-l-4 border-l-orange-500 border-t border-b border-r border-slate-200 rounded-xl p-5 shadow-sm relative mb-4" id="card-pendencia-${i.id}">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <span class="block text-[10px] font-bold text-orange-500 uppercase tracking-wider">🟠 INTERVENÇÃO INTERNA · ${i.id} · ABERTA EM ${dataAbertura}</span>
+                                <h4 class="font-bold text-slate-800 text-sm mt-0.5">${i.maquina}</h4>
+                            </div>
+                            <span class="text-[9px] border border-orange-200 bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold uppercase">${i.tipo}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed bg-slate-50 p-2.5 rounded-lg border border-slate-100 mb-3">
+                            <i class="fa-solid fa-clipboard-list text-slate-300 mr-1"></i> ${i.descricao}
+                            <span class="block text-[9px] text-slate-400 font-semibold mt-2">Criado por: ${i.responsavel}</span>
+                        </p>
+                        <div class="mt-4 pt-4 border-t border-slate-200">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">O que foi realizado no Fechamento?</label>
+                            <textarea id="resolucao-int-${i.id}" rows="2" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-orange-400 mb-3 resize-none" placeholder="Log final da intervenção..."></textarea>
+                            <div class="flex flex-col sm:flex-row items-end gap-3">
+                                <div class="w-full">
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico que Executou</label>
+                                    <select id="solucionador-int-${i.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-orange-400 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
+                                </div>
+                                <button onclick="fecharIntervencao('${i.id}')" class="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Finalizar Interv.</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            if(abertosOS.length === 0 && abertosINT.length === 0) {
+                container.innerHTML = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhuma pendência na fila. Ótimo trabalho!</div>`;
+            } else {
+                container.innerHTML = htmlCompleto;
             }
-            document.getElementById('gerenciarChamadosModal').classList.remove('hidden');
+            document.getElementById('gerenciarPendenciasModal').classList.remove('hidden');
         }
-        function fecharGerenciamentoChamados() { document.getElementById('gerenciarChamadosModal').classList.add('hidden'); }
+        
+        function fecharGerenciamentoPendencias() { document.getElementById('gerenciarPendenciasModal').classList.add('hidden'); }
 
         async function fecharOS(idOS) {
             const resolucao = document.getElementById(`resolucao-os-${idOS}`).value.trim();
             const solucionador = document.getElementById(`solucionador-os-${idOS}`).value;
             if (!resolucao || !solucionador) { showToast("Preencha a solução e o técnico responsável.", "error"); return; }
-            const card = document.getElementById(`card-os-${idOS}`);
-            const btn = document.getElementById(`btn-fechar-os-${idOS}`);
+            
+            const btn = document.querySelector(`button[onclick="fecharOS('${idOS}')"]`);
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; btn.disabled = true;
+
             if (API_URL) {
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "fecharChamado", dados: { id: idOS, resolucao: resolucao, solucionador: solucionador } }) });
                     showToast(`Ordem ${idOS} fechada!`);
                 } catch(e) {
                     showToast("Falha ao sincronizar baixa.", "error");
-                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Dar Baixa`; btn.disabled = false; return;
+                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Dar Baixa (OS)`; btn.disabled = false; return;
                 }
             } else {
                 showToast(`Modo Local: Ordem ${idOS} fechada.`);
             }
+
             const index = chamadosData.findIndex(c => c.id === idOS);
             if(index !== -1) {
                 chamadosData[index].status = "Fechado";
@@ -1247,8 +1311,37 @@
                 chamadosData[index].resolucao = resolucao;
                 chamadosData[index].solucionador = solucionador;
             }
-            card.style.opacity = '0.5'; card.style.pointerEvents = 'none';
-            atualizarKPIs(); setTimeout(() => abrirGerenciamentoChamados(), 1000); 
+            
+            atualizarKPIs(); renderListaIntervencoes(); abrirGerenciamentoPendencias(); 
+        }
+
+        async function fecharIntervencao(idInt) {
+            const resolucao = document.getElementById(`resolucao-int-${idInt}`).value.trim();
+            const solucionador = document.getElementById(`solucionador-int-${idInt}`).value;
+            if (!resolucao || !solucionador) { showToast("Preencha o log de fechamento e o técnico responsável.", "error"); return; }
+            
+            const btn = document.querySelector(`button[onclick="fecharIntervencao('${idInt}')"]`);
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; btn.disabled = true;
+
+            if (API_URL) {
+                try {
+                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "fecharIntervencao", dados: { id: idInt, resolucao: resolucao, solucionador: solucionador } }) });
+                    showToast(`Intervenção ${idInt} finalizada!`);
+                } catch(e) {
+                    showToast("Falha ao sincronizar baixa.", "error");
+                    btn.innerHTML = `<i class="fa-solid fa-check-double"></i> Finalizar Interv.`; btn.disabled = false; return;
+                }
+            }
+
+            const index = intervencoesData.findIndex(i => i.id === idInt);
+            if(index !== -1) {
+                intervencoesData[index].status = "Fechado";
+                intervencoesData[index].dataFechamento = new Date().toISOString();
+                intervencoesData[index].resolucao = resolucao;
+                intervencoesData[index].solucionador = solucionador;
+            }
+            
+            atualizarKPIs(); renderListaIntervencoes(); abrirGerenciamentoPendencias(); 
         }
 
         function abrirModalNovaIntervencao() {
@@ -1270,7 +1363,17 @@
             if (!descricao || !responsavel) { showToast("Preencha a descrição e selecione o técnico.", "error"); return; }
             btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
-            const novaIntervencao = { data: new Date().toISOString(), maquina, tipo, descricao, responsavel };
+            
+            const maxId = intervencoesData.reduce((max, item) => {
+                const num = parseInt(item.id.replace('INT-', '')) || 0;
+                return num > max ? num : max;
+            }, 0);
+            const novoId = `INT-${maxId + 1}`;
+
+            const novaIntervencao = {
+                id: novoId, data: new Date().toISOString(), maquina, tipo, descricao, responsavel, status: "Aberto", resolucao: "", dataFechamento: "", solucionador: ""
+            };
+
             if (API_URL) {
                 try {
                     await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "intervencao", dados: novaIntervencao }) });
@@ -1282,40 +1385,33 @@
             }
             intervencoesData.unshift(novaIntervencao);
             renderListaIntervencoes();
+            atualizarKPIs();
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalIntervencao();
         }
 
         function renderListaIntervencoes() {
             const tbody = document.getElementById('intervencoesTbody');
-            let combined = [];
-            intervencoesData.forEach(i => {
-                combined.push({
-                    isOS: false, id: i.id, data: new Date(i.data), maquina: i.maquina, tipo: i.tipo,
-                    descricao: i.descricao, responsavel: i.responsavel
-                });
-            });
-            chamadosData.filter(c => c.status === "Fechado").forEach(c => {
-                combined.push({
-                    isOS: true, id: c.id, data: c.dataFechamento ? new Date(c.dataFechamento) : new Date(c.data),
-                    maquina: c.maquina, tipo: "OS Fechada", descricao: c.resolucao || "Reparo realizado.",
-                    defeito: c.defeito, relator: c.relator, responsavel: c.solucionador
-                });
-            });
-            combined.sort((a, b) => b.data - a.data); 
-            if (combined.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhum histórico de manutenção registrado.</td></tr>`;
+            let ordenados = [...intervencoesData].sort((a, b) => new Date(b.data) - new Date(a.data));
+            
+            if (ordenados.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-6 text-center text-slate-400">Nenhum histórico de intervenção registrado.</td></tr>`;
                 return;
             }
-            tbody.innerHTML = combined.map(i => {
-                const dataFormatada = i.data.toLocaleDateString('pt-BR') + ' às ' + i.data.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-                let tipoBadge = `<span class="bg-blue-50 text-blue-600 px-2 py-1 rounded font-bold border border-blue-100 text-[10px]">${i.tipo}</span>`;
-                if(i.tipo === "Manutenção Forçada") tipoBadge = `<span class="bg-rose-50 text-rose-600 px-2 py-1 rounded font-bold border border-rose-100 text-[10px]">${i.tipo}</span>`;
-                if(i.isOS) tipoBadge = `<span class="bg-emerald-50 text-emerald-600 px-2 py-1 rounded font-bold border border-emerald-100 text-[10px]"><i class="fa-solid fa-clipboard-check"></i> OS Concluída</span>`;
-                let descHtml = `<span class="text-slate-600 italic">"${i.descricao}"</span>`;
-                if (i.isOS) {
-                    descHtml = `<div class="flex items-center gap-2"><span class="text-slate-600 truncate max-w-[200px]" title="${i.descricao}">${i.descricao}</span><button onclick="abrirDetalhesOS('${i.id}')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 px-2 py-1 rounded text-[9px] font-bold border border-slate-200 transition-colors flex items-center gap-1 shadow-sm"><i class="fa-regular fa-file-lines"></i> Ver OS</button></div>`;
-                }
-                return `<tr class="hover:bg-slate-50/50 border-b border-slate-100 last:border-0"><td class="p-4 font-semibold text-slate-500 whitespace-nowrap">${dataFormatada}</td><td class="p-4 font-bold text-slate-800">${i.maquina}</td><td class="p-4">${tipoBadge}</td><td class="p-4">${descHtml}</td><td class="p-4 font-medium text-slate-700">${i.responsavel}</td></tr>`;
+            tbody.innerHTML = ordenados.map(i => {
+                const dataFormatada = new Date(i.data).toLocaleDateString('pt-BR') + ' às ' + new Date(i.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                let badgeStatus = i.status === "Aberto" ? `<span class="bg-orange-100 text-orange-700 font-bold px-2 py-1 rounded text-[9px]"><i class="fa-solid fa-clock"></i> Pendente</span>` : `<span class="bg-emerald-100 text-emerald-700 font-bold px-2 py-1 rounded text-[9px]"><i class="fa-solid fa-check"></i> Fechado</span>`;
+                let textResolucao = i.status === "Aberto" ? `<span class="italic text-slate-400">Aguardando fechamento...<br>Demanda original: ${i.descricao}</span>` : `<span class="text-slate-700 font-medium">${i.resolucao}</span><br><span class="text-[9px] text-slate-400">Demanda original: ${i.descricao}</span>`;
+                let responsavelText = i.status === "Aberto" ? `Aberto por:<br><span class="font-semibold text-slate-600">${i.responsavel}</span>` : `Executado por:<br><span class="font-bold text-slate-800">${i.solucionador}</span>`;
+
+                return `
+                <tr class="hover:bg-slate-50/50 border-b border-slate-100 last:border-0">
+                    <td class="p-4 font-bold text-orange-600 text-xs">${i.id}</td>
+                    <td class="p-4 font-semibold text-slate-500 whitespace-nowrap">${dataFormatada}</td>
+                    <td class="p-4 font-bold text-slate-800"><span class="block">${i.maquina}</span><span class="text-[9px] text-slate-400 uppercase tracking-wider">${i.tipo}</span></td>
+                    <td class="p-4">${badgeStatus}</td>
+                    <td class="p-4 text-xs">${textResolucao}</td>
+                    <td class="p-4 text-[10px] text-slate-500 leading-tight">${responsavelText}</td>
+                </tr>`;
             }).join('');
         }
 
@@ -1438,17 +1534,25 @@
 
         function atualizarKPIs() {
             const alertas = calcularAlertas();
-            const pendentes = alertas.hoje.length; 
-            const programados = alertas.amanha.length + alertas.dias3.length + alertas.dias7.length;
-            const atrasadas = alertas.vencidas.length;
-            document.getElementById('kpiPendentesHoje').innerText = pendentes;
-            document.getElementById('kpiProximosDias').innerText = programados;
+            document.getElementById('kpiPendentesHoje').innerText = alertas.hoje.length;
+            document.getElementById('kpiProximosDias').innerText = alertas.amanha.length + alertas.dias3.length + alertas.dias7.length;
+            
             const badgeAtrasadas = document.getElementById('kpiAtrasadas');
-            if(badgeAtrasadas) badgeAtrasadas.innerText = atrasadas;
+            if(badgeAtrasadas) badgeAtrasadas.innerText = alertas.vencidas.length;
+            
             const osAbertas = chamadosData.filter(c => c.status !== "Fechado").length;
-            document.getElementById('kpiChamadosAbertos').innerText = osAbertas;
+            const intAbertas = intervencoesData.filter(i => i.status !== "Fechado").length;
+            const totalPendencias = osAbertas + intAbertas;
+            
+            document.getElementById('kpiPendencias').innerText = totalPendencias;
+            
             const badge = document.getElementById('badgeAlertas');
-            if (osAbertas > 0) { badge.innerText = osAbertas; badge.classList.remove('hidden'); } else { badge.classList.add('hidden'); }
+            if (totalPendencias > 0) { 
+                badge.innerText = totalPendencias; 
+                badge.classList.remove('hidden'); 
+            } else { 
+                badge.classList.add('hidden'); 
+            }
         }
 
         function renderListaAlertas(arr) {
@@ -1736,10 +1840,15 @@
                   itensStatus: { "Verificar Oleo Canola": [{ data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", status: "Problema", obs: "Correia desfiando na lateral direita." }] } 
                 }
             ];
+            
             chamadosData = [
-                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou.", relator: "Rodrigo - Produção", status: "Aberto" }
+                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou e vazou óleo.", relator: "Rodrigo - Produção", status: "Aberto" }
             ];
-            intervencoesData = [];
+            
+            intervencoesData = [
+                { id: "INT-1", data: ontem, maquina: "Guilhotina - GUI-001", tipo: "Preventiva de TI", descricao: "Apertar os prisioneiros do motor principal.", responsavel: "José - Manutenção", status: "Aberto", resolucao: "", dataFechamento: "", solucionador: "" }
+            ];
+            
             maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; 
             
             popData = [
@@ -2198,7 +2307,6 @@
             item.quantidade = novaQuantidade; renderAlmoxarifadoLista(); fecharModalMovimentacao();
         }
 
-        // --- SISTEMA INTELIGENTE DE RENDERIZAÇÃO DE POPS ---
         function renderPOPs() {
             const container = document.getElementById('popsContainer'); 
             const maqFilter = document.getElementById('popMaquinaFilter').value; 
@@ -2231,7 +2339,6 @@
             `).join('');
         }
 
-        // --- SISTEMA ATUALIZADO DO FORNO ---
         function formatarTempo(totalSegundos) {
             if (!isFinite(totalSegundos) || totalSegundos < 0) return "00:00:00";
             const h = Math.floor(totalSegundos / 3600);
@@ -2373,7 +2480,6 @@
         function visualizarImagem(base64) { document.getElementById('enlargedImg').src = base64; document.getElementById('viewImageModal').classList.remove('hidden'); }
         function fecharModalImagem() { document.getElementById('viewImageModal').classList.add('hidden'); }
 
-        // Ativador do Service Worker para o PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
