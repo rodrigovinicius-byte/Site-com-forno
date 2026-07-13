@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Manutenção, Processos & Parametrização 5.0 - Grupo TBX</title>
+    
     <!-- Configurações do PWA (App de Celular) -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#0b132b">
-    <!-- Configurações exclusivas para iPhones (iOS) -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="TBX App">
     <link rel="apple-touch-icon" href="icon.png">
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- BIBLIOTECA DE GRÁFICOS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
         body { font-family: 'Inter', sans-serif; }
@@ -142,11 +147,16 @@
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Procedimentos (POP)</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Guias de execução, documentos do Google Docs e LOTO.</p>
                 </button>
-                
                 <button onclick="abrirModuloParametrizacao()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
                     <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-sliders text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Parametrização de Máquinas</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Central de calculadoras, simulação de produção e parametrizações validadas.</p>
+                </button>
+                <!-- NOVO BOTÃO: RELATÓRIOS -->
+                <button onclick="abrirModuloRelatorios()" class="nav-card text-left bg-gradient-to-br from-slate-800 to-[#0b132b] border border-slate-900 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
+                    <div class="w-11 h-11 rounded-xl bg-white/10 text-white flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-chart-pie text-xl"></i></div>
+                    <h2 class="font-bold text-white mb-1.5 text-base">Painel de Relatórios</h2>
+                    <p class="text-xs text-slate-300 leading-relaxed">Dashboards instantâneos, KPIs e gráficos gerenciais da fábrica.</p>
                 </button>
             </div>
         </div>
@@ -255,9 +265,7 @@
         </div>
 
         <div id="view-forno" class="fade-in hidden">
-            
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                     <div class="flex justify-between items-center border-b pb-3 border-slate-100">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -455,6 +463,38 @@
                 
             </div>
         </div>
+
+        <!-- TELA DE RELATÓRIOS (DASHBOARD) -->
+        <div id="view-relatorios" class="fade-in hidden">
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                    <h2 class="font-black text-slate-800 text-xl tracking-tight">Indicadores de Manutenção</h2>
+                    <p class="text-xs text-slate-500 mt-1">Dados processados instantaneamente com base na última sincronização.</p>
+                </div>
+                <button onclick="renderizarGraficos()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold py-2 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-all">
+                    <i class="fa-solid fa-arrows-rotate"></i> Atualizar Dados
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Gráfico 1: Volume de OS -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Volume de Ordens de Serviço (OS)</h3>
+                    <div class="relative h-64 w-full">
+                        <canvas id="graficoOS"></canvas>
+                    </div>
+                </div>
+
+                <!-- Gráfico 2: Status dos Checklists Diários -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Adesão de Checklists (Geral)</h3>
+                    <div class="relative h-64 w-full flex items-center justify-center">
+                        <canvas id="graficoChecklist"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </main>
 
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
@@ -837,6 +877,10 @@
         let currentModalMode = '';
         let currentPreditivaMenu = '';
 
+        // --- SISTEMA DE RELATÓRIOS E DASHBOARDS ---
+        let chartOS = null;
+        let chartChecklist = null;
+
         window.onload = () => {
             verificarAutenticacao();
         };
@@ -903,7 +947,7 @@
         }
 
         function alternarTela(novaTela) {
-            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'parametrizacao', 'forno', 'intervencoes'];
+            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'parametrizacao', 'forno', 'intervencoes', 'relatorios'];
             telas.forEach(t => {
                 const el = document.getElementById(`view-${t}`);
                 if(el) el.classList.add('hidden');
@@ -930,6 +974,8 @@
                     setTimeout(calcularParametrosForno, 50);
                 } else if (novaTela === 'intervencoes') {
                     headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva Direta";
+                } else if (novaTela === 'relatorios') {
+                    // Mantém os nomes setados na função abrirModuloRelatorios
                 } else {
                     headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas";
                 }
@@ -941,6 +987,75 @@
             else if (currentView === 'checklist-periodo') alternarTela('checklist-setor');
             else if (currentView === 'forno') alternarTela('parametrizacao');
             else alternarTela('home');
+        }
+
+        function abrirModuloRelatorios() {
+            alternarTela('relatorios');
+            const headerTitle = document.getElementById('headerTitle');
+            const headerSubtitle = document.getElementById('headerSubtitle');
+            headerTitle.innerText = "Painel Gerencial (Dashboard)"; 
+            headerSubtitle.innerText = "Grupo TBX · Relatórios de Manutenção";
+            
+            // Dá um pequeno atraso para a tela aparecer antes de desenhar o gráfico (animação fluida)
+            setTimeout(() => { renderizarGraficos(); }, 150);
+        }
+
+        function renderizarGraficos() {
+            // 1. DADOS DO GRÁFICO DE OS (Corretivas)
+            const osAbertas = chamadosData.filter(c => c.status !== "Fechado").length;
+            const osFechadas = chamadosData.filter(c => c.status === "Fechado").length;
+
+            const ctxOS = document.getElementById('graficoOS').getContext('2d');
+            if (chartOS) chartOS.destroy(); 
+            
+            chartOS = new Chart(ctxOS, {
+                type: 'bar',
+                data: {
+                    labels: ['OS Abertas / Pendentes', 'OS Concluídas'],
+                    datasets: [{
+                        label: 'Quantidade de OS',
+                        data: [osAbertas, osFechadas],
+                        backgroundColor: ['#e11d48', '#10b981'], 
+                        borderRadius: 6,
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+                }
+            });
+
+            // 2. DADOS DO GRÁFICO DE CHECKLISTS (Preventivas)
+            const alertas = calcularAlertas();
+            const emDia = alertas.hoje.length + alertas.amanha.length + alertas.dias3.length + alertas.dias7.length;
+            const emAtraso = alertas.vencidas.length;
+
+            const ctxChecklist = document.getElementById('graficoChecklist').getContext('2d');
+            if (chartChecklist) chartChecklist.destroy();
+
+            chartChecklist = new Chart(ctxChecklist, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Em Dia / No Prazo', 'Vencidos / Atrasados'],
+                    datasets: [{
+                        data: [emDia, emAtraso],
+                        backgroundColor: ['#0ea5e9', '#f43f5e'], 
+                        borderWidth: 2,
+                        hoverOffset: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '65%',
+                    plugins: {
+                        legend: { position: 'bottom' }
+                    }
+                }
+            });
         }
 
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
@@ -2257,9 +2372,8 @@
         function salvarConfigUrl() { const url = document.getElementById('apiInputUrl').value.trim(); if (url) { localStorage.setItem("checklist_google_api_url", url); API_URL = url; document.getElementById('apiStatusAlert').classList.add('hidden'); toggleConfigModal(false); baixarDadosDaPlanilha(); } else { showToast("URL inválida.", "error"); } }
         function visualizarImagem(base64) { document.getElementById('enlargedImg').src = base64; document.getElementById('viewImageModal').classList.remove('hidden'); }
         function fecharModalImagem() { document.getElementById('viewImageModal').classList.add('hidden'); }
-    </script>
-    <!-- Ativador do Service Worker para o PWA -->
-    <script>
+
+        // Ativador do Service Worker para o PWA
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
