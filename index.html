@@ -462,80 +462,92 @@
         </div>
 
         <div id="view-pvd" class="fade-in hidden">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-palette text-indigo-600"></i> Setup do Processo (Estequiometria)
-                        </h3>
-                    </div>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Cor de Produção (Receita)</label>
-                            <select id="pvdCor" onchange="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-800">
-                                <option value="ouro">Dourado (Gold)</option>
-                                <option value="rose">Rosé</option>
-                                <option value="grafite">Grafite</option>
-                            </select>
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Cátodo Operacional</label>
-                                <span id="pvdCatodo" class="block font-bold text-sm text-slate-700">Titânio (Ti) Puro</span>
-                            </div>
-                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
-                                <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Gases Injetados</label>
-                                <span id="pvdGases" class="block font-bold text-sm text-indigo-600">Nitrogênio (N₂)</span>
-                            </div>
-                        </div>
-                        <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100">
-                            <label class="block text-[9px] font-bold text-indigo-400 uppercase mb-1">Equação de Plasma</label>
-                            <span id="pvdEstequiometria" class="block font-bold text-xs text-indigo-700">Ti + N <i class="fa-solid fa-arrow-right mx-1"></i> TiN (Nitreto de Titânio)</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
-                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-gauge-high text-blue-600"></i> Engenharia de Vácuo e Térmico
-                        </h3>
-                    </div>
-                    <div class="space-y-4">
-                        <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-3">
-                            <div>
-                                <span class="block text-xs font-bold text-slate-800">Água de Refrigeração</span>
-                                <span class="block text-[9px] text-slate-500 font-medium">Torre de resfriamento para bombas de difusão e câmara.</span>
-                            </div>
-                            <select id="pvdAgua" onchange="calcularParametrosPVD()" class="bg-white border border-slate-300 rounded-lg p-2 text-xs focus:outline-none focus:border-blue-500 font-bold w-24 text-center">
-                                <option value="sim" selected class="text-emerald-600">Ligada</option>
-                                <option value="nao" class="text-rose-600">Desligada</option>
-                            </select>
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Temperatura Real (PV) °C</label>
-                                <input type="number" id="pvdTemp" value="180" oninput="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-rose-600 text-center">
-                                <span class="block text-[9px] text-slate-400 mt-1 text-center">Aquecimento Interno das Cubas</span>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Nível de Vácuo Atual</label>
-                                <select id="pvdVacuo" onchange="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-blue-600 text-center">
-                                    <option value="Atmosfera">Atmosfera (Aberta)</option>
-                                    <option value="J1">J1 (Bombas Mecânicas)</option>
-                                    <option value="J2">J2 (Roots Transição)</option>
-                                    <option value="J4">J4 (Pré-Alto Vácuo)</option>
-                                    <option value="J5" selected>J5 (Alto Vácuo Molecular)</option>
-                                </select>
-                                <span class="block text-[9px] text-slate-400 mt-1 text-center">Monitoramento do Painel</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="flex gap-2 mb-6 border-b border-slate-200 pb-2">
+                <button onclick="mudarAbaPVD('setup')" id="tab-pvd-setup" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-blue-100 text-blue-700 border border-blue-200 shadow-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-sliders"></i> Setup do Processo
+                </button>
+                <button onclick="mudarAbaPVD('decapagem')" id="tab-pvd-decapagem" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-flask"></i> Calculadora de Decapagem
+                </button>
+                <button onclick="mudarAbaPVD('pop')" id="tab-pvd-pop" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-book-open"></i> Ficha de Operação (POP)
+                </button>
             </div>
 
-            <div class="space-y-6">
+            <div id="pvd-tab-setup" class="block">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-palette text-indigo-600"></i> Setup do Processo (Estequiometria)
+                            </h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Cor de Produção (Receita)</label>
+                                <select id="pvdCor" onchange="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                    <option value="ouro">Dourado (Gold)</option>
+                                    <option value="rose">Rosé</option>
+                                    <option value="grafite">Grafite</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                    <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Cátodo Operacional</label>
+                                    <span id="pvdCatodo" class="block font-bold text-sm text-slate-700">Titânio (Ti) Puro</span>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                    <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Gases Injetados</label>
+                                    <span id="pvdGases" class="block font-bold text-sm text-indigo-600">Nitrogênio (N₂)</span>
+                                </div>
+                            </div>
+                            <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100">
+                                <label class="block text-[9px] font-bold text-indigo-400 uppercase mb-1">Equação de Plasma</label>
+                                <span id="pvdEstequiometria" class="block font-bold text-xs text-indigo-700">Ti + N <i class="fa-solid fa-arrow-right mx-1"></i> TiN (Nitreto de Titânio)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                        <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-gauge-high text-blue-600"></i> Engenharia de Vácuo e Térmico
+                            </h3>
+                        </div>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-3">
+                                <div>
+                                    <span class="block text-xs font-bold text-slate-800">Água de Refrigeração</span>
+                                    <span class="block text-[9px] text-slate-500 font-medium">Torre de resfriamento para bombas e câmara.</span>
+                                </div>
+                                <select id="pvdAgua" onchange="calcularParametrosPVD()" class="bg-white border border-slate-300 rounded-lg p-2 text-xs focus:outline-none focus:border-blue-500 font-bold w-24 text-center">
+                                    <option value="sim" selected class="text-emerald-600">Ligada</option>
+                                    <option value="nao" class="text-rose-600">Desligada</option>
+                                </select>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Temp. Real (PV) °C</label>
+                                    <input type="number" id="pvdTemp" value="180" oninput="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-rose-600 text-center">
+                                    <span class="block text-[9px] text-slate-400 mt-1 text-center">Aquecimento Interno</span>
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Vácuo Atual</label>
+                                    <select id="pvdVacuo" onchange="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-blue-600 text-center">
+                                        <option value="Atmosfera">Atmosfera (Aberta)</option>
+                                        <option value="J1">J1 (Bombas Mecânicas)</option>
+                                        <option value="J2">J2 (Roots Transição)</option>
+                                        <option value="J4">J4 (Pré-Alto Vácuo)</option>
+                                        <option value="J5" selected>J5 (Alto Vácuo Molecular)</option>
+                                    </select>
+                                    <span class="block text-[9px] text-slate-400 mt-1 text-center">Monitoramento Painel</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="pvdFeedbackBox" class="bg-emerald-50 border border-emerald-200 text-emerald-900 p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300">
                     <i id="pvdFeedbackIcon" class="fa-solid fa-check-double text-emerald-600 mt-1 text-3xl"></i>
                     <div>
@@ -543,14 +555,152 @@
                         <p id="pvdFeedbackText" class="text-sm leading-relaxed font-medium">A máquina está em Alto Vácuo perfeito e as cubas atingiram a temperatura de ativação. Pode pressionar <strong>Automatic Coating</strong>.</p>
                     </div>
                 </div>
+            </div>
 
-                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
-                    <h3 id="pvdDecapagemTitle" class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-2 border-b border-slate-100 pb-2">
-                        <i class="fa-solid fa-flask text-rose-600"></i> Remoção Química (Base Titânio)
-                    </h3>
-                    <p id="pvdDecapagemText" class="text-xs text-slate-600 leading-relaxed text-justify">
-                        <strong>Receita Padrão (2L):</strong> 1L Peróxido de Hidrogênio (35%), 1L Água Desmineralizada, 100-150g Soda Cáustica (NaOH), 20g EDTA.<br><span class="text-rose-600 font-bold">Atenção:</span> Diluir a Soda separadamente antes de misturar ao Peróxido para evitar fervura explosiva!
-                    </p>
+            <div id="pvd-tab-decapagem" class="hidden space-y-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100 mb-5">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-calculator text-rose-600"></i> Calculadora de Decapagem Química
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1">Gere a receita exata para remover revestimentos de PVD sem atacar o Inox.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Cátodo Base (Cor Origem)</label>
+                            <select id="decapMaterial" onchange="calcularDecapagem()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                <option value="ti" selected>Titânio (Ouro / Rosé)</option>
+                                <option value="cr">Cromo (Grafite)</option>
+                            </select>
+                        </div>
+                        <div id="decapAguaWrapper">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd. Água Desmineralizada (L)</label>
+                            <input type="number" id="decapAguaInput" value="1" min="1" step="1" oninput="calcularDecapagem()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-blue-600 text-center">
+                        </div>
+                        <div id="decapEdtaWrapper">
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo de EDTA</label>
+                            <select id="decapEdtaTipo" onchange="calcularDecapagem()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-700">
+                                <option value="po" selected>Pó (Sólido)</option>
+                                <option value="liquido">Líquido (40% Comercial)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div id="decapTiContainer" class="block space-y-5">
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-200 text-center shadow-sm">
+                                <span class="block text-[10px] font-bold text-blue-600 uppercase mb-1">Água Desmin.</span>
+                                <span id="resDecapAgua" class="block text-xl font-black text-blue-800">1.0 L</span>
+                            </div>
+                            <div class="bg-slate-100 p-4 rounded-xl border border-slate-300 text-center shadow-sm">
+                                <span class="block text-[10px] font-bold text-slate-600 uppercase mb-1">Peróxido (35%)</span>
+                                <span id="resDecapPeroxido" class="block text-xl font-black text-slate-800">1.0 L</span>
+                            </div>
+                            <div class="bg-rose-50 p-4 rounded-xl border border-rose-200 text-center shadow-sm">
+                                <span class="block text-[10px] font-bold text-rose-600 uppercase mb-1">Soda (NaOH)</span>
+                                <span id="resDecapSoda" class="block text-xl font-black text-rose-800">50g a 75g</span>
+                            </div>
+                            <div class="bg-emerald-50 p-4 rounded-xl border border-emerald-200 text-center shadow-sm">
+                                <span class="block text-[10px] font-bold text-emerald-600 uppercase mb-1">EDTA</span>
+                                <span id="resDecapEdta" class="block text-xl font-black text-emerald-800">10 g</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-xs text-slate-700 leading-relaxed font-medium">
+                            <strong class="text-rose-600 uppercase text-[10px] tracking-wider mb-2 block"><i class="fa-solid fa-triangle-exclamation"></i> Procedimento de Segurança Obrigatório</strong>
+                            <ol class="list-decimal pl-4 space-y-2">
+                                <li>Em um recipiente <strong>separado e pequeno</strong>, dissolva a Soda Cáustica lentamente em uma parte de água fria (Atenção: esquenta muito!)[cite: 177, 178, 179].</li>
+                                <li>No tanque principal, misture o Peróxido de Hidrogênio com a Água Desmineralizada e adicione todo o EDTA (ele estabiliza a fervura)[cite: 180, 181, 184].</li>
+                                <li>Mergulhe as cubas inteiramente na solução do tanque[cite: 185].</li>
+                                <li>Despeje a Soda diluída (do Passo 1) lentamente no tanque para ativar a fervura (efervescência)[cite: 186, 187].</li>
+                                <li>Aguarde a cor se dissolver 100% e lave a peça com água corrente abundante[cite: 166, 188].</li>
+                            </ol>
+                        </div>
+                    </div>
+
+                    <div id="decapCrContainer" class="hidden space-y-5">
+                        <div class="bg-amber-50 p-6 rounded-xl border border-amber-200 text-amber-900 shadow-sm flex gap-4 items-start">
+                            <i class="fa-solid fa-bolt text-3xl mt-1 text-amber-600"></i>
+                            <div>
+                                <h4 class="font-black text-base uppercase mb-2">Decapagem Eletrolítica Anódica Obrigatória</h4>
+                                <p class="text-sm font-medium leading-relaxed mb-3">
+                                    O Cromo Carbonitreto (Grafite) possui inércia química extrema e é blindado contra Peróxido e Soda[cite: 191]. A remoção exige o uso de um retificador de energia (tipo máquina de solda)[cite: 196].
+                                </p>
+                                <ol class="list-decimal pl-4 space-y-1.5 text-xs">
+                                    <li>Prepare um banho alcalino estático (Água + Soda + Carbonato)[cite: 195].</li>
+                                    <li>Ligue o cabo <strong>POSITIVO (Anodo)</strong> diretamente na cuba manchada[cite: 197].</li>
+                                    <li>Ligue o cabo <strong>NEGATIVO (Catodo)</strong> nas placas laterais de aço[cite: 198].</li>
+                                    <li>A energia arranca as moléculas de Cromo e, ao chegar no Inox, o processo desliga sozinho (passivação) salvando a peça[cite: 201, 202, 203].</li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pvd-tab-pop" class="hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
+                            <i class="fa-solid fa-list-ol text-blue-600"></i> POP de Operação (Passo a Passo)
+                        </h3>
+                        <ol class="space-y-4 text-xs font-medium text-slate-600">
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                                <div><strong class="text-slate-800">Água de Refrigeração:</strong> Ligue a torre e as bombas de água. Jamais prossiga sem confirmar o fluxo[cite: 120, 121].</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                                <div><strong class="text-slate-800">Energia e Sistema:</strong> Ligue disjuntores magnéticos e o "Disjuntor 1". Pressione ON[cite: 122, 123, 124]. Faça login (Senha: 666666) no idioma English[cite: 125].</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold flex-shrink-0">3</div>
+                                <div><strong class="text-slate-800">Aquecimento (220°C/250°C):</strong> Ligue resistências do óleo interno e aquecimento lateral[cite: 126, 127].</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0">4</div>
+                                <div><strong class="text-slate-800">Carga e Vedação:</strong> Acomode cubas no carrossel planetário, trave as manivelas firmemente (comprime o O-ring)[cite: 128, 129, 130].</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold flex-shrink-0">5</div>
+                                <div><strong class="text-slate-800">Desbaste (J1):</strong> Clique Pump 1, aguarde 20s, Pump 2[cite: 132, 133, 134]. Ouça as bombas. O barulho deve ser ruidoso mas contínuo. Se engasgar, desligue logo (óleo frio trava as palhetas)[cite: 135, 136, 137, 138].</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">6</div>
+                                <div><strong class="text-slate-800">Vácuo Auto e Pintura:</strong> Ao acender J1, clique Auto Pump[cite: 139, 140]. Inicie Heating 1[cite: 143]. Somente quando atingir J5 e PV $\ge$ 180°C, pressione Automatic Coating[cite: 149, 150, 151].</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold flex-shrink-0">7</div>
+                                <div><strong class="text-slate-800">Finalização:</strong> Despressurização automática (Automatic Deflation). Não force a porta. Abra só quando o barulho de ar parar. Use mangotes (peças a 200°C)[cite: 152, 153, 154, 155].</div>
+                            </li>
+                        </ol>
+                    </div>
+
+                    <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-sm text-white">
+                        <h3 class="text-sm font-bold flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
+                            <i class="fa-solid fa-atom text-rose-500"></i> Fundamentos Físicos Básicos
+                        </h3>
+                        <div class="space-y-4 text-xs font-medium text-slate-300">
+                            <div>
+                                <strong class="text-rose-400 block mb-1 text-[11px] uppercase">Não Existe Tinta</strong>
+                                O processo usa Arco Catódico. Raios de alta corrente atingem o bloco sólido (cátodo) e o vaporizam instantaneamente, criando um "Gás/Plasma"[cite: 7, 25, 26, 27].
+                            </div>
+                            <div>
+                                <strong class="text-blue-400 block mb-1 text-[11px] uppercase">Polarização (Bias)</strong>
+                                Para o metal grudar na cuba, o gás ganha carga Positiva (+), e o Bias injeta carga Negativa (-) nas peças. Os opostos se atraem e a cor se funde[cite: 28, 30, 31, 32, 33].
+                            </div>
+                            <div>
+                                <strong class="text-amber-400 block mb-1 text-[11px] uppercase">A Regra da Sujeira (Outgassing)</strong>
+                                Uma única digital (gordura) ou microgota de cola vira gás explosivo no vácuo. Ela explode a cor de dentro para fora, criando arco-íris e descascamento[cite: 14, 15, 101]. Luvas nitrílicas são inegociáveis[cite: 105, 106].
+                            </div>
+                            <div>
+                                <strong class="text-emerald-400 block mb-1 text-[11px] uppercase">Setup Cruzado de Cores</strong>
+                                Vai de Dourado para Grafite? Limpe o pó dourado da máquina! Caso contrário, rode 1 ciclo vazio (Purga) para forrar a parede com o novo metal[cite: 108, 114, 115, 116].
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1025,8 +1175,8 @@
                     headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
                     setTimeout(calcularParametrosForno, 50);
                 } else if (novaTela === 'pvd') {
-                    headerTitle.innerText = "Parametrização PVD (Arco Catódico)"; headerSubtitle.innerText = "Grupo TBX · Ajuste de Pintura e Vácuo";
-                    setTimeout(calcularParametrosPVD, 50);
+                    headerTitle.innerText = "Parametrização PVD (Arco Catódico)"; headerSubtitle.innerText = "Grupo TBX · Setup, Decapagem e Operação";
+                    setTimeout(() => { calcularParametrosPVD(); mudarAbaPVD('setup'); }, 50);
                 } else if (novaTela === 'intervencoes') {
                     headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva e Planejada";
                 } else if (novaTela === 'relatorios') {
@@ -1148,7 +1298,7 @@
                     desc = "Simulação de encharque térmico, cálculo de ciclo e dimensionamento de gás.";
                 } else if (isPvd) {
                     icone = "fa-atom"; corBg = "bg-blue-100"; corText = "text-blue-600"; action = "abrirModuloPVD()";
-                    desc = "Ajuste de parâmetros, seleção de cátodos e engenharia do vácuo/plasma.";
+                    desc = "Ajuste de parâmetros, cálculo químico de decapagem e operação do vácuo.";
                 }
 
                 return `
@@ -1166,8 +1316,27 @@
         }
 
         // ============================================
-        // LÓGICA DO PVD
+        // LÓGICA DO PVD (COM ABAS E CALCULADORA)
         // ============================================
+        function mudarAbaPVD(abaSelecionada) {
+            const abas = ['setup', 'decapagem', 'pop'];
+            abas.forEach(aba => {
+                document.getElementById(`pvd-tab-${aba}`).classList.add('hidden');
+                document.getElementById(`tab-pvd-${aba}`).className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2";
+            });
+
+            document.getElementById(`pvd-tab-${abaSelecionada}`).classList.remove('hidden');
+            
+            if (abaSelecionada === 'setup') {
+                document.getElementById('tab-pvd-setup').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-blue-100 text-blue-700 border border-blue-200 shadow-sm flex items-center justify-center gap-2";
+            } else if (abaSelecionada === 'decapagem') {
+                document.getElementById('tab-pvd-decapagem').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2";
+                calcularDecapagem();
+            } else if (abaSelecionada === 'pop') {
+                document.getElementById('tab-pvd-pop').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm flex items-center justify-center gap-2";
+            }
+        }
+
         function calcularParametrosPVD() {
             const cor = document.getElementById('pvdCor').value;
             const temp = parseFloat(document.getElementById('pvdTemp').value) || 0;
@@ -1177,32 +1346,16 @@
             const catodoEl = document.getElementById('pvdCatodo');
             const gasesEl = document.getElementById('pvdGases');
             const estequiometriaEl = document.getElementById('pvdEstequiometria');
-            const decapagemTitle = document.getElementById('pvdDecapagemTitle');
-            const decapagemText = document.getElementById('pvdDecapagemText');
-
-            let isTitanio = true;
 
             if (cor === 'ouro') {
-                catodoEl.innerText = 'Titânio (Ti) Puro';
-                gasesEl.innerText = 'Nitrogênio (N₂)';
-                estequiometriaEl.innerHTML = 'Ti + N <i class="fa-solid fa-arrow-right mx-1"></i> TiN (Nitreto)';
+                catodoEl.innerText = 'Titânio (Ti) Puro'; gasesEl.innerText = 'Nitrogênio (N₂)'; estequiometriaEl.innerHTML = 'Ti + N <i class="fa-solid fa-arrow-right mx-1"></i> TiN (Nitreto de Titânio)';
+                document.getElementById('decapMaterial').value = 'ti';
             } else if (cor === 'rose') {
-                catodoEl.innerText = 'Titânio (Ti) Puro';
-                gasesEl.innerText = 'N₂ + Acetileno (C₂H₂)';
-                estequiometriaEl.innerHTML = 'Adição Carbono <i class="fa-solid fa-arrow-right mx-1"></i> TiCN (Carbonitreto)';
+                catodoEl.innerText = 'Titânio (Ti) Puro'; gasesEl.innerText = 'N₂ + Acetileno (C₂H₂)'; estequiometriaEl.innerHTML = 'Carbono na rede <i class="fa-solid fa-arrow-right mx-1"></i> TiCN (Carbonitreto)';
+                document.getElementById('decapMaterial').value = 'ti';
             } else if (cor === 'grafite') {
-                isTitanio = false;
-                catodoEl.innerText = 'Cromo (Cr) Puro';
-                gasesEl.innerText = 'Acetileno (C₂H₂)';
-                estequiometriaEl.innerHTML = 'Cr + C₂H₂ <i class="fa-solid fa-arrow-right mx-1"></i> CrC/CrCN (Carbeto)';
-            }
-
-            if (isTitanio) {
-                decapagemTitle.innerHTML = `<i class="fa-solid fa-flask text-rose-600"></i> Remoção Química (Base Titânio)`;
-                decapagemText.innerHTML = `<strong>Receita Padrão (2L):</strong> 1L Peróxido de Hidrogênio (35%), 1L Água Desmineralizada, 100-150g Soda Cáustica (NaOH), 20g EDTA.<br><span class="text-rose-600 font-bold">Atenção:</span> Diluir a Soda separadamente antes de misturar ao Peróxido para evitar fervura explosiva!`;
-            } else {
-                decapagemTitle.innerHTML = `<i class="fa-solid fa-bolt text-amber-500"></i> Decapagem Eletrolítica (Base Cromo)`;
-                decapagemText.innerHTML = `<strong>O Cromo Grafite é imune ao Peróxido com Soda.</strong><br>Utilize Retificador CC. Ligue o cabo Positivo (+) na cuba manchada e Negativo (-) nas placas. O ataque expulsa o metal e entra em auto-passivação (não fura o Inox).`;
+                catodoEl.innerText = 'Cromo (Cr) Puro'; gasesEl.innerText = 'Acetileno (C₂H₂)'; estequiometriaEl.innerHTML = 'Cr + C₂H₂ <i class="fa-solid fa-arrow-right mx-1"></i> CrC/CrCN (Carbeto)';
+                document.getElementById('decapMaterial').value = 'cr';
             }
 
             const fbBox = document.getElementById('pvdFeedbackBox');
@@ -1216,26 +1369,67 @@
                 fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
                 fbIcon.className = "fa-solid fa-skull-crossbones text-rose-600 mt-1 text-3xl";
                 fbTitle.innerText = "RISCO FATAL: Água Desligada!";
-                fbText.innerHTML = `Ligar as resistências ou bombas de difusão sem água circulando causará a <strong>destruição do óleo de difusão e derretimento catastrófico dos O-Rings de vedação</strong>. A máquina perderá a capacidade de vácuo.`;
+                fbText.innerHTML = `Ligar resistências ou bombas de difusão sem água causará a <strong>destruição do óleo e derretimento dos O-Rings de vedação</strong>.`;
             } else if (vacuo !== 'J5') {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-wind text-amber-600 mt-1 text-3xl";
-                fbTitle.innerText = "Vácuo Insuficiente (Aguardar Alto Vácuo)";
-                fbText.innerHTML = `Nível de vácuo atual (<strong>${vacuo}</strong>) não permite viagem do plasma. As partículas metálicas oxidariam e cairiam como fuligem inútil. Aguarde o J5 (Bombas de Difusão) e a liberação da sirene.`;
+                fbTitle.innerText = "Vácuo Insuficiente (Aguardar J5)";
+                fbText.innerHTML = `Nível <strong>${vacuo}</strong> não permite viagem do plasma metálico (oxidação instantânea). Aguarde a sirene do Alto Vácuo Molecular.`;
             } else if (temp < 180) {
                 fbBox.className += "bg-orange-50 border-orange-200 text-orange-900";
                 fbIcon.className = "fa-solid fa-temperature-arrow-down text-orange-600 mt-1 text-3xl";
                 fbTitle.innerText = "Temperatura Crítica: Peças Frias (" + temp + "°C)";
-                fbText.innerHTML = `A regra do PVD exige <strong>PV = 180°C ou superior</strong>. Caso inicie, o plasma solidificará instantaneamente no substrato e criará uma "casca fraca" que vai descascar imediatamente ao toque (falta de difusão atômica).`;
+                fbText.innerHTML = `Regra de processo: PV = 180°C. Com esta temperatura, o plasma solidificará numa "casca" superficial que irá descascar ao primeiro toque.`;
             } else {
                 fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
                 fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-3xl";
                 fbTitle.innerText = "Parâmetros Liberados (J5 + " + temp + "°C)";
-                let extra = cor === 'grafite' ? `<br><br><span class="text-emerald-700 text-[10px]"><strong>Atualização Grafite:</strong> O ciclo adiciona +2,3 min (Limpeza Iônica/Plasma Etching e Deposição) para garantir resistência a riscos e curar efeito de arco-íris.</span>` : ``;
-                fbText.innerHTML = `A máquina está em Alto Vácuo perfeito e as peças atingiram a energia de ativação térmica. Pode pressionar o botão <strong>Automatic Coating</strong>.${extra}`;
+                let extra = cor === 'grafite' ? `<br><br><span class="text-emerald-700 text-[10px]"><strong>Grafite Ajustado:</strong> Ciclo operando com +2,3 min extras para curar manchas arco-íris e aumentar espessura.</span>` : ``;
+                fbText.innerHTML = `A máquina está em Alto Vácuo perfeito e as peças atingiram a energia térmica para enraizamento atômico. Pressione <strong>Automatic Coating</strong>.${extra}`;
             }
         }
 
+        function calcularDecapagem() {
+            const material = document.getElementById('decapMaterial').value;
+            const containerTi = document.getElementById('decapTiContainer');
+            const containerCr = document.getElementById('decapCrContainer');
+            
+            const aguaWrapper = document.getElementById('decapAguaWrapper');
+            const edtaWrapper = document.getElementById('decapEdtaWrapper');
+
+            if (material === 'ti') {
+                containerTi.classList.remove('hidden');
+                containerCr.classList.add('hidden');
+                aguaWrapper.classList.remove('opacity-30', 'pointer-events-none');
+                edtaWrapper.classList.remove('opacity-30', 'pointer-events-none');
+
+                const aguaL = parseFloat(document.getElementById('decapAguaInput').value) || 1;
+                const edtaTipo = document.getElementById('decapEdtaTipo').value;
+
+                // Receita Base Documentada para 2 Litros Totais: 1L Peróx + 1L Água, 100g Soda, 20g EDTA pó ou 40ml líquido
+                // Multiplicador linear: 'aguaL' é a variável mestre (já que 1 agua = 1 peroxido).
+                const peroxidoL = aguaL; 
+                const sodaMin = Math.round(100 * aguaL);
+                const sodaMax = Math.round(150 * aguaL);
+
+                let edtaStr = "";
+                if (edtaTipo === 'po') {
+                    edtaStr = Math.round(20 * aguaL) + " g";
+                } else {
+                    edtaStr = Math.round(45 * aguaL) + " ml"; // média 40-50
+                }
+
+                document.getElementById('resDecapAgua').innerText = aguaL.toFixed(1) + " L";
+                document.getElementById('resDecapPeroxido').innerText = peroxidoL.toFixed(1) + " L";
+                document.getElementById('resDecapSoda').innerText = sodaMin + "g a " + sodaMax + "g";
+                document.getElementById('resDecapEdta').innerText = edtaStr;
+            } else {
+                containerTi.classList.add('hidden');
+                containerCr.classList.remove('hidden');
+                aguaWrapper.classList.add('opacity-30', 'pointer-events-none');
+                edtaWrapper.classList.add('opacity-30', 'pointer-events-none');
+            }
+        }
 
         function gerarOptionsEquipes(setorAlvo = "") {
             if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador</option>`;
@@ -2074,7 +2268,7 @@
                 { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
                 { setor: "Manutenção", membros: ["José", "Carlos"] }
             ];
-            listaTodasMaquinas = ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001", "Forno de Recozimento Contínuo"];
+            listaTodasMaquinas = ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001", "Forno de Recozimento Contínuo", "PVD Deposição Física de Vapor - PVD-DE001"];
             originalDatabase = [
                 { item: "Verificar Oleo Canola", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", tempoReanalise: 2, orientacao: "Lubrificar lateral direita" },
                 { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", orientacao: "" },
