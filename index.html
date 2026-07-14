@@ -462,20 +462,23 @@
         </div>
 
         <div id="view-pvd" class="fade-in hidden">
-            <div class="flex gap-2 mb-6 border-b border-slate-200 pb-2">
-                <button onclick="mudarAbaPVD('setup')" id="tab-pvd-setup" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-blue-100 text-blue-700 border border-blue-200 shadow-sm flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-sliders"></i> Setup do Processo
+            <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-200 pb-2">
+                <button onclick="mudarAbaPVD('setup')" id="tab-pvd-setup" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-blue-100 text-blue-700 border border-blue-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none">
+                    <i class="fa-solid fa-sliders"></i> Setup & Espessura
                 </button>
-                <button onclick="mudarAbaPVD('decapagem')" id="tab-pvd-decapagem" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-flask"></i> Calculadora de Decapagem
+                <button onclick="mudarAbaPVD('limpeza')" id="tab-pvd-limpeza" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2 flex-1 sm:flex-none">
+                    <i class="fa-solid fa-hands-bubbles"></i> Preparação & Limpeza
                 </button>
-                <button onclick="mudarAbaPVD('pop')" id="tab-pvd-pop" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2">
-                    <i class="fa-solid fa-book-open"></i> Ficha de Operação (POP)
+                <button onclick="mudarAbaPVD('decapagem')" id="tab-pvd-decapagem" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2 flex-1 sm:flex-none">
+                    <i class="fa-solid fa-flask"></i> Decapagem Química
+                </button>
+                <button onclick="mudarAbaPVD('pop')" id="tab-pvd-pop" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2 flex-1 sm:flex-none">
+                    <i class="fa-solid fa-book-open"></i> POP Operacional
                 </button>
             </div>
 
-            <div id="pvd-tab-setup" class="block">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <div id="pvd-tab-setup" class="block space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
                         <div class="flex justify-between items-center border-b pb-3 border-slate-100">
                             <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
@@ -555,6 +558,65 @@
                         <p id="pvdFeedbackText" class="text-sm leading-relaxed font-medium">A máquina está em Alto Vácuo perfeito e as cubas atingiram a temperatura de ativação. Pode pressionar <strong>Automatic Coating</strong>.</p>
                     </div>
                 </div>
+
+                <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-sm text-white">
+                    <h3 class="text-sm font-bold flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
+                        <i class="fa-solid fa-layer-group text-blue-400"></i> Controle de Espessura (Mícrons) - Ajuste de Tempos
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs font-medium text-slate-300">
+                        <div>
+                            <strong class="text-rose-400 block mb-1 text-[11px] uppercase">O Problema (Efeito Arco-Íris)</strong>
+                            Manchas coloridas na cuba após o processo significam que a camada de PVD depositada foi muito fina. A luz bate no metal e sofre refração. Além da estética ruim, a resistência a riscos fica abaixo do ideal.
+                        </div>
+                        <div>
+                            <strong class="text-emerald-400 block mb-1 text-[11px] uppercase">A Solução Parametrizada (+2.3 min)</strong>
+                            Para curar esse efeito, adicionamos tempo de deposição para engrossar a camada:<br>
+                            <span class="text-emerald-300 font-bold block mt-1">• Fase 5 e 6 (Limpeza Iônica):</span> +10s (Remove micro-oxidações).<br>
+                            <span class="text-emerald-300 font-bold block">• Fase 12 e 13 (Camada Base/Adesão):</span> +10s e +30s.<br>
+                            <span class="text-emerald-300 font-bold block">• Fase 15 e 16 (Deposição Final):</span> +30s e +60s.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pvd-tab-limpeza" class="hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
+                            <i class="fa-solid fa-hands-bubbles text-blue-600"></i> O Gargalo da Qualidade
+                        </h3>
+                        <div class="space-y-4 text-xs font-medium text-slate-600 leading-relaxed">
+                            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 text-blue-900">
+                                <strong class="text-blue-700 block mb-1 uppercase text-[10px]">A Analogia do Esmalte Metálico</strong>
+                                Imagine aplicar um esmalte caríssimo sobre a unha. Se a unha estiver limpa, ele adere perfeitamente. Porém, se houver uma microgota de óleo, cisco de poeira ou umidade, o esmalte cobre o defeito no momento, mas depois descasca inteiro. O PVD segue a mesma lei em escala invisível a olho nu.
+                            </div>
+                            <div class="bg-rose-50 p-4 rounded-xl border border-rose-100 text-rose-900">
+                                <strong class="text-rose-700 block mb-1 uppercase text-[10px]">A Ameaça Invisível: Outgassing</strong>
+                                Se houver uma única digital (que contém sal e gordura) na peça, ela vira gás no vácuo e "explode" a cor de dentro para fora, criando manchas e descascamento severo.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
+                            <i class="fa-solid fa-spray-can text-emerald-600"></i> Protocolo de Limpeza Inegociável
+                        </h3>
+                        <ol class="space-y-4 text-xs font-medium text-slate-600">
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                                <div><strong class="text-slate-800 block">Inspeção e Remoção de Cola:</strong><br>Álcool não derrete cola. Umedeça o pano com <span class="text-rose-600 font-bold">Thinner Industrial ou Acetona</span> e esfregue vigorosamente sobre etiquetas ou fitas até a total dissolução. Cola na máquina gera manchas gigantes.</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                                <div><strong class="text-slate-800 block">Desengraxe Fino e Final:</strong><br>Limpe a cuba inteira usando um pano de microfibra novo umedecido em <span class="text-blue-600 font-bold">Álcool Absoluto (99%) ou Isopropílico</span>. O movimento deve ser em <span class="underline">um único sentido</span>. Esfregar em círculos apenas espalha a gordura.</div>
+                            </li>
+                            <li class="flex gap-3">
+                                <div class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold flex-shrink-0"><i class="fa-solid fa-hand"></i></div>
+                                <div><strong class="text-rose-600 block">A Regra Intocável (EPI):</strong><br>Após o passo 2, a cuba <span class="font-bold">nunca mais pode ser tocada com a mão nua</span>. Transporte e carregamento na gaiola exigem luvas de nitrila ou luvas de algodão limpas.</div>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
             </div>
 
             <div id="pvd-tab-decapagem" class="hidden space-y-6">
@@ -611,11 +673,11 @@
                         <div class="bg-slate-50 border border-slate-200 rounded-xl p-5 text-xs text-slate-700 leading-relaxed font-medium">
                             <strong class="text-rose-600 uppercase text-[10px] tracking-wider mb-2 block"><i class="fa-solid fa-triangle-exclamation"></i> Procedimento de Segurança Obrigatório</strong>
                             <ol class="list-decimal pl-4 space-y-2">
-                                <li>Em um recipiente <strong>separado e pequeno</strong>, dissolva a Soda Cáustica lentamente em uma parte de água fria (Atenção: esquenta muito!)[cite: 177, 178, 179].</li>
-                                <li>No tanque principal, misture o Peróxido de Hidrogênio com a Água Desmineralizada e adicione todo o EDTA (ele estabiliza a fervura)[cite: 180, 181, 184].</li>
-                                <li>Mergulhe as cubas inteiramente na solução do tanque[cite: 185].</li>
-                                <li>Despeje a Soda diluída (do Passo 1) lentamente no tanque para ativar a fervura (efervescência)[cite: 186, 187].</li>
-                                <li>Aguarde a cor se dissolver 100% e lave a peça com água corrente abundante[cite: 166, 188].</li>
+                                <li>Em um recipiente <strong>separado e pequeno</strong>, dissolva a Soda Cáustica lentamente em uma parte de água fria (Atenção: esquenta muito!).</li>
+                                <li>No tanque principal, misture o Peróxido de Hidrogênio com a Água Desmineralizada e adicione todo o EDTA (ele estabiliza a fervura).</li>
+                                <li>Mergulhe as cubas inteiramente na solução do tanque.</li>
+                                <li>Despeje a Soda diluída (do Passo 1) lentamente no tanque para ativar a fervura (efervescência).</li>
+                                <li>Aguarde a cor se dissolver 100% e lave a peça com água corrente abundante.</li>
                             </ol>
                         </div>
                     </div>
@@ -626,13 +688,13 @@
                             <div>
                                 <h4 class="font-black text-base uppercase mb-2">Decapagem Eletrolítica Anódica Obrigatória</h4>
                                 <p class="text-sm font-medium leading-relaxed mb-3">
-                                    O Cromo Carbonitreto (Grafite) possui inércia química extrema e é blindado contra Peróxido e Soda[cite: 191]. A remoção exige o uso de um retificador de energia (tipo máquina de solda)[cite: 196].
+                                    O Cromo Carbonitreto (Grafite) possui inércia química extrema e é blindado contra Peróxido e Soda. A remoção exige o uso de um retificador de energia (tipo máquina de solda).
                                 </p>
                                 <ol class="list-decimal pl-4 space-y-1.5 text-xs">
-                                    <li>Prepare um banho alcalino estático (Água + Soda + Carbonato)[cite: 195].</li>
-                                    <li>Ligue o cabo <strong>POSITIVO (Anodo)</strong> diretamente na cuba manchada[cite: 197].</li>
-                                    <li>Ligue o cabo <strong>NEGATIVO (Catodo)</strong> nas placas laterais de aço[cite: 198].</li>
-                                    <li>A energia arranca as moléculas de Cromo e, ao chegar no Inox, o processo desliga sozinho (passivação) salvando a peça[cite: 201, 202, 203].</li>
+                                    <li>Prepare um banho alcalino estático (Água + Soda + Carbonato).</li>
+                                    <li>Ligue o cabo <strong>POSITIVO (Anodo)</strong> diretamente na cuba manchada.</li>
+                                    <li>Ligue o cabo <strong>NEGATIVO (Catodo)</strong> nas placas laterais de aço.</li>
+                                    <li>A energia arranca as moléculas de Cromo e, ao chegar no Inox, o processo desliga sozinho (passivação) salvando a peça intacta.</li>
                                 </ol>
                             </div>
                         </div>
@@ -649,55 +711,55 @@
                         <ol class="space-y-4 text-xs font-medium text-slate-600">
                             <li class="flex gap-3">
                                 <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">1</div>
-                                <div><strong class="text-slate-800">Água de Refrigeração:</strong> Ligue a torre e as bombas de água. Jamais prossiga sem confirmar o fluxo[cite: 120, 121].</div>
+                                <div><strong class="text-slate-800">Água de Refrigeração:</strong> Ligue a torre e as bombas de água. Jamais prossiga sem confirmar o fluxo no nível MÁXIMO.</div>
                             </li>
                             <li class="flex gap-3">
                                 <div class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold flex-shrink-0">2</div>
-                                <div><strong class="text-slate-800">Energia e Sistema:</strong> Ligue disjuntores magnéticos e o "Disjuntor 1". Pressione ON[cite: 122, 123, 124]. Faça login (Senha: 666666) no idioma English[cite: 125].</div>
+                                <div><strong class="text-slate-800">Energia e Sistema:</strong> Ligue disjuntores magnéticos na base da torre e acione o "Disjuntor 1". Pressione ON. Faça login (Senha: 666666) no idioma English.</div>
                             </li>
                             <li class="flex gap-3">
                                 <div class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold flex-shrink-0">3</div>
-                                <div><strong class="text-slate-800">Aquecimento (220°C/250°C):</strong> Ligue resistências do óleo interno e aquecimento lateral[cite: 126, 127].</div>
+                                <div><strong class="text-slate-800">Aquecimento (220°C/250°C):</strong> Ligue resistências do fluido interno (220°C) e aquecimento lateral (250°C).</div>
                             </li>
                             <li class="flex gap-3">
                                 <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0">4</div>
-                                <div><strong class="text-slate-800">Carga e Vedação:</strong> Acomode cubas no carrossel planetário, trave as manivelas firmemente (comprime o O-ring)[cite: 128, 129, 130].</div>
+                                <div><strong class="text-slate-800">Carga e Vedação:</strong> Acomode cubas no carrossel planetário, trave as manivelas firmemente (comprime o O-ring). Se ficar solta, vácuo falha no J4.</div>
                             </li>
                             <li class="flex gap-3">
                                 <div class="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold flex-shrink-0">5</div>
-                                <div><strong class="text-slate-800">Desbaste (J1):</strong> Clique Pump 1, aguarde 20s, Pump 2[cite: 132, 133, 134]. Ouça as bombas. O barulho deve ser ruidoso mas contínuo. Se engasgar, desligue logo (óleo frio trava as palhetas)[cite: 135, 136, 137, 138].</div>
+                                <div><strong class="text-slate-800">Desbaste Primário:</strong> Clique Pump 1, aguarde 20s-30s, clique Pump 2. Ouça as bombas: o barulho deve ser ruidoso mas contínuo. Se engasgar, desligue logo (óleo frio trava palhetas).</div>
                             </li>
                             <li class="flex gap-3">
                                 <div class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">6</div>
-                                <div><strong class="text-slate-800">Vácuo Auto e Pintura:</strong> Ao acender J1, clique Auto Pump[cite: 139, 140]. Inicie Heating 1[cite: 143]. Somente quando atingir J5 e PV $\ge$ 180°C, pressione Automatic Coating[cite: 149, 150, 151].</div>
+                                <div><strong class="text-slate-800">Vácuo Auto e Pintura:</strong> Ao acender J1 verde, clique Auto Pump. Inicie Heating 1. Somente quando atingir J5 e PV $\ge$ 180°C (sirene contínua), pressione Automatic Coating.</div>
                             </li>
                             <li class="flex gap-3">
                                 <div class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold flex-shrink-0">7</div>
-                                <div><strong class="text-slate-800">Finalização:</strong> Despressurização automática (Automatic Deflation). Não force a porta. Abra só quando o barulho de ar parar. Use mangotes (peças a 200°C)[cite: 152, 153, 154, 155].</div>
+                                <div><strong class="text-slate-800">Finalização:</strong> Despressurização automática (Automatic Deflation). Não force a porta. Abra só quando o barulho de ar parar. Uso obrigatório de mangotes (peças próximas a 200°C).</div>
                             </li>
                         </ol>
                     </div>
 
                     <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-sm text-white">
                         <h3 class="text-sm font-bold flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
-                            <i class="fa-solid fa-atom text-rose-500"></i> Fundamentos Físicos Básicos
+                            <i class="fa-solid fa-atom text-rose-500"></i> O Que é o PVD (Lógica Básica)?
                         </h3>
                         <div class="space-y-4 text-xs font-medium text-slate-300">
                             <div>
-                                <strong class="text-rose-400 block mb-1 text-[11px] uppercase">Não Existe Tinta</strong>
-                                O processo usa Arco Catódico. Raios de alta corrente atingem o bloco sólido (cátodo) e o vaporizam instantaneamente, criando um "Gás/Plasma"[cite: 7, 25, 26, 27].
+                                <strong class="text-rose-400 block mb-1 text-[11px] uppercase">Física de Vapor (Não é Tinta)</strong>
+                                O processo não usa nenhum líquido. Disparos elétricos de alta corrente (Arco Catódico) atingem blocos de metal maciço e os vaporizam instantaneamente, criando uma nuvem de plasma incandescente.
                             </div>
                             <div>
-                                <strong class="text-blue-400 block mb-1 text-[11px] uppercase">Polarização (Bias)</strong>
-                                Para o metal grudar na cuba, o gás ganha carga Positiva (+), e o Bias injeta carga Negativa (-) nas peças. Os opostos se atraem e a cor se funde[cite: 28, 30, 31, 32, 33].
+                                <strong class="text-blue-400 block mb-1 text-[11px] uppercase">Atração Magnética (Bias)</strong>
+                                A nuvem de metal flutua na câmara com carga Positiva (+). A máquina aplica uma voltagem (Bias) nas cubas de inox, tornando-as Negativas (-). Pela lei da física, o gás é sugado e "enraizado" atomicamente na peça.
                             </div>
                             <div>
-                                <strong class="text-amber-400 block mb-1 text-[11px] uppercase">A Regra da Sujeira (Outgassing)</strong>
-                                Uma única digital (gordura) ou microgota de cola vira gás explosivo no vácuo. Ela explode a cor de dentro para fora, criando arco-íris e descascamento[cite: 14, 15, 101]. Luvas nitrílicas são inegociáveis[cite: 105, 106].
+                                <strong class="text-amber-400 block mb-1 text-[11px] uppercase">Enclausuramento / Sala Limpa</strong>
+                                A sala PVD precisa ser livre de poeira de lixamento ou movimentação de terra. Se poeira grudar na cuba, o metal cobre a poeira e, ao lavar a peça, a sujeira cai e revela microfuros no inox.
                             </div>
                             <div>
                                 <strong class="text-emerald-400 block mb-1 text-[11px] uppercase">Setup Cruzado de Cores</strong>
-                                Vai de Dourado para Grafite? Limpe o pó dourado da máquina! Caso contrário, rode 1 ciclo vazio (Purga) para forrar a parede com o novo metal[cite: 108, 114, 115, 116].
+                                Vai mudar a produção de Dourado para Grafite? Remova as proteções, lixe a parede da máquina, varra o pó e rode 1 ciclo VAZIO na cor nova (Purga). Isso sela as paredes com Cromo e evita contaminação.
                             </div>
                         </div>
                     </div>
@@ -1319,21 +1381,23 @@
         // LÓGICA DO PVD (COM ABAS E CALCULADORA)
         // ============================================
         function mudarAbaPVD(abaSelecionada) {
-            const abas = ['setup', 'decapagem', 'pop'];
+            const abas = ['setup', 'decapagem', 'pop', 'limpeza'];
             abas.forEach(aba => {
                 document.getElementById(`pvd-tab-${aba}`).classList.add('hidden');
-                document.getElementById(`tab-pvd-${aba}`).className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2";
+                document.getElementById(`tab-pvd-${aba}`).className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2 flex-1 sm:flex-none";
             });
 
             document.getElementById(`pvd-tab-${abaSelecionada}`).classList.remove('hidden');
             
             if (abaSelecionada === 'setup') {
-                document.getElementById('tab-pvd-setup').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-blue-100 text-blue-700 border border-blue-200 shadow-sm flex items-center justify-center gap-2";
+                document.getElementById('tab-pvd-setup').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-blue-100 text-blue-700 border border-blue-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
+            } else if (abaSelecionada === 'limpeza') {
+                document.getElementById('tab-pvd-limpeza').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
             } else if (abaSelecionada === 'decapagem') {
-                document.getElementById('tab-pvd-decapagem').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2";
+                document.getElementById('tab-pvd-decapagem').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
                 calcularDecapagem();
             } else if (abaSelecionada === 'pop') {
-                document.getElementById('tab-pvd-pop').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm flex items-center justify-center gap-2";
+                document.getElementById('tab-pvd-pop').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-[#0b132b] text-white shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
             }
         }
 
@@ -1406,8 +1470,6 @@
                 const aguaL = parseFloat(document.getElementById('decapAguaInput').value) || 1;
                 const edtaTipo = document.getElementById('decapEdtaTipo').value;
 
-                // Receita Base Documentada para 2 Litros Totais: 1L Peróx + 1L Água, 100g Soda, 20g EDTA pó ou 40ml líquido
-                // Multiplicador linear: 'aguaL' é a variável mestre (já que 1 agua = 1 peroxido).
                 const peroxidoL = aguaL; 
                 const sodaMin = Math.round(100 * aguaL);
                 const sodaMax = Math.round(150 * aguaL);
@@ -1416,7 +1478,7 @@
                 if (edtaTipo === 'po') {
                     edtaStr = Math.round(20 * aguaL) + " g";
                 } else {
-                    edtaStr = Math.round(45 * aguaL) + " ml"; // média 40-50
+                    edtaStr = Math.round(45 * aguaL) + " ml"; 
                 }
 
                 document.getElementById('resDecapAgua').innerText = aguaL.toFixed(1) + " L";
@@ -2897,7 +2959,7 @@
             }
         }
 
-        function renderVisualEsteira(compPeca, espacamento, compTotalPecaM) {
+        function renderVisualEsteira(compPeca, espacamento, cM) {
             const area = document.getElementById('conveyorVisualArea'); 
             area.innerHTML = "";
             const label = document.getElementById('labelQtdPecasEsteira');
@@ -2938,4 +3000,5 @@
         }
     </script>
 </body>
-</html>
+</html>ompTotalPeca
+                                     
