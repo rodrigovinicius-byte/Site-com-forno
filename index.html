@@ -88,6 +88,7 @@
                 <span class="flex-1">Sinalização de Rede: Conecte o URL do Google Apps Script para sincronizar dados. Usando modo local.</span>
             </span>
         </div>
+        
         <div id="view-home" class="fade-in">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                 <button onclick="abrirGerenciamentoPendencias()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
@@ -457,6 +458,100 @@
                     </div>
                 </div>
                 
+            </div>
+        </div>
+
+        <div id="view-pvd" class="fade-in hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-palette text-indigo-600"></i> Setup do Processo (Estequiometria)
+                        </h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Cor de Produção (Receita)</label>
+                            <select id="pvdCor" onchange="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-bold text-slate-800">
+                                <option value="ouro">Dourado (Gold)</option>
+                                <option value="rose">Rosé</option>
+                                <option value="grafite">Grafite</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Cátodo Operacional</label>
+                                <span id="pvdCatodo" class="block font-bold text-sm text-slate-700">Titânio (Ti) Puro</span>
+                            </div>
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                <label class="block text-[9px] font-bold text-slate-400 uppercase mb-1">Gases Injetados</label>
+                                <span id="pvdGases" class="block font-bold text-sm text-indigo-600">Nitrogênio (N₂)</span>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-50/50 p-3 rounded-xl border border-indigo-100">
+                            <label class="block text-[9px] font-bold text-indigo-400 uppercase mb-1">Equação de Plasma</label>
+                            <span id="pvdEstequiometria" class="block font-bold text-xs text-indigo-700">Ti + N <i class="fa-solid fa-arrow-right mx-1"></i> TiN (Nitreto de Titânio)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-gauge-high text-blue-600"></i> Engenharia de Vácuo e Térmico
+                        </h3>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between bg-slate-50 border border-slate-200 rounded-xl p-3">
+                            <div>
+                                <span class="block text-xs font-bold text-slate-800">Água de Refrigeração</span>
+                                <span class="block text-[9px] text-slate-500 font-medium">Torre de resfriamento para bombas de difusão e câmara.</span>
+                            </div>
+                            <select id="pvdAgua" onchange="calcularParametrosPVD()" class="bg-white border border-slate-300 rounded-lg p-2 text-xs focus:outline-none focus:border-blue-500 font-bold w-24 text-center">
+                                <option value="sim" selected class="text-emerald-600">Ligada</option>
+                                <option value="nao" class="text-rose-600">Desligada</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Temperatura Real (PV) °C</label>
+                                <input type="number" id="pvdTemp" value="180" oninput="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-rose-600 text-center">
+                                <span class="block text-[9px] text-slate-400 mt-1 text-center">Aquecimento Interno das Cubas</span>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Nível de Vácuo Atual</label>
+                                <select id="pvdVacuo" onchange="calcularParametrosPVD()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 font-bold text-blue-600 text-center">
+                                    <option value="Atmosfera">Atmosfera (Aberta)</option>
+                                    <option value="J1">J1 (Bombas Mecânicas)</option>
+                                    <option value="J2">J2 (Roots Transição)</option>
+                                    <option value="J4">J4 (Pré-Alto Vácuo)</option>
+                                    <option value="J5" selected>J5 (Alto Vácuo Molecular)</option>
+                                </select>
+                                <span class="block text-[9px] text-slate-400 mt-1 text-center">Monitoramento do Painel</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-y-6">
+                <div id="pvdFeedbackBox" class="bg-emerald-50 border border-emerald-200 text-emerald-900 p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300">
+                    <i id="pvdFeedbackIcon" class="fa-solid fa-check-double text-emerald-600 mt-1 text-3xl"></i>
+                    <div>
+                        <h4 id="pvdFeedbackTitle" class="font-bold text-base mb-1.5 uppercase tracking-wider">Parâmetros Liberados (J5 + 180°C)</h4>
+                        <p id="pvdFeedbackText" class="text-sm leading-relaxed font-medium">A máquina está em Alto Vácuo perfeito e as cubas atingiram a temperatura de ativação. Pode pressionar <strong>Automatic Coating</strong>.</p>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+                    <h3 id="pvdDecapagemTitle" class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-2 border-b border-slate-100 pb-2">
+                        <i class="fa-solid fa-flask text-rose-600"></i> Remoção Química (Base Titânio)
+                    </h3>
+                    <p id="pvdDecapagemText" class="text-xs text-slate-600 leading-relaxed text-justify">
+                        <strong>Receita Padrão (2L):</strong> 1L Peróxido de Hidrogênio (35%), 1L Água Desmineralizada, 100-150g Soda Cáustica (NaOH), 20g EDTA.<br><span class="text-rose-600 font-bold">Atenção:</span> Diluir a Soda separadamente antes de misturar ao Peróxido para evitar fervura explosiva!
+                    </p>
+                </div>
             </div>
         </div>
 
@@ -834,9 +929,8 @@
         let API_URL = localStorage.getItem("checklist_google_api_url") || "";
         let currentModalMode = '';
         let currentPreditivaMenu = '';
-        let abaPendenciasAtual = 'chamados'; // Aba padrão no painel de pendências
+        let abaPendenciasAtual = 'chamados';
 
-        // --- SISTEMA DE RELATÓRIOS E DASHBOARDS ---
         let chartOS = null;
         let chartChecklist = null;
 
@@ -844,7 +938,6 @@
             verificarAutenticacao();
         };
 
-        // --- FUNÇÕES DE SEGURANÇA BÁSICA ---
         function verificarAutenticacao() {
             const auth = localStorage.getItem("app_tbx_auth");
             const loginScreen = document.getElementById("loginScreen");
@@ -906,7 +999,7 @@
         }
 
         function alternarTela(novaTela) {
-            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'parametrizacao', 'forno', 'intervencoes', 'relatorios'];
+            const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'parametrizacao', 'forno', 'pvd', 'intervencoes', 'relatorios'];
             telas.forEach(t => {
                 const el = document.getElementById(`view-${t}`);
                 if(el) el.classList.add('hidden');
@@ -931,6 +1024,9 @@
                 } else if (novaTela === 'forno') {
                     headerTitle.innerText = "Parametrização do Forno"; headerSubtitle.innerText = "Grupo TBX · Ajuste do Ciclo de Recozimento";
                     setTimeout(calcularParametrosForno, 50);
+                } else if (novaTela === 'pvd') {
+                    headerTitle.innerText = "Parametrização PVD (Arco Catódico)"; headerSubtitle.innerText = "Grupo TBX · Ajuste de Pintura e Vácuo";
+                    setTimeout(calcularParametrosPVD, 50);
                 } else if (novaTela === 'intervencoes') {
                     headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva e Planejada";
                 } else if (novaTela === 'relatorios') {
@@ -945,6 +1041,7 @@
             if (currentView === 'checklist-itens') alternarTela('checklist-periodo');
             else if (currentView === 'checklist-periodo') alternarTela('checklist-setor');
             else if (currentView === 'forno') alternarTela('parametrizacao');
+            else if (currentView === 'pvd') alternarTela('parametrizacao');
             else alternarTela('home');
         }
 
@@ -1030,6 +1127,8 @@
         }
         
         function abrirModuloForno() { alternarTela('forno'); }
+        function abrirModuloPVD() { alternarTela('pvd'); }
+        
         function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
 
         function renderParametrizacaoCards() {
@@ -1040,11 +1139,18 @@
             }
             container.innerHTML = maquinasParametrizaveisData.map(m => {
                 const isForno = normalizar(m.nome).includes('forno');
-                const icone = isForno ? "fa-fire" : "fa-microchip";
-                const corText = isForno ? "text-orange-600" : "text-blue-600";
-                const corBg = isForno ? "bg-orange-100" : "bg-blue-100";
-                const desc = isForno ? "Simulação de encharque térmico, cálculo de ciclo e dimensionamento de gás." : "Ajuste de parâmetros e simulação de processo.";
-                const action = isForno ? "abrirModuloForno()" : `showToast('Módulo de parametrização para ${m.nome} em desenvolvimento.', 'info')`;
+                const isPvd = normalizar(m.nome).includes('pvd');
+                
+                let icone = "fa-microchip", corBg = "bg-slate-100", corText = "text-slate-600", desc = "", action = "showToast('Em desenvolvimento.', 'info')";
+
+                if (isForno) {
+                    icone = "fa-fire"; corBg = "bg-orange-100"; corText = "text-orange-600"; action = "abrirModuloForno()";
+                    desc = "Simulação de encharque térmico, cálculo de ciclo e dimensionamento de gás.";
+                } else if (isPvd) {
+                    icone = "fa-atom"; corBg = "bg-blue-100"; corText = "text-blue-600"; action = "abrirModuloPVD()";
+                    desc = "Ajuste de parâmetros, seleção de cátodos e engenharia do vácuo/plasma.";
+                }
+
                 return `
                 <button onclick="${action}" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center gap-4 w-full">
                     <div class="w-12 h-12 rounded-xl ${corBg} ${corText} flex items-center justify-center text-xl shrink-0">
@@ -1058,6 +1164,78 @@
                 `;
             }).join('');
         }
+
+        // ============================================
+        // LÓGICA DO PVD
+        // ============================================
+        function calcularParametrosPVD() {
+            const cor = document.getElementById('pvdCor').value;
+            const temp = parseFloat(document.getElementById('pvdTemp').value) || 0;
+            const vacuo = document.getElementById('pvdVacuo').value;
+            const aguaAtiva = document.getElementById('pvdAgua').value === 'sim';
+
+            const catodoEl = document.getElementById('pvdCatodo');
+            const gasesEl = document.getElementById('pvdGases');
+            const estequiometriaEl = document.getElementById('pvdEstequiometria');
+            const decapagemTitle = document.getElementById('pvdDecapagemTitle');
+            const decapagemText = document.getElementById('pvdDecapagemText');
+
+            let isTitanio = true;
+
+            if (cor === 'ouro') {
+                catodoEl.innerText = 'Titânio (Ti) Puro';
+                gasesEl.innerText = 'Nitrogênio (N₂)';
+                estequiometriaEl.innerHTML = 'Ti + N <i class="fa-solid fa-arrow-right mx-1"></i> TiN (Nitreto)';
+            } else if (cor === 'rose') {
+                catodoEl.innerText = 'Titânio (Ti) Puro';
+                gasesEl.innerText = 'N₂ + Acetileno (C₂H₂)';
+                estequiometriaEl.innerHTML = 'Adição Carbono <i class="fa-solid fa-arrow-right mx-1"></i> TiCN (Carbonitreto)';
+            } else if (cor === 'grafite') {
+                isTitanio = false;
+                catodoEl.innerText = 'Cromo (Cr) Puro';
+                gasesEl.innerText = 'Acetileno (C₂H₂)';
+                estequiometriaEl.innerHTML = 'Cr + C₂H₂ <i class="fa-solid fa-arrow-right mx-1"></i> CrC/CrCN (Carbeto)';
+            }
+
+            if (isTitanio) {
+                decapagemTitle.innerHTML = `<i class="fa-solid fa-flask text-rose-600"></i> Remoção Química (Base Titânio)`;
+                decapagemText.innerHTML = `<strong>Receita Padrão (2L):</strong> 1L Peróxido de Hidrogênio (35%), 1L Água Desmineralizada, 100-150g Soda Cáustica (NaOH), 20g EDTA.<br><span class="text-rose-600 font-bold">Atenção:</span> Diluir a Soda separadamente antes de misturar ao Peróxido para evitar fervura explosiva!`;
+            } else {
+                decapagemTitle.innerHTML = `<i class="fa-solid fa-bolt text-amber-500"></i> Decapagem Eletrolítica (Base Cromo)`;
+                decapagemText.innerHTML = `<strong>O Cromo Grafite é imune ao Peróxido com Soda.</strong><br>Utilize Retificador CC. Ligue o cabo Positivo (+) na cuba manchada e Negativo (-) nas placas. O ataque expulsa o metal e entra em auto-passivação (não fura o Inox).`;
+            }
+
+            const fbBox = document.getElementById('pvdFeedbackBox');
+            const fbIcon = document.getElementById('pvdFeedbackIcon');
+            const fbTitle = document.getElementById('pvdFeedbackTitle');
+            const fbText = document.getElementById('pvdFeedbackText');
+
+            fbBox.className = "p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300 border ";
+
+            if (!aguaAtiva) {
+                fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
+                fbIcon.className = "fa-solid fa-skull-crossbones text-rose-600 mt-1 text-3xl";
+                fbTitle.innerText = "RISCO FATAL: Água Desligada!";
+                fbText.innerHTML = `Ligar as resistências ou bombas de difusão sem água circulando causará a <strong>destruição do óleo de difusão e derretimento catastrófico dos O-Rings de vedação</strong>. A máquina perderá a capacidade de vácuo.`;
+            } else if (vacuo !== 'J5') {
+                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
+                fbIcon.className = "fa-solid fa-wind text-amber-600 mt-1 text-3xl";
+                fbTitle.innerText = "Vácuo Insuficiente (Aguardar Alto Vácuo)";
+                fbText.innerHTML = `Nível de vácuo atual (<strong>${vacuo}</strong>) não permite viagem do plasma. As partículas metálicas oxidariam e cairiam como fuligem inútil. Aguarde o J5 (Bombas de Difusão) e a liberação da sirene.`;
+            } else if (temp < 180) {
+                fbBox.className += "bg-orange-50 border-orange-200 text-orange-900";
+                fbIcon.className = "fa-solid fa-temperature-arrow-down text-orange-600 mt-1 text-3xl";
+                fbTitle.innerText = "Temperatura Crítica: Peças Frias (" + temp + "°C)";
+                fbText.innerHTML = `A regra do PVD exige <strong>PV = 180°C ou superior</strong>. Caso inicie, o plasma solidificará instantaneamente no substrato e criará uma "casca fraca" que vai descascar imediatamente ao toque (falta de difusão atômica).`;
+            } else {
+                fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
+                fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-3xl";
+                fbTitle.innerText = "Parâmetros Liberados (J5 + " + temp + "°C)";
+                let extra = cor === 'grafite' ? `<br><br><span class="text-emerald-700 text-[10px]"><strong>Atualização Grafite:</strong> O ciclo adiciona +2,3 min (Limpeza Iônica/Plasma Etching e Deposição) para garantir resistência a riscos e curar efeito de arco-íris.</span>` : ``;
+                fbText.innerHTML = `A máquina está em Alto Vácuo perfeito e as peças atingiram a energia de ativação térmica. Pode pressionar o botão <strong>Automatic Coating</strong>.${extra}`;
+            }
+        }
+
 
         function gerarOptionsEquipes(setorAlvo = "") {
             if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador</option>`;
@@ -1116,10 +1294,9 @@
             const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Registrando...`;
             
-            // Garantir ID sequencial limpo
             const maxId = chamadosData.reduce((max, item) => {
                 let num = parseInt(item.id.replace('OS-', '')) || 0;
-                if (num > 1000000) num = 0; // Previne IDs gerados via Timestamp antigamente de quebrarem a sequência
+                if (num > 1000000) num = 0;
                 return num > max ? num : max;
             }, 0);
             const novoId = `OS-${maxId + 1}`;
@@ -1177,8 +1354,6 @@
                 abrirModalChamado(maquina, `Falha no checklist - Item: '${item}'${obsValue ? ` | Obs: ${obsValue}` : ""}`);
             }
         }
-
-        // --- NOVO SISTEMA DE ABAS NO MODAL DE PENDÊNCIAS ---
         
         function mudarAbaPendencias(aba) {
             abaPendenciasAtual = aba;
@@ -1418,10 +1593,9 @@
             btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
             
-            // Garantir ID sequencial limpo
             const maxId = intervencoesData.reduce((max, item) => {
                 let num = parseInt(item.id.replace('INT-', '')) || 0;
-                if (num > 1000000) num = 0; // Previne IDs gerados via Timestamp antigamente de quebrarem a sequência
+                if (num > 1000000) num = 0;
                 return num > max ? num : max;
             }, 0);
             const novoId = `INT-${maxId + 1}`;
@@ -1446,11 +1620,9 @@
             btn.disabled = false; btn.innerHTML = textoBtn; fecharModalIntervencao();
         }
 
-        // --- SISTEMA MISTO NA TABELA HISTÓRICO ---
         function renderListaIntervencoes() {
             const tbody = document.getElementById('intervencoesTbody');
             
-            // Juntar os chamados e intervenções
             let misto = [...intervencoesData, ...chamadosData];
             let ordenados = misto.sort((a, b) => new Date(b.data) - new Date(a.data));
             
@@ -1481,7 +1653,6 @@
                     ? `Aberto por:<br><span class="font-semibold text-slate-600">${relatorStr}</span>` 
                     : `Resolvido por:<br><span class="font-bold text-slate-800">${i.solucionador || ''}</span><br><span class="text-[9px] text-slate-500 font-medium bg-slate-100 px-1 py-0.5 rounded mt-1 inline-block">Em: ${dataFechamentoStr}</span>`;
 
-                // Tailwind workaround para injetar classes dinâmicas sem ser expurgado
                 const textColorClass = isOS ? "text-rose-600" : "text-orange-600";
 
                 return `
@@ -1930,7 +2101,10 @@
                 { id: "INT-1", data: ontem, maquina: "Guilhotina - GUI-001", tipo: "Preventiva de TI", descricao: "Apertar os prisioneiros do motor principal.", responsavel: "José - Manutenção", status: "Fechado", resolucao: "Prisioneiros reapertados e com trava química", dataFechamento: new Date().toISOString(), solucionador: "Carlos - Manutenção" }
             ];
             
-            maquinasParametrizaveisData = [ { nome: "Forno de Recozimento Contínuo" } ]; 
+            maquinasParametrizaveisData = [ 
+                { nome: "Forno de Recozimento Contínuo" },
+                { nome: "PVD Deposição Física de Vapor - PVD-DE001" } 
+            ]; 
             
             popData = [
                 { maquina: "Guilhotina - GUI-001", titulo: "Procedimento de LOTO", descricao: "Passo a passo para bloqueio de energias perigosas antes da manutenção.", link: "https://docs.google.com/" },
