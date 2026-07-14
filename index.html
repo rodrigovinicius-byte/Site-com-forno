@@ -472,7 +472,7 @@
                 <button onclick="mudarAbaPVD('decapagem')" id="tab-pvd-decapagem" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2 flex-1 sm:flex-none">
                     <i class="fa-solid fa-flask"></i> Decapagem Química
                 </button>
-                <button onclick="mudarAbaPVD('pop')" id="tab-pvd-pop" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2 flex-1 sm:flex-none">
+                <button onclick="mudarAbaPVD('pop')" id="tab-pvd-pop-btn" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2 flex-1 sm:flex-none">
                     <i class="fa-solid fa-book-open"></i> POP Operacional
                 </button>
             </div>
@@ -703,64 +703,86 @@
             </div>
 
             <div id="pvd-tab-pop" class="hidden space-y-6">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
-                        <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
-                            <i class="fa-solid fa-list-ol text-blue-600"></i> POP de Operação (Passo a Passo)
-                        </h3>
-                        <ol class="space-y-4 text-xs font-medium text-slate-600">
-                            <li class="flex gap-3">
-                                <div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">1</div>
-                                <div><strong class="text-slate-800">Água de Refrigeração:</strong> Ligue a torre e as bombas de água. Jamais prossiga sem confirmar o fluxo no nível MÁXIMO.</div>
-                            </li>
-                            <li class="flex gap-3">
-                                <div class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold flex-shrink-0">2</div>
-                                <div><strong class="text-slate-800">Energia e Sistema:</strong> Ligue disjuntores magnéticos na base da torre e acione o "Disjuntor 1". Pressione ON. Faça login (Senha: 666666) no idioma English.</div>
-                            </li>
-                            <li class="flex gap-3">
-                                <div class="w-6 h-6 rounded-full bg-rose-100 text-rose-600 flex items-center justify-center font-bold flex-shrink-0">3</div>
-                                <div><strong class="text-slate-800">Aquecimento (220°C/250°C):</strong> Ligue resistências do fluido interno (220°C) e aquecimento lateral (250°C).</div>
-                            </li>
-                            <li class="flex gap-3">
-                                <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold flex-shrink-0">4</div>
-                                <div><strong class="text-slate-800">Carga e Vedação:</strong> Acomode cubas no carrossel planetário, trave as manivelas firmemente (comprime o O-ring). Se ficar solta, vácuo falha no J4.</div>
-                            </li>
-                            <li class="flex gap-3">
-                                <div class="w-6 h-6 rounded-full bg-slate-800 text-white flex items-center justify-center font-bold flex-shrink-0">5</div>
-                                <div><strong class="text-slate-800">Desbaste Primário:</strong> Clique Pump 1, aguarde 20s-30s, clique Pump 2. Ouça as bombas: o barulho deve ser ruidoso mas contínuo. Se engasgar, desligue logo (óleo frio trava palhetas).</div>
-                            </li>
-                            <li class="flex gap-3">
-                                <div class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">6</div>
-                                <div><strong class="text-slate-800">Vácuo Auto e Pintura:</strong> Ao acender J1 verde, clique Auto Pump. Inicie Heating 1. Somente quando atingir J5 e PV $\ge$ 180°C (sirene contínua), pressione Automatic Coating.</div>
-                            </li>
-                            <li class="flex gap-3">
-                                <div class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold flex-shrink-0">7</div>
-                                <div><strong class="text-slate-800">Finalização:</strong> Despressurização automática (Automatic Deflation). Não force a porta. Abra só quando o barulho de ar parar. Uso obrigatório de mangotes (peças próximas a 200°C).</div>
-                            </li>
-                        </ol>
+                <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center border-b pb-3 border-slate-100 mb-5">
+                        <div>
+                            <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+                                <i class="fa-solid fa-list-ol text-blue-600"></i> POP de Operação Prática (PVD)
+                            </h3>
+                            <p class="text-xs text-slate-500 mt-1">Passo a passo oficial extraído do treinamento no equipamento.</p>
+                        </div>
+                        <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shadow-sm">
+                            <i class="fa-solid fa-chalkboard-user"></i>
+                        </div>
                     </div>
 
-                    <div class="bg-[#0b132b] p-6 rounded-2xl border border-slate-800 shadow-sm text-white">
-                        <h3 class="text-sm font-bold flex items-center gap-2 mb-4 border-b border-slate-700 pb-2">
-                            <i class="fa-solid fa-atom text-rose-500"></i> O Que é o PVD (Lógica Básica)?
-                        </h3>
-                        <div class="space-y-4 text-xs font-medium text-slate-300">
-                            <div>
-                                <strong class="text-rose-400 block mb-1 text-[11px] uppercase">Física de Vapor (Não é Tinta)</strong>
-                                O processo não usa nenhum líquido. Disparos elétricos de alta corrente (Arco Catódico) atingem blocos de metal maciço e os vaporizam instantaneamente, criando uma nuvem de plasma incandescente.
-                            </div>
-                            <div>
-                                <strong class="text-blue-400 block mb-1 text-[11px] uppercase">Atração Magnética (Bias)</strong>
-                                A nuvem de metal flutua na câmara com carga Positiva (+). A máquina aplica uma voltagem (Bias) nas cubas de inox, tornando-as Negativas (-). Pela lei da física, o gás é sugado e "enraizado" atomicamente na peça.
-                            </div>
-                            <div>
-                                <strong class="text-amber-400 block mb-1 text-[11px] uppercase">Enclausuramento / Sala Limpa</strong>
-                                A sala PVD precisa ser livre de poeira de lixamento ou movimentação de terra. Se poeira grudar na cuba, o metal cobre a poeira e, ao lavar a peça, a sujeira cai e revela microfuros no inox.
-                            </div>
-                            <div>
-                                <strong class="text-emerald-400 block mb-1 text-[11px] uppercase">Setup Cruzado de Cores</strong>
-                                Vai mudar a produção de Dourado para Grafite? Remova as proteções, lixe a parede da máquina, varra o pó e rode 1 ciclo VAZIO na cor nova (Purga). Isso sela as paredes com Cromo e evita contaminação.
-                            </div>
+                    <div class="space-y-6">
+                        <div class="relative">
+                            <h4 class="text-xs font-bold text-indigo-600 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fa-solid fa-power-off"></i> Fase 1: Inicialização e Segurança</h4>
+                            <ol class="space-y-4 text-xs font-medium text-slate-600 border-l-2 border-indigo-100 ml-2 pl-4">
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">1</div>
+                                    <strong class="text-slate-800 block">A Regra de Ouro (Água de Resfriamento):</strong> Antes de ligar fornos ou bombas, ligue a água. Sem resfriamento, os motores e reservatórios vão queimar rapidamente.
+                                </li>
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">2</div>
+                                    <strong class="text-slate-800 block">Painel e Login:</strong> Acione o disjuntor principal inferior e aperte o botão verde "ON". Na tela *touch*, clique em Login e digite a senha mestre (<span class="font-mono bg-slate-100 px-1 rounded font-bold">666666</span>).
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="relative">
+                            <h4 class="text-xs font-bold text-amber-600 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fa-solid fa-cart-flatbed"></i> Fase 2: Carregamento</h4>
+                            <ol class="space-y-4 text-xs font-medium text-slate-600 border-l-2 border-amber-100 ml-2 pl-4">
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">3</div>
+                                    <strong class="text-slate-800 block">Acomodação das Peças:</strong> Prenda as cubas limpas (livres de poeira e oleosidade) firmemente na gaiola planetária giratória.
+                                </li>
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">4</div>
+                                    <strong class="text-slate-800 block">Travamento Hermético:</strong> Empurre a gaiola para dentro do forno usando o trilho, feche a porta pesada e acione os grampos laterais em sequência para garantir vedação total do vácuo.
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="relative">
+                            <h4 class="text-xs font-bold text-rose-600 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fa-solid fa-temperature-arrow-up"></i> Fase 3: Vácuo e Aquecimento</h4>
+                            <ol class="space-y-4 text-xs font-medium text-slate-600 border-l-2 border-rose-100 ml-2 pl-4">
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">5</div>
+                                    <strong class="text-slate-800 block">Acionamento das Bombas (Macete):</strong> Inicie as bombas inferiores com cuidado. Se estiverem frias, ligue-as e desligue-as rapidamente para quebrar a inércia do motor, evitando que o disjuntor desarme. O som deve ser "limpo".
+                                </li>
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-rose-100 text-rose-700 flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">6</div>
+                                    <strong class="text-slate-800 block">Auto Pump e Fornos:</strong> Acione o botão "Auto Pump". Em seguida, ligue os disjuntores do aquecedor e aperte "Start" no *Heating 1*. O alvo operacional térmico é alcançar os 200°C a 250°C.
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="relative">
+                            <h4 class="text-xs font-bold text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-2"><i class="fa-solid fa-spray-can-sparkles"></i> Fase 4: Setup e Pintura Automática</h4>
+                            <ol class="space-y-4 text-xs font-medium text-slate-600 border-l-2 border-emerald-100 ml-2 pl-4">
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">7</div>
+                                    <strong class="text-slate-800 block">Escolha da Cor e Gases:</strong> Selecione a cor no painel (ex: 2 = Rosé, 3 = Grafite). Mantenha todos os galões de gás ligados. Se for fazer grafite, é obrigatório trocar fisicamente o cátodo interno (paredes/catetos).
+                                </li>
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">8</div>
+                                    <strong class="text-slate-800 block">Gatilho de Operação (Condição Crítica):</strong> Só inicie o processo quando duas condições ocorrerem simultaneamente: O indicador de vácuo atingir <span class="font-bold text-blue-600">J5 (com sirene tocando)</span> E a temperatura estiver cravada em <span class="font-bold text-rose-600">200°C</span>.
+                                </li>
+                                <li class="relative">
+                                    <div class="w-6 h-6 rounded-full bg-[#0b132b] text-white flex items-center justify-center font-bold absolute -left-[29px] top-0 border-4 border-white">9</div>
+                                    <strong class="text-slate-800 block">Iniciar Ciclo:</strong> Mude para a tela "Coating Interface", aperte "Automatic Coating" (ou o botão verde correspondente) e deixe a máquina realizar a deposição de plasma.
+                                </li>
+                            </ol>
+                        </div>
+                        
+                        <div class="mt-6 bg-amber-50 p-4 rounded-xl border border-amber-200 text-amber-900 shadow-sm flex items-start gap-3">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-600 mt-0.5 text-lg"></i>
+                            <p class="text-xs font-medium leading-relaxed">
+                                <strong class="uppercase font-bold tracking-wider block mb-1">Nota sobre Troca de Cores:</strong> 
+                                Se for alterar a cor em relação ao ciclo anterior, é necessário remover as capas dos catetos, lixar todas as peças internas, limpar a câmara e rodar um <strong>ciclo vazio de purga</strong> antes de inserir as peças reais.
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -1397,7 +1419,7 @@
                 document.getElementById('tab-pvd-decapagem').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
                 calcularDecapagem();
             } else if (abaSelecionada === 'pop') {
-                document.getElementById('tab-pvd-pop').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-[#0b132b] text-white shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
+                document.getElementById('tab-pvd-pop-btn').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-[#0b132b] text-white shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
             }
         }
 
