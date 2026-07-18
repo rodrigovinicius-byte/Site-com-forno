@@ -766,7 +766,7 @@
                 </div>
             </div>
         </div>
-        <div id="view-relatorios" class="fade-in hidden">
+       <div id="view-relatorios" class="fade-in hidden">
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
                 <div>
                     <h2 class="font-black text-slate-800 text-xl tracking-tight">Dashboard Gerencial</h2>
@@ -835,7 +835,6 @@
 
             <!-- Gráficos e Desempenho -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <!-- Gráfico de Máquinas -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Top 5 Máquinas (Incidências)</h3>
                     <div class="relative flex-grow min-h-[250px] w-full">
@@ -843,7 +842,6 @@
                     </div>
                 </div>
 
-                <!-- Tabela de Desempenho por Operador -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2 flex items-center gap-2">
                         <i class="fa-solid fa-stopwatch text-indigo-500"></i> Desempenho da Equipe (Manutenção)
@@ -881,12 +879,11 @@
                             </tr>
                         </thead>
                         <tbody id="tabelaRelatorioTbody" class="divide-y divide-slate-100">
-                            <!-- Preenchido via JS -->
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </div> 
     </main>
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
@@ -987,7 +984,6 @@
             </div>
         </div>
     </div>
-    
     <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -1018,9 +1014,15 @@
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Descrição / O que precisa ser feito?</label>
                         <textarea id="intervDescricao" rows="3" placeholder="Ex: Substituição preventiva do óleo hidráulico..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
                     </div>
-                    <div>
-                        <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Criado Por (Técnico)</label>
-                        <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Atribuir a (Opcional)</label>
+                            <select id="intervAtribuido" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                        </div>
+                        <div>
+                            <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Criado Por (Técnico)</label>
+                            <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                        </div>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-3">
@@ -1032,6 +1034,7 @@
             </div>
         </div>
     </div>
+   
     <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -1356,63 +1359,210 @@
             headerSubtitle.innerText = "Grupo TBX · Relatórios de Manutenção";
             setTimeout(() => { renderizarGraficos(); }, 150);
         }
+let chartTopMaquinas = null;
 
-        function renderizarGraficos() {
-            const osAbertas = chamadosData.filter(c => c.status !== "Fechado").length;
-            const osFechadas = chamadosData.filter(c => c.status === "Fechado").length;
-
-            const ctxOS = document.getElementById('graficoOS').getContext('2d');
-            if (chartOS) chartOS.destroy(); 
+        function abrirModuloRelatorios() {
+            alternarTela('relatorios');
             
-            chartOS = new Chart(ctxOS, {
-                type: 'bar',
-                data: {
-                    labels: ['OS Abertas / Pendentes', 'OS Concluídas'],
-                    datasets: [{
-                        label: 'Quantidade de OS',
-                        data: [osAbertas, osFechadas],
-                        backgroundColor: ['#e11d48', '#10b981'], 
-                        borderRadius: 6,
-                        borderWidth: 0
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } }
+            // Popula as máquinas no filtro
+            const selectMaquina = document.getElementById('filtroRelMaquina');
+            let maquinas = listaTodasMaquinas.length > 0 ? listaTodasMaquinas : [...new Set(originalDatabase.map(i => i.maquina))];
+            selectMaquina.innerHTML = '<option value="todas">Todas as Máquinas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            
+            // Setando as datas de forma totalmente segura contra fuso horário
+            const inputFim = document.getElementById('filtroDataFim');
+            const inputInicio = document.getElementById('filtroDataInicio');
+
+            if (!inputFim.value || !inputInicio.value) {
+                const hoje = new Date();
+                const trintaDiasAtras = new Date();
+                trintaDiasAtras.setDate(hoje.getDate() - 30);
+                
+                inputFim.value = hoje.getFullYear() + '-' + String(hoje.getMonth() + 1).padStart(2, '0') + '-' + String(hoje.getDate()).padStart(2, '0');
+                inputInicio.value = trintaDiasAtras.getFullYear() + '-' + String(trintaDiasAtras.getMonth() + 1).padStart(2, '0') + '-' + String(trintaDiasAtras.getDate()).padStart(2, '0');
+            }
+
+            setTimeout(() => { renderizarRelatorioAvancado(); }, 150);
+        }
+
+        // Formata o tempo em Ms para "Min", "H" ou "Dias"
+        function formatarDiferencaTempo(diffMs) {
+            if (diffMs < 0 || isNaN(diffMs)) return "-";
+            const diffHoras = diffMs / (1000 * 60 * 60);
+            if (diffHoras < 1) {
+                const min = Math.round(diffMs / (1000 * 60));
+                return `${min} min`;
+            } else if (diffHoras < 24) {
+                return `${diffHoras.toFixed(1)}h`;
+            } else {
+                const dias = Math.floor(diffHoras / 24);
+                const horasRestantes = Math.round(diffHoras % 24);
+                return `${dias}d ${horasRestantes}h`;
+            }
+        }
+
+        function renderizarRelatorioAvancado() {
+            const dataInicioValue = document.getElementById('filtroDataInicio').value;
+            const dataFimValue = document.getElementById('filtroDataFim').value;
+            
+            let dtInicio = new Date(dataInicioValue + "T00:00:00");
+            let dtFim = new Date(dataFimValue + "T23:59:59");
+            
+            const maqFiltro = document.getElementById('filtroRelMaquina').value;
+            const tipoFiltro = document.getElementById('filtroRelTipo').value;
+            const statusFiltro = document.getElementById('filtroRelStatus').value;
+
+            let baseUnificada = [];
+            
+            // Juntar Chamados
+            if (tipoFiltro === "todos" || tipoFiltro === "os") {
+                chamadosData.forEach(c => baseUnificada.push({
+                    id: c.id, tipoBase: "Chamado", dataAbertura: c.data, maquina: c.maquina, 
+                    status: c.status, relator: c.relator, defeito: c.defeito, urgencia: c.urgencia,
+                    dataFechamento: c.dataFechamento, solucionador: c.solucionador, resolucao: c.resolucao, atribuido: ""
+                }));
+            }
+            // Juntar Intervenções
+            if (tipoFiltro === "todos" || tipoFiltro === "int") {
+                intervencoesData.forEach(i => baseUnificada.push({
+                    id: i.id, tipoBase: "Intervenção", dataAbertura: i.data, maquina: i.maquina, 
+                    status: i.status, relator: i.responsavel, defeito: i.descricao, urgencia: i.tipo,
+                    dataFechamento: i.dataFechamento, solucionador: i.solucionador, resolucao: i.resolucao, atribuido: i.atribuido || ""
+                }));
+            }
+
+            // Aplicar Filtros (usando objetos de data seguros)
+            let dadosFiltrados = baseUnificada.filter(item => {
+                let itemDate = new Date(item.dataAbertura);
+                let passaData = true;
+                if (!isNaN(dtInicio.getTime()) && !isNaN(dtFim.getTime()) && !isNaN(itemDate.getTime())) {
+                    passaData = (itemDate >= dtInicio) && (itemDate <= dtFim);
                 }
+                let passaMaq = (maqFiltro === "todas" || item.maquina === maqFiltro);
+                let passaStatus = (statusFiltro === "todos" || item.status === statusFiltro);
+                return passaData && passaMaq && passaStatus;
             });
 
-            const alertas = calcularAlertas();
-            const emDia = alertas.hoje.length + alertas.amanha.length + alertas.dias3.length + alertas.dias7.length;
-            const emAtraso = alertas.vencidas.length;
+            let qtdFechados = 0;
+            let somaTemposMs = 0;
+            let maqContagem = {};
+            let tecnicoDesempenho = {};
 
-            const ctxChecklist = document.getElementById('graficoChecklist').getContext('2d');
-            if (chartChecklist) chartChecklist.destroy();
+            // Cálculos
+            dadosFiltrados.forEach(item => {
+                maqContagem[item.maquina] = (maqContagem[item.maquina] || 0) + 1;
+                
+                if (item.status === "Fechado" && item.solucionador && item.dataFechamento) {
+                    qtdFechados++;
+                    const diffMs = new Date(item.dataFechamento) - new Date(item.dataAbertura);
+                    if(!isNaN(diffMs) && diffMs >= 0) {
+                        somaTemposMs += diffMs;
 
-            chartChecklist = new Chart(ctxChecklist, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Em Dia / No Prazo', 'Vencidos / Atrasados'],
-                    datasets: [{
-                        data: [emDia, emAtraso],
-                        backgroundColor: ['#0ea5e9', '#f43f5e'], 
-                        borderWidth: 2,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '65%',
-                    plugins: {
-                        legend: { position: 'bottom' }
+                        // Acumula os dados para a tabela do técnico
+                        const tecnicoStr = item.solucionador.split(' - ')[0]; // pega só o nome principal
+                        if (!tecnicoDesempenho[tecnicoStr]) {
+                            tecnicoDesempenho[tecnicoStr] = { resolvidos: 0, tempoMs: 0 };
+                        }
+                        tecnicoDesempenho[tecnicoStr].resolvidos++;
+                        tecnicoDesempenho[tecnicoStr].tempoMs += diffMs;
                     }
                 }
             });
-        }
 
+            // Atualiza KPIs do topo
+            const abertosOS = dadosFiltrados.filter(c => c.status !== "Fechado").length;
+            document.getElementById('kpiRelTotal').innerText = dadosFiltrados.length;
+            document.getElementById('kpiRelAbertos').innerText = abertosOS;
+            document.getElementById('kpiRelTempoMedio').innerText = qtdFechados > 0 ? formatarDiferencaTempo(somaTemposMs / qtdFechados) : "-";
+
+            let topMaq = "-"; let maxCount = 0;
+            for (let m in maqContagem) { if (maqContagem[m] > maxCount) { maxCount = maqContagem[m]; topMaq = m; } }
+            document.getElementById('kpiRelTopMaquina').innerText = topMaq.split(' - ')[0];
+
+            // Renderiza Tabela de Desempenho
+            const tbodyDesempenho = document.getElementById('tabelaDesempenhoTbody');
+            const tecArray = Object.entries(tecnicoDesempenho).sort((a, b) => b[1].resolvidos - a[1].resolvidos);
+            
+            if (tecArray.length === 0) {
+                tbodyDesempenho.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Sem atividades fechadas no período.</td></tr>`;
+            } else {
+                tbodyDesempenho.innerHTML = tecArray.map(([nome, dados]) => {
+                    const mediaMs = dados.tempoMs / dados.resolvidos;
+                    return `
+                        <tr>
+                            <td class="p-3 font-bold text-slate-700"><i class="fa-solid fa-user text-indigo-400 mr-1.5"></i> ${nome}</td>
+                            <td class="p-3 text-center font-bold text-blue-600">${dados.resolvidos}</td>
+                            <td class="p-3 text-center text-slate-600 font-mono">${formatarDiferencaTempo(dados.tempoMs)}</td>
+                            <td class="p-3 text-center text-emerald-600 font-bold font-mono">${formatarDiferencaTempo(mediaMs)}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            // Gráfico Top Máquinas
+            const sortedMaq = Object.entries(maqContagem).sort((a,b) => b[1] - a[1]).slice(0,5);
+            const ctxTop = document.getElementById('graficoTopMaquinas').getContext('2d');
+            if (chartTopMaquinas) chartTopMaquinas.destroy();
+            chartTopMaquinas = new Chart(ctxTop, {
+                type: 'doughnut',
+                data: {
+                    labels: sortedMaq.map(m => m[0].substring(0, 15) + '...'),
+                    datasets: [{
+                        data: sortedMaq.map(m => m[1]),
+                        backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6'],
+                        borderWidth: 2
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 9 } } } } }
+            });
+
+            // Renderiza a Lista Geral Detalhada (A que aparece lá no fundo)
+            const tbodyRelatorio = document.getElementById('tabelaRelatorioTbody');
+            dadosFiltrados.sort((a,b) => new Date(b.dataAbertura) - new Date(a.dataAbertura));
+
+            if (dadosFiltrados.length === 0) {
+                tbodyRelatorio.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhum registro para os filtros selecionados.</td></tr>`;
+                return;
+            }
+
+            tbodyRelatorio.innerHTML = dadosFiltrados.map(item => {
+                let badgeTipo = item.tipoBase === "Chamado" ? "bg-rose-100 text-rose-700" : "bg-orange-100 text-orange-700";
+                let badgeStatus = item.status === "Fechado" ? `<span class="text-emerald-600 font-bold"><i class="fa-solid fa-check"></i> Resolvido</span>` : `<span class="text-amber-500 font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
+                
+                let dtAbre = new Date(item.dataAbertura).toLocaleString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+                let dtFecha = item.dataFechamento ? new Date(item.dataFechamento).toLocaleString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) : "---";
+                
+                let tempoStr = "Em andamento";
+                if (item.status === "Fechado" && item.dataFechamento) {
+                    tempoStr = formatarDiferencaTempo(new Date(item.dataFechamento) - new Date(item.dataAbertura));
+                }
+
+                let quemAbriu = `Aberta por: <span class="font-semibold text-slate-700">${item.relator}</span>`;
+                if (item.atribuido) {
+                    quemAbriu += `<br><span class="text-[9px] mt-1 inline-block text-blue-600 font-bold"><i class="fa-solid fa-thumbtack"></i> Atribuído: ${item.atribuido}</span>`;
+                }
+
+                return `
+                <tr class="hover:bg-slate-50 transition-colors border-b last:border-0 border-slate-100">
+                    <td class="p-4 align-top">
+                        <span class="font-bold text-slate-800 block">${item.id}</span>
+                        <span class="${badgeTipo} text-[9px] px-2 py-0.5 rounded font-bold uppercase mt-1 inline-block">${item.tipoBase}</span>
+                    </td>
+                    <td class="p-4 align-top font-bold text-slate-700 text-[11px]">${item.maquina}</td>
+                    <td class="p-4 align-top">
+                        <div class="text-[10px] text-slate-500 mb-1"><i class="fa-regular fa-calendar text-slate-400"></i> ${dtAbre} | ${quemAbriu}</div>
+                        <p class="text-slate-700 font-medium">"${item.defeito}"</p>
+                        <span class="text-[9px] bg-slate-100 border border-slate-200 text-slate-500 px-1.5 py-0.5 rounded mt-1.5 inline-block">Classe: ${item.urgencia}</span>
+                    </td>
+                    <td class="p-4 align-top">
+                        <div class="text-[10px] text-slate-500 mb-1">${badgeStatus} ${item.dataFechamento ? `| Em: ${dtFecha}` : ''}</div>
+                        ${item.status === "Fechado" ? `<p class="text-emerald-700 font-medium">"${item.resolucao}"</p><span class="text-[9px] text-slate-500 mt-1.5 inline-block">Técnico que Fechou: <span class="font-bold text-slate-800">${item.solucionador}</span></span>` : `<span class="italic text-slate-400">Aguardando intervenção...</span>`}
+                    </td>
+                    <td class="p-4 align-middle text-center font-mono font-bold text-slate-600">${tempoStr}</td>
+                </tr>
+                `;
+            }).join('');
+        }        
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
         
@@ -1918,13 +2068,15 @@
             renderListaIntervencoes(); 
             renderizarListaPendenciasMista(); 
         }
-
-        function abrirModalNovaIntervencao() {
+function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
             let maquinas = listaTodasMaquinas.length > 0 ? listaTodasMaquinas : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"]);
             select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
             document.getElementById('intervDescricao').value = "";
             document.getElementById('intervResponsavel').innerHTML = gerarOptionsEquipes('manutencao'); 
+            
+            document.getElementById('intervAtribuido').innerHTML = '<option value="">Sem atribuição</option>' + gerarOptionsEquipes('manutencao');
+
             document.getElementById('intervencaoModal').classList.remove('hidden');
         }
         function fecharModalIntervencao() { document.getElementById('intervencaoModal').classList.add('hidden'); }
@@ -1934,9 +2086,10 @@
             const tipo = document.getElementById('intervTipo').value;
             const descricao = document.getElementById('intervDescricao').value.trim();
             const responsavel = document.getElementById('intervResponsavel').value.trim();
+            const atribuido = document.getElementById('intervAtribuido').value.trim();
             const btn = document.getElementById('btnEnviarIntervencao');
             
-            if (!descricao || !responsavel) { showToast("Preencha a descrição e selecione o técnico.", "error"); return; }
+            if (!descricao || !responsavel) { showToast("Preencha a descrição e selecione o técnico relator.", "error"); return; }
             btn.disabled = true; const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
             
@@ -1948,7 +2101,7 @@
             const novoId = `INT-${maxId + 1}`;
 
             const novaIntervencao = {
-                id: novoId, data: new Date().toISOString(), maquina, tipo, descricao, responsavel, status: "Aberto", resolucao: "", dataFechamento: "", solucionador: ""
+                id: novoId, data: new Date().toISOString(), maquina, tipo, descricao, responsavel, atribuido, status: "Aberto", resolucao: "", dataFechamento: "", solucionador: ""
             };
 
             if (API_URL) {
@@ -1997,7 +2150,7 @@
                     : `<span class="text-slate-700 font-medium">${i.resolucao || ''}</span><br><span class="text-[9px] text-slate-400">Demanda original: ${descricaoStr}</span>`;
                 
                 let responsavelText = i.status === "Aberto" 
-                    ? `Aberto por:<br><span class="font-semibold text-slate-600">${relatorStr}</span>` 
+                    ? `Aberto por:<br><span class="font-semibold text-slate-600">${relatorStr}</span>${i.atribuido ? `<br><br><span class="bg-blue-50 text-blue-600 border border-blue-100 rounded px-1.5 py-0.5 inline-block"><i class="fa-solid fa-thumbtack"></i> Atribuído a:<br><b>${i.atribuido}</b></span>` : ''}` 
                     : `Resolvido por:<br><span class="font-bold text-slate-800">${i.solucionador || ''}</span><br><span class="text-[9px] text-slate-500 font-medium bg-slate-100 px-1 py-0.5 rounded mt-1 inline-block">Em: ${dataFechamentoStr}</span>`;
 
                 const textColorClass = isOS ? "text-rose-600" : "text-orange-600";
@@ -2013,7 +2166,7 @@
                 </tr>`;
             }).join('');
         }
-
+    
         function abrirDetalhesOS(id) {
             const os = chamadosData.find(c => c.id === id);
             if(!os) return;
