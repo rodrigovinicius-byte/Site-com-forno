@@ -834,30 +834,118 @@
                     </div>
                 </div>
             </div>
+        </div>
+        
         <div id="view-relatorios" class="fade-in hidden">
             <div class="flex items-center justify-between mb-6">
                 <div>
-                    <h2 class="font-black text-slate-800 text-xl tracking-tight">Indicadores de Manutenção</h2>
-                    <p class="text-xs text-slate-500 mt-1">Dados processados instantaneamente com base na última sincronização.</p>
+                    <h2 class="font-black text-slate-800 text-xl tracking-tight">Indicadores & Filtros de Manutenção</h2>
+                    <p class="text-xs text-slate-500 mt-1">Análise de chamados, intervenções e tempo de resposta.</p>
                 </div>
-                <button onclick="renderizarGraficos()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold py-2 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-all">
-                    <i class="fa-solid fa-arrows-rotate"></i> Atualizar Dados
+                <button onclick="abrirModuloRelatorios()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold py-2 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-all">
+                    <i class="fa-solid fa-arrows-rotate"></i> Atualizar
                 </button>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Gráficos Existentes -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Volume de Ordens de Serviço (OS)</h3>
-                    <div class="relative h-64 w-full">
+                    <div class="relative h-48 w-full">
                         <canvas id="graficoOS"></canvas>
                     </div>
                 </div>
-
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
                     <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Adesão de Checklists (Geral)</h3>
-                    <div class="relative h-64 w-full flex items-center justify-center">
+                    <div class="relative h-48 w-full flex items-center justify-center">
                         <canvas id="graficoChecklist"></canvas>
                     </div>
+                </div>
+            </div>
+
+            <!-- NOVA ÁREA: Filtros e Tabela Analítica -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+                <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-100 pb-3">
+                    <i class="fa-solid fa-filter text-blue-600"></i> Relatório Analítico Detalhado
+                </h3>
+                
+                <!-- Filtros -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 mb-6">
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tipo de Registro</label>
+                        <select id="filtroRelTipo" onchange="filtrarTabelaRelatorios()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="Todos">Todos (OS + Intervenções)</option>
+                            <option value="OS">Apenas Chamados (OS)</option>
+                            <option value="INT">Apenas Intervenções</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Status</label>
+                        <select id="filtroRelStatus" onchange="filtrarTabelaRelatorios()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="Todos">Todos</option>
+                            <option value="Fechado">Finalizados</option>
+                            <option value="Aberto">Em Aberto / Pendente</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Urgência (Apenas OS)</label>
+                        <select id="filtroRelUrgencia" onchange="filtrarTabelaRelatorios()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="Todas">Todas</option>
+                            <option value="Alta">Alta</option>
+                            <option value="Média">Média</option>
+                            <option value="Baixa">Baixa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Máquina</label>
+                        <select id="filtroRelMaquina" onchange="filtrarTabelaRelatorios()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="Todas">Todas as Máquinas</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Técnico / Solucionador</label>
+                        <select id="filtroRelTecnico" onchange="filtrarTabelaRelatorios()" class="w-full bg-slate-50 border border-slate-200 rounded-lg p-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-blue-500">
+                            <option value="Todos">Todos os Técnicos</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- KPIs do Filtro -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 border-t border-slate-100 pt-5">
+                    <div class="bg-blue-50 p-3 rounded-xl border border-blue-100">
+                        <span class="block text-[10px] font-bold text-blue-500 uppercase">Registros Filtrados</span>
+                        <span class="block text-xl font-black text-blue-700" id="kpiRelTotal">0</span>
+                    </div>
+                    <div class="bg-emerald-50 p-3 rounded-xl border border-emerald-100">
+                        <span class="block text-[10px] font-bold text-emerald-500 uppercase">Finalizados no Filtro</span>
+                        <span class="block text-xl font-black text-emerald-700" id="kpiRelFechados">0</span>
+                    </div>
+                    <div class="bg-rose-50 p-3 rounded-xl border border-rose-100 md:col-span-2 flex items-center justify-between">
+                        <div>
+                            <span class="block text-[10px] font-bold text-rose-500 uppercase">Tempo Médio de Atendimento (TMA)</span>
+                            <span class="block text-xl font-black text-rose-700" id="kpiRelTempoMedio">0h 0m</span>
+                        </div>
+                        <i class="fa-solid fa-stopwatch text-3xl text-rose-200"></i>
+                    </div>
+                </div>
+
+                <!-- Tabela -->
+                <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <table class="w-full text-left border-collapse whitespace-nowrap">
+                        <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-500 border-b border-slate-200">
+                            <tr>
+                                <th class="p-3">ID / TIPO</th>
+                                <th class="p-3">MÁQUINA</th>
+                                <th class="p-3">ABERTURA</th>
+                                <th class="p-3">STATUS</th>
+                                <th class="p-3 bg-blue-50 text-blue-700"><i class="fa-solid fa-clock"></i> TEMPO DE SOLUÇÃO</th>
+                                <th class="p-3">TÉCNICO (FECHAMENTO)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbodyRelatorios" class="divide-y divide-slate-100 text-xs">
+                            <!-- Injetado via JS -->
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -3004,7 +3092,7 @@
                 fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Alerta: Tempo de Encharque Reduzido";
                 fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz gera um tempo de permanência muito curto (${formatarTempo(tempoEsteiraSegundos)}) para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor.` + sugestaoHtm;
-            } else if (freq < (freqIdealMin - 5) && freq > 0) {
+           } else if (freq < (freqIdealMin - 5) && freq > 0) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-gauge-simple text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Alerta: Velocidade Lenta Demais";
