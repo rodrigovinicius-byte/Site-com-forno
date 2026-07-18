@@ -425,7 +425,6 @@
                         <div class="h-10 w-full bg-[#cbd5e1] rounded-lg flex items-center p-1 overflow-hidden relative shadow-inner" id="conveyorVisualArea"></div>
                     </div>
                 </div>
-
                 <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
                     <h3 class="text-sm font-bold text-slate-800 flex items-center gap-2 mb-4 border-b border-slate-200 pb-2">
                         <i class="fa-solid fa-flask text-indigo-600"></i> Físico-Química do Recozimento & Atmosfera
@@ -936,12 +935,13 @@
                     <table class="w-full text-left border-collapse whitespace-nowrap">
                         <thead class="bg-slate-50 text-[10px] font-bold uppercase text-slate-500 border-b border-slate-200">
                             <tr>
-                                <th class="p-3">ID / TIPO</th>
-                                <th class="p-3">MÁQUINA</th>
-                                <th class="p-3">ABERTURA</th>
-                                <th class="p-3">STATUS</th>
-                                <th class="p-3 bg-blue-50 text-blue-700"><i class="fa-solid fa-clock"></i> TEMPO DE SOLUÇÃO</th>
-                                <th class="p-3">TÉCNICO (FECHAMENTO)</th>
+                                <th class="p-3 w-24">ID / TIPO</th>
+                                <th class="p-3">MÁQUINA & DESCRIÇÃO</th>
+                                <th class="p-3 w-32">ABERTURA</th>
+                                <th class="p-3 w-32">FECHAMENTO</th>
+                                <th class="p-3 bg-blue-50 text-blue-700 w-32"><i class="fa-solid fa-clock"></i> TEMPO</th>
+                                <th class="p-3">TÉCNICO & RESOLUÇÃO</th>
+                                <th class="p-3 w-24">STATUS</th>
                             </tr>
                         </thead>
                         <tbody id="tbodyRelatorios" class="divide-y divide-slate-100 text-xs">
@@ -954,7 +954,7 @@
 
     </main>
 
-    <!-- Modais do Sistema (Config, Chamados, etc) -->
+    <!-- Modais do Sistema -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -1279,7 +1279,7 @@
         </div>
     </div>
     <div id="printArea" class="hidden"></div>
-<script>
+    <script>
         // --- SENHA DE ACESSO AQUI ---
         const SENHA_ACESSO = "TBX2026";
 
@@ -1474,7 +1474,7 @@
             const elMaquina = document.getElementById('filtroRelMaquina');
             const elTecnico = document.getElementById('filtroRelTecnico');
 
-            if (!elTipo || !elStatus) return; // Proteção de carregamento
+            if (!elTipo || !elStatus) return;
 
             const fTipo = elTipo.value;
             const fStatus = elStatus.value;
@@ -1482,7 +1482,6 @@
             const fMaquina = elMaquina.value;
             const fTecnico = elTecnico.value;
 
-            // Une os dados para facilitar o filtro
             let dadosBrutos = [];
             const chamadosSafe = chamadosData || [];
             const intervSafe = intervencoesData || [];
@@ -1490,7 +1489,6 @@
             if (fTipo === "Todos" || fTipo === "OS") dadosBrutos = [...dadosBrutos, ...chamadosSafe.map(c => ({...c, _isOS: true}))];
             if (fTipo === "Todos" || fTipo === "INT") dadosBrutos = [...dadosBrutos, ...intervSafe.map(i => ({...i, _isOS: false}))];
 
-            // Aplica os filtros
             let dadosFiltrados = dadosBrutos.filter(item => {
                 let passaStatus = fStatus === "Todos" || item.status === fStatus;
                 let passaMaquina = fMaquina === "Todas" || item.maquina === fMaquina;
@@ -1505,57 +1503,66 @@
                 return passaStatus && passaMaquina && passaUrgencia && passaTecnico;
             });
 
-            // Ordena do mais recente pro mais antigo
             dadosFiltrados.sort((a, b) => new Date(b.data) - new Date(a.data));
 
-            // Variáveis para cálculos de KPI
             let totalFechados = 0;
             let somaMinutosAtendimento = 0;
             let htmlTabela = "";
 
             if (dadosFiltrados.length === 0) {
-                htmlTabela = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-medium">Nenhum registro encontrado com estes filtros.</td></tr>`;
+                htmlTabela = `<tr><td colspan="7" class="p-8 text-center text-slate-400 font-medium">Nenhum registro encontrado com estes filtros.</td></tr>`;
             } else {
                 dadosFiltrados.forEach(item => {
                     const dataAberturaObj = new Date(item.data);
-                    const aberturaFormatada = dataAberturaObj.toLocaleDateString('pt-BR') + ' ' + dataAberturaObj.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                    const aberturaFormatada = dataAberturaObj.toLocaleDateString('pt-BR') + '<br><span class="text-[10px] text-slate-400">' + dataAberturaObj.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) + '</span>';
                     
-                    // Cálculo de tempo
                     let tempoText = `<span class="text-slate-400 italic text-[10px]">Em andamento</span>`;
+                    let fechamentoFormatada = `<span class="text-slate-300">-</span>`;
+
                     if (item.status === "Fechado" && item.dataFechamento) {
                         totalFechados++;
                         const calcTempo = calcularTempoResolucao(item.data, item.dataFechamento);
                         somaMinutosAtendimento += calcTempo.minutos;
                         
-                        // Cor do texto baseada no tempo (Ex: > 24h fica vermelho)
                         let corTempo = calcTempo.minutos > 1440 ? 'text-rose-600' : 'text-emerald-600';
                         tempoText = `<span class="font-bold ${corTempo}">${calcTempo.texto}</span>`;
+
+                        const dFechamento = new Date(item.dataFechamento);
+                        fechamentoFormatada = dFechamento.toLocaleDateString('pt-BR') + '<br><span class="text-[10px] text-slate-400">' + dFechamento.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'}) + '</span>';
                     }
 
-                    // Estética da linha
                     const icone = item._isOS ? '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>' : '<i class="fa-solid fa-screwdriver-wrench text-orange-500"></i>';
-                    const urgenciaBadge = item._isOS ? `<span class="block text-[9px] text-slate-400">Urgência: ${item.urgencia || '-'}</span>` : `<span class="block text-[9px] text-slate-400">Intervenção Interna</span>`;
+                    const urgenciaBadge = item._isOS ? `<span class="inline-block bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded mt-1 text-[9px] text-slate-500">Urgência: ${item.urgencia || '-'}</span>` : `<span class="inline-block bg-slate-100 border border-slate-200 px-1.5 py-0.5 rounded mt-1 text-[9px] text-slate-500">Intervenção Interna</span>`;
                     const statusBadge = item.status === "Fechado" 
-                        ? `<span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded font-bold text-[9px]"><i class="fa-solid fa-check"></i> Fechado</span>`
-                        : `<span class="bg-amber-100 text-amber-700 px-2 py-1 rounded font-bold text-[9px]"><i class="fa-solid fa-clock"></i> Aberto</span>`;
+                        ? `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-md font-bold text-[10px]"><i class="fa-solid fa-check"></i> Fechado</span>`
+                        : `<span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-md font-bold text-[10px]"><i class="fa-solid fa-clock"></i> Aberto</span>`;
+
+                    const problemaDesc = item.defeito || item.descricao || '';
+                    const resolucaoDesc = item.resolucao || '-';
 
                     htmlTabela += `
                         <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
                             <td class="p-3 font-bold text-slate-700">${icone} ${item.id}</td>
-                            <td class="p-3"><span class="block font-bold text-slate-800 text-xs">${item.maquina || '-'}</span>${urgenciaBadge}</td>
-                            <td class="p-3 font-medium text-slate-500">${aberturaFormatada}</td>
-                            <td class="p-3">${statusBadge}</td>
+                            <td class="p-3 max-w-xs">
+                                <span class="block font-bold text-slate-800 text-xs truncate">${item.maquina || '-'}</span>
+                                <span class="block text-[10px] text-slate-500 mt-0.5 truncate" title="${problemaDesc}">${problemaDesc}</span>
+                                ${urgenciaBadge}
+                            </td>
+                            <td class="p-3 font-medium text-slate-600 leading-tight">${aberturaFormatada}</td>
+                            <td class="p-3 font-medium text-slate-600 leading-tight">${fechamentoFormatada}</td>
                             <td class="p-3 bg-blue-50/30">${tempoText}</td>
-                            <td class="p-3 font-bold text-slate-600">${item.status === "Fechado" ? String(item.solucionador || 'N/A').split(' - ')[0] : '-'}</td>
+                            <td class="p-3 max-w-xs">
+                                <span class="block font-bold text-slate-700 text-xs truncate">${item.status === "Fechado" ? String(item.solucionador || 'N/A').split(' - ')[0] : '-'}</span>
+                                <span class="block text-[10px] text-slate-500 mt-0.5 truncate" title="${resolucaoDesc}">${resolucaoDesc}</span>
+                            </td>
+                            <td class="p-3">${statusBadge}</td>
                         </tr>
                     `;
                 });
             }
 
-            // Atualiza Tabela
             document.getElementById('tbodyRelatorios').innerHTML = htmlTabela;
 
-            // Atualiza KPIs numéricos
             const elTotal = document.getElementById('kpiRelTotal');
             const elFechados = document.getElementById('kpiRelFechados');
             const elTempo = document.getElementById('kpiRelTempoMedio');
@@ -1563,7 +1570,6 @@
             if (elTotal) elTotal.innerText = dadosFiltrados.length;
             if (elFechados) elFechados.innerText = totalFechados;
 
-            // Atualiza KPI Tempo Médio
             if (elTempo) {
                 if (totalFechados > 0) {
                     const mediaMinutos = Math.floor(somaMinutosAtendimento / totalFechados);
@@ -1714,7 +1720,6 @@
                 document.getElementById('tab-pvd-pop').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-[#0b132b] text-white shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
             }
         }
-
         function calcularParametrosPVD() {
             const cor = document.getElementById('pvdCor').value;
             const temp = parseFloat(document.getElementById('pvdTemp').value) || 0;
@@ -1849,6 +1854,7 @@
             document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(''); 
             document.getElementById('chamadoModal').classList.remove('hidden');
         }
+        
         function fecharModalChamado() { document.getElementById('chamadoModal').classList.add('hidden'); }
         
         async function enviarChamado() {
@@ -3036,7 +3042,7 @@
 
         function fecharModalCadastroItem() { document.getElementById('cadastroItemModal').classList.add('hidden'); }
 
-      function processarFotoItem(e) {
+        function processarFotoItem(e) {
             const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = function(evt) {
