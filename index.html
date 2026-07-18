@@ -766,15 +766,14 @@
                 </div>
             </div>
         </div>
-
-     <div id="view-relatorios" class="fade-in hidden">
+        <div id="view-relatorios" class="fade-in hidden">
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
                 <div>
                     <h2 class="font-black text-slate-800 text-xl tracking-tight">Dashboard Gerencial</h2>
-                    <p class="text-xs text-slate-500 mt-1">Análise de chamados, intervenções e tempos de atendimento.</p>
+                    <p class="text-xs text-slate-500 mt-1">Análise de chamados, intervenções e desempenho da equipe.</p>
                 </div>
                 <button onclick="renderizarRelatorioAvancado()" class="bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs font-bold py-2 px-4 rounded-xl flex items-center gap-2 shadow-sm transition-all w-full md:w-auto justify-center">
-                    <i class="fa-solid fa-filter"></i> Aplicar Filtros
+                    <i class="fa-solid fa-filter"></i> Atualizar Dados
                 </button>
             </div>
 
@@ -785,19 +784,19 @@
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Período (Abertura)</label>
                         <div class="flex gap-2">
-                            <input type="date" id="filtroDataInicio" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
-                            <input type="date" id="filtroDataFim" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <input type="date" id="filtroDataInicio" onchange="renderizarRelatorioAvancado()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
+                            <input type="date" id="filtroDataFim" onchange="renderizarRelatorioAvancado()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500">
                         </div>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Máquina / Equipamento</label>
-                        <select id="filtroRelMaquina" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <select id="filtroRelMaquina" onchange="renderizarRelatorioAvancado()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
                             <option value="todas">Todas as Máquinas</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Tipo de Registro</label>
-                        <select id="filtroRelTipo" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <select id="filtroRelTipo" onchange="renderizarRelatorioAvancado()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
                             <option value="todos">OS & Intervenções</option>
                             <option value="os">Apenas Chamados (OS)</option>
                             <option value="int">Apenas Intervenções</option>
@@ -805,7 +804,7 @@
                     </div>
                     <div>
                         <label class="block text-[10px] font-bold text-slate-500 uppercase mb-1.5">Status</label>
-                        <select id="filtroRelStatus" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <select id="filtroRelStatus" onchange="renderizarRelatorioAvancado()" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-blue-500">
                             <option value="todos">Todos os Status</option>
                             <option value="Aberto">Apenas Abertos (Pendentes)</option>
                             <option value="Fechado">Apenas Fechados (Resolvidos)</option>
@@ -817,7 +816,7 @@
             <!-- KPIs -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
                 <div class="bg-blue-50 p-4 rounded-2xl border border-blue-100 shadow-sm flex flex-col justify-center">
-                    <span class="block text-[10px] font-bold text-blue-600 uppercase mb-1">Total de Registros</span>
+                    <span class="block text-[10px] font-bold text-blue-600 uppercase mb-1">Total Filtrado</span>
                     <span class="block text-2xl font-black text-blue-900" id="kpiRelTotal">0</span>
                 </div>
                 <div class="bg-rose-50 p-4 rounded-2xl border border-rose-100 shadow-sm flex flex-col justify-center">
@@ -825,7 +824,7 @@
                     <span class="block text-2xl font-black text-rose-900" id="kpiRelAbertos">0</span>
                 </div>
                 <div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-100 shadow-sm flex flex-col justify-center">
-                    <span class="block text-[10px] font-bold text-emerald-600 uppercase mb-1">Tempo Médio de Reparo</span>
+                    <span class="block text-[10px] font-bold text-emerald-600 uppercase mb-1">Tempo Médio Global</span>
                     <span class="block text-lg font-black text-emerald-900" id="kpiRelTempoMedio">-</span>
                 </div>
                 <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100 shadow-sm flex flex-col justify-center">
@@ -834,26 +833,41 @@
                 </div>
             </div>
 
-            <!-- Gráficos -->
+            <!-- Gráficos e Desempenho -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Status do Volume (Filtrado)</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="graficoOS"></canvas>
+                <!-- Gráfico de Máquinas -->
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col">
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Top 5 Máquinas (Incidências)</h3>
+                    <div class="relative flex-grow min-h-[250px] w-full">
+                        <canvas id="graficoTopMaquinas"></canvas>
                     </div>
                 </div>
+
+                <!-- Tabela de Desempenho por Operador -->
                 <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200">
-                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Top 5 Máquinas (Incidências)</h3>
-                    <div class="relative h-64 w-full">
-                        <canvas id="graficoTopMaquinas"></canvas>
+                    <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-stopwatch text-indigo-500"></i> Desempenho da Equipe (Manutenção)
+                    </h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-xs">
+                            <thead class="bg-slate-50 text-[9px] font-bold uppercase text-slate-400 border-b border-slate-150">
+                                <tr>
+                                    <th class="p-3">Técnico / Operador</th>
+                                    <th class="p-3 text-center">Resolvidas</th>
+                                    <th class="p-3 text-center">Tempo Investido</th>
+                                    <th class="p-3 text-center">MTTR (Média)</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tabelaDesempenhoTbody" class="divide-y divide-slate-100"></tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-            <!-- Tabela Detalhada -->
+            <!-- Tabela Detalhada de Chamados -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
                 <div class="p-5 border-b border-slate-100 bg-slate-50">
-                    <h3 class="text-sm font-bold text-slate-800">Detalhamento de Ocorrências</h3>
+                    <h3 class="text-sm font-bold text-slate-800">Detalhamento de Ocorrências e Soluções</h3>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse text-xs">
@@ -861,9 +875,9 @@
                             <tr>
                                 <th class="p-4 whitespace-nowrap">ID / Tipo</th>
                                 <th class="p-4 whitespace-nowrap">Máquina</th>
-                                <th class="p-4 min-w-[200px]">Abertura & Defeito</th>
-                                <th class="p-4 min-w-[200px]">Fechamento & Solução</th>
-                                <th class="p-4 whitespace-nowrap">Tempo Resolução</th>
+                                <th class="p-4 min-w-[220px]">Relator & Defeito</th>
+                                <th class="p-4 min-w-[220px]">Solução & Técnico</th>
+                                <th class="p-4 whitespace-nowrap text-center">Tempo Fila</th>
                             </tr>
                         </thead>
                         <tbody id="tabelaRelatorioTbody" class="divide-y divide-slate-100">
@@ -873,9 +887,7 @@
                 </div>
             </div>
         </div>
-
     </main>
-
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
