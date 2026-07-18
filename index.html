@@ -199,6 +199,7 @@
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4" id="itensTopLabel"></span>
             <div id="checklistContainer" class="space-y-8"></div>
         </div>
+        
         <div id="view-almoxarifado" class="fade-in hidden">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col lg:flex-row gap-4 items-center justify-between">
                 <div class="flex flex-col sm:flex-row gap-3 w-full lg:max-w-3xl">
@@ -235,6 +236,7 @@
                 </div>
             </div>
         </div>
+        
         <div id="view-pops" class="fade-in hidden">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div class="flex flex-1 gap-3 w-full sm:max-w-xl">
@@ -835,7 +837,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div id="view-relatorios" class="fade-in hidden">
             <div class="flex items-center justify-between mb-6">
                 <div>
@@ -952,6 +954,7 @@
 
     </main>
 
+    <!-- Modais do Sistema (Config, Chamados, etc) -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -1412,9 +1415,172 @@
             else alternarTela('home');
         }
 
+        // ============================================
+        // LÓGICA DO PAINEL DE RELATÓRIOS E FILTROS
+        // ============================================
         function abrirModuloRelatorios() {
             alternarTela('relatorios');
-            setTimeout(() => { renderizarGraficos(); }, 150);
+            setTimeout(() => { 
+                renderizarGraficos(); 
+                preencherOpcoesFiltroRelatorio();
+                filtrarTabelaRelatorios();
+            }, 150);
+        }
+
+        function calcularTempoResolucao(dataAbertura, dataFechamento) {
+            if (!dataAbertura || !dataFechamento) return { texto: "-", minutos: 0 };
+            const ms = new Date(dataFechamento) - new Date(dataAbertura);
+            if (ms < 0) return { texto: "-", minutos: 0 };
+
+            const totalMinutos = Math.floor(ms / 60000);
+            const dias = Math.floor(totalMinutos / 1440);
+            const horas = Math.floor((totalMinutos % 1440) / 60);
+            const minutos = totalMinutos % 60;
+
+            let texto = [];
+            if (dias > 0) texto.push(`${dias}d`);
+            if (horas > 0) texto.push(`${horas}h`);
+            if (minutos > 0 || texto.length === 0) texto.push(`${minutos}m`);
+
+            return { texto: texto.join(' '), minutos: totalMinutos };
+        }
+
+        function preencherOpcoesFiltroRelatorio() {
+            const chamadosSafe = chamadosData || [];
+            const intervSafe = intervencoesData || [];
+            const misto = [...chamadosSafe, ...intervSafe];
+            
+            // Extrair máquinas únicas
+            const maquinas = [...new Set(misto.map(i => i.maquina).filter(Boolean))].sort();
+            const selectMaq = document.getElementById('filtroRelMaquina');
+            if (selectMaq) {
+                selectMaq.innerHTML = '<option value="Todas">Todas as Máquinas</option>' + 
+                                      maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            }
+
+            // Extrair técnicos/solucionadores únicos (que já fecharam algo)
+            const tecnicos = [...new Set(misto.filter(i => i.solucionador).map(i => String(i.solucionador).split(' - ')[0]))].sort();
+            const selectTec = document.getElementById('filtroRelTecnico');
+            if (selectTec) {
+                selectTec.innerHTML = '<option value="Todos">Todos os Técnicos</option>' + 
+                                      tecnicos.map(t => `<option value="${t}">${t}</option>`).join('');
+            }
+        }
+
+        function filtrarTabelaRelatorios() {
+            const elTipo = document.getElementById('filtroRelTipo');
+            const elStatus = document.getElementById('filtroRelStatus');
+            const elUrgencia = document.getElementById('filtroRelUrgencia');
+            const elMaquina = document.getElementById('filtroRelMaquina');
+            const elTecnico = document.getElementById('filtroRelTecnico');
+
+            if (!elTipo || !elStatus) return; // Proteção de carregamento
+
+            const fTipo = elTipo.value;
+            const fStatus = elStatus.value;
+            const fUrgencia = elUrgencia.value;
+            const fMaquina = elMaquina.value;
+            const fTecnico = elTecnico.value;
+
+            // Une os dados para facilitar o filtro
+            let dadosBrutos = [];
+            const chamadosSafe = chamadosData || [];
+            const intervSafe = intervencoesData || [];
+
+            if (fTipo === "Todos" || fTipo === "OS") dadosBrutos = [...dadosBrutos, ...chamadosSafe.map(c => ({...c, _isOS: true}))];
+            if (fTipo === "Todos" || fTipo === "INT") dadosBrutos = [...dadosBrutos, ...intervSafe.map(i => ({...i, _isOS: false}))];
+
+            // Aplica os filtros
+            let dadosFiltrados = dadosBrutos.filter(item => {
+                let passaStatus = fStatus === "Todos" || item.status === fStatus;
+                let passaMaquina = fMaquina === "Todas" || item.maquina === fMaquina;
+                let passaUrgencia = fUrgencia === "Todas" || (!item._isOS) || (item._isOS && item.urgencia === fUrgencia);
+                
+                let passaTecnico = true;
+                if (fTecnico !== "Todos") {
+                    if (!item.solucionador) passaTecnico = false;
+                    else passaTecnico = String(item.solucionador).includes(fTecnico);
+                }
+
+                return passaStatus && passaMaquina && passaUrgencia && passaTecnico;
+            });
+
+            // Ordena do mais recente pro mais antigo
+            dadosFiltrados.sort((a, b) => new Date(b.data) - new Date(a.data));
+
+            // Variáveis para cálculos de KPI
+            let totalFechados = 0;
+            let somaMinutosAtendimento = 0;
+            let htmlTabela = "";
+
+            if (dadosFiltrados.length === 0) {
+                htmlTabela = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-medium">Nenhum registro encontrado com estes filtros.</td></tr>`;
+            } else {
+                dadosFiltrados.forEach(item => {
+                    const dataAberturaObj = new Date(item.data);
+                    const aberturaFormatada = dataAberturaObj.toLocaleDateString('pt-BR') + ' ' + dataAberturaObj.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+                    
+                    // Cálculo de tempo
+                    let tempoText = `<span class="text-slate-400 italic text-[10px]">Em andamento</span>`;
+                    if (item.status === "Fechado" && item.dataFechamento) {
+                        totalFechados++;
+                        const calcTempo = calcularTempoResolucao(item.data, item.dataFechamento);
+                        somaMinutosAtendimento += calcTempo.minutos;
+                        
+                        // Cor do texto baseada no tempo (Ex: > 24h fica vermelho)
+                        let corTempo = calcTempo.minutos > 1440 ? 'text-rose-600' : 'text-emerald-600';
+                        tempoText = `<span class="font-bold ${corTempo}">${calcTempo.texto}</span>`;
+                    }
+
+                    // Estética da linha
+                    const icone = item._isOS ? '<i class="fa-solid fa-triangle-exclamation text-rose-500"></i>' : '<i class="fa-solid fa-screwdriver-wrench text-orange-500"></i>';
+                    const urgenciaBadge = item._isOS ? `<span class="block text-[9px] text-slate-400">Urgência: ${item.urgencia || '-'}</span>` : `<span class="block text-[9px] text-slate-400">Intervenção Interna</span>`;
+                    const statusBadge = item.status === "Fechado" 
+                        ? `<span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded font-bold text-[9px]"><i class="fa-solid fa-check"></i> Fechado</span>`
+                        : `<span class="bg-amber-100 text-amber-700 px-2 py-1 rounded font-bold text-[9px]"><i class="fa-solid fa-clock"></i> Aberto</span>`;
+
+                    htmlTabela += `
+                        <tr class="hover:bg-slate-50 transition-colors border-b border-slate-100 last:border-0">
+                            <td class="p-3 font-bold text-slate-700">${icone} ${item.id}</td>
+                            <td class="p-3"><span class="block font-bold text-slate-800 text-xs">${item.maquina || '-'}</span>${urgenciaBadge}</td>
+                            <td class="p-3 font-medium text-slate-500">${aberturaFormatada}</td>
+                            <td class="p-3">${statusBadge}</td>
+                            <td class="p-3 bg-blue-50/30">${tempoText}</td>
+                            <td class="p-3 font-bold text-slate-600">${item.status === "Fechado" ? String(item.solucionador || 'N/A').split(' - ')[0] : '-'}</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            // Atualiza Tabela
+            document.getElementById('tbodyRelatorios').innerHTML = htmlTabela;
+
+            // Atualiza KPIs numéricos
+            const elTotal = document.getElementById('kpiRelTotal');
+            const elFechados = document.getElementById('kpiRelFechados');
+            const elTempo = document.getElementById('kpiRelTempoMedio');
+
+            if (elTotal) elTotal.innerText = dadosFiltrados.length;
+            if (elFechados) elFechados.innerText = totalFechados;
+
+            // Atualiza KPI Tempo Médio
+            if (elTempo) {
+                if (totalFechados > 0) {
+                    const mediaMinutos = Math.floor(somaMinutosAtendimento / totalFechados);
+                    const dias = Math.floor(mediaMinutos / 1440);
+                    const horas = Math.floor((mediaMinutos % 1440) / 60);
+                    const min = mediaMinutos % 60;
+                    
+                    let textMedia = [];
+                    if(dias>0) textMedia.push(`${dias}d`);
+                    if(horas>0 || dias>0) textMedia.push(`${horas}h`);
+                    textMedia.push(`${min}m`);
+                    
+                    elTempo.innerText = textMedia.join(' ');
+                } else {
+                    elTempo.innerText = "-";
+                }
+            }
         }
 
         function renderizarGraficos() {
@@ -1528,9 +1694,6 @@
             }).join('');
         }
 
-        // ============================================
-        // LÓGICA DO PVD (COM ABAS E CALCULADORA)
-        // ============================================
         function mudarAbaPVD(abaSelecionada) {
             const abas = ['setup', 'decapagem', 'pop', 'limpeza'];
             abas.forEach(aba => {
@@ -1872,8 +2035,6 @@
 
             container.innerHTML = htmlCompleto;
         }
-        
-        function fecharGerenciamentoPendencias() { document.getElementById('gerenciarPendenciasModal').classList.add('hidden'); }
 
         async function fecharOS(idOS) {
             const resolucao = document.getElementById(`resolucao-os-${idOS}`).value.trim();
@@ -2875,14 +3036,18 @@
 
         function fecharModalCadastroItem() { document.getElementById('cadastroItemModal').classList.add('hidden'); }
 
-        function processarFotoItem(e) {
+      function processarFotoItem(e) {
             const file = e.target.files[0]; if (!file) return;
             const reader = new FileReader();
             reader.onload = function(evt) {
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas'); let w = img.width, h = img.height;
-                    if (w > h) { if (w > 800) { h *= 800 / w; w = 800; } } else { if (h > 800) { w *= 800 / h; h = 800; } }
+                    if (w > h) { 
+                        if (w > 800) { h *= 800 / w; w = 800; } 
+                    } else { 
+                        if (h > 800) { w *= 800 / h; h = 800; } 
+                    }
                     canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
                     fotoAnexadaBase64 = canvas.toDataURL('image/jpeg', 0.8);
                     const previewImg = document.getElementById('fotoPreviewImg');
@@ -2894,15 +3059,34 @@
             reader.readAsDataURL(file);
         }
 
-        function removerFotoAnexada() { fotoAnexadaBase64 = ""; document.getElementById('fotoPreviewImg').src = ""; document.getElementById('fotoPreviewContainer').classList.add('hidden'); document.getElementById('novoItemImagem').value = ""; }
+        function removerFotoAnexada() { 
+            fotoAnexadaBase64 = ""; 
+            document.getElementById('fotoPreviewImg').src = ""; 
+            document.getElementById('fotoPreviewContainer').classList.add('hidden'); 
+            document.getElementById('novoItemImagem').value = ""; 
+        }
 
         async function confirmarCadastroItem() {
-            const nome = document.getElementById('novoItemNome').value.trim(); const categoria = document.getElementById('novoItemCategoria').value.trim(); const quantidade = parseInt(document.getElementById('novoItemQuantidade').value) || 0; const minimo = parseInt(document.getElementById('novoItemMinimo').value) || 0; const unidade = document.getElementById('novoItemUnidade').value.trim() || "un"; const descricao = document.getElementById('novoItemDescricao').value.trim(); const editId = document.getElementById('editAlmoxIndex').value;
+            const nome = document.getElementById('novoItemNome').value.trim(); 
+            const categoria = document.getElementById('novoItemCategoria').value.trim(); 
+            const quantidade = parseInt(document.getElementById('novoItemQuantidade').value) || 0; 
+            const minimo = parseInt(document.getElementById('novoItemMinimo').value) || 0; 
+            const unidade = document.getElementById('novoItemUnidade').value.trim() || "un"; 
+            const descricao = document.getElementById('novoItemDescricao').value.trim(); 
+            const editId = document.getElementById('editAlmoxIndex').value;
             const enderecosInput = Array.from(document.querySelectorAll('.localizacao-endereco-inp')).map(i => i.value.trim()).filter(Boolean);
+            
             if (!nome || !categoria) { showToast("Nome e Família são obrigatórios.", "error"); return; }
             let base64Clean = "", mimeType = "", isNovaImagem = false;
-            if (fotoAnexadaBase64 && fotoAnexadaBase64.startsWith("data:")) { base64Clean = fotoAnexadaBase64.split(",")[1]; mimeType = fotoAnexadaBase64.split(";")[0].split(":")[1]; isNovaImagem = true; }
+            
+            if (fotoAnexadaBase64 && fotoAnexadaBase64.startsWith("data:")) { 
+                base64Clean = fotoAnexadaBase64.split(",")[1]; 
+                mimeType = fotoAnexadaBase64.split(";")[0].split(":")[1]; 
+                isNovaImagem = true; 
+            }
+            
             const dadosObj = { id: editId || "", item: nome, categoria, unidade, quantidade, estoqueMinimo: minimo, enderecos: enderecosInput, descricao, imagemUrl: isNovaImagem ? "" : fotoAnexadaBase64, imagemBase64: base64Clean, mimeType: mimeType };
+            
             if (API_URL) {
                 showToast("Sincronizando...", "info");
                 try {
@@ -2910,10 +3094,13 @@
                     showToast("Sincronizado!"); setTimeout(() => baixarAlmoxarifadoDaPlanilha(), 1500); 
                 } catch(err) { showToast("Salvo apenas localmente.", "error"); }
             }
+            
             if (editId) {
                 const item = almoxarifadoData.find(i => i.id == editId);
                 if (item) { item.nome = nome; item.categoria = categoria; item.local = enderecosInput.join(" | "); item.quantidade = quantidade; item.minimo = minimo; item.unidade = unidade; item.descricao = descricao; if (isNovaImagem) item.foto = fotoAnexadaBase64; }
-            } else { almoxarifadoData.push({ id: "IT" + Date.now(), nome, categoria, local: enderecosInput.join(" | "), quantidade, minimo, unidade, descricao, foto: isNovaImagem ? fotoAnexadaBase64 : "" }); }
+            } else { 
+                almoxarifadoData.push({ id: "IT" + Date.now(), nome, categoria, local: enderecosInput.join(" | "), quantidade, minimo, unidade, descricao, foto: isNovaImagem ? fotoAnexadaBase64 : "" }); 
+            }
             fecharModalCadastroItem(); renderAlmoxarifadoLista();
         }
 
@@ -3092,7 +3279,7 @@
                 fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Alerta: Tempo de Encharque Reduzido";
                 fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz gera um tempo de permanência muito curto (${formatarTempo(tempoEsteiraSegundos)}) para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor.` + sugestaoHtm;
-           } else if (freq < (freqIdealMin - 5) && freq > 0) {
+            } else if (freq < (freqIdealMin - 5) && freq > 0) {
                 fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
                 fbIcon.className = "fa-solid fa-gauge-simple text-amber-600 mt-1 text-3xl";
                 fbTitle.innerText = "Alerta: Velocidade Lenta Demais";
