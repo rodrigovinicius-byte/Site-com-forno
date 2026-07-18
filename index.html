@@ -16,6 +16,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
 
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -51,7 +56,7 @@
     </div>
 
     <div id="toastContainer" class="fixed top-5 left-5 right-5 sm:left-auto sm:right-5 z-[9999] flex flex-col gap-3 pointer-events-none sm:max-w-sm font-sans"></div>
-    <header class="bg-[#0b132b] text-white shadow-md border-b border-slate-800 sticky top-0 z-40 no-print">
+   <header class="bg-[#0b132b] text-white shadow-md border-b border-slate-800 sticky top-0 z-40 no-print">
         <div class="max-w-7xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
             <div class="flex items-center gap-3 w-full sm:w-auto">
                 <button id="btnVoltar" onclick="voltar()" class="hidden p-2 sm:p-2.5 rounded-lg bg-slate-800/60 hover:bg-slate-800 transition-all text-slate-300 flex-shrink-0">
@@ -72,10 +77,18 @@
                     <i class="fa-solid fa-triangle-exclamation"></i> <span class="whitespace-nowrap">Abrir Chamado</span>
                 </button>
                 <div class="flex items-center gap-2 flex-shrink-0">
+                    <!-- Botão de Notificações -->
                     <button onclick="abrirGerenciamentoPendencias()" class="relative bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs py-2 px-3 rounded-lg transition-all shadow-sm">
                         <i class="fa-solid fa-bell text-sm"></i>
                         <span id="badgeAlertas" class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden border-2 border-[#0b132b]">0</span>
                     </button>
+                    
+                    <!-- NOVO: Botão de Tema -->
+                    <button onclick="toggleTema()" id="btnTema" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs py-2 px-3 rounded-lg transition-all shadow-sm">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+
+                    <!-- Botão de Configurar -->
                     <button onclick="toggleConfigModal(true)" class="bg-slate-800 border border-slate-700 text-[11px] sm:text-xs py-2 px-3 rounded-lg hover:bg-slate-700 transition-all text-slate-300 whitespace-nowrap">Configurar</button>
                 </div>
             </div>
@@ -3341,6 +3354,39 @@
                     .then(reg => console.log('Service worker registrado com sucesso!', reg))
                     .catch(err => console.log('Erro ao registrar o Service Worker:', err));
             });
+        }
+        // ============================================
+        // LÓGICA DE TEMA (CLARO/ESCURO)
+        // ============================================
+        
+        // Verifica o tema salvo ou a preferência do sistema ao carregar a página
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            // Ajusta o ícone inicial se o botão já existir na tela
+            window.addEventListener('DOMContentLoaded', () => {
+                const btnIcon = document.querySelector('#btnTema i');
+                if(btnIcon) btnIcon.className = "fa-solid fa-sun";
+            });
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        // Função ativada pelo botão
+        function toggleTema() {
+            const html = document.documentElement;
+            const btnIcon = document.querySelector('#btnTema i');
+            
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                btnIcon.className = "fa-solid fa-moon"; 
+                showToast("Modo Claro ativado", "info");
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                btnIcon.className = "fa-solid fa-sun"; 
+                showToast("Modo Escuro ativado", "info");
+            }
         }
     </script>
 </body>
