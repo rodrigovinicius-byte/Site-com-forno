@@ -72,7 +72,7 @@
                     <i class="fa-solid fa-triangle-exclamation"></i> <span class="whitespace-nowrap">Abrir Chamado</span>
                 </button>
                 <div class="flex items-center gap-2 flex-shrink-0">
-                    <button onclick="abrirGerenciamentoPendencias()" class="relative bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs py-2 px-3 rounded-lg transition-all shadow-sm">
+                    <button onclick="abrirQuadroPendencias()" class="relative bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] sm:text-xs py-2 px-3 rounded-lg transition-all shadow-sm">
                         <i class="fa-solid fa-bell text-sm"></i>
                         <span id="badgeAlertas" class="absolute -top-1.5 -right-1.5 bg-rose-500 text-white text-[8px] sm:text-[9px] font-bold px-1.5 py-0.5 rounded-full hidden border-2 border-[#0b132b]">0</span>
                     </button>
@@ -91,7 +91,7 @@
         
         <div id="view-home" class="fade-in">
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-                <button onclick="abrirGerenciamentoPendencias()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
+                <button onclick="abrirQuadroPendencias()" class="nav-card text-left bg-rose-50 border border-rose-100 p-5 rounded-2xl flex items-center gap-4 shadow-sm w-full">
                     <div class="p-3 bg-rose-600 text-white rounded-xl"><i class="fa-solid fa-triangle-exclamation text-lg"></i></div>
                     <div>
                         <span class="block text-[9px] font-bold text-rose-500 uppercase tracking-wider">Pendências</span>
@@ -135,7 +135,8 @@
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Almoxarifado Técnico</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Controle detalhado de quantidades, localizações e movimentação de peças.</p>
                 </button>
-                <button onclick="abrirModuloIntervencoes()" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
+                <button onclick="abrirModuloIntervencoes()" class="nav-card relative text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col items-start w-full">
+                    <div id="badgeIntervencoesContainer" class="absolute top-4 right-4 flex flex-col gap-1.5 items-end z-10"></div>
                     <div class="w-11 h-11 rounded-xl bg-orange-100 text-orange-700 flex items-center justify-center mb-4 shadow-sm"><i class="fa-solid fa-screwdriver-wrench text-xl"></i></div>
                     <h2 class="font-bold text-slate-800 mb-1.5 text-base">Intervenções & Melhorias</h2>
                     <p class="text-xs text-slate-500 leading-relaxed">Registro direto de manutenções internas, corretivas e modificações.</p>
@@ -199,6 +200,9 @@
             <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-4" id="itensTopLabel"></span>
             <div id="checklistContainer" class="space-y-8"></div>
         </div>
+        <!-- ======================= -->
+        <!-- VIEW: ALMOXARIFADO      -->
+        <!-- ======================= -->
         <div id="view-almoxarifado" class="fade-in hidden">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col lg:flex-row gap-4 items-center justify-between">
                 <div class="flex flex-col sm:flex-row gap-3 w-full lg:max-w-3xl">
@@ -235,6 +239,10 @@
                 </div>
             </div>
         </div>
+
+        <!-- ======================= -->
+        <!-- VIEW: POPs              -->
+        <!-- ======================= -->
         <div id="view-pops" class="fade-in hidden">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row gap-4 items-center justify-between">
                 <div class="flex flex-1 gap-3 w-full sm:max-w-xl">
@@ -247,6 +255,9 @@
             <div id="popsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
         
+        <!-- ======================= -->
+        <!-- VIEW: PARAMETRIZAÇÃO    -->
+        <!-- ======================= -->
         <div id="view-parametrizacao" class="fade-in hidden">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-6 flex flex-col sm:flex-row items-center justify-between gap-4">
                 <div>
@@ -257,10 +268,12 @@
                     <i class="fa-solid fa-sliders text-xl"></i>
                 </div>
             </div>
-            
             <div id="parametrizacaoCards" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
+        <!-- ======================= -->
+        <!-- VIEW: FORNO             -->
+        <!-- ======================= -->
         <div id="view-forno" class="fade-in hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
@@ -344,7 +357,6 @@
             </div>
                 
             <div class="space-y-6">
-                
                 <div id="fornoFeedbackBox" class="bg-blue-50 border border-blue-200 text-blue-800 p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300">
                     <i id="fornoFeedbackIcon" class="fa-solid fa-award text-blue-600 mt-1 text-3xl"></i>
                     <div>
@@ -457,10 +469,12 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
         </div>
 
+        <!-- ======================= -->
+        <!-- VIEW: PVD               -->
+        <!-- ======================= -->
         <div id="view-pvd" class="fade-in hidden">
             <div class="flex flex-wrap gap-2 mb-6 border-b border-slate-200 pb-2">
                 <button onclick="mudarAbaPVD('setup')" id="tab-pvd-setup" class="px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-blue-100 text-blue-700 border border-blue-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none">
@@ -766,7 +780,11 @@
                 </div>
             </div>
         </div>
-       <div id="view-relatorios" class="fade-in hidden">
+        
+        <!-- ======================= -->
+        <!-- VIEW: RELATÓRIOS        -->
+        <!-- ======================= -->
+        <div id="view-relatorios" class="fade-in hidden">
             <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-6 gap-4">
                 <div>
                     <h2 class="font-black text-slate-800 text-xl tracking-tight">Dashboard Gerencial</h2>
@@ -885,6 +903,11 @@
             </div>
         </div> 
     </main>
+    <!-- ==================================================== -->
+    <!-- MODAIS DE SISTEMA                                    -->
+    <!-- ==================================================== -->
+
+    <!-- MODAL: CONFIGURAÇÃO DE REDE -->
     <div id="configModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -911,6 +934,7 @@
         </div>
     </div>
     
+    <!-- MODAL: ABERTURA DE CHAMADO (OS) -->
     <div id="chamadoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -954,36 +978,90 @@
             </div>
         </div>
     </div>
-    
-    <div id="gerenciarPendenciasModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
-        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
-            <div class="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+
+    <!-- MODAL: DETALHES DE OS HISTÓRICA -->
+    <div id="detalhesOsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[70] hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden flex flex-col max-h-[90vh]">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center shadow-sm">
-                        <i class="fa-solid fa-list-check"></i>
+                    <div class="w-9 h-9 rounded-xl bg-indigo-100 text-indigo-700 flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-file-lines"></i>
                     </div>
                     <div>
-                        <h3 class="text-base font-bold text-slate-900">Quadro de Pendências</h3>
-                        <p class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider">Manutenção Reativa e Preventiva</p>
+                        <h3 class="text-sm font-bold text-slate-900">Detalhes da OS</h3>
+                        <p class="text-[10px] text-slate-500 font-medium" id="detOsId">OS-X</p>
                     </div>
                 </div>
-                <button onclick="fecharGerenciamentoPendencias()" class="text-slate-400 hover:text-slate-700 p-2 bg-slate-100 rounded-lg"><i class="fa-solid fa-xmark text-lg"></i></button>
+                <button onclick="fecharDetalhesOS()" class="text-slate-400 hover:text-slate-700 p-2"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
-            <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-100">
-                
-                <div class="flex gap-2 mb-2 border-b border-slate-200 pb-2">
-                    <button id="tabChamados" onclick="mudarAbaPendencias('chamados')" class="flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Chamados (<span id="contadorChamadosAbertos">0</span>)
-                    </button>
-                    <button id="tabIntervencoes" onclick="mudarAbaPendencias('intervencoes')" class="flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-screwdriver-wrench"></i> Intervenções (<span id="contadorIntervencoesAbertas">0</span>)
-                    </button>
+            <div class="p-6 overflow-y-auto space-y-5 bg-white">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase">Máquina / Equipamento</span>
+                        <span class="block font-bold text-slate-800 text-sm" id="detOsMaquina"></span>
+                    </div>
+                    <span class="bg-emerald-100 text-emerald-700 text-[10px] px-2 py-1 rounded font-bold border border-emerald-200" id="detOsStatus"></span>
                 </div>
-
-                <div id="listaPendenciasMista" class="space-y-4"></div>
+                <div class="bg-rose-50 border border-rose-100 rounded-xl p-4 space-y-3">
+                    <div class="flex items-center gap-2 text-rose-700 font-bold text-xs uppercase border-b border-rose-200 pb-2">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Abertura (Falha)
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataAbertura"></span></div>
+                        <div><span class="block font-bold text-slate-400 uppercase">Relator</span><span class="font-semibold text-slate-700" id="detOsRelator"></span></div>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Defeito Relatado</span>
+                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-rose-100 italic" id="detOsDefeito"></p>
+                    </div>
+                </div>
+                <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3">
+                    <div class="flex items-center gap-2 text-emerald-700 font-bold text-xs uppercase border-b border-emerald-200 pb-2">
+                        <i class="fa-solid fa-wrench"></i> Fechamento (Reparo)
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 text-[10px]">
+                        <div><span class="block font-bold text-slate-400 uppercase">Data/Hora</span><span class="font-semibold text-slate-700" id="detOsDataFechamento"></span></div>
+                        <div><span class="block font-bold text-slate-400 uppercase">Técnico</span><span class="font-semibold text-slate-700" id="detOsSolucionador"></span></div>
+                    </div>
+                    <div>
+                        <span class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Solução Aplicada</span>
+                        <p class="text-xs text-slate-700 bg-white p-2 rounded border border-emerald-100 font-medium" id="detOsResolucao"></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    
+    <!-- MODAL REESTRUTURADO: QUADRO DE PENDÊNCIAS COM ABAS (IGUAL A IMAGEM) -->
+    <div id="gerenciarPendenciasModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
+        <div class="bg-white rounded-2xl max-w-3xl w-full shadow-2xl overflow-hidden max-h-[90vh] flex flex-col border border-slate-200">
+            <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-slate-800 text-white flex items-center justify-center shadow-sm">
+                        <i class="fa-solid fa-list-ul text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900">Quadro de Pendências</h3>
+                        <p class="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Manutenção Reativa e Preventiva</p>
+                    </div>
+                </div>
+                <button onclick="fecharGerenciamentoPendencias()" class="text-slate-400 hover:text-slate-700 p-2 bg-white rounded-lg border border-slate-200 shadow-sm transition-all"><i class="fa-solid fa-xmark text-lg px-1"></i></button>
+            </div>
+            
+            <div class="p-4 bg-white border-b border-slate-100 flex gap-4 shadow-sm relative z-10">
+                <button id="tabChamados" onclick="mudarAbaPendencias('chamados')" class="flex-1 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border-2">
+                    <i class="fa-solid fa-triangle-exclamation"></i> Chamados ( <span id="contadorChamadosAbertos">0</span> )
+                </button>
+                <button id="tabIntervencoes" onclick="mudarAbaPendencias('intervencoes')" class="flex-1 py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 border-2">
+                    <i class="fa-solid fa-screwdriver-wrench"></i> Intervenções ( <span id="contadorIntervencoesAbertas">0</span> )
+                </button>
+            </div>
+
+            <div class="p-5 overflow-y-auto space-y-4 flex-grow bg-slate-50" id="listaPendenciasMista"></div>
+        </div>
+    </div>
+
+    <!-- MODAL REESTRUTURADO: REGISTRO DE INTERVENÇÃO (ABRIR COM DESIGNADO) -->
     <div id="intervencaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-md w-full shadow-xl overflow-hidden">
             <div class="p-6">
@@ -1014,14 +1092,14 @@
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Descrição / O que precisa ser feito?</label>
                         <textarea id="intervDescricao" rows="3" placeholder="Ex: Substituição preventiva do óleo hidráulico..." class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 resize-none"></textarea>
                     </div>
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Atribuir a (Opcional)</label>
-                            <select id="intervAtribuido" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                            <select id="intervAtribuido" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Criado Por (Técnico)</label>
-                            <select id="intervResponsavel" class="w-full bg-slate-50 border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
+                            <select id="intervResponsavel" class="w-full bg-white border border-slate-200 rounded-xl p-2.5 text-xs focus:outline-none focus:ring-1 focus:ring-blue-500 font-semibold"></select>
                         </div>
                     </div>
                 </div>
@@ -1034,7 +1112,7 @@
             </div>
         </div>
     </div>
-   
+    <!-- MODAL: RESUMO DO STATUS DA MÁQUINA -->
     <div id="resumoMaquinaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[60] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-2xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -1052,11 +1130,15 @@
             <div class="p-5 overflow-y-auto space-y-3 flex-grow bg-slate-50" id="listaResumoMaquina"></div>
         </div>
     </div>
+
+    <!-- MODAL: AGENDA DE PREVENTIVAS E ATRASADAS -->
     <div id="preditivaModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-2xl max-w-3xl w-full shadow-xl overflow-hidden max-h-[90vh] flex flex-col">
             <div class="p-5 border-b border-slate-100 flex justify-between items-center bg-slate-50">
                 <div class="flex items-center gap-3">
-                    <button id="btnVoltarPreditiva" onclick="voltarPreditiva()" class="hidden text-slate-400 hover:text-slate-700 p-2 -ml-2 transition-colors"><i class="fa-solid fa-arrow-left text-lg"></i></button>
+                    <button id="btnVoltarPreditiva" onclick="voltarPreditiva()" class="hidden text-slate-400 hover:text-slate-700 p-2 -ml-2 transition-colors">
+                        <i class="fa-solid fa-arrow-left text-lg"></i>
+                    </button>
                     <div class="w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm" id="iconContainerPreditiva">
                         <i id="iconPreditivaModal" class="fa-solid fa-calendar-check"></i>
                     </div>
@@ -1092,6 +1174,7 @@
                     </button>
                 </div>
                 <div id="preditivaHojeMenu" class="grid grid-cols-1 sm:grid-cols-2 gap-4 hidden"></div>
+                
                 <div id="containerVencidas" class="hidden"><div id="listaAlertasVencidas"></div></div>
                 <div id="containerHoje" class="hidden"><div id="listaAlertasHoje"></div></div>
                 <div id="containerAmanha" class="hidden"><div id="listaAlertasAmanha"></div></div>
@@ -1100,11 +1183,14 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL: CADASTRO ALMOXARIFADO -->
     <div id="cadastroItemModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 overflow-y-auto no-print">
         <div class="bg-white rounded-[24px] max-w-lg w-full shadow-2xl overflow-hidden my-8 border border-slate-100">
             <div class="p-8 space-y-6">
                 <h3 id="almoxModalTitle" class="text-xl font-bold text-slate-900">Cadastrar Novo Item</h3>
                 <input type="hidden" id="editAlmoxIndex">
+                
                 <div class="space-y-4 font-sans text-slate-600">
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Nome do Item</label>
@@ -1118,6 +1204,7 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div id="fotoPreviewContainer" class="hidden relative border border-slate-200 rounded-xl overflow-hidden bg-slate-50 p-2 flex items-center justify-between">
                         <div class="flex items-center gap-3">
                             <img id="fotoPreviewImg" src="" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" class="h-10 w-10 object-cover rounded-lg border">
@@ -1127,10 +1214,12 @@
                             <i class="fa-solid fa-trash"></i> Remover
                         </button>
                     </div>
+                    
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Descrição do Item</label>
                         <textarea id="novoItemDescricao" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
                     </div>
+                    
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Categoria</label>
@@ -1141,6 +1230,7 @@
                             <input type="text" id="novoItemUnidade" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
                         </div>
                     </div>
+                    
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Qtd. Inicial</label>
@@ -1151,12 +1241,16 @@
                             <input type="number" id="novoItemMinimo" value="0" min="0" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans">
                         </div>
                     </div>
+                    
                     <div>
                         <label class="block text-[11px] font-bold text-slate-400 uppercase mb-1 tracking-wider">Localização</label>
                         <div id="localizacaoInputsContainer" class="space-y-2"></div>
-                        <button type="button" onclick="adicionarLinhaLocalizacao()" class="text-[10px] text-blue-600 font-bold mt-2 flex items-center gap-1 hover:text-blue-700"><i class="fa-solid fa-plus"></i> Endereço</button>
+                        <button type="button" onclick="adicionarLinhaLocalizacao()" class="text-[10px] text-blue-600 font-bold mt-2 flex items-center gap-1 hover:text-blue-700">
+                            <i class="fa-solid fa-plus"></i> Endereço
+                        </button>
                     </div>
                 </div>
+                
                 <div class="grid grid-cols-2 gap-3 pt-3 border-t">
                     <button onclick="fecharModalCadastroItem()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
                     <button onclick="confirmarCadastroItem()" class="w-full py-3 bg-[#0b132b] hover:bg-slate-850 text-white font-bold rounded-xl text-xs shadow-md transition-all">Salvar</button>
@@ -1164,26 +1258,40 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL: MOVIMENTAÇÃO ALMOXARIFADO -->
     <div id="movimentacaoModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-[55] hidden p-4 no-print">
         <div class="bg-white rounded-[24px] max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
             <div class="p-8 space-y-4">
                 <h3 class="text-lg font-bold text-slate-900 font-sans">Registrar Movimentação</h3>
+                
                 <div class="space-y-3">
                     <div>
                         <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Item</label>
                         <select id="movItemSelect" onchange="atualizarInfoItemMov()" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800 font-sans"></select>
                     </div>
                     <div class="bg-slate-50 border border-slate-150 rounded-xl p-3 text-[10px] space-y-2 text-slate-600 font-sans">
-                        <div><span class="block font-bold text-slate-400 uppercase">Descrição</span><span id="movItemDescText" class="text-slate-700 font-medium">-</span></div>
-                        <div><span class="block font-bold text-slate-400 uppercase">Localização</span><span id="movItemLocalText" class="text-slate-700 font-medium">-</span></div>
+                        <div>
+                            <span class="block font-bold text-slate-400 uppercase">Descrição</span>
+                            <span id="movItemDescText" class="text-slate-700 font-medium">-</span>
+                        </div>
+                        <div>
+                            <span class="block font-bold text-slate-400 uppercase">Localização</span>
+                            <span id="movItemLocalText" class="text-slate-700 font-medium">-</span>
+                        </div>
                         <div class="flex gap-2 pt-1 border-t">
-                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600"><i class="fa-solid fa-image"></i> Imagem</button>
+                            <button onclick="visualizarImagemMov()" class="bg-white border border-slate-200 rounded-lg px-2.5 py-1 text-[9px] font-bold hover:bg-slate-100 flex items-center gap-1 text-slate-600">
+                                <i class="fa-solid fa-image"></i> Imagem
+                            </button>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-3 font-sans">
                         <div>
                             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Tipo</label>
-                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800"><option value="Entrada">Entrada</option><option value="Saída">Saída</option></select>
+                            <select id="movTipo" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 font-medium text-slate-800">
+                                <option value="Entrada">Entrada</option>
+                                <option value="Saída">Saída</option>
+                            </select>
                         </div>
                         <div>
                             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1.5 tracking-wider">Qtd</label>
@@ -1199,6 +1307,7 @@
                         <textarea id="movMotivo" rows="2" class="w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:border-blue-500 resize-none text-slate-800"></textarea>
                     </div>
                 </div>
+                
                 <div class="grid grid-cols-2 gap-3 pt-3 border-t font-sans">
                     <button onclick="fecharModalMovimentacao()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition-all">Cancelar</button>
                     <button onclick="confirmarMovimentacao()" class="w-full py-3 bg-[#047857] hover:bg-emerald-700 text-white font-bold rounded-xl text-xs shadow-md transition-all">Confirmar</button>
@@ -1206,6 +1315,8 @@
             </div>
         </div>
     </div>
+
+    <!-- MODAL VISUALIZADOR DE IMAGENS -->
     <div id="viewImageModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-[90] hidden p-4 no-print" onclick="fecharModalImagem()">
         <div class="max-w-3xl w-full flex flex-col items-center gap-4" onclick="event.stopPropagation()">
             <img id="enlargedImg" src="" onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'100\\' height=\\'100\\'><rect width=\\'100\\' height=\\'100\\' fill=\\'%23f1f5f9\\'/></svg>';" class="max-h-[80vh] max-w-full rounded-2xl object-contain shadow-2xl border border-slate-800 bg-white">
@@ -1214,11 +1325,66 @@
             </button>
         </div>
     </div>
+    
+    <!-- ÁREA DE IMPRESSÃO PAPEL -->
     <div id="printArea" class="hidden"></div>
 
+
+    <!-- ==================================================== -->
+    <!-- JAVASCRIPT GLOBAL E LÓGICAS DO APLICATIVO            -->
+    <!-- ==================================================== -->
     <script>
-        // --- SENHA DE ACESSO AQUI ---
+        // ==========================================
+        // SISTEMA DE ACESSO E CONVERSOR DE TEMPO
+        // ==========================================
         const SENHA_ACESSO = "TBX2026";
+
+        function formatarHorasDecimais(decimalStr) {
+            let num = parseFloat(decimalStr);
+            if (isNaN(num)) return decimalStr + 'h';
+            let h = Math.floor(num);
+            let m = Math.round((num - h) * 60);
+            if (m === 60) { h++; m = 0; }
+            if (h > 0 && m > 0) return `${h}h ${m.toString().padStart(2, '0')}min`;
+            if (h > 0) return `${h}h`;
+            return `${m} min`;
+        }
+
+        // MutationObserver para vigiar textos e converter ex: "6.2 h" para "6h 12min"
+        function observeAndFormatTime() {
+            const regex = /\b(\d+)\.(\d+)\s*h\b/g;
+
+            const formatNode = (node) => {
+                if (node.nodeType === 3) { 
+                    if (regex.test(node.nodeValue)) {
+                        node.nodeValue = node.nodeValue.replace(regex, (match, p1, p2) => {
+                            let num = parseFloat(`${p1}.${p2}`);
+                            let h = Math.floor(num);
+                            let m = Math.round((num - h) * 60);
+                            if (m === 60) { h++; m = 0; }
+                            if (h > 0 && m > 0) return `${h}h ${m.toString().padStart(2, '0')}min`;
+                            if (h > 0) return `${h}h`;
+                            return `${m} min`;
+                        });
+                    }
+                } else if (node.nodeType === 1 && node.nodeName !== 'SCRIPT' && node.nodeName !== 'STYLE') {
+                    node.childNodes.forEach(formatNode);
+                }
+            };
+
+            formatNode(document.body);
+
+            const observer = new MutationObserver((mutations) => {
+                mutations.forEach(mutation => {
+                    mutation.addedNodes.forEach(node => formatNode(node));
+                    if (mutation.type === 'characterData') {
+                         formatNode(mutation.target);
+                    }
+                });
+            });
+
+            observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+        }
 
         let originalDatabase = [];
         let checklistStatus = [];
@@ -1229,16 +1395,19 @@
         let equipesData = [];
         let maquinasParametrizaveisData = [];
         let listaTodasMaquinas = [];
+        
         let currentView = 'home';
         let selectedSetor = '';
         let selectedPeriodo = '';
         let API_URL = localStorage.getItem("checklist_google_api_url") || "";
         let currentModalMode = '';
         let currentPreditivaMenu = '';
+        
         let abaPendenciasAtual = 'chamados';
+        let filtroIntervencaoAtual = null;
+        let linhaChecklistPendenteDeOS = null; 
 
-        let chartOS = null;
-        let chartChecklist = null;
+        let chartTopMaquinas = null;
 
         window.onload = () => {
             verificarAutenticacao();
@@ -1287,6 +1456,7 @@
                 carregarChecklistMock();
             }
             if(typeof gerarAlmoxarifadoMock === 'function') gerarAlmoxarifadoMock();
+            observeAndFormatTime();
         }
 
         function showToast(message, type = 'success') {
@@ -1304,6 +1474,9 @@
             setTimeout(() => { toast.classList.add('translate-y-2', 'opacity-0'); setTimeout(() => toast.remove(), 300); }, 3500);
         }
 
+        // ==========================================
+        // NAVEGAÇÃO E VIEWS
+        // ==========================================
         function alternarTela(novaTela) {
             const telas = ['home', 'checklist-setor', 'checklist-periodo', 'checklist-itens', 'almoxarifado', 'pops', 'parametrizacao', 'forno', 'pvd', 'intervencoes', 'relatorios'];
             telas.forEach(t => {
@@ -1312,6 +1485,7 @@
             });
             document.getElementById(`view-${novaTela}`).classList.remove('hidden');
             currentView = novaTela;
+            
             const btnVoltar = document.getElementById('btnVoltar');
             const headerTitle = document.getElementById('headerTitle');
             const headerSubtitle = document.getElementById('headerSubtitle');
@@ -1336,7 +1510,8 @@
                 } else if (novaTela === 'intervencoes') {
                     headerTitle.innerText = "Intervenções e Melhorias"; headerSubtitle.innerText = "Grupo TBX · Manutenção Corretiva e Planejada";
                 } else if (novaTela === 'relatorios') {
-                    
+                    headerTitle.innerText = "Painel Gerencial (Dashboard)"; 
+                    headerSubtitle.innerText = "Grupo TBX · Relatórios de Manutenção";
                 } else {
                     headerTitle.innerText = "Checklist de Máquinas"; headerSubtitle.innerText = "Grupo TBX · Verificações e Inspeções Ativas";
                 }
@@ -1350,527 +1525,42 @@
             else if (currentView === 'pvd') alternarTela('parametrizacao');
             else alternarTela('home');
         }
-
-        function abrirModuloRelatorios() {
-            alternarTela('relatorios');
-            const headerTitle = document.getElementById('headerTitle');
-            const headerSubtitle = document.getElementById('headerSubtitle');
-            headerTitle.innerText = "Painel Gerencial (Dashboard)"; 
-            headerSubtitle.innerText = "Grupo TBX · Relatórios de Manutenção";
-            setTimeout(() => { renderizarGraficos(); }, 150);
-        }
-let chartTopMaquinas = null;
-
-        function abrirModuloRelatorios() {
-            alternarTela('relatorios');
-            
-            // Popula as máquinas no filtro
-            const selectMaquina = document.getElementById('filtroRelMaquina');
-            let maquinas = listaTodasMaquinas.length > 0 ? listaTodasMaquinas : [...new Set(originalDatabase.map(i => i.maquina))];
-            selectMaquina.innerHTML = '<option value="todas">Todas as Máquinas</option>' + maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
-            
-            // Setando as datas de forma totalmente segura contra fuso horário
-            const inputFim = document.getElementById('filtroDataFim');
-            const inputInicio = document.getElementById('filtroDataInicio');
-
-            if (!inputFim.value || !inputInicio.value) {
-                const hoje = new Date();
-                const trintaDiasAtras = new Date();
-                trintaDiasAtras.setDate(hoje.getDate() - 30);
-                
-                inputFim.value = hoje.getFullYear() + '-' + String(hoje.getMonth() + 1).padStart(2, '0') + '-' + String(hoje.getDate()).padStart(2, '0');
-                inputInicio.value = trintaDiasAtras.getFullYear() + '-' + String(trintaDiasAtras.getMonth() + 1).padStart(2, '0') + '-' + String(trintaDiasAtras.getDate()).padStart(2, '0');
-            }
-
-            setTimeout(() => { renderizarRelatorioAvancado(); }, 150);
-        }
-
-        // Formata o tempo em Ms para "Min", "H" ou "Dias"
-        function formatarDiferencaTempo(diffMs) {
-            if (diffMs < 0 || isNaN(diffMs)) return "-";
-            const diffHoras = diffMs / (1000 * 60 * 60);
-            if (diffHoras < 1) {
-                const min = Math.round(diffMs / (1000 * 60));
-                return `${min} min`;
-            } else if (diffHoras < 24) {
-                return `${diffHoras.toFixed(1)}h`;
-            } else {
-                const dias = Math.floor(diffHoras / 24);
-                const horasRestantes = Math.round(diffHoras % 24);
-                return `${dias}d ${horasRestantes}h`;
-            }
-        }
-
-        function renderizarRelatorioAvancado() {
-            const dataInicioValue = document.getElementById('filtroDataInicio').value;
-            const dataFimValue = document.getElementById('filtroDataFim').value;
-            
-            let dtInicio = new Date(dataInicioValue + "T00:00:00");
-            let dtFim = new Date(dataFimValue + "T23:59:59");
-            
-            const maqFiltro = document.getElementById('filtroRelMaquina').value;
-            const tipoFiltro = document.getElementById('filtroRelTipo').value;
-            const statusFiltro = document.getElementById('filtroRelStatus').value;
-
-            let baseUnificada = [];
-            
-            // Juntar Chamados
-            if (tipoFiltro === "todos" || tipoFiltro === "os") {
-                chamadosData.forEach(c => baseUnificada.push({
-                    id: c.id, tipoBase: "Chamado", dataAbertura: c.data, maquina: c.maquina, 
-                    status: c.status, relator: c.relator, defeito: c.defeito, urgencia: c.urgencia,
-                    dataFechamento: c.dataFechamento, solucionador: c.solucionador, resolucao: c.resolucao, atribuido: ""
-                }));
-            }
-            // Juntar Intervenções
-            if (tipoFiltro === "todos" || tipoFiltro === "int") {
-                intervencoesData.forEach(i => baseUnificada.push({
-                    id: i.id, tipoBase: "Intervenção", dataAbertura: i.data, maquina: i.maquina, 
-                    status: i.status, relator: i.responsavel, defeito: i.descricao, urgencia: i.tipo,
-                    dataFechamento: i.dataFechamento, solucionador: i.solucionador, resolucao: i.resolucao, atribuido: i.atribuido || ""
-                }));
-            }
-
-            // Aplicar Filtros (usando objetos de data seguros)
-            let dadosFiltrados = baseUnificada.filter(item => {
-                let itemDate = new Date(item.dataAbertura);
-                let passaData = true;
-                if (!isNaN(dtInicio.getTime()) && !isNaN(dtFim.getTime()) && !isNaN(itemDate.getTime())) {
-                    passaData = (itemDate >= dtInicio) && (itemDate <= dtFim);
-                }
-                let passaMaq = (maqFiltro === "todas" || item.maquina === maqFiltro);
-                let passaStatus = (statusFiltro === "todos" || item.status === statusFiltro);
-                return passaData && passaMaq && passaStatus;
-            });
-
-            let qtdFechados = 0;
-            let somaTemposMs = 0;
-            let maqContagem = {};
-            let tecnicoDesempenho = {};
-
-            // Cálculos
-            dadosFiltrados.forEach(item => {
-                maqContagem[item.maquina] = (maqContagem[item.maquina] || 0) + 1;
-                
-                if (item.status === "Fechado" && item.solucionador && item.dataFechamento) {
-                    qtdFechados++;
-                    const diffMs = new Date(item.dataFechamento) - new Date(item.dataAbertura);
-                    if(!isNaN(diffMs) && diffMs >= 0) {
-                        somaTemposMs += diffMs;
-
-                        // Acumula os dados para a tabela do técnico
-                        const tecnicoStr = item.solucionador.split(' - ')[0]; // pega só o nome principal
-                        if (!tecnicoDesempenho[tecnicoStr]) {
-                            tecnicoDesempenho[tecnicoStr] = { resolvidos: 0, tempoMs: 0 };
-                        }
-                        tecnicoDesempenho[tecnicoStr].resolvidos++;
-                        tecnicoDesempenho[tecnicoStr].tempoMs += diffMs;
-                    }
-                }
-            });
-
-            // Atualiza KPIs do topo
-            const abertosOS = dadosFiltrados.filter(c => c.status !== "Fechado").length;
-            document.getElementById('kpiRelTotal').innerText = dadosFiltrados.length;
-            document.getElementById('kpiRelAbertos').innerText = abertosOS;
-            document.getElementById('kpiRelTempoMedio').innerText = qtdFechados > 0 ? formatarDiferencaTempo(somaTemposMs / qtdFechados) : "-";
-
-            let topMaq = "-"; let maxCount = 0;
-            for (let m in maqContagem) { if (maqContagem[m] > maxCount) { maxCount = maqContagem[m]; topMaq = m; } }
-            document.getElementById('kpiRelTopMaquina').innerText = topMaq.split(' - ')[0];
-
-            // Renderiza Tabela de Desempenho
-            const tbodyDesempenho = document.getElementById('tabelaDesempenhoTbody');
-            const tecArray = Object.entries(tecnicoDesempenho).sort((a, b) => b[1].resolvidos - a[1].resolvidos);
-            
-            if (tecArray.length === 0) {
-                tbodyDesempenho.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Sem atividades fechadas no período.</td></tr>`;
-            } else {
-                tbodyDesempenho.innerHTML = tecArray.map(([nome, dados]) => {
-                    const mediaMs = dados.tempoMs / dados.resolvidos;
-                    return `
-                        <tr>
-                            <td class="p-3 font-bold text-slate-700"><i class="fa-solid fa-user text-indigo-400 mr-1.5"></i> ${nome}</td>
-                            <td class="p-3 text-center font-bold text-blue-600">${dados.resolvidos}</td>
-                            <td class="p-3 text-center text-slate-600 font-mono">${formatarDiferencaTempo(dados.tempoMs)}</td>
-                            <td class="p-3 text-center text-emerald-600 font-bold font-mono">${formatarDiferencaTempo(mediaMs)}</td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-
-            // Gráfico Top Máquinas
-            const sortedMaq = Object.entries(maqContagem).sort((a,b) => b[1] - a[1]).slice(0,5);
-            const ctxTop = document.getElementById('graficoTopMaquinas').getContext('2d');
-            if (chartTopMaquinas) chartTopMaquinas.destroy();
-            chartTopMaquinas = new Chart(ctxTop, {
-                type: 'doughnut',
-                data: {
-                    labels: sortedMaq.map(m => m[0].substring(0, 15) + '...'),
-                    datasets: [{
-                        data: sortedMaq.map(m => m[1]),
-                        backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6'],
-                        borderWidth: 2
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 9 } } } } }
-            });
-
-            // Renderiza a Lista Geral Detalhada (A que aparece lá no fundo)
-            const tbodyRelatorio = document.getElementById('tabelaRelatorioTbody');
-            dadosFiltrados.sort((a,b) => new Date(b.dataAbertura) - new Date(a.dataAbertura));
-
-            if (dadosFiltrados.length === 0) {
-                tbodyRelatorio.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhum registro para os filtros selecionados.</td></tr>`;
-                return;
-            }
-
-            tbodyRelatorio.innerHTML = dadosFiltrados.map(item => {
-                let badgeTipo = item.tipoBase === "Chamado" ? "bg-rose-100 text-rose-700" : "bg-orange-100 text-orange-700";
-                let badgeStatus = item.status === "Fechado" ? `<span class="text-emerald-600 font-bold"><i class="fa-solid fa-check"></i> Resolvido</span>` : `<span class="text-amber-500 font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
-                
-                let dtAbre = new Date(item.dataAbertura).toLocaleString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
-                let dtFecha = item.dataFechamento ? new Date(item.dataFechamento).toLocaleString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) : "---";
-                
-                let tempoStr = "Em andamento";
-                if (item.status === "Fechado" && item.dataFechamento) {
-                    tempoStr = formatarDiferencaTempo(new Date(item.dataFechamento) - new Date(item.dataAbertura));
-                }
-
-                let quemAbriu = `Aberta por: <span class="font-semibold text-slate-700">${item.relator}</span>`;
-                if (item.atribuido) {
-                    quemAbriu += `<br><span class="text-[9px] mt-1 inline-block text-blue-600 font-bold"><i class="fa-solid fa-thumbtack"></i> Atribuído: ${item.atribuido}</span>`;
-                }
-
-                return `
-                <tr class="hover:bg-slate-50 transition-colors border-b last:border-0 border-slate-100">
-                    <td class="p-4 align-top">
-                        <span class="font-bold text-slate-800 block">${item.id}</span>
-                        <span class="${badgeTipo} text-[9px] px-2 py-0.5 rounded font-bold uppercase mt-1 inline-block">${item.tipoBase}</span>
-                    </td>
-                    <td class="p-4 align-top font-bold text-slate-700 text-[11px]">${item.maquina}</td>
-                    <td class="p-4 align-top">
-                        <div class="text-[10px] text-slate-500 mb-1"><i class="fa-regular fa-calendar text-slate-400"></i> ${dtAbre} | ${quemAbriu}</div>
-                        <p class="text-slate-700 font-medium">"${item.defeito}"</p>
-                        <span class="text-[9px] bg-slate-100 border border-slate-200 text-slate-500 px-1.5 py-0.5 rounded mt-1.5 inline-block">Classe: ${item.urgencia}</span>
-                    </td>
-                    <td class="p-4 align-top">
-                        <div class="text-[10px] text-slate-500 mb-1">${badgeStatus} ${item.dataFechamento ? `| Em: ${dtFecha}` : ''}</div>
-                        ${item.status === "Fechado" ? `<p class="text-emerald-700 font-medium">"${item.resolucao}"</p><span class="text-[9px] text-slate-500 mt-1.5 inline-block">Técnico que Fechou: <span class="font-bold text-slate-800">${item.solucionador}</span></span>` : `<span class="italic text-slate-400">Aguardando intervenção...</span>`}
-                    </td>
-                    <td class="p-4 align-middle text-center font-mono font-bold text-slate-600">${tempoStr}</td>
-                </tr>
-                `;
-            }).join('');
-        }        
+        
         function abrirModuloChecklist() { alternarTela('checklist-setor'); }
         function abrirModuloAlmoxarifado() { alternarTela('almoxarifado'); renderAlmoxarifadoLista(); if(API_URL) baixarAlmoxarifadoDaPlanilha(); }
-        
-        function abrirModuloPOPs() { 
-            alternarTela('pops'); 
-            const select = document.getElementById('popMaquinaFilter');
-            let maquinasComPop = [...new Set(popData.map(p => p.maquina))].sort();
-            select.innerHTML = '<option value="">Todas as Máquinas</option>' + maquinasComPop.map(m => `<option value="${m}">${m}</option>`).join('');
-            renderPOPs(); 
-        }
-        
-        function abrirModuloParametrizacao() { 
-            alternarTela('parametrizacao'); 
-            renderParametrizacaoCards();
-        }
-        
+        function abrirModuloParametrizacao() { alternarTela('parametrizacao'); renderParametrizacaoCards(); }
         function abrirModuloForno() { alternarTela('forno'); }
         function abrirModuloPVD() { alternarTela('pvd'); }
-        
         function abrirModuloIntervencoes() { alternarTela('intervencoes'); renderListaIntervencoes(); }
 
-        function renderParametrizacaoCards() {
-            const container = document.getElementById('parametrizacaoCards');
-            if (maquinasParametrizaveisData.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10 font-medium">Nenhuma máquina habilitada para parametrização (Coluna H = Sim).</div>`;
-                return;
-            }
-            container.innerHTML = maquinasParametrizaveisData.map(m => {
-                const isForno = normalizar(m.nome).includes('forno');
-                const isPvd = normalizar(m.nome).includes('pvd');
-                
-                let icone = "fa-microchip", corBg = "bg-slate-100", corText = "text-slate-600", desc = "", action = "showToast('Em desenvolvimento.', 'info')";
-
-                if (isForno) {
-                    icone = "fa-fire"; corBg = "bg-orange-100"; corText = "text-orange-600"; action = "abrirModuloForno()";
-                    desc = "Simulação de encharque térmico, cálculo de ciclo e dimensionamento de gás.";
-                } else if (isPvd) {
-                    icone = "fa-atom"; corBg = "bg-blue-100"; corText = "text-blue-600"; action = "abrirModuloPVD()";
-                    desc = "Ajuste de parâmetros, cálculo químico de decapagem e operação do vácuo.";
-                }
-
-                return `
-                <button onclick="${action}" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center gap-4 w-full">
-                    <div class="w-12 h-12 rounded-xl ${corBg} ${corText} flex items-center justify-center text-xl shrink-0">
-                        <i class="fa-solid ${icone}"></i>
-                    </div>
-                    <div>
-                        <h3 class="font-extrabold text-slate-800 text-sm mb-1">${m.nome}</h3>
-                        <span class="block text-[10px] text-slate-500 leading-relaxed">${desc}</span>
-                    </div>
-                </button>
-                `;
-            }).join('');
-        }
-
-        // ============================================
-        // LÓGICA DO PVD (COM ABAS E CALCULADORA)
-        // ============================================
-        function mudarAbaPVD(abaSelecionada) {
-            const abas = ['setup', 'decapagem', 'pop', 'limpeza'];
-            abas.forEach(aba => {
-                document.getElementById(`pvd-tab-${aba}`).classList.add('hidden');
-                document.getElementById(`tab-pvd-${aba}`).className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2 flex-1 sm:flex-none";
-            });
-
-            document.getElementById(`pvd-tab-${abaSelecionada}`).classList.remove('hidden');
-            
-            if (abaSelecionada === 'setup') {
-                document.getElementById('tab-pvd-setup').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-blue-100 text-blue-700 border border-blue-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
-            } else if (abaSelecionada === 'limpeza') {
-                document.getElementById('tab-pvd-limpeza').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-emerald-100 text-emerald-700 border border-emerald-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
-            } else if (abaSelecionada === 'decapagem') {
-                document.getElementById('tab-pvd-decapagem').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
-                calcularDecapagem();
-            } else if (abaSelecionada === 'pop') {
-                document.getElementById('tab-pvd-pop').className = "px-5 py-2.5 font-bold text-sm rounded-xl transition-all bg-[#0b132b] text-white shadow-sm flex items-center justify-center gap-2 flex-1 sm:flex-none";
-            }
-        }
-
-        function calcularParametrosPVD() {
-            const cor = document.getElementById('pvdCor').value;
-            const temp = parseFloat(document.getElementById('pvdTemp').value) || 0;
-            const vacuo = document.getElementById('pvdVacuo').value;
-            const aguaAtiva = document.getElementById('pvdAgua').value === 'sim';
-
-            const catodoEl = document.getElementById('pvdCatodo');
-            const gasesEl = document.getElementById('pvdGases');
-            const estequiometriaEl = document.getElementById('pvdEstequiometria');
-
-            if (cor === 'ouro') {
-                catodoEl.innerText = 'Titânio (Ti) Puro'; gasesEl.innerText = 'Nitrogênio (N₂)'; estequiometriaEl.innerHTML = 'Ti + N <i class="fa-solid fa-arrow-right mx-1"></i> TiN (Nitreto de Titânio)';
-                document.getElementById('decapMaterial').value = 'ti';
-            } else if (cor === 'rose') {
-                catodoEl.innerText = 'Titânio (Ti) Puro'; gasesEl.innerText = 'N₂ + Acetileno (C₂H₂)'; estequiometriaEl.innerHTML = 'Carbono na rede <i class="fa-solid fa-arrow-right mx-1"></i> TiCN (Carbonitreto)';
-                document.getElementById('decapMaterial').value = 'ti';
-            } else if (cor === 'grafite') {
-                catodoEl.innerText = 'Cromo (Cr) Puro'; gasesEl.innerText = 'Acetileno (C₂H₂)'; estequiometriaEl.innerHTML = 'Cr + C₂H₂ <i class="fa-solid fa-arrow-right mx-1"></i> CrC/CrCN (Carbeto)';
-                document.getElementById('decapMaterial').value = 'cr';
-            }
-
-            const fbBox = document.getElementById('pvdFeedbackBox');
-            const fbIcon = document.getElementById('pvdFeedbackIcon');
-            const fbTitle = document.getElementById('pvdFeedbackTitle');
-            const fbText = document.getElementById('pvdFeedbackText');
-
-            fbBox.className = "p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300 border ";
-
-            if (!aguaAtiva) {
-                fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
-                fbIcon.className = "fa-solid fa-skull-crossbones text-rose-600 mt-1 text-3xl";
-                fbTitle.innerText = "RISCO FATAL: Água Desligada!";
-                fbText.innerHTML = `Ligar resistências ou bombas de difusão sem água causará a <strong>destruição do óleo e derretimento dos O-Rings de vedação</strong>.`;
-            } else if (vacuo !== 'J5') {
-                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-wind text-amber-600 mt-1 text-3xl";
-                fbTitle.innerText = "Vácuo Insuficiente (Aguardar J5)";
-                fbText.innerHTML = `Nível <strong>${vacuo}</strong> não permite viagem do plasma metálico (oxidação instantânea). Aguarde a sirene do Alto Vácuo Molecular.`;
-            } else if (temp < 180) {
-                fbBox.className += "bg-orange-50 border-orange-200 text-orange-900";
-                fbIcon.className = "fa-solid fa-temperature-arrow-down text-orange-600 mt-1 text-3xl";
-                fbTitle.innerText = "Temperatura Crítica: Peças Frias (" + temp + "°C)";
-                fbText.innerHTML = `Regra de processo: PV = 180°C. Com esta temperatura, o plasma solidificará numa "casca" superficial que irá descascar ao primeiro toque.`;
-            } else {
-                fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
-                fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-3xl";
-                fbTitle.innerText = "Parâmetros Liberados (J5 + " + temp + "°C)";
-                let extra = cor === 'grafite' ? `<br><br><span class="text-emerald-700 text-[10px]"><strong>Grafite Ajustado:</strong> Ciclo operando com +2,3 min extras para curar manchas arco-íris e aumentar espessura.</span>` : ``;
-                fbText.innerHTML = `A máquina está em Alto Vácuo perfeito e as peças atingiram a energia térmica para enraizamento atômico. Pressione <strong>Automatic Coating</strong>.${extra}`;
-            }
-        }
-
-        function calcularDecapagem() {
-            const material = document.getElementById('decapMaterial').value;
-            const containerTi = document.getElementById('decapTiContainer');
-            const containerCr = document.getElementById('decapCrContainer');
-            
-            const aguaWrapper = document.getElementById('decapAguaWrapper');
-            const edtaWrapper = document.getElementById('decapEdtaWrapper');
-
-            if (material === 'ti') {
-                containerTi.classList.remove('hidden');
-                containerCr.classList.add('hidden');
-                aguaWrapper.classList.remove('opacity-30', 'pointer-events-none');
-                edtaWrapper.classList.remove('opacity-30', 'pointer-events-none');
-
-                const aguaL = parseFloat(document.getElementById('decapAguaInput').value) || 1;
-                const edtaTipo = document.getElementById('decapEdtaTipo').value;
-
-                const peroxidoL = aguaL; 
-                const sodaMin = Math.round(100 * aguaL);
-                const sodaMax = Math.round(150 * aguaL);
-
-                let edtaStr = "";
-                if (edtaTipo === 'po') {
-                    edtaStr = Math.round(20 * aguaL) + " g";
-                } else {
-                    edtaStr = Math.round(45 * aguaL) + " ml"; 
-                }
-
-                document.getElementById('resDecapAgua').innerText = aguaL.toFixed(1) + " L";
-                document.getElementById('resDecapPeroxido').innerText = peroxidoL.toFixed(1) + " L";
-                document.getElementById('resDecapSoda').innerText = sodaMin + "g a " + sodaMax + "g";
-                document.getElementById('resDecapEdta').innerText = edtaStr;
-            } else {
-                containerTi.classList.add('hidden');
-                containerCr.classList.remove('hidden');
-                aguaWrapper.classList.add('opacity-30', 'pointer-events-none');
-                edtaWrapper.classList.add('opacity-30', 'pointer-events-none');
-            }
-        }
-
-        function gerarOptionsEquipes(setorAlvo = "") {
-            if (!equipesData || equipesData.length === 0) return `<option value="">Nenhum colaborador</option>`;
-            let opcoes = `<option value="">Selecione o Nome...</option>`;
-            let setorNorm = normalizar(setorAlvo);
-            let encontrouAlguem = false;
-
-            equipesData.forEach(eq => {
-                const eqSetorNorm = normalizar(eq.setor);
-                let podeAdicionar = false;
-
-                if (setorNorm.includes('manutencao')) {
-                    if (eqSetorNorm.includes('manutencao')) podeAdicionar = true;
-                } else if (setorNorm.includes('producao')) {
-                    if (eqSetorNorm.includes('producao') || eqSetorNorm.includes('manutencao')) podeAdicionar = true;
-                } else {
-                    podeAdicionar = true;
-                }
-
-                if (podeAdicionar) {
-                    eq.membros.forEach(m => {
-                        const nomeCompleto = `${m} - ${eq.setor}`;
-                        opcoes += `<option value="${nomeCompleto}">${nomeCompleto}</option>`;
-                        encontrouAlguem = true;
-                    });
-                }
-            });
-
-            if (!encontrouAlguem) {
-                return `<option value="">Sem equipe configurada para este setor</option><option value="Sistema - Fallback">Modo de Emergência</option>`;
-            }
-            return opcoes;
-        }
-
-        function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
-            const select = document.getElementById('chamadoMaquina');
-            let maquinas = listaTodasMaquinas.length > 0 ? listaTodasMaquinas : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"]);
-            select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
-            if(maquinaPre) select.value = maquinaPre;
-            document.getElementById('chamadoDefeito').value = defeitoPre;
-            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(''); 
-            document.getElementById('chamadoModal').classList.remove('hidden');
-        }
-        function fecharModalChamado() { document.getElementById('chamadoModal').classList.add('hidden'); }
-        
-        async function enviarChamado() {
-            const maquina = document.getElementById('chamadoMaquina').value;
-            const urgencia = document.getElementById('chamadoUrgencia').value;
-            const defeito = document.getElementById('chamadoDefeito').value.trim();
-            const relator = document.getElementById('chamadoRelator').value.trim();
-            const btn = document.getElementById('btnEnviarChamado');
-            
-            if (!defeito || !relator) { showToast("Preencha o defeito e selecione o relator.", "error"); return; }
-            
-            btn.disabled = true; 
-            const textoBtn = btn.innerHTML;
-            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Registrando...`;
-            
-            const maxId = chamadosData.reduce((max, item) => {
-                let num = parseInt(item.id.replace('OS-', '')) || 0;
-                if (num > 1000000) num = 0;
-                return num > max ? num : max;
-            }, 0);
-            const novoId = `OS-${maxId + 1}`;
-            const dataAbertura = new Date().toISOString();
-
-            if (API_URL) {
-                try {
-                    await fetch(API_URL, { 
-                        method: "POST", 
-                        mode: "no-cors", 
-                        body: JSON.stringify({ 
-                            tipo: "chamado", 
-                            dados: { 
-                                id: novoId, 
-                                data: dataAbertura, 
-                                maquina, 
-                                urgencia, 
-                                defeito, 
-                                relator, 
-                                status: "Aberto" 
-                            } 
-                        }) 
-                    });
-                    showToast("OS criada com sucesso!"); 
-                    setTimeout(() => baixarDadosDaPlanilha(), 1500); 
-                } catch(e) { 
-                    showToast("Falha na rede. Tente novamente.", "error"); 
-                }
-            } else {
-                chamadosData.unshift({ id: novoId, data: dataAbertura, maquina, urgencia, defeito, relator, status: "Aberto" });
-                showToast("Modo Offline: OS simulada com sucesso.", "info");
-                atualizarContadoresPendencias();
-                atualizarKPIs();
-            }
-            btn.disabled = false; 
-            btn.innerHTML = textoBtn; 
-            fecharModalChamado();
-        }
-
-        function verificarStatusChamado(selectElement) {
-            const linha = selectElement.closest(".row-check");
-            const inputOperador = linha.querySelector(".operador-inp");
-            
-            if (!inputOperador.value.trim()) {
-                showToast("Selecione o operador antes de marcar o status.", "error");
-                selectElement.value = ""; 
-                inputOperador.focus();
-                return;
-            }
-
-            if (selectElement.value === "Problema") {
-                const maquina = linha.getAttribute("data-maquina");
-                const item = linha.getAttribute("data-item");
-                const obsValue = linha.querySelector(".obs-inp").value.trim();
-                abrirModalChamado(maquina, `Falha no checklist - Item: '${item}'${obsValue ? ` | Obs: ${obsValue}` : ""}`);
-            }
-        }
-        
+        // ==========================================
+        // LÓGICA DO QUADRO DE PENDÊNCIAS
+        // ==========================================
         function mudarAbaPendencias(aba) {
             abaPendenciasAtual = aba;
             const tabChamados = document.getElementById('tabChamados');
             const tabIntervencoes = document.getElementById('tabIntervencoes');
 
             if (aba === 'chamados') {
-                tabChamados.className = "flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-rose-100 text-rose-700 border border-rose-200 shadow-sm flex items-center justify-center gap-2";
-                tabIntervencoes.className = "flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2";
+                tabChamados.className = "flex-1 py-3 rounded-xl border-2 font-bold text-sm transition-all bg-white border-rose-500 text-rose-600 flex items-center justify-center gap-2 shadow-sm scale-[1.02]";
+                tabIntervencoes.className = "flex-1 py-3 rounded-xl border font-bold text-sm transition-all bg-orange-50/50 border-orange-200 text-orange-600/70 flex items-center justify-center gap-2 hover:bg-orange-50";
             } else {
-                tabIntervencoes.className = "flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-orange-100 text-orange-700 border border-orange-200 shadow-sm flex items-center justify-center gap-2";
-                tabChamados.className = "flex-1 py-2.5 font-bold text-sm rounded-xl transition-all bg-white text-slate-500 hover:bg-slate-50 border border-slate-200 flex items-center justify-center gap-2";
+                tabIntervencoes.className = "flex-1 py-3 rounded-xl border-2 font-bold text-sm transition-all bg-white border-orange-500 text-orange-600 flex items-center justify-center gap-2 shadow-sm scale-[1.02]";
+                tabChamados.className = "flex-1 py-3 rounded-xl border font-bold text-sm transition-all bg-rose-50/50 border-rose-200 text-rose-600/70 flex items-center justify-center gap-2 hover:bg-rose-50";
             }
             renderizarListaPendenciasMista();
         }
 
-        function abrirGerenciamentoPendencias() {
+        function abrirQuadroPendencias(abaPadrao = 'chamados', filtroTecnico = null) {
+            filtroIntervencaoAtual = filtroTecnico;
             document.getElementById('gerenciarPendenciasModal').classList.remove('hidden');
             atualizarContadoresPendencias();
-            mudarAbaPendencias(abaPendenciasAtual);
+            mudarAbaPendencias(abaPadrao);
+        }
+
+        function fecharGerenciamentoPendencias() { 
+            document.getElementById('gerenciarPendenciasModal').classList.add('hidden'); 
+            filtroIntervencaoAtual = null;
         }
 
         function atualizarContadoresPendencias() {
@@ -1894,6 +1584,7 @@ let chartTopMaquinas = null;
                     abertosOS.forEach(c => {
                         const dataAbertura = new Date(c.data).toLocaleDateString('pt-BR');
                         let urgenciaCor = c.urgencia === "Alta" ? "text-rose-600 bg-rose-100 border-rose-200" : (c.urgencia === "Baixa" ? "text-blue-600 bg-blue-100 border-blue-200" : "text-amber-600 bg-amber-100 border-amber-200");
+                        
                         htmlCompleto += `
                             <div class="bg-white border-l-4 border-l-rose-500 border-t border-b border-r border-slate-200 rounded-xl p-5 shadow-sm relative mb-4" id="card-pendencia-${c.id}">
                                 <div class="flex justify-between items-start mb-3">
@@ -1915,7 +1606,9 @@ let chartTopMaquinas = null;
                                             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico que Fechou</label>
                                             <select id="solucionador-os-${c.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-rose-400 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
                                         </div>
-                                        <button onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Dar Baixa (OS)</button>
+                                        <button onclick="fecharOS('${c.id}')" class="w-full sm:w-auto bg-rose-600 hover:bg-rose-700 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]">
+                                            <i class="fa-solid fa-check-double"></i> Dar Baixa (OS)
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1923,10 +1616,18 @@ let chartTopMaquinas = null;
                     });
                 }
             } else if (abaPendenciasAtual === 'intervencoes') {
-                const abertosINT = intervencoesData.filter(i => i.status !== "Fechado");
+                let abertosINT = intervencoesData.filter(i => i.status !== "Fechado");
+                
+                if (filtroIntervencaoAtual) {
+                    if (filtroIntervencaoAtual === 'pendentes') {
+                        abertosINT = abertosINT.filter(i => !i.atribuido);
+                    } else {
+                        abertosINT = abertosINT.filter(i => i.atribuido && i.atribuido.includes(filtroIntervencaoAtual));
+                    }
+                }
                 
                 if (abertosINT.length === 0) {
-                    htmlCompleto = `<div class="text-center text-slate-400 text-sm py-10 font-medium">Nenhuma intervenção na fila.</div>`;
+                    htmlCompleto = `<div class="text-center text-slate-400 text-sm py-10 font-medium">${filtroIntervencaoAtual ? 'Filtro atual sem resultados.' : 'Nenhuma intervenção na fila.'}</div>`;
                 } else {
                     abertosINT.forEach(i => {
                         const dataAbertura = new Date(i.data).toLocaleDateString('pt-BR');
@@ -1951,7 +1652,9 @@ let chartTopMaquinas = null;
                                             <label class="block text-[10px] font-bold text-slate-400 uppercase mb-1">Técnico que Executou</label>
                                             <select id="solucionador-int-${i.id}" class="w-full bg-white border border-slate-200 rounded-lg p-2 text-xs focus:outline-none focus:ring-1 focus:ring-orange-400 font-semibold">${gerarOptionsEquipes('manutencao')}</select>
                                         </div>
-                                        <button onclick="fecharIntervencao('${i.id}')" class="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white text-[10px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]"><i class="fa-solid fa-check-double"></i> Finalizar Interv.</button>
+                                        <button onclick="fecharIntervencao('${i.id}')" class="w-full sm:w-auto bg-orange-500 hover:bg-orange-600 text-white text-[11px] font-bold py-2 px-4 rounded-lg shadow-sm flex items-center justify-center gap-1.5 transition-all whitespace-nowrap h-[34px]">
+                                            <i class="fa-solid fa-check"></i> Finalizar Interv.
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -1962,14 +1665,18 @@ let chartTopMaquinas = null;
 
             container.innerHTML = htmlCompleto;
         }
-        
-        function fecharGerenciamentoPendencias() { document.getElementById('gerenciarPendenciasModal').classList.add('hidden'); }
+        function fecharGerenciamentoPendencias() { 
+            document.getElementById('gerenciarPendenciasModal').classList.add('hidden'); 
+        }
 
         async function fecharOS(idOS) {
             const resolucao = document.getElementById(`resolucao-os-${idOS}`).value.trim();
             const solucionador = document.getElementById(`solucionador-os-${idOS}`).value;
             
-            if (!resolucao || !solucionador) { showToast("Preencha a solução e o técnico responsável.", "error"); return; }
+            if (!resolucao || !solucionador) { 
+                showToast("Preencha a solução e o técnico responsável.", "error"); 
+                return; 
+            }
             
             const btn = document.querySelector(`button[onclick="fecharOS('${idOS}')"]`);
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; 
@@ -2021,7 +1728,10 @@ let chartTopMaquinas = null;
             const resolucao = document.getElementById(`resolucao-int-${idInt}`).value.trim();
             const solucionador = document.getElementById(`solucionador-int-${idInt}`).value;
             
-            if (!resolucao || !solucionador) { showToast("Preencha o log de fechamento e o técnico responsável.", "error"); return; }
+            if (!resolucao || !solucionador) { 
+                showToast("Preencha o log de fechamento e o técnico responsável.", "error"); 
+                return; 
+            }
             
             const btn = document.querySelector(`button[onclick="fecharIntervencao('${idInt}')"]`);
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`; 
@@ -2068,18 +1778,25 @@ let chartTopMaquinas = null;
             renderListaIntervencoes(); 
             renderizarListaPendenciasMista(); 
         }
-function abrirModalNovaIntervencao() {
+
+        // ==========================================
+        // CADASTRAR NOVA INTERVENÇÃO
+        // ==========================================
+        function abrirModalNovaIntervencao() {
             const select = document.getElementById('intervMaquina');
             let maquinas = listaTodasMaquinas.length > 0 ? listaTodasMaquinas : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"]);
             select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            
             document.getElementById('intervDescricao').value = "";
             document.getElementById('intervResponsavel').innerHTML = gerarOptionsEquipes('manutencao'); 
-            
             document.getElementById('intervAtribuido').innerHTML = '<option value="">Sem atribuição</option>' + gerarOptionsEquipes('manutencao');
 
             document.getElementById('intervencaoModal').classList.remove('hidden');
         }
-        function fecharModalIntervencao() { document.getElementById('intervencaoModal').classList.add('hidden'); }
+        
+        function fecharModalIntervencao() { 
+            document.getElementById('intervencaoModal').classList.add('hidden'); 
+        }
 
         async function enviarIntervencao() {
             const maquina = document.getElementById('intervMaquina').value;
@@ -2089,8 +1806,13 @@ function abrirModalNovaIntervencao() {
             const atribuido = document.getElementById('intervAtribuido').value.trim();
             const btn = document.getElementById('btnEnviarIntervencao');
             
-            if (!descricao || !responsavel) { showToast("Preencha a descrição e selecione o técnico relator.", "error"); return; }
-            btn.disabled = true; const textoBtn = btn.innerHTML;
+            if (!descricao || !responsavel) { 
+                showToast("Preencha a descrição e selecione o técnico relator.", "error"); 
+                return; 
+            }
+            
+            btn.disabled = true; 
+            const textoBtn = btn.innerHTML;
             btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Salvando...`;
             
             const maxId = intervencoesData.reduce((max, item) => {
@@ -2098,6 +1820,7 @@ function abrirModalNovaIntervencao() {
                 if (num > 1000000) num = 0;
                 return num > max ? num : max;
             }, 0);
+            
             const novoId = `INT-${maxId + 1}`;
 
             const novaIntervencao = {
@@ -2113,12 +1836,154 @@ function abrirModalNovaIntervencao() {
             } else {
                 showToast("Modo Offline: Registro simulado.", "info");
             }
+            
             intervencoesData.unshift(novaIntervencao);
             renderListaIntervencoes();
             atualizarContadoresPendencias();
             atualizarKPIs();
-            btn.disabled = false; btn.innerHTML = textoBtn; fecharModalIntervencao();
+            
+            btn.disabled = false; 
+            btn.innerHTML = textoBtn; 
+            fecharModalIntervencao();
         }
+
+        // ==========================================
+        // CADASTRAR NOVO CHAMADO E AUTO-REGISTRO CHECKLIST
+        // ==========================================
+        function abrirModalChamado(maquinaPre = "", defeitoPre = "") {
+            const select = document.getElementById('chamadoMaquina');
+            let maquinas = listaTodasMaquinas.length > 0 ? listaTodasMaquinas : (originalDatabase.length > 0 ? [...new Set(originalDatabase.map(i => i.maquina))] : ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001"]);
+            select.innerHTML = maquinas.map(m => `<option value="${m}">${m}</option>`).join('');
+            if(maquinaPre) select.value = maquinaPre;
+            document.getElementById('chamadoDefeito').value = defeitoPre;
+            document.getElementById('chamadoRelator').innerHTML = gerarOptionsEquipes(''); 
+            document.getElementById('chamadoModal').classList.remove('hidden');
+        }
+        
+        function fecharModalChamado() { 
+            document.getElementById('chamadoModal').classList.add('hidden'); 
+            // Cancela o processo de auto-registro se fechar pelo X
+            if (linhaChecklistPendenteDeOS) {
+                const sel = linhaChecklistPendenteDeOS.querySelector('.status-sel');
+                if (sel) sel.value = "";
+                linhaChecklistPendenteDeOS = null;
+            }
+        }
+        
+        async function enviarChamado() {
+            const maquina = document.getElementById('chamadoMaquina').value;
+            const urgencia = document.getElementById('chamadoUrgencia').value;
+            const defeito = document.getElementById('chamadoDefeito').value.trim();
+            const relator = document.getElementById('chamadoRelator').value.trim();
+            const btn = document.getElementById('btnEnviarChamado');
+            
+            if (!defeito || !relator) { showToast("Preencha o defeito e selecione o relator.", "error"); return; }
+            
+            // Pega a linha do Checklist para auto-registrar
+            const linhaAProcessar = linhaChecklistPendenteDeOS;
+            linhaChecklistPendenteDeOS = null; // Reseta para evitar duplicações
+
+            btn.disabled = true; 
+            const textoBtn = btn.innerHTML;
+            btn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Registrando...`;
+            
+            const maxId = chamadosData.reduce((max, item) => {
+                let num = parseInt(item.id.replace('OS-', '')) || 0;
+                if (num > 1000000) num = 0;
+                return num > max ? num : max;
+            }, 0);
+            const novoId = `OS-${maxId + 1}`;
+            const dataAbertura = new Date().toISOString();
+
+            if (API_URL) {
+                try {
+                    await fetch(API_URL, { 
+                        method: "POST", 
+                        mode: "no-cors", 
+                        body: JSON.stringify({ 
+                            tipo: "chamado", 
+                            dados: { 
+                                id: novoId, 
+                                data: dataAbertura, 
+                                maquina, 
+                                urgencia, 
+                                defeito, 
+                                relator, 
+                                status: "Aberto" 
+                            } 
+                        }) 
+                    });
+                    showToast("OS criada com sucesso!"); 
+                    setTimeout(() => baixarDadosDaPlanilha(), 1500); 
+                } catch(e) { 
+                    showToast("Falha na rede. Tente novamente.", "error"); 
+                }
+            } else {
+                chamadosData.unshift({ id: novoId, data: dataAbertura, maquina, urgencia, defeito, relator, status: "Aberto" });
+                showToast("Modo Offline: OS simulada com sucesso.", "info");
+                atualizarContadoresPendencias();
+                atualizarKPIs();
+            }
+            
+            btn.disabled = false; 
+            btn.innerHTML = textoBtn; 
+            
+            // Fecha modal normalmente
+            document.getElementById('chamadoModal').classList.add('hidden');
+            
+            // AUTO REGISTRAR O ITEM DO CHECKLIST
+            if (linhaAProcessar) {
+                const btnRegistrar = linhaAProcessar.querySelector('.btn-registrar');
+                if (btnRegistrar) {
+                    await registrarItemIndividual(btnRegistrar);
+                }
+            }
+        }
+
+        function verificarStatusChamado(selectElement) {
+            const linha = selectElement.closest(".row-check");
+            const inputOperador = linha.querySelector(".operador-inp");
+            
+            if (!inputOperador.value.trim()) {
+                showToast("Selecione o operador antes de marcar o status.", "error");
+                selectElement.value = ""; 
+                inputOperador.focus();
+                return;
+            }
+
+            if (selectElement.value === "Problema") {
+                const maquina = linha.getAttribute("data-maquina");
+                const item = linha.getAttribute("data-item");
+                const obsValue = linha.querySelector(".obs-inp").value.trim();
+                
+                // Armazena a linha globalmente para auto-registro
+                linhaChecklistPendenteDeOS = linha;
+                
+                abrirModalChamado(maquina, `Falha no checklist - Item: '${item}'${obsValue ? ` | Obs: ${obsValue}` : ""}`);
+            } else {
+                linhaChecklistPendenteDeOS = null;
+            }
+        }
+
+        // ==========================================
+        // DEMAIS FUNÇÕES GERAIS E RELATÓRIOS
+        // ==========================================
+        function abrirDetalhesOS(id) {
+            const os = chamadosData.find(c => c.id === id);
+            if(!os) return;
+            document.getElementById('detOsId').innerText = os.id;
+            document.getElementById('detOsStatus').innerText = os.status;
+            document.getElementById('detOsMaquina').innerText = os.maquina;
+            document.getElementById('detOsDataAbertura').innerText = new Date(os.data).toLocaleDateString('pt-BR') + ' às ' + new Date(os.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+            document.getElementById('detOsRelator').innerText = os.relator;
+            document.getElementById('detOsDefeito').innerText = os.defeito;
+            document.getElementById('detOsDataFechamento').innerText = os.dataFechamento ? (new Date(os.dataFechamento).toLocaleDateString('pt-BR') + ' às ' + new Date(os.dataFechamento).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})) : '-';
+            document.getElementById('detOsSolucionador').innerText = os.solucionador || '-';
+            document.getElementById('detOsResolucao').innerText = os.resolucao || '-';
+            document.getElementById('detalhesOsModal').classList.remove('hidden');
+        }
+        
+        function fecharDetalhesOS() { document.getElementById('detalhesOsModal').classList.add('hidden'); }
 
         function renderListaIntervencoes() {
             const tbody = document.getElementById('intervencoesTbody');
@@ -2166,32 +2031,13 @@ function abrirModalNovaIntervencao() {
                 </tr>`;
             }).join('');
         }
-    
-        function abrirDetalhesOS(id) {
-            const os = chamadosData.find(c => c.id === id);
-            if(!os) return;
-            document.getElementById('detOsId').innerText = os.id;
-            document.getElementById('detOsStatus').innerText = os.status;
-            document.getElementById('detOsMaquina').innerText = os.maquina;
-            document.getElementById('detOsDataAbertura').innerText = new Date(os.data).toLocaleDateString('pt-BR') + ' às ' + new Date(os.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
-            document.getElementById('detOsRelator').innerText = os.relator;
-            document.getElementById('detOsDefeito').innerText = os.defeito;
-            document.getElementById('detOsDataFechamento').innerText = os.dataFechamento ? (new Date(os.dataFechamento).toLocaleDateString('pt-BR') + ' às ' + new Date(os.dataFechamento).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})) : '-';
-            document.getElementById('detOsSolucionador').innerText = os.solucionador || '-';
-            document.getElementById('detOsResolucao').innerText = os.resolucao || '-';
-            document.getElementById('detalhesOsModal').classList.remove('hidden');
-        }
-        function fecharDetalhesOS() { document.getElementById('detalhesOsModal').classList.add('hidden'); }
 
-        function irParaChecklist(setor, tipoOriginal) {
-            fecharPreditiva(); selecionarSetor(setor);
-            let pId = normalizar(tipoOriginal); let pLabel = tipoOriginal;
-            if (pId.includes('diar') || pId.includes('intrad')) { pId = 'diaria'; pLabel = 'Diária/ Intradiária'; }
-            else if (pId.includes('seman')) { pId = 'semanal'; pLabel = 'Semanal'; }
-            else if (pId.includes('quinzen')) { pId = 'quinzenal'; pLabel = 'Quinzenal'; }
-            else if (pId.includes('mens')) { pId = 'mensal'; pLabel = 'Mensal'; }
-            selecionarPeriodo(pId, pLabel);
-        }
+        // =========================================================
+        // TODAS AS FUNÇÕES COMPARTILHADAS (Cálculos, Tabelas, KPIs)
+        // =========================================================
+        function normalizar(texto) { return String(texto||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
+        function matchPeriodicidade(iP, pId) { const n = normalizar(iP); if (pId==="diaria") return n.includes("diar")||n.includes("intrad")||n.includes("turno"); if (pId==="semanal") return n.includes("seman"); if (pId==="quinzenal") return n.includes("quinzen"); if (pId==="mensal") return n.includes("mens")||n.includes("mes"); return n===pId; }
+        function diasParaPeriodicidade(p) { const c = normalizar(p); if (c.includes("diar")||c.includes("intrad")||c.includes("turno")) return 1; if (c.includes("seman")) return 7; if (c.includes("quinzen")) return 15; if (c.includes("mens")||c.includes("mes")) return 30; return 1; }
 
         function calcularAlertas() {
             let alertasDict = { vencidas: {}, hoje: {}, amanha: {}, dias3: {}, dias7: {} };
@@ -2226,6 +2072,7 @@ function abrirModalNovaIntervencao() {
                     }
                     return { nome: it.item, status: statusStr };
                 });
+                
                 if (!statusAtivo || !statusAtivo.ultimoRegistro) {
                     categoriaTarget = isDiario ? 'hoje' : 'vencidas'; 
                     mensagem = "Pendente de execução";
@@ -2296,6 +2143,7 @@ function abrirModalNovaIntervencao() {
             const intAbertas = intervencoesData.filter(i => i.status !== "Fechado").length;
             const totalPendencias = osAbertas + intAbertas;
             
+            document.getElementById('kpiChamadosAbertos').innerText = osAbertas;
             document.getElementById('kpiPendencias').innerText = totalPendencias;
             
             const badge = document.getElementById('badgeAlertas');
@@ -2305,335 +2153,34 @@ function abrirModalNovaIntervencao() {
             } else { 
                 badge.classList.add('hidden'); 
             }
-        }
-
-        function renderListaAlertas(arr) {
-            if (arr.length === 0) return `<div class="text-[11px] text-slate-400 italic mb-4 p-4 text-center">Nenhum registro encontrado para esta janela de tempo.</div>`;
-            return arr.map(a => {
-                let proxClass = "text-emerald-500 bg-emerald-600/20 border-emerald-500/30";
-                if(a.proxima === "Pendente" || a.alerta.includes("Atrasada") || a.alerta.includes("Pendente") || a.alerta === "Vence Hoje") {
-                    proxClass = "text-rose-500 bg-rose-600/20 border-rose-500/30";
+            
+            // Badges na Tela Inicial de Intervenções
+            let abertasItv = intervencoesData.filter(i => i.status === "Aberto");
+            let grouped = {}; 
+            let naoAtribuidos = 0;
+            abertasItv.forEach(i => {
+                if (i.atribuido) { 
+                    grouped[i.atribuido] = (grouped[i.atribuido] || 0) + 1; 
+                } else { 
+                    naoAtribuidos++; 
                 }
-                let detalhesH = "";
-                if (a.subItensStatus && a.subItensStatus.length > 0) {
-                    detalhesH = `<div class="mt-3 text-[9px] text-slate-500 font-semibold border-t border-slate-100 pt-2 space-y-1">`;
-                    a.subItensStatus.forEach(si => {
-                        let isPendente = si.status === "Pendente";
-                        let isProb = si.status.includes("Problema");
-                        let iconSi = isPendente 
-                            ? `<i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1.5"></i>`
-                            : (isProb ? `<i class="fa-solid fa-circle-xmark text-rose-500 mr-1.5"></i>` : `<i class="fa-solid fa-user-check text-slate-300 mr-1.5"></i>`);
-                        let textCor = isPendente ? "text-rose-600 font-bold" : "text-slate-600 font-medium";
-                        detalhesH += `<div class="flex items-start gap-0.5">${iconSi}<div><span class="text-slate-800 font-bold">${si.nome}:</span> <span class="${textCor}">${isPendente ? 'Pendente' : 'Último registro ' + si.status}</span></div></div>`;
-                    });
-                    detalhesH += `</div>`;
-                }
-                return `
-                    <div class="bg-white border border-slate-200 rounded-xl p-4 shadow-sm mb-3">
-                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                            <div class="space-y-1 w-full">
-                                <h4 class="text-sm font-bold text-slate-800">${a.maquina}</h4>
-                                <div class="text-[10px] text-slate-500 font-medium mb-1.5">${a.setor} · Revisão ${a.tipo}</div>
-                                <div class="inline-block mt-1">
-                                    <span class="text-[10px] font-bold ${proxClass} px-2.5 py-1 rounded-md border inline-flex items-center gap-1.5 shadow-sm">
-                                        <i class="fa-solid fa-calendar-day"></i> Próxima: ${a.proxima}
-                                    </span>
-                                </div>
-                                ${detalhesH}
-                            </div>
-                            <div class="flex flex-col sm:flex-row items-end sm:items-center gap-2 w-full sm:w-auto mt-3 sm:mt-0">
-                                <button onclick="abrirResumoMaquina('${a.maquina}', '${a.setor}', '${a.tipo}')" class="bg-blue-600 hover:bg-blue-500 text-white py-1.5 px-3 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
-                                    <i class="fa-solid fa-list-check"></i> Status
-                                </button>
-                                <button onclick="irParaChecklist('${a.setor}', '${a.tipo}')" class="bg-[#0b132b] hover:bg-slate-800 text-white py-1.5 px-4 rounded-lg transition-all text-[11px] font-bold flex gap-1.5 items-center shadow-sm whitespace-nowrap w-full sm:w-auto justify-center">
-                                    Entrar <i class="fa-solid fa-arrow-right-to-bracket"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function abrirPreditiva(alvo) {
-            currentModalMode = alvo;
-            const alertas = calcularAlertas();
-            const divMenuProgramacao = document.getElementById('preditivaProgramacaoMenu');
-            const divMenuHoje = document.getElementById('preditivaHojeMenu');
-            const modalTitle = document.getElementById('preditivaModalTitle');
-            const modalDesc = document.getElementById('preditivaModalDesc');
-            const modalIcon = document.getElementById('iconPreditivaModal');
-            const iconContainer = document.getElementById('iconContainerPreditiva');
-            const btnVoltar = document.getElementById('btnVoltarPreditiva');
-            btnVoltar.classList.add('hidden'); 
-            ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('hidden');
             });
-            if(divMenuProgramacao) divMenuProgramacao.classList.add('hidden');
-            if(divMenuHoje) divMenuHoje.classList.add('hidden');
-            if (alvo === 'vencidas') {
-                currentPreditivaMenu = '';
-                modalTitle.innerText = "Em Atraso / Vencidas"; modalDesc.innerText = "Inspeções com prazos operacionais estourados.";
-                modalIcon.className = "fa-solid fa-circle-xmark"; iconContainer.className = "w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shadow-sm";
-                document.getElementById('listaAlertasVencidas').innerHTML = renderListaAlertas(alertas.vencidas);
-                document.getElementById('containerVencidas').classList.remove('hidden');
-            } else if (alvo === 'hoje') {
-                currentPreditivaMenu = 'hoje';
-                modalTitle.innerText = "Para Hoje"; modalDesc.innerText = "Selecione o setor para ver os checklists do dia.";
-                modalIcon.className = "fa-solid fa-clock"; iconContainer.className = "w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shadow-sm";
-                const setoresHoje = [...new Set(alertas.hoje.map(a => a.setor))];
-                if (setoresHoje.length > 0 && divMenuHoje) {
-                    divMenuHoje.innerHTML = setoresHoje.map(setor => {
-                        const count = alertas.hoje.filter(a => a.setor === setor).length;
-                        return `
-                            <button onclick="mostrarListaHojeSetor('${setor}')" class="nav-card bg-white border border-amber-200 rounded-2xl p-4 shadow-sm flex flex-col items-center justify-center w-full gap-2 transition-colors hover:bg-amber-50/50">
-                                <div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-lg">
-                                    <i class="fa-solid fa-industry"></i>
-                                </div>
-                                <h4 class="font-extrabold text-slate-800 text-[11px] uppercase tracking-wider">${setor}</h4>
-                                <span class="bg-amber-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold">${count} tarefas</span>
-                            </button>
-                        `;
-                    }).join('');
-                    divMenuHoje.classList.remove('hidden');
-                } else {
-                    document.getElementById('listaAlertasHoje').innerHTML = renderListaAlertas(alertas.hoje);
-                    document.getElementById('containerHoje').classList.remove('hidden');
-                }
-            } else if (alvo === 'programacao') {
-                currentPreditivaMenu = 'programacao';
-                modalTitle.innerText = "Programação"; modalDesc.innerText = "Selecione a janela de planejamento futuro.";
-                modalIcon.className = "fa-solid fa-calendar-days"; iconContainer.className = "w-9 h-9 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center shadow-sm";
-                document.getElementById('cardCountAmanha').innerText = `${alertas.amanha.length} item(ns)`;
-                document.getElementById('cardCountDias3').innerText = `${alertas.dias3.length} item(ns)`;
-                document.getElementById('cardCountDias7').innerText = `${alertas.dias7.length} item(ns)`;
-                if(divMenuProgramacao) divMenuProgramacao.classList.remove('hidden');
+            
+            let badgesHtml = '';
+            for(let tec in grouped) {
+                let shortName = tec.split(' ')[0];
+                badgesHtml += `<button onclick="event.stopPropagation(); abrirQuadroPendencias('intervencoes', '${tec}')" class="bg-indigo-100 text-indigo-700 text-[9px] px-2 py-0.5 rounded-full font-bold border border-indigo-200 shadow-sm transition-transform hover:scale-105 z-10">${shortName}: ${grouped[tec]}</button>`;
             }
-            document.getElementById('preditivaModal').classList.remove('hidden');
-        }
-
-        function mostrarListaHojeSetor(setor) {
-            const divMenuHoje = document.getElementById('preditivaHojeMenu');
-            if(divMenuHoje) divMenuHoje.classList.add('hidden');
-            document.getElementById('btnVoltarPreditiva').classList.remove('hidden');
-            ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('hidden');
-            });
-            const alertas = calcularAlertas();
-            const alertasSetor = alertas.hoje.filter(a => a.setor === setor);
-            document.getElementById('listaAlertasHoje').innerHTML = renderListaAlertas(alertasSetor);
-            document.getElementById('containerHoje').classList.remove('hidden'); 
-            document.getElementById('preditivaModalTitle').innerText = `Para Hoje: ${setor}`;
-            document.getElementById('preditivaModalDesc').innerText = "Inspeções programadas para a data atual.";
-        }
-
-        function mostrarListaPreditiva(tipo) {
-            const divMenuProg = document.getElementById('preditivaProgramacaoMenu');
-            if(divMenuProg) divMenuProg.classList.add('hidden');
-            document.getElementById('btnVoltarPreditiva').classList.remove('hidden');
-            ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('hidden');
-            });
-            const alertas = calcularAlertas();
-            if (tipo === 'amanha') { 
-                document.getElementById('listaAlertasAmanha').innerHTML = renderListaAlertas(alertas.amanha);
-                document.getElementById('containerAmanha').classList.remove('hidden'); 
-                document.getElementById('preditivaModalTitle').innerText = "Vencem Amanhã"; 
-            } 
-            else if (tipo === 'dias3') { 
-                document.getElementById('listaAlertasDias3').innerHTML = renderListaAlertas(alertas.dias3);
-                document.getElementById('containerDias3').classList.remove('hidden'); 
-                document.getElementById('preditivaModalTitle').innerText = "Em até 3 dias"; 
-            } 
-            else if (tipo === 'dias7') { 
-                document.getElementById('listaAlertasDias7').innerHTML = renderListaAlertas(alertas.dias7);
-                document.getElementById('containerDias7').classList.remove('hidden'); 
-                document.getElementById('preditivaModalTitle').innerText = "Em até 7 dias"; 
+            if(naoAtribuidos > 0) {
+                badgesHtml += `<button onclick="event.stopPropagation(); abrirQuadroPendencias('intervencoes', 'pendentes')" class="bg-orange-100 text-orange-700 text-[9px] px-2 py-0.5 rounded-full font-bold border border-orange-200 shadow-sm transition-transform hover:scale-105 z-10">Pendentes: ${naoAtribuidos}</button>`;
             }
+            const containerBadge = document.getElementById('badgeIntervencoesContainer');
+            if(containerBadge) containerBadge.innerHTML = badgesHtml;
         }
 
-        function voltarPreditiva() {
-            ['containerVencidas', 'containerHoje', 'containerAmanha', 'containerDias3', 'containerDias7'].forEach(id => {
-                const el = document.getElementById(id);
-                if(el) el.classList.add('hidden');
-            });
-            document.getElementById('btnVoltarPreditiva').classList.add('hidden'); 
-            if (currentPreditivaMenu === 'programacao') {
-                const divMenuProg = document.getElementById('preditivaProgramacaoMenu');
-                if(divMenuProg) divMenuProg.classList.remove('hidden');
-                document.getElementById('preditivaModalTitle').innerText = "Programação"; 
-                document.getElementById('preditivaModalDesc').innerText = "Selecione a janela de planejamento futuro.";
-            } else if (currentPreditivaMenu === 'hoje') {
-                const divMenuHoje = document.getElementById('preditivaHojeMenu');
-                if(divMenuHoje) divMenuHoje.classList.remove('hidden');
-                document.getElementById('preditivaModalTitle').innerText = "Para Hoje"; 
-                document.getElementById('preditivaModalDesc').innerText = "Selecione o setor para ver os checklists do dia.";
-            }
-        }
-
-        function fecharPreditiva() { document.getElementById('preditivaModal').classList.add('hidden'); }
-
-        function abrirResumoMaquina(maquina, setor, periodicidade) {
-            const statusAtivo = checklistStatus.find(s => normalizar(s.maquina) === normalizar(maquina) && normalizar(s.setor) === normalizar(setor) && normalizar(s.periodicidade) === normalizar(periodicidade));
-            const itensDaMaquina = originalDatabase.filter(i => normalizar(i.maquina) === normalizar(maquina) && normalizar(i.setor) === normalizar(setor) && normalizar(i.periodicidade) === normalizar(periodicidade));
-            const container = document.getElementById('listaResumoMaquina');
-            document.getElementById('tituloResumoMaquina').innerText = `Status: ${maquina}`;
-            document.getElementById('subtituloResumoMaquina').innerText = `Checklist ${periodicidade} · Setor ${setor}`;
-            
-            if(itensDaMaquina.length === 0) {
-                container.innerHTML = `<div class="text-center text-slate-400 py-4 text-sm">Sem itens para exibir.</div>`;
-            } else {
-                container.innerHTML = itensDaMaquina.map(it => {
-                    let badge = `<span class="bg-amber-100 text-amber-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
-                    let info = `<div class="text-[9px] text-slate-400 italic">Nunca verificado.</div>`;
-                    
-                    if (statusAtivo && statusAtivo.itensStatus && statusAtivo.itensStatus[it.item] && statusAtivo.itensStatus[it.item].length > 0) {
-                        const histArray = statusAtivo.itensStatus[it.item];
-                        if(normalizar(periodicidade).includes('diar') || normalizar(periodicidade).includes('intrad')) {
-                            const hojeStr = new Date().toLocaleDateString('pt-BR');
-                            const regsHoje = histArray.filter(h => new Date(h.data).toLocaleDateString('pt-BR') === hojeStr).slice(0, 10);
-                            
-                            if (regsHoje.length > 0) {
-                                const ult = regsHoje[0];
-                                const horas = it.tempoReanalise ? parseFloat(it.tempoReanalise) : 2;
-                                let atrasado = new Date() > new Date(new Date(ult.data).getTime() + (horas * 60 * 60 * 1000));
-                                
-                                if (atrasado) {
-                                    badge = `<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
-                                } else {
-                                    badge = `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
-                                }
-                                
-                                info = `<div class="text-[9px] text-slate-500 font-semibold mt-1.5 space-y-0.5 border-l-2 border-blue-400 pl-2">
-                                        <div class="text-blue-600 font-bold mb-1">Registros de Hoje (${regsHoje.length}/10):</div>
-                                        ${regsHoje.map((h, idx) => {
-                                            let textProb = h.status === "Problema" ? `<span class="text-rose-600 font-bold ml-1 bg-rose-50 px-1 rounded border border-rose-100"><i class="fa-solid fa-circle-xmark"></i> Problema: ${h.obs || "Registrado e encaminhado"}</span>` : `<span class="text-emerald-600 font-bold ml-1"><i class="fa-solid fa-check"></i> OK</span>`;
-                                            return `<div><span class="text-slate-400">${idx+1}º</span> Feito por <span class="text-slate-700">${h.operador}</span> às ${new Date(h.data).toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})} ${textProb}</div>`;
-                                        }).join('')}
-                                       </div>`;
-                            } else {
-                                info = `<div class="text-[9px] text-slate-400 font-medium mt-1"><i class="fa-solid fa-clock text-amber-500"></i> Nenhum registro hoje</div>`;
-                            }
-                        } else {
-                            const ult = histArray[0];
-                            const dateL = new Date(ult.data);
-                            const inter = diasParaPeriodicidade(periodicidade);
-                            const dataProx = new Date(dateL.getFullYear(), dateL.getMonth(), dateL.getDate() + inter);
-                            const hojeZero = new Date(); hojeZero.setHours(0,0,0,0);
-                            
-                            if (dataProx < hojeZero) {
-                                badge = `<span class="bg-rose-100 text-rose-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Atrasado</span>`;
-                            } else {
-                                badge = `<span class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold"><i class="fa-solid fa-check"></i> Verificado</span>`;
-                            }
-                            
-                            let textProb = ult.status === "Problema" ? `<br><span class="text-rose-600 font-bold mt-1 inline-block bg-rose-50 px-1.5 py-0.5 rounded border border-rose-100"><i class="fa-solid fa-circle-xmark"></i> Problema: ${ult.obs || "Falha identificada e encaminhada."}</span>` : ``;
-                            info = `<div class="text-[10px] text-slate-500 font-medium mt-1">Realizado por <span class="font-bold text-slate-700">${ult.operador}</span> em ${dateL.toLocaleDateString('pt-BR')} às ${dateL.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}${textProb}</div>`;
-                        }
-                    }
-                    return `
-                        <div class="bg-white border border-slate-200 p-4 rounded-xl shadow-sm flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                            <div class="space-y-1">
-                                <span class="font-bold text-slate-800 text-sm block">${it.item}</span>
-                                ${info}
-                            </div>
-                            <div class="mt-2 sm:mt-0 flex-shrink-0">${badge}</div>
-                        </div>
-                    `;
-                }).join('');
-            }
-            document.getElementById('resumoMaquinaModal').classList.remove('hidden');
-        }
-        function fecharResumoMaquina() { document.getElementById('resumoMaquinaModal').classList.add('hidden'); }
-
-        async function baixarDadosDaPlanilha() {
-            try {
-                const res = await fetch(`${API_URL}?action=carregarItens`);
-                if (!res.ok) throw new Error();
-                const resJson = await res.json();
-                originalDatabase = resJson.itens || [];
-                checklistStatus = resJson.status || [];
-                equipesData = resJson.equipes || [];
-                chamadosData = resJson.chamados || []; 
-                intervencoesData = resJson.intervencoes || [];
-                maquinasParametrizaveisData = resJson.maquinasParam || []; 
-                popData = resJson.pops || []; 
-                listaTodasMaquinas = resJson.maquinasLista || [];
-                
-                renderSetorCards(); atualizarKPIs();
-            } catch (e) { 
-                showToast("Erro de rede. Modo Offline.", "error"); carregarChecklistMock();
-            }
-        }
-
-        function carregarChecklistMock() {
-            equipesData = [
-                { setor: "Produção", membros: ["Rodrigo", "Claudio"] },
-                { setor: "Manutenção", membros: ["José", "Carlos"] }
-            ];
-            listaTodasMaquinas = ["Robô Prensa - ROB-PR001", "Guilhotina - GUI-001", "Forno de Recozimento Contínuo", "PVD Deposição Física de Vapor - PVD-DE001"];
-            originalDatabase = [
-                { item: "Verificar Oleo Canola", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", tempoReanalise: 2, orientacao: "Lubrificar lateral direita" },
-                { item: "Verificar Desgaste Da Correia", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", orientacao: "" },
-                { item: "Verificar Aperto Dos Parafusos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", orientacao: "" },
-                { item: "Verificar folga nas Engrenagens", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", orientacao: "" },
-                { item: "Verificar e completar Fluidos", maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", orientacao: "" }
-            ];
-            const agora = new Date();
-            const ontem = new Date(agora.getTime() - 36 * 60 * 60 * 1000).toISOString();
-            const preventinaFeitaRecente = new Date(agora.getTime() - 5 * 24 * 60 * 60 * 1000).toISOString();
-            
-            checklistStatus = [
-                { maquina: "Guilhotina - GUI-001", setor: "Manutenção", periodicidade: "Semanal", ultimoRegistro: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", vencido: false,
-                  historico: [{data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", status: "Problema", obs: "Correia desfiando na lateral direita."}],
-                  itensStatus: { "Verificar Oleo Canola": [{ data: preventinaFeitaRecente, operador: "Rodrigo - Manutenção", status: "Problema", obs: "Correia desfiando na lateral direita." }] } 
-                }
-            ];
-            
-            chamadosData = [
-                { id: "OS-1", data: ontem, maquina: "Robô Prensa - ROB-PR001", urgencia: "Alta", defeito: "Faca travou e vazou óleo.", relator: "Rodrigo - Produção", status: "Aberto" }
-            ];
-            
-            intervencoesData = [
-                { id: "INT-1", data: ontem, maquina: "Guilhotina - GUI-001", tipo: "Preventiva de TI", descricao: "Apertar os prisioneiros do motor principal.", responsavel: "José - Manutenção", status: "Fechado", resolucao: "Prisioneiros reapertados e com trava química", dataFechamento: new Date().toISOString(), solucionador: "Carlos - Manutenção" }
-            ];
-            
-            maquinasParametrizaveisData = [ 
-                { nome: "Forno de Recozimento Contínuo" },
-                { nome: "PVD Deposição Física de Vapor - PVD-DE001" } 
-            ]; 
-            
-            popData = [
-                { maquina: "Guilhotina - GUI-001", titulo: "Procedimento de LOTO", descricao: "Passo a passo para bloqueio de energias perigosas antes da manutenção.", link: "https://docs.google.com/" },
-                { maquina: "Robô Prensa", titulo: "Troca de Garra", descricao: "Instruções seguras para a substituição de garras pneumáticas.", link: "https://docs.google.com/" }
-            ];
-            
-            renderSetorCards(); atualizarKPIs();
-        }
-
-        function normalizar(texto) { return String(texto||"").trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); }
-        function matchPeriodicidade(iP, pId) { const n = normalizar(iP); if (pId==="diaria") return n.includes("diar")||n.includes("intrad")||n.includes("turno"); if (pId==="semanal") return n.includes("seman"); if (pId==="quinzenal") return n.includes("quinzen"); if (pId==="mensal") return n.includes("mens")||n.includes("mes"); return n===pId; }
-        function diasParaPeriodicidade(p) { const c = normalizar(p); if (c.includes("diar")||c.includes("intrad")||c.includes("turno")) return 1; if (c.includes("seman")) return 7; if (c.includes("quinzen")) return 15; if (c.includes("mens")||c.includes("mes")) return 30; return 1; }
-        
-        function renderSetorCards() {
-            const container = document.getElementById('setorCards'); if(!container) return;
-            const setores = [...new Set(originalDatabase.map(i => i.setor))];
-            container.innerHTML = setores.map(setor => {
-                const maquinasDoSetor = [...new Set(originalDatabase.filter(i => normalizar(i.setor) === normalizar(setor)).map(i => i.maquina))];
-                let pendentes = 0;
-                maquinasDoSetor.forEach(maq => {
-                    const st = checklistStatus.filter(s => normalizar(s.maquina) === normalizar(maq) && normalizar(s.setor) === normalizar(setor));
-                    if (st.length === 0) pendentes++;
-                    else if (st.some(s => s.vencido)) pendentes++;
-                });
-                const badge = pendentes > 0 ? `<span class="bg-red-100 text-red-700 text-xs px-2.5 py-1 rounded-full font-bold mt-3">${pendentes} pendente(s)</span>` : `<span class="bg-emerald-100 text-emerald-800 text-xs px-2.5 py-1 rounded-full font-bold mt-3">Tudo conforme</span>`;
-                return `<button onclick="selecionarSetor('${setor}')" class="nav-card text-left bg-white border border-slate-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between w-full"><div class="flex items-center gap-3"><div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center"><i class="fa-solid fa-industry text-base"></i></div><h3 class="font-extrabold text-slate-800 text-lg">${setor}</h3></div>${badge}</button>`;
-            }).join('');
-        }
-
+        // =========================================================
+        // FUNÇÕES DO CHECKLIST (SELEÇÃO E REGISTRO)
+        // =========================================================
         function selecionarSetor(setor) {
             selectedSetor = setor;
             document.getElementById('periodoHeaderLabel').innerText = `SETOR: ${setor.toUpperCase()} — SELECIONE A PERIODICIDADE`;
@@ -2811,429 +2358,176 @@ function abrirModalNovaIntervencao() {
             }
         }
 
-        function imprimirChecklistPapel(maquina, periodo) {
-            const printArea = document.getElementById('printArea');
-            const pId = periodo ? normalizar(periodo) : normalizar(selectedPeriodo);
-            const sId = normalizar(selectedSetor); 
-            const filtrados = originalDatabase.filter(x => 
-                normalizar(x.maquina) === normalizar(maquina) && 
-                matchPeriodicidade(x.periodicidade, pId) && 
-                normalizar(x.setor) === sId
-            );
-            if(filtrados.length === 0) {
-                showToast("Não foi possível gerar a impressão (sem itens).", "error");
+        // =========================================================
+        // FUNÇÕES DO PAINEL GERENCIAL E GRÁFICOS (RELATÓRIOS)
+        // =========================================================
+        function formatarDiferencaTempo(diffMs) {
+            if (diffMs < 0 || isNaN(diffMs)) return "-";
+            const diffHoras = diffMs / (1000 * 60 * 60);
+            if (diffHoras < 1) {
+                const min = Math.round(diffMs / (1000 * 60));
+                return `${min} min`;
+            } else if (diffHoras < 24) {
+                return `${diffHoras.toFixed(1)}h`;
+            } else {
+                const dias = Math.floor(diffHoras / 24);
+                const horasRestantes = Math.round(diffHoras % 24);
+                return `${dias}d ${horasRestantes}h`;
+            }
+        }
+
+        function renderizarRelatorioAvancado() {
+            const dataInicioValue = document.getElementById('filtroDataInicio').value;
+            const dataFimValue = document.getElementById('filtroDataFim').value;
+            
+            let dtInicio = new Date(dataInicioValue + "T00:00:00");
+            let dtFim = new Date(dataFimValue + "T23:59:59");
+            
+            const maqFiltro = document.getElementById('filtroRelMaquina').value;
+            const tipoFiltro = document.getElementById('filtroRelTipo').value;
+            const statusFiltro = document.getElementById('filtroRelStatus').value;
+
+            let baseUnificada = [];
+            
+            if (tipoFiltro === "todos" || tipoFiltro === "os") {
+                chamadosData.forEach(c => baseUnificada.push({
+                    id: c.id, tipoBase: "Chamado", dataAbertura: c.data, maquina: c.maquina, 
+                    status: c.status, relator: c.relator, defeito: c.defeito, urgencia: c.urgencia,
+                    dataFechamento: c.dataFechamento, solucionador: c.solucionador, resolucao: c.resolucao, atribuido: ""
+                }));
+            }
+            if (tipoFiltro === "todos" || tipoFiltro === "int") {
+                intervencoesData.forEach(i => baseUnificada.push({
+                    id: i.id, tipoBase: "Intervenção", dataAbertura: i.data, maquina: i.maquina, 
+                    status: i.status, relator: i.responsavel, defeito: i.descricao, urgencia: i.tipo,
+                    dataFechamento: i.dataFechamento, solucionador: i.solucionador, resolucao: i.resolucao, atribuido: i.atribuido || ""
+                }));
+            }
+
+            let dadosFiltrados = baseUnificada.filter(item => {
+                let itemDate = new Date(item.dataAbertura);
+                let passaData = true;
+                if (!isNaN(dtInicio.getTime()) && !isNaN(dtFim.getTime()) && !isNaN(itemDate.getTime())) {
+                    passaData = (itemDate >= dtInicio) && (itemDate <= dtFim);
+                }
+                let passaMaq = (maqFiltro === "todas" || item.maquina === maqFiltro);
+                let passaStatus = (statusFiltro === "todos" || item.status === statusFiltro);
+                return passaData && passaMaq && passaStatus;
+            });
+
+            let qtdFechados = 0;
+            let somaTemposMs = 0;
+            let maqContagem = {};
+            let tecnicoDesempenho = {};
+
+            dadosFiltrados.forEach(item => {
+                maqContagem[item.maquina] = (maqContagem[item.maquina] || 0) + 1;
+                
+                if (item.status === "Fechado" && item.solucionador && item.dataFechamento) {
+                    qtdFechados++;
+                    const diffMs = new Date(item.dataFechamento) - new Date(item.dataAbertura);
+                    if(!isNaN(diffMs) && diffMs >= 0) {
+                        somaTemposMs += diffMs;
+                        const tecnicoStr = item.solucionador.split(' - ')[0];
+                        if (!tecnicoDesempenho[tecnicoStr]) {
+                            tecnicoDesempenho[tecnicoStr] = { resolvidos: 0, tempoMs: 0 };
+                        }
+                        tecnicoDesempenho[tecnicoStr].resolvidos++;
+                        tecnicoDesempenho[tecnicoStr].tempoMs += diffMs;
+                    }
+                }
+            });
+
+            const abertosOS = dadosFiltrados.filter(c => c.status !== "Fechado").length;
+            document.getElementById('kpiRelTotal').innerText = dadosFiltrados.length;
+            document.getElementById('kpiRelAbertos').innerText = abertosOS;
+            document.getElementById('kpiRelTempoMedio').innerText = qtdFechados > 0 ? formatarDiferencaTempo(somaTemposMs / qtdFechados) : "-";
+
+            let topMaq = "-"; let maxCount = 0;
+            for (let m in maqContagem) { if (maqContagem[m] > maxCount) { maxCount = maqContagem[m]; topMaq = m; } }
+            document.getElementById('kpiRelTopMaquina').innerText = topMaq.split(' - ')[0];
+
+            const tbodyDesempenho = document.getElementById('tabelaDesempenhoTbody');
+            const tecArray = Object.entries(tecnicoDesempenho).sort((a, b) => b[1].resolvidos - a[1].resolvidos);
+            
+            if (tecArray.length === 0) {
+                tbodyDesempenho.innerHTML = `<tr><td colspan="4" class="p-4 text-center text-slate-400">Sem atividades fechadas no período.</td></tr>`;
+            } else {
+                tbodyDesempenho.innerHTML = tecArray.map(([nome, dados]) => {
+                    const mediaMs = dados.tempoMs / dados.resolvidos;
+                    return `
+                        <tr>
+                            <td class="p-3 font-bold text-slate-700"><i class="fa-solid fa-user text-indigo-400 mr-1.5"></i> ${nome}</td>
+                            <td class="p-3 text-center font-bold text-blue-600">${dados.resolvidos}</td>
+                            <td class="p-3 text-center text-slate-600 font-mono">${formatarDiferencaTempo(dados.tempoMs)}</td>
+                            <td class="p-3 text-center text-emerald-600 font-bold font-mono">${formatarDiferencaTempo(mediaMs)}</td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            const sortedMaq = Object.entries(maqContagem).sort((a,b) => b[1] - a[1]).slice(0,5);
+            const ctxTop = document.getElementById('graficoTopMaquinas').getContext('2d');
+            if (chartTopMaquinas) chartTopMaquinas.destroy();
+            chartTopMaquinas = new Chart(ctxTop, {
+                type: 'doughnut',
+                data: {
+                    labels: sortedMaq.map(m => m[0].substring(0, 15) + '...'),
+                    datasets: [{
+                        data: sortedMaq.map(m => m[1]),
+                        backgroundColor: ['#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#14b8a6'],
+                        borderWidth: 2
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'right', labels: { boxWidth: 12, font: { size: 9 } } } } }
+            });
+
+            const tbodyRelatorio = document.getElementById('tabelaRelatorioTbody');
+            dadosFiltrados.sort((a,b) => new Date(b.dataAbertura) - new Date(a.dataAbertura));
+
+            if (dadosFiltrados.length === 0) {
+                tbodyRelatorio.innerHTML = `<tr><td colspan="5" class="p-6 text-center text-slate-400">Nenhum registro para os filtros selecionados.</td></tr>`;
                 return;
             }
-            const periodicidadeStr = filtrados[0].periodicidade.toUpperCase();
-            let numCols = 7;
-            let stepDays = 1;
-            let labelTopo = "DIAS DA SEMANA";
-            if (pId !== 'diaria') {
-                numCols = 4;
-                stepDays = diasParaPeriodicidade(pId);
-                if (pId === 'semanal') labelTopo = "PRÓXIMAS SEMANAS";
-                else if (pId === 'quinzenal') labelTopo = "PRÓXIMAS QUINZENAS";
-                else if (pId === 'mensal') labelTopo = "PRÓXIMOS MESES";
-                else labelTopo = "PRÓXIMAS DATAS";
-            }
-            const dates = Array.from({length: numCols}, (_, i) => {
-                const d = new Date();
-                d.setDate(d.getDate() + (i * stepDays));
-                return d.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'});
-            });
-            const colWidth = 82 / numCols; 
-            const colspanValue = numCols;
-            let tableHtml = `
-            <style>
-                .t-print { width: 100%; border-collapse: collapse; font-family: Arial, sans-serif; font-size: 10px; color: #000; }
-                .t-print td { border: 1.5px solid #000; padding: 4px 6px; vertical-align: middle; }
-                .t-dark { background-color: #0b132b !important; color: #ffffff !important; font-weight: bold; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                .t-light { font-weight: bold; background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                .c-box { display: inline-block; width: 10px; height: 10px; border: 1px solid #000; margin-right: 4px; vertical-align: middle; background-color: #fff; }
-                .item-block { page-break-inside: avoid; break-inside: avoid; }
-                @media print {
-                    @page { size: landscape; margin: 8mm; }
-                    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+            tbodyRelatorio.innerHTML = dadosFiltrados.map(item => {
+                let badgeTipo = item.tipoBase === "Chamado" ? "bg-rose-100 text-rose-700" : "bg-orange-100 text-orange-700";
+                let badgeStatus = item.status === "Fechado" ? `<span class="text-emerald-600 font-bold"><i class="fa-solid fa-check"></i> Resolvido</span>` : `<span class="text-amber-500 font-bold"><i class="fa-solid fa-clock"></i> Pendente</span>`;
+                
+                let dtAbre = new Date(item.dataAbertura).toLocaleString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+                let dtFecha = item.dataFechamento ? new Date(item.dataFechamento).toLocaleString('pt-BR', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'}) : "---";
+                
+                let tempoStr = "Em andamento";
+                if (item.status === "Fechado" && item.dataFechamento) {
+                    tempoStr = formatarDiferencaTempo(new Date(item.dataFechamento) - new Date(item.dataAbertura));
                 }
-            </style>
-            <div style="font-size: 10px; margin-bottom: 15px; font-family: Arial; display: flex; justify-content: space-between; align-items: flex-start;">
-                <div style="line-height: 1.5; text-align: left;">
-                    <div style="font-size: 14px; font-weight: bold; color: #0f172a; margin-bottom: 2px;">DOCUMENTO: CHECKLIST MANUTENÇÃO / PRODUÇÃO</div>
-                    <div style="font-size: 11px; font-weight: bold; color: #475569;">SETOR: ${selectedSetor.toUpperCase()}</div>
-                    <div style="font-size: 11px; font-weight: bold; color: #475569;">PERIODICIDADE: ${periodicidadeStr}</div>
-                    <div style="font-size: 10px; font-weight: bold; color: #e11d48; margin-top: 8px;">⚠️ EM CASO DE PROBLEMA, REGISTRE NO VERSO INDICANDO A MÁQUINA, O ITEM, SEU NOME E O PROBLEMA.</div>
-                </div>
-                <div style="text-align: right;">
-                    <div style="color: #64748b; margin-bottom: 8px;">Data de Impressão: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'})}</div>
-                    <div style="font-size: 16px; font-weight: bold; text-transform: uppercase; color: #0f172a;">${maquina}</div>
-                </div>
-            </div>
-            <table class="t-print">
-                <thead>
-                    <tr>
-                        <td class="t-dark" style="width: 18%;">${labelTopo}</td>
-                        ${dates.map(d => `<td class="t-light" style="text-align: center; width: ${colWidth}%; font-size: 11px;">${d}</td>`).join('')}
-                    </tr>
-                </thead>
-            `;
-            filtrados.forEach(item => {
-                let obsText = item.orientacao ? item.orientacao : "";
-                tableHtml += `
-                <tbody class="item-block">
-                    <tr>
-                        <td class="t-light" style="font-size: 11px; text-transform: uppercase;">ITEM</td>
-                        <td colspan="${colspanValue}" style="font-size: 11px; font-weight: bold;">
-                            ${item.item}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="t-light">Operador / Manutentor</td>
-                        ${dates.map(() => `<td></td>`).join('')}
-                    </tr>
-                    <tr>
-                        <td class="t-light">Status</td>
-                        ${dates.map(() => `
-                            <td style="text-align: center; padding: 8px 2px;">
-                                <div style="margin-bottom: 6px;"><span class="c-box"></span> OK</div>
-                                <div><span class="c-box"></span> Problema</div>
-                            </td>
-                        `).join('')}
-                    </tr>
-                    <tr style="border-bottom: 2px solid #000;">
-                        <td class="t-light" style="vertical-align: middle; padding: 4px 6px;">
-                            Orientação
-                        </td>
-                        <td colspan="${colspanValue}" style="border: 1px solid black; padding: 6px; vertical-align: top; font-weight: normal; font-size: 10px; font-style: italic; color: #334155; height: 38px;">
-                            ${obsText}
-                        </td>
-                    </tr>
-                    <tr style="border: none !important;">
-                        <td colspan="${colspanValue + 1}" style="height: 15px; border: none !important; background: white !important;"></td>
-                    </tr>
-                </tbody>
+
+                let quemAbriu = `Aberta por: <span class="font-semibold text-slate-700">${item.relator}</span>`;
+                if (item.atribuido) {
+                    quemAbriu += `<br><span class="text-[9px] mt-1 inline-block text-blue-600 font-bold"><i class="fa-solid fa-thumbtack"></i> Atribuído: ${item.atribuido}</span>`;
+                }
+
+                return `
+                <tr class="hover:bg-slate-50 transition-colors border-b last:border-0 border-slate-100">
+                    <td class="p-4 align-top">
+                        <span class="font-bold text-slate-800 block">${item.id}</span>
+                        <span class="${badgeTipo} text-[9px] px-2 py-0.5 rounded font-bold uppercase mt-1 inline-block">${item.tipoBase}</span>
+                    </td>
+                    <td class="p-4 align-top font-bold text-slate-700 text-[11px]">${item.maquina}</td>
+                    <td class="p-4 align-top">
+                        <div class="text-[10px] text-slate-500 mb-1"><i class="fa-regular fa-calendar text-slate-400"></i> ${dtAbre} | ${quemAbriu}</div>
+                        <p class="text-slate-700 font-medium">"${item.defeito}"</p>
+                        <span class="text-[9px] bg-slate-100 border border-slate-200 text-slate-500 px-1.5 py-0.5 rounded mt-1.5 inline-block">Classe: ${item.urgencia}</span>
+                    </td>
+                    <td class="p-4 align-top">
+                        <div class="text-[10px] text-slate-500 mb-1">${badgeStatus} ${item.dataFechamento ? `| Em: ${dtFecha}` : ''}</div>
+                        ${item.status === "Fechado" ? `<p class="text-emerald-700 font-medium">"${item.resolucao}"</p><span class="text-[9px] text-slate-500 mt-1.5 inline-block">Técnico que Fechou: <span class="font-bold text-slate-800">${item.solucionador}</span></span>` : `<span class="italic text-slate-400">Aguardando intervenção...</span>`}
+                    </td>
+                    <td class="p-4 align-middle text-center font-mono font-bold text-slate-600">${tempoStr}</td>
+                </tr>
                 `;
-            });
-            tableHtml += `</table>`;
-            printArea.innerHTML = tableHtml;
-            setTimeout(() => { window.print(); }, 200);
-        }
-
-        async function baixarAlmoxarifadoDaPlanilha() {
-            if (!API_URL) return;
-            try {
-                const res = await fetch(`${API_URL}?action=carregarAlmoxarifado`);
-                if (!res.ok) throw new Error();
-                const data = await res.json();
-                if (Array.isArray(data)) {
-                    almoxarifadoData = data.map(item => ({ id: item.id, nome: item.item, categoria: item.categoria, quantidade: item.quantidade, minimo: item.estoqueMinimo, unidade: item.unidade, local: item.localizacao, foto: item.imagem, descricao: item.descricao }));
-                    renderAlmoxarifadoLista();
-                }
-            } catch(e) {}
-        }
-
-        function renderAlmoxarifadoLista() {
-            const tbody = document.getElementById('almoxarifadoTbody'); if(!tbody) return;
-            const catFilter = document.getElementById('almoxCategoriaFilter').value;
-            const search = document.getElementById('almoxSearch').value.toLowerCase();
-            const categorias = [...new Set(almoxarifadoData.map(i => i.categoria))].sort((a, b) => a.localeCompare(b));
-            const selectCat = document.getElementById('almoxCategoriaFilter');
-            selectCat.innerHTML = '<option value="">Todas as Famílias</option>' +  categorias.map(c => `<option value="${c}">${c}</option>`).join('');
-            selectCat.value = catFilter;
-            const filtrados = almoxarifadoData.filter(item => (catFilter === "" || item.categoria === catFilter) && ((item.nome||"").toLowerCase().includes(search) || (item.id||"").toLowerCase().includes(search) || (item.categoria||"").toLowerCase().includes(search)));
-            tbody.innerHTML = filtrados.map(item => {
-                const badgeEstoque = item.quantidade <= item.minimo ? `<span class="bg-red-50 text-red-600 border border-red-100 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>` : `<span class="bg-slate-50 text-slate-700 border border-slate-200 text-[10px] px-2 py-0.5 rounded font-bold">${item.quantidade} ${item.unidade}</span>`;
-                const imgTag = item.foto && item.foto.trim() !== "" ? `<img src="${item.foto}" onerror="this.onerror=null; this.outerHTML='<div class=\\'h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400\\'><i class=\\'fa-solid fa-image\\'></i></div>';" onclick="visualizarImagem('${item.foto}')" class="h-10 w-10 object-cover rounded-lg border border-slate-200 cursor-pointer shadow-sm">` : `<div class="h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border border-slate-200 text-slate-400"><i class="fa-solid fa-camera"></i></div>`;
-                return `<tr class="border-b last:border-0 hover:bg-slate-50/25"><td class="p-4">${imgTag}</td><td class="p-4 font-mono text-xs text-slate-500 font-sans">${item.id}</td><td class="p-4"><span class="block font-bold text-slate-800 text-xs">${item.nome}</span>${item.descricao ? `<span class="block text-[10px] text-slate-400 italic font-medium mt-0.5">${item.descricao}</span>` : ""}</td><td class="p-4 text-xs text-slate-500">${item.categoria}</td><td class="p-4 text-xs font-sans">${badgeEstoque}</td><td class="p-4 text-xs text-slate-500">${item.local || "-"}</td><td class="p-4 font-sans text-center"><div class="flex gap-2 justify-center"><button onclick="abrirModalMovimentacao('${item.id}')" class="text-emerald-600 p-2 hover:bg-emerald-50 rounded-lg"><i class="fa-solid fa-arrows-rotate text-emerald-600"></i></button><button onclick="editarItemAlmox('${item.id}')" class="text-blue-600 p-2 hover:bg-blue-50 rounded-lg"><i class="fa-solid fa-pencil text-blue-600"></i></button></div></td></tr>`;
             }).join('');
         }
-
-        function adicionarLinhaLocalizacao(valor = "") {
-            const container = document.getElementById('localizacaoInputsContainer');
-            const div = document.createElement('div'); div.className = "flex gap-2";
-            div.innerHTML = `<input type="text" class="localizacao-endereco-inp w-full bg-white border border-slate-200 rounded-xl p-3 text-xs focus:ring-blue-500 text-slate-850" value="${valor}"><button type="button" onclick="removerLinhaLocalizacao(this)" class="px-3 bg-slate-50 border border-slate-200 rounded-xl text-slate-400 hover:text-red-500 text-xs"><i class="fa-solid fa-xmark"></i></button>`;
-            container.appendChild(div);
-        }
-
-        function removerLinhaLocalizacao(botao) {
-            const c = document.getElementById('localizacaoInputsContainer');
-            if(c.children.length > 1) botao.closest('.flex').remove();
-            else botao.closest('.flex').querySelector('input').value = "";
-        }
-
-        function abrirModalCadastroItem() {
-            document.getElementById('editAlmoxIndex').value = ""; document.getElementById('novoItemNome').value = ""; document.getElementById('novoItemCategoria').value = ""; document.getElementById('novoItemQuantidade').value = "0"; document.getElementById('novoItemMinimo').value = "0"; document.getElementById('novoItemUnidade').value = "un"; document.getElementById('novoItemDescricao').value = "";
-            document.getElementById('localizacaoInputsContainer').innerHTML = ""; adicionarLinhaLocalizacao("");
-            removerFotoAnexada(); document.getElementById('cadastroItemModal').classList.remove('hidden');
-        }
-
-        function fecharModalCadastroItem() { document.getElementById('cadastroItemModal').classList.add('hidden'); }
-
-        function processarFotoItem(e) {
-            const file = e.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(evt) {
-                const img = new Image();
-                img.onload = function() {
-                    const canvas = document.createElement('canvas'); let w = img.width, h = img.height;
-                    if (w > h) { if (w > 800) { h *= 800 / w; w = 800; } } else { if (h > 800) { w *= 800 / h; h = 800; } }
-                    canvas.width = w; canvas.height = h; canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                    fotoAnexadaBase64 = canvas.toDataURL('image/jpeg', 0.8);
-                    const previewImg = document.getElementById('fotoPreviewImg');
-                    previewImg.src = fotoAnexadaBase64; previewImg.onerror = null; 
-                    document.getElementById('fotoPreviewContainer').classList.remove('hidden');
-                };
-                img.src = evt.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function removerFotoAnexada() { fotoAnexadaBase64 = ""; document.getElementById('fotoPreviewImg').src = ""; document.getElementById('fotoPreviewContainer').classList.add('hidden'); document.getElementById('novoItemImagem').value = ""; }
-
-        async function confirmarCadastroItem() {
-            const nome = document.getElementById('novoItemNome').value.trim(); const categoria = document.getElementById('novoItemCategoria').value.trim(); const quantidade = parseInt(document.getElementById('novoItemQuantidade').value) || 0; const minimo = parseInt(document.getElementById('novoItemMinimo').value) || 0; const unidade = document.getElementById('novoItemUnidade').value.trim() || "un"; const descricao = document.getElementById('novoItemDescricao').value.trim(); const editId = document.getElementById('editAlmoxIndex').value;
-            const enderecosInput = Array.from(document.querySelectorAll('.localizacao-endereco-inp')).map(i => i.value.trim()).filter(Boolean);
-            if (!nome || !categoria) { showToast("Nome e Família são obrigatórios.", "error"); return; }
-            let base64Clean = "", mimeType = "", isNovaImagem = false;
-            if (fotoAnexadaBase64 && fotoAnexadaBase64.startsWith("data:")) { base64Clean = fotoAnexadaBase64.split(",")[1]; mimeType = fotoAnexadaBase64.split(";")[0].split(":")[1]; isNovaImagem = true; }
-            const dadosObj = { id: editId || "", item: nome, categoria, unidade, quantidade, estoqueMinimo: minimo, enderecos: enderecosInput, descricao, imagemUrl: isNovaImagem ? "" : fotoAnexadaBase64, imagemBase64: base64Clean, mimeType: mimeType };
-            if (API_URL) {
-                showToast("Sincronizando...", "info");
-                try {
-                    await fetch(API_URL, { method: 'POST', mode: 'no-cors', body: JSON.stringify({ tipo: editId ? "editarItemEstoque" : "cadastroItemEstoque", dados: dadosObj }) });
-                    showToast("Sincronizado!"); setTimeout(() => baixarAlmoxarifadoDaPlanilha(), 1500); 
-                } catch(err) { showToast("Salvo apenas localmente.", "error"); }
-            }
-            if (editId) {
-                const item = almoxarifadoData.find(i => i.id == editId);
-                if (item) { item.nome = nome; item.categoria = categoria; item.local = enderecosInput.join(" | "); item.quantidade = quantidade; item.minimo = minimo; item.unidade = unidade; item.descricao = descricao; if (isNovaImagem) item.foto = fotoAnexadaBase64; }
-            } else { almoxarifadoData.push({ id: "IT" + Date.now(), nome, categoria, local: enderecosInput.join(" | "), quantidade, minimo, unidade, descricao, foto: isNovaImagem ? fotoAnexadaBase64 : "" }); }
-            fecharModalCadastroItem(); renderAlmoxarifadoLista();
-        }
-
-        function editarItemAlmox(id) {
-            const item = almoxarifadoData.find(i => i.id == id); if (!item) return;
-            document.getElementById('editAlmoxIndex').value = id; document.getElementById('novoItemNome').value = item.nome; document.getElementById('novoItemCategoria').value = item.categoria; document.getElementById('novoItemQuantidade').value = item.quantidade; document.getElementById('novoItemMinimo').value = item.minimo; document.getElementById('novoItemUnidade').value = item.unidade; document.getElementById('novoItemDescricao').value = item.descricao || "";
-            document.getElementById('localizacaoInputsContainer').innerHTML = "";
-            const enderecos = item.local ? item.local.split("|").map(s => s.trim()) : [""];
-            enderecos.forEach(end => adicionarLinhaLocalizacao(end));
-            if (item.foto && item.foto.trim() !== "") {
-                fotoAnexadaBase64 = item.foto; const pImg = document.getElementById('fotoPreviewImg'); pImg.src = item.foto;
-                pImg.onerror = function() { this.onerror=null; this.outerHTML='<div class="h-10 w-10 bg-slate-100 flex items-center justify-center rounded-lg border text-slate-400"><i class="fa-solid fa-image"></i></div>'; };
-                document.getElementById('fotoPreviewContainer').classList.remove('hidden');
-            } else { removerFotoAnexada(); }
-            document.getElementById('cadastroItemModal').classList.remove('hidden');
-        }
-
-        function abrirModalMovimentacao(preSelectedId = "") {
-            const select = document.getElementById('movItemSelect');
-            select.innerHTML = almoxarifadoData.map(i => `<option value="${i.id}">${i.nome} (${i.quantidade} ${i.unidade})</option>`).join('');
-            if (preSelectedId) select.value = preSelectedId;
-            document.getElementById('movResponsavel').innerHTML = gerarOptionsEquipes('manutencao');
-            atualizarInfoItemMov(); document.getElementById('movimentacaoModal').classList.remove('hidden');
-        }
-
-        function fecharModalMovimentacao() { document.getElementById('movimentacaoModal').classList.add('hidden'); }
-
-        function atualizarInfoItemMov() {
-            const item = almoxarifadoData.find(i => i.id == document.getElementById('movItemSelect').value);
-            if (item) { document.getElementById('movItemDescText').innerText = item.descricao || "Sem descrição"; document.getElementById('movItemLocalText').innerText = item.local || "Sem endereço"; }
-        }
-
-        function visualizarImagemMov() {
-            const item = almoxarifadoData.find(i => i.id == document.getElementById('movItemSelect').value);
-            if (item && item.foto && item.foto.trim() !== "") visualizarImagem(item.foto); else showToast("Sem imagem.", "info");
-        }
-
-        function editarItemMov() { fecharModalMovimentacao(); editarItemAlmox(document.getElementById('movItemSelect').value); }
-
-        async function confirmarMovimentacao() {
-            const id = document.getElementById('movItemSelect').value; const tipo = document.getElementById('movTipo').value; const quantidade = parseInt(document.getElementById('movQuantidade').value) || 0; const responsavel = document.getElementById('movResponsavel').value.trim(); const motivo = document.getElementById('movMotivo').value.trim();
-            const item = almoxarifadoData.find(i => i.id == id); if (!item) return;
-            if (quantidade <= 0 || !responsavel) { showToast("Qtd e Responsável são obrigatórios.", "error"); return; }
-            let novaQuantidade = item.quantidade;
-            if (tipo === "Saída") { if (item.quantidade < quantidade) { showToast("Quantidade insuficiente.", "error"); return; } novaQuantidade -= quantidade; } else { novaQuantidade += quantidade; }
-            if (API_URL) {
-                showToast("Registrando...", "info");
-                try {
-                    await fetch(API_URL, { method: "POST", mode: "no-cors", body: JSON.stringify({ tipo: "movimentacao", dados: { id: item.id, item: item.nome, tipo, quantidade, responsavel, motivo } }) });
-                    showToast("Registro efetuado!");
-                } catch(e) { showToast("Salvo localmente.", "error"); }
-            }
-            item.quantidade = novaQuantidade; renderAlmoxarifadoLista(); fecharModalMovimentacao();
-        }
-
-        function renderPOPs() {
-            const container = document.getElementById('popsContainer'); 
-            const maqFilter = document.getElementById('popMaquinaFilter').value; 
-            const search = document.getElementById('popSearch').value.toLowerCase();
-            
-            const filtrados = popData.filter(p => 
-                (maqFilter === "" || p.maquina === maqFilter) && 
-                (p.titulo.toLowerCase().includes(search) || p.descricao.toLowerCase().includes(search))
-            );
-            
-            if (filtrados.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10 font-medium">Nenhum POP encontrado. Verifique se a aba "POPs" está preenchida na planilha.</div>`;
-                return;
-            }
-
-            container.innerHTML = filtrados.map(p => `
-                <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <div class="flex justify-between items-start mb-3">
-                            <span class="bg-amber-100 text-amber-700 text-[9px] font-bold px-2.5 py-1 rounded uppercase tracking-wider">${p.maquina}</span>
-                            <div class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 border border-slate-100"><i class="fa-solid fa-file-word"></i></div>
-                        </div>
-                        <h4 class="font-bold text-slate-800 text-sm mb-2 leading-tight">${p.titulo}</h4>
-                        <p class="text-[11px] text-slate-500 leading-relaxed mb-4 line-clamp-3">${p.descricao || 'Sem descrição.'}</p>
-                    </div>
-                    <a href="${p.link}" target="_blank" class="w-full bg-[#0b132b] hover:bg-slate-800 text-white text-[11px] font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all shadow-sm">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i> Abrir Documento
-                    </a>
-                </div>
-            `).join('');
-        }
-
-        function formatarTempo(totalSegundos) {
-            if (!isFinite(totalSegundos) || totalSegundos < 0) return "00:00:00";
-            const h = Math.floor(totalSegundos / 3600);
-            const m = Math.floor((totalSegundos % 3600) / 60);
-            const s = Math.round(totalSegundos % 60);
-            return `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        function calcularParametrosForno() {
-            const espessura = parseFloat(document.getElementById('fornoEspessura').value) || 0.50; 
-            const freq = parseFloat(document.getElementById('fornoFrequencia').value) || 0; 
-            const compPeca = parseFloat(document.getElementById('fornoPecaComprimento').value) || 0; 
-            const espacamento = parseFloat(document.getElementById('fornoEspacamento').value) || 0; 
-            const gas = parseFloat(document.getElementById('fornoGas').value) || 0;
-            const material = document.getElementById('fornoMaterial').value;
-            
-            const b1 = parseFloat(document.getElementById('fornoB1').value) || 0;
-            const b2 = parseFloat(document.getElementById('fornoB2').value) || 0;
-            const b3 = parseFloat(document.getElementById('fornoB3').value) || 0;
-            const b4 = parseFloat(document.getElementById('fornoB4').value) || 0;
-            const b5 = parseFloat(document.getElementById('fornoB5').value) || 0;
-            const tempMedia = (b1 + b2 + b3 + b4 + b5) / 5;
-            
-            document.getElementById('valTempMedia').innerText = Math.round(tempMedia) + ' °C';
-            
-            const v_m_s = freq > 0 ? (freq / 32) * (1 / 64) : 0;
-            const v_m_min = v_m_s * 60;
-            const v_m_h = v_m_min * 60; 
-            
-            const compTotalPeca = (compPeca + espacamento) / 1000;
-            const tempoEsteiraSegundos = v_m_s > 0 ? 28.5 / v_m_s : 0; 
-            const tempoCicloSegundos = v_m_s > 0 ? compTotalPeca / v_m_s : 0; 
-            
-            const pecasHora = tempoCicloSegundos > 0 ? (3600 / tempoCicloSegundos) : 0;
-            const pecasTurno = pecasHora * 12;
-            const pecasDia = pecasHora * 24;
-            
-            document.getElementById('fornoVelocidade').innerText = v_m_h.toFixed(2) + ' m/h'; 
-            document.getElementById('fornoTempoTotal').innerText = formatarTempo(tempoEsteiraSegundos);
-            document.getElementById('fornoTempoCiclo').innerText = formatarTempo(tempoCicloSegundos);
-            document.getElementById('fornoPecasHora').innerText = Math.floor(pecasHora);
-            document.getElementById('fornoPecasTurno').innerText = Math.floor(pecasTurno);
-            document.getElementById('fornoPecasDia').innerText = Math.floor(pecasDia);
-            
-            renderVisualEsteira(compPeca, espacamento, compTotalPeca);
-            
-            const fbBox = document.getElementById('fornoFeedbackBox');
-            const fbIcon = document.getElementById('fornoFeedbackIcon');
-            const fbTitle = document.getElementById('fornoFeedbackTitle');
-            const fbText = document.getElementById('fornoFeedbackText');
-            
-            const nomeMaterial = material === 'aco-304' ? 'Inox 304' : 'Inox Série 200 (J1-J5)';
-            
-            const fatorEspessura = espessura / 0.50;
-            let freqIdealMax = Math.round(40 / fatorEspessura);
-            let freqIdealMin = Math.round(30 / fatorEspessura);
-            
-            if (freqIdealMax > 60) freqIdealMax = 60;
-            if (freqIdealMin < 10) freqIdealMin = 10;
-
-            let tempBaseMin = material === 'aco-304' ? 1050 : 1040;
-            if (espessura >= 1.00) tempBaseMin += 10;
-            if (espessura >= 2.00) tempBaseMin += 15;
-            const tempIdealMax = tempBaseMin + 40;
-
-            const gasIdeal = material === 'aco-304' ? 40 : 45;
-
-            const sugestaoHtm = `<br><br><span class="block mt-2 pt-3 border-t border-blue-200/50"><strong>💡 Sugestão para chapa de ${espessura.toFixed(2)} mm (${nomeMaterial}):</strong> Recomendamos utilizar Gás a partir de <strong>${gasIdeal} m³/h</strong>, Frequência entre <strong>${freqIdealMin} e ${freqIdealMax} Hz</strong>, e Temperatura Média entre <strong>${tempBaseMin}°C e ${tempIdealMax}°C</strong>.</span>`;
-            
-            fbBox.className = "p-6 rounded-2xl shadow-sm flex items-start gap-4 transition-all duration-300 border ";
-            
-            if (gas < 30) {
-                fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
-                fbIcon.className = "fa-solid fa-cloud-showers-heavy text-rose-600 mt-1 text-3xl";
-                fbTitle.innerText = "Risco Crítico de Oxidação (Cubas Pretas)";
-                fbText.innerHTML = `A vazão de ${gas} m³/h não gera pressão positiva suficiente contra a porta de saída. O Oxigênio externo vai invadir a zona de resfriamento e oxidar severamente as peças.` + sugestaoHtm;
-            } else if (tempMedia > 1100) {
-                fbBox.className += "bg-rose-50 border-rose-200 text-rose-900";
-                fbIcon.className = "fa-solid fa-fire text-rose-600 mt-1 text-3xl";
-                fbTitle.innerText = "Excesso de Temperatura (Limite Máx: 1100°C)";
-                fbText.innerHTML = `A temperatura de ${Math.round(tempMedia)}°C rompe o limite operacional recomendado. Risco de fragilidade e derretimento das bordas da chapa de ${espessura.toFixed(2)}mm.` + sugestaoHtm;
-            } else if (tempMedia < (tempBaseMin - 15)) {
-                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-temperature-arrow-down text-amber-600 mt-1 text-3xl";
-                fbTitle.innerText = "Recozimento Incompleto (Risco de Estourar na Prensa)";
-                fbText.innerHTML = `Com média de ${Math.round(tempMedia)}°C, a chapa de ${espessura.toFixed(2)}mm (${nomeMaterial}) sairá encruada e com alto risco de rachar no estampo.` + sugestaoHtm;
-            } else if (freq > (freqIdealMax + 2)) {
-                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-gauge-high text-amber-600 mt-1 text-3xl";
-                fbTitle.innerText = "Alerta: Tempo de Encharque Reduzido";
-                fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz gera um tempo de permanência muito curto (${formatarTempo(tempoEsteiraSegundos)}) para a espessura de ${espessura.toFixed(2)}mm absorver completamente o calor.` + sugestaoHtm;
-            } else if (freq < (freqIdealMin - 5) && freq > 0) {
-                fbBox.className += "bg-amber-50 border-amber-200 text-amber-900";
-                fbIcon.className = "fa-solid fa-gauge-simple text-amber-600 mt-1 text-3xl";
-                fbTitle.innerText = "Alerta: Velocidade Lenta Demais";
-                fbText.innerHTML = `A frequência de ${freq.toFixed(1)} Hz gera um encharque excessivo para a chapa de ${espessura.toFixed(2)}mm, reduzindo drasticamente a produtividade e causando granulação do metal.` + sugestaoHtm;
-            } else if (tempMedia >= tempBaseMin && tempMedia <= tempIdealMax && freq >= freqIdealMin && freq <= freqIdealMax && gas >= gasIdeal) {
-                fbBox.className += "bg-blue-50 border-blue-200 text-blue-900";
-                fbIcon.className = "fa-solid fa-award text-blue-600 mt-1 text-3xl";
-                fbTitle.innerText = "Parâmetros Validados (Padrão Ouro)";
-                fbText.innerHTML = `Setup PERFEITO para <strong>${nomeMaterial}</strong> (${espessura.toFixed(2)}mm)! O encharque (${formatarTempo(tempoEsteiraSegundos)}) e o fluxo de H₂ estão ideais. As cubas sairão recristalizadas, flexíveis e brilhantes.`;
-            } else {
-                fbBox.className += "bg-emerald-50 border-emerald-200 text-emerald-900";
-                fbIcon.className = "fa-solid fa-check-double text-emerald-600 mt-1 text-3xl";
-                fbTitle.innerText = "Operação Dentro dos Limites Estáveis";
-                fbText.innerHTML = `As curvas de temperatura e fluxo de gás estão matematicamente seguros para o <strong>${nomeMaterial}</strong>, mas podem ser otimizados visando máxima eficiência mecânica.` + sugestaoHtm;
-            }
-        }
-
-        function renderVisualEsteira(compPeca, espacamento, compTotalPecaM) {
-            const area = document.getElementById('conveyorVisualArea'); 
-            area.innerHTML = "";
-            const label = document.getElementById('labelQtdPecasEsteira');
-            
-            if(compTotalPecaM <= 0) {
-                label.innerText = "0 peças simultâneas";
-                return;
-            }
-            
-            const numPecas = Math.floor(28.5 / compTotalPecaM);
-            label.innerText = `${numPecas} peças simultâneas no forno`;
-            
-            const limitRender = Math.min(numPecas, 300);
-            const pctLarguraPeca = ((compPeca/1000) / 28.5) * 100;
-            const pctMargem = ((espacamento/1000) / 28.5) * 100;
-            
-            for (let i = 0; i < limitRender; i++) {
-                const peca = document.createElement('div'); 
-                peca.className = "h-6 bg-slate-500 rounded-sm border border-slate-600 shadow-sm flex items-center justify-center text-[7px] text-white font-bold shrink-0 overflow-hidden"; 
-                peca.style.width = `${pctLarguraPeca}%`; 
-                peca.style.marginRight = `${pctMargem}%`; 
-                if (pctLarguraPeca > 2) peca.innerText = "AÇO";
-                area.appendChild(peca);
-            }
-        }
-
-        function toggleConfigModal(show) { document.getElementById('configModal').classList.toggle('hidden', !show); if (show) document.getElementById('apiInputUrl').value = API_URL; }
-        function salvarConfigUrl() { const url = document.getElementById('apiInputUrl').value.trim(); if (url) { localStorage.setItem("checklist_google_api_url", url); API_URL = url; document.getElementById('apiStatusAlert').classList.add('hidden'); toggleConfigModal(false); baixarDadosDaPlanilha(); } else { showToast("URL inválida.", "error"); } }
-        function visualizarImagem(base64) { document.getElementById('enlargedImg').src = base64; document.getElementById('viewImageModal').classList.remove('hidden'); }
-        function fecharModalImagem() { document.getElementById('viewImageModal').classList.add('hidden'); }
 
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
